@@ -19,6 +19,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'spatie/schema-org' => array(
+            'pretty_version' => '3.14.0',
+            'version' => '3.14.0.0',
+            'reference' => 'ada9f696ae958236d6707caced77b2630185bb76',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../spatie/schema-org',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'tobimori/kirby-seo' => array(
             'pretty_version' => '1.0.0',
             'version' => '1.0.0.0',

@@ -6,5 +6,7 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'tobimori\\Seo\\' => array($baseDir . '/classes'),
+    'Spatie\\SchemaOrg\\' => array($vendorDir . '/spatie/schema-org/src'),
     'Kirby\\' => array($vendorDir . '/getkirby/composer-installer/src'),
 );

@@ -1,0 +1,75 @@
+<?php
+
+namespace Spatie\SchemaOrg;
+
+use \Spatie\SchemaOrg\Contracts\{{ type.className }}Contract;
+{% for parent in type.parents %}
+use \Spatie\SchemaOrg\Contracts\{{ parent }}Contract;
+{% endfor %}
+
+/**
+ * {{ type.description | doc(0) }}
+ *
+ * @see {{ type.resource | fixLink }}
+{% if type.partOf is not empty %}
+ * @see {{ type.partOf | fixLink }}
+{% endif %}
+{% if type.source is not empty %}
+ * @link {{ type.source }}
+{% endif %}
+ *
+{% for property in type.properties %}
+{% if property.pending %}
+ * @method static {{ property.name }}(${{ property.name }}) The value should be instance of pending types {{ property.ranges | join('|') }}
+{% endif %}
+{% endfor %}
+ */
+class {{ type.className }} extends BaseType implements {{ type.className }}Contract{% if type.parents %}, {% endif %}{{ type.parents|map(parent => "#{parent}Contract")|join(', ') }}
+{
+{% for constant in type.constants %}
+    /**
+     * {{ constant.description | doc(1) }}
+     *
+     * @see {{ constant.value | fixLink }}
+{% if constant.partOf is not empty %}
+     * @see {{ constant.partOf | fixLink }}
+{% endif %}
+{% if constant.source is not empty %}
+     * @link {{ constant.source }}
+{% endif %}
+     */
+     const {{ constant.name }} = '{{ constant.value | fixLink }}';
+
+{% endfor %}
+{% if type.name != type.className %}
+    public function getType(): string
+    {
+        return '{{ type.name }}';
+    }
+
+{% endif %}
+{% for property in type.properties %}
+{% if not property.pending %}
+    /**
+     * {{ property.description | doc(1) }}
+     *
+     * @param {{ property.ranges | param }} ${{ property.name }}
+     *
+     * @return static
+     *
+     * @see {{ property.resource | fixLink }}
+{% if property.partOf is not empty %}
+     * @see {{ property.partOf | fixLink }}
+{% endif %}
+{% if property.source is not empty %}
+     * @link {{ property.source }}
+{% endif %}
+     */
+    public function {{ property.name }}(${{ property.name }})
+    {
+        return $this->setProperty('{{ property.name }}', ${{ property.name }});
+    }
+
+{% endif %}
+{% endfor %}
+}

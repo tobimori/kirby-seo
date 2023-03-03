@@ -11,9 +11,15 @@
       "email": "tobias@moeritz.io"
     }
   ],
+  "autoload": {
+    "psr-4": {
+      "tobimori\\Seo\\": "classes"
+    }
+  },
   "require": {
     "php": ">=8.0.0",
-    "getkirby/composer-installer": "^1.2.1"
+    "getkirby/composer-installer": "^1.2.1",
+    "spatie/schema-org": "^3.14"
   },
   "require-dev": {
     "getkirby/cms": "^3.9"
