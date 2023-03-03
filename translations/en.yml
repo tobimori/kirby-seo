@@ -1,0 +1,5 @@
+# Heading Structure
+heading-structure: Heading Structure
+incorrect-heading-order: Your heading structure has an incorrect order and considered invalid.
+missing-h1-tag: Your heading structure is missing an H1 tag and considered invalid.
+multiple-h1-tags: Your heading structure contains more than one H1 tag and considered invalid.

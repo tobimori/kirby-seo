@@ -1,0 +1,5 @@
+# Heading Structure
+heading-structure: Überschriftenstruktur
+incorrect-heading-order: Deine Überschriftenstruktur hat eine falsche Abfolge und ist ungültig.
+missing-h1-tag: Deine Überschriftenstruktur enthält keine H1 und ist ungültig.
+multiple-h1-tags: Deine Überschriftenstruktur enthält mehr als eine H1 und ist ungültig.

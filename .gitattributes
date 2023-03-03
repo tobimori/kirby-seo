@@ -1,0 +1,8 @@
+# Git
+.gitattributes export-ignore
+.github/ export-ignore
+.gitignore export-ignore
+
+# Development files
+.editorconfig export-ignore
+composer.lock export-ignore
