@@ -44,7 +44,7 @@ columns:
         width: 1/2
       ogImage:
         label: og-image
-        extends: meta/og-image
+        extends: seo/og-image
         empty: og-image-empty
         width: 1/2
       twitterCardType:
@@ -57,17 +57,6 @@ columns:
           summary: '{{ t('summary') }}'
           summary_large_image: '{{ t('summary_large_image') }}'
         help: twitter-card-type-help
-      twitterSeparateAuthor:
-        label: twitter-separate-author
-        type: toggle
-        default: true
-        width: 1/2
-        text:
-          - de: Nein, globaler Account
-            en: No, global account
-          - de: Ja, separate Accounts
-            en: Yes, separate accounts
-        help: twitter-separate-author-help
       line2:
         type: line
       socialMediaAccounts:

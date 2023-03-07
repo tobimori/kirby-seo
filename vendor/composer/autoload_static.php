@@ -1824,6 +1824,7 @@ class ComposerStaticInit3e4bc37d480117d497c8333636c62d44
         'Spatie\\SchemaOrg\\WriteAction' => __DIR__ . '/..' . '/spatie/schema-org/src/WriteAction.php',
         'Spatie\\SchemaOrg\\XPathType' => __DIR__ . '/..' . '/spatie/schema-org/src/XPathType.php',
         'Spatie\\SchemaOrg\\Zoo' => __DIR__ . '/..' . '/spatie/schema-org/src/Zoo.php',
+        'tobimori\\Seo\\Meta' => __DIR__ . '/../..' . '/classes/Meta.php',
         'tobimori\\Seo\\SchemaSingleton' => __DIR__ . '/../..' . '/classes/SchemaSingleton.php',
     );
 

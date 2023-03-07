@@ -1793,5 +1793,6 @@ return array(
     'Spatie\\SchemaOrg\\WriteAction' => $vendorDir . '/spatie/schema-org/src/WriteAction.php',
     'Spatie\\SchemaOrg\\XPathType' => $vendorDir . '/spatie/schema-org/src/XPathType.php',
     'Spatie\\SchemaOrg\\Zoo' => $vendorDir . '/spatie/schema-org/src/Zoo.php',
+    'tobimori\\Seo\\Meta' => $baseDir . '/classes/Meta.php',
     'tobimori\\Seo\\SchemaSingleton' => $baseDir . '/classes/SchemaSingleton.php',
 );

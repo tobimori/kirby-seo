@@ -42,7 +42,7 @@ columns:
         placeholder: '{{ page.metaDescription.isEmpty ? (site.ogDescription.isEmpty ? site.metaDescription : site.ogDescription) : page.metaDescription }}'
       ogImage:
         label: og-image
-        extends: meta/og-image
+        extends: seo/og-image
         empty: og-image-empty
       twitterCardType:
         label: twitter-card-type

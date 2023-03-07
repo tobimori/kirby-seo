@@ -1,0 +1,115 @@
+<?php
+
+namespace tobimori\Seo;
+
+use Kirby\Cms\Field;
+use Kirby\Cms\Page;
+
+class Meta
+{
+  protected Page $page;
+  protected ?string $lang;
+  protected array $meta = [];
+
+  public function __call($name, $args): mixed
+  {
+    return $this->get($name);
+  }
+
+  public function __construct(Page $page, ?string $lang = null)
+  {
+    $this->page = $page;
+    $this->lang = $lang;
+
+    if (method_exists($this->page, 'meta')) {
+      $this->meta = $this->page->meta($this->lang);
+    }
+  }
+
+  public function get(string $key): Field
+  {
+    if (($field = $this->page->content($this->lang)->get($key)) && $field->isNotEmpty() === true) { // Page field
+      return $field;
+    }
+
+    if ($this->meta && array_key_exists($key, $this->meta)) { // Programmatic content
+      $val = $this->meta[$key];
+
+      if (is_a($val, 'Kirby\Cms\Field')) {
+        return $val;
+      }
+
+      if (is_callable($val)) {
+        $val = $val($this->page);
+      }
+
+      return new Field($this->page, $key, $val);
+    }
+
+    if (($parent = $this->page->parent()) && in_array($key, $parent->metaInherit()->split())) { // Inheritance from parent
+      $parentMeta = new Meta($parent, $this->lang);
+      if ($value = $parentMeta->get($key)) {
+        return $value;
+      }
+    }
+
+    if (($site = $this->page->site()->content($this->lang)->get($key)) && $site->isNotEmpty()) { // Site globals
+      return $site;
+    }
+
+    if ($option = $this->page->kirby()->option("tobimori.seo.default.{$key}")) { // Options fallback
+      if (is_callable($option)) {
+        $option = $option($this->page);
+      }
+
+      return new Field($this->page, $key, $option);
+    }
+
+    return new Field($this->page, $key, '');
+  }
+
+  public function title()
+  {
+    $title = $this->metaTitle();
+    $template = $this->metaTemplate();
+
+    return new Field(
+      $this->page,
+      'metaTitle',
+      $this->page->toSafeString(
+        $template,
+        ['title' => $title]
+      )
+    );
+  }
+
+  public function ogTitle()
+  {
+    $title = $this->metaTitle();
+    $template = $this->ogTemplate();
+
+    return new Field(
+      $this->page,
+      'ogTitle',
+      $this->page->toSafeString(
+        $template,
+        ['title' => $title]
+      )
+    );
+  }
+
+  public function canonicalUrl()
+  {
+    if (option('tobimori.seo.canonicalIncludesWWW') === false) {
+      return preg_replace(array('/http:/', '/www\./'), array('https:', ''), $this->page->url());
+    } else {
+      return preg_replace('/http(s)?:\/\/(www.)?/', 'https://www.', $this->page->url());
+    }
+  }
+
+  public function twitterSite()
+  {
+    $accs = $this->page->site()->socialMediaAccounts()->toObject();
+    return $accs->twitter();
+  }
+}
