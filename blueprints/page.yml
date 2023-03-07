@@ -1,0 +1,82 @@
+label: metadata-site
+icon: search
+
+columns:
+  - width: 7/12
+    fields:
+      metaHeadline:
+        label: meta-headline
+        type: headline
+        numbered: false
+      metaTitle:
+        label: title-overwrite
+        type: text
+        placeholder: '{{ page.title }}'
+      metaTemplate:
+        label: meta-title-template
+        type: text
+        help: meta-title-template-help
+        placeholder: '{{ site.metaTemplate }}'
+      metaDescription:
+        label: meta-description
+        type: textarea
+        help: meta-description-help
+        placeholder: '{{ site.metaDescription }}'
+        buttons: false
+      line1:
+        type: line
+      ogHeadline:
+        label: og-headline
+        type: headline
+        numbered: false
+        help: global-og-headline-help
+      ogTemplate:
+        label: og-title-template
+        type: text
+        help: meta-title-template-help
+        placeholder: '{{ page.metaTemplate.isEmpty ? (site.ogTemplate.isEmpty ? site.metaTemplate : site.ogTemplate) : page.metaTemplate }}'
+      ogDescription:
+        label: og-description
+        type: textarea
+        buttons: false
+        placeholder: '{{ page.metaDescription.isEmpty ? (site.ogDescription.isEmpty ? site.metaDescription : site.ogDescription) : page.metaDescription }}'
+      ogImage:
+        label: og-image
+        extends: meta/og-image
+        empty: og-image-empty
+      twitterCardType:
+        label: twitter-card-type
+        width: 1/2
+        placeholder: '{{ t('default-select') }} {{ t(site.twitterCardType) }}'
+        type: select
+        options:
+          summary: '{{ t('summary') }}'
+          summary_large_image: '{{ t('summary_large_image') }}'
+        help: twitter-card-type-help
+      twitterAuthor:
+        label: twitter-author
+        width: 1/2
+        type: text
+        before: '@'
+        placeholder: '{{ site.socialMediaAccounts.toObject.twitter }}'
+        help: twitter-author-help
+      line3:
+        type: line
+      metaInherit:
+        label: inherit-settings
+        type: multiselect
+        help: inherit-settings-help
+        options:
+          metaTemplate: '{{ t('meta-title-template') }}'
+          metaDescription: '{{ t('meta-description') }}'
+          ogTemplate: '{{ t('og-title-template') }}'
+          ogDescription: '{{ t('og-description') }}'
+          ogImage: '{{ t('og-image') }}'
+          twitterCardType: '{{ t('twitter-card-type') }}'
+          twitterAuthor: '{{ t('twitter-author') }}'
+
+  - width: 5/12
+    sticky: true
+    sections:
+      seoPreview:
+        type: seo-preview

@@ -1,0 +1,98 @@
+label: metadata-site
+icon: search
+
+columns:
+  - width: 7/12
+    fields:
+      metaHeadline:
+        label: global-meta-headline
+        type: headline
+        numbered: false
+        help: global-meta-headline-help
+      metaTemplate:
+        label: meta-title-template
+        type: text
+        help: meta-title-template-help
+      metaDescription:
+        label: meta-description
+        type: textarea
+        help: meta-description-help
+        buttons: false
+      line1:
+        type: line
+      ogHeadline:
+        label: global-og-headline
+        type: headline
+        numbered: false
+        help: global-og-headline-help
+      ogTemplate:
+        label: og-title-template
+        type: text
+        default: '{{ title }}'
+        help: meta-title-template-help
+        placeholder: '{{ site.metaTemplate }}'
+      ogDescription:
+        label: og-description
+        type: textarea
+        buttons: false
+        placeholder: '{{ site.metaDescription }}'
+      ogSiteName:
+        label: og-site-name
+        type: text
+        default: '{{ site.title }}'
+        placeholder: '{{ site.title }}'
+        width: 1/2
+      ogImage:
+        label: og-image
+        extends: meta/og-image
+        empty: og-image-empty
+        width: 1/2
+      twitterCardType:
+        label: twitter-card-type
+        width: 1/2
+        type: select
+        default: summary
+        required: true
+        options:
+          summary: '{{ t('summary') }}'
+          summary_large_image: '{{ t('summary_large_image') }}'
+        help: twitter-card-type-help
+      twitterSeparateAuthor:
+        label: twitter-separate-author
+        type: toggle
+        default: true
+        width: 1/2
+        text:
+          - de: Nein, globaler Account
+            en: No, global account
+          - de: Ja, separate Accounts
+            en: Yes, separate accounts
+        help: twitter-separate-author-help
+      line2:
+        type: line
+      socialMediaAccounts:
+        label: social-media-accounts
+        type: object
+        help: social-media-accounts-help
+        fields:
+          twitter:
+            label: Twitter
+            type: text
+            before: @
+          facebook:
+            label: Facebook
+            type: url
+            placeholder: https://www.facebook.com/my-company
+          linkedin:
+            label: LinkedIn
+            type: url
+            placeholder: https://www.linkedin.com/company/my-company
+          instagram:
+            label: Instagram
+            type: url
+            placeholder: https://www.instagram.com/my-company
+  - width: 5/12
+    sticky: true
+    sections:
+      seoPreview:
+        type: seo-preview
