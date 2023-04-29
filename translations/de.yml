@@ -40,7 +40,7 @@ title-overwrite: Titel (Überschreiben)
 summary: Karte mit quadratischem Bild
 summary_large_image: Karte mit großem Bild
 default-select: 'Standard:'
-twitter-author: @username des Autors auf Twitter
+twitter-author: '@username des Autors auf Twitter'
 twitter-author-help: wtf
 inherit-settings: Einstellungen vererben
 inherit-settings-help: |

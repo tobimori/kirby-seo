@@ -47,11 +47,11 @@ columns:
       twitterCardType:
         label: twitter-card-type
         width: 1/2
-        placeholder: '{{ t('default-select') }} {{ t(site.twitterCardType) }}'
+        placeholder: "{{ t('default-select') }} {{ t(site.twitterCardType) }}"
         type: select
         options:
-          summary: '{{ t('summary') }}'
-          summary_large_image: '{{ t('summary_large_image') }}'
+          summary: "{{ t('summary') }}"
+          summary_large_image: "{{ t('summary_large_image') }}"
         help: twitter-card-type-help
       twitterAuthor:
         label: twitter-author
@@ -67,13 +67,13 @@ columns:
         type: multiselect
         help: inherit-settings-help
         options:
-          metaTemplate: '{{ t('meta-title-template') }}'
-          metaDescription: '{{ t('meta-description') }}'
-          ogTemplate: '{{ t('og-title-template') }}'
-          ogDescription: '{{ t('og-description') }}'
-          ogImage: '{{ t('og-image') }}'
-          twitterCardType: '{{ t('twitter-card-type') }}'
-          twitterAuthor: '{{ t('twitter-author') }}'
+          metaTemplate: "{{ t('meta-title-template') }}"
+          metaDescription: "{{ t('meta-description') }}"
+          ogTemplate: "{{ t('og-title-template') }}"
+          ogDescription: "{{ t('og-description') }}"
+          ogImage: "{{ t('og-image') }}"
+          twitterCardType: "{{ t('twitter-card-type') }}"
+          twitterAuthor: "{{ t('twitter-author') }}"
 
   - width: 5/12
     sticky: true

@@ -18,7 +18,7 @@ columns:
         type: textarea
         help: meta-description-help
         buttons: false
-      line1:
+      seoL:ine1:
         type: line
       ogHeadline:
         label: global-og-headline
@@ -54,10 +54,10 @@ columns:
         default: summary
         required: true
         options:
-          summary: '{{ t('summary') }}'
-          summary_large_image: '{{ t('summary_large_image') }}'
+          summary: "{{ t('summary') }}"
+          summary_large_image: "{{ t('summary_large_image') }}"
         help: twitter-card-type-help
-      line2:
+      seoLine2:
         type: line
       socialMediaAccounts:
         label: social-media-accounts
@@ -66,20 +66,12 @@ columns:
         fields:
           twitter:
             label: Twitter
-            type: text
-            before: @
-          facebook:
-            label: Facebook
             type: url
-            placeholder: https://www.facebook.com/my-company
+            placeholder: https://twitter.com/my-company
           linkedin:
             label: LinkedIn
             type: url
             placeholder: https://www.linkedin.com/company/my-company
-          instagram:
-            label: Instagram
-            type: url
-            placeholder: https://www.instagram.com/my-company
   - width: 5/12
     sticky: true
     sections:
