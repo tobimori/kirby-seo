@@ -42,7 +42,7 @@ return [
       if ($model instanceof Page) {
         $page = $model->render();
         $dom = new DOMDocument();
-        $dom->loadHTML($page, libxml_use_internal_errors(true));
+        $dom->loadHTML(mb_convert_encoding($page, 'HTML-ENTITIES', 'UTF-8'), libxml_use_internal_errors(true));
 
         $xpath = new DOMXPath($dom);
         $headings = $xpath->query('//h1|//h2|//h3|//h4|//h5|//h6');

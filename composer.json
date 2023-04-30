@@ -2,9 +2,9 @@
   "name": "tobimori/kirby-seo",
   "description": "The ultimate Kirby SEO toolkit",
   "type": "kirby-plugin",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "license": "MIT",
-  "homepage": "https://github.com/tobimori/kirby-meta#readme",
+  "homepage": "https://github.com/tobimori/kirby-seo#readme",
   "authors": [
     {
       "name": "Tobias Möritz",

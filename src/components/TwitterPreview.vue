@@ -1,7 +1,7 @@
 <template>
   <div class="k-twitter-preview">
     <div class="k-twitter-preview__image">
-      <img v-if="this.fallbackImage" :src="ogImage" class="twitter-card__image__img" />
+      <img :src="ogImage" class="k-twitter-preview__img" />
     </div>
     <div class="k-twitter-preview__content">
       <span class="k-twitter-preview__url">{{ host }}</span>
@@ -66,7 +66,6 @@ export default {
     width: 100%;
     height: 0;
     padding-bottom: 52.355%;
-    object-fit: cover;
     position: relative;
     background: rgb(247, 249, 249);
 
@@ -79,7 +78,7 @@ export default {
       object-fit: cover;
     }
 
-    &::after {
+    &::before {
       position: absolute;
       top: 0;
       left: 0;

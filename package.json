@@ -1,7 +1,7 @@
 {
-  "name": "kirby-meta",
-  "description": "Supercharge Kirby's Writer field with new nodes, marks and features",
-  "version": "1.0.0",
+  "name": "kirby-seo",
+  "description": "The ultimate Kirby SEO toolkit",
+  "version": "0.0.1",
   "private": true,
   "license": "MIT",
   "author": "Tobias Möritz",

@@ -21,8 +21,8 @@ class Meta
     $this->page = $page;
     $this->lang = $lang;
 
-    if (method_exists($this->page, 'meta')) {
-      $this->meta = $this->page->meta($this->lang);
+    if (method_exists($this->page, 'metaDefaults')) {
+      $this->meta = $this->page->metaDefaults($this->lang);
     }
   }
 
