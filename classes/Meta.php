@@ -28,7 +28,8 @@ class Meta
 
   public function get(string $key): Field
   {
-    if (($field = $this->page->content($this->lang)->get($key)) && $field->isNotEmpty() === true) { // Page field
+    if (($field = $this->page->content($this->lang)->get($key)) && ($field->isNotEmpty() && $field->value() !== '[]')) { // Page field
+      if ($key == 'ogimage') ray($field);
       return $field;
     }
 
@@ -53,7 +54,7 @@ class Meta
       }
     }
 
-    if (($site = $this->page->site()->content($this->lang)->get($key)) && $site->isNotEmpty()) { // Site globals
+    if (($site = $this->page->site()->content($this->lang)->get($key)) && ($site->isNotEmpty() && $site->value() !== '[]')) { // Site globals
       return $site;
     }
 
