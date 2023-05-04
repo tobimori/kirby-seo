@@ -67,11 +67,28 @@ columns:
           twitter:
             label: Twitter
             type: url
+            icon: twitter
             placeholder: https://twitter.com/my-company
           linkedin:
             label: LinkedIn
             type: url
+            icon: linkedin
             placeholder: https://www.linkedin.com/company/my-company
+          instagram:
+            label: Instagram
+            type: url
+            icon: instagram
+            placeholder: https://instagram.com/my-company
+          facebook:
+            label: Facebook
+            type: url
+            icon: facebook
+            placeholder: https://www.facebook.com/my-company
+          youtube:
+            label: YouTube
+            type: url
+            icon: youtube
+            placeholder: https://www.youtube.com/channel/my-company
   - width: 5/12
     sticky: true
     sections:
