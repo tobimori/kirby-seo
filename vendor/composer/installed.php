@@ -1,8 +1,8 @@
 <?php return array(
     'root' => array(
         'name' => 'tobimori/kirby-seo',
-        'pretty_version' => '1.0.0',
-        'version' => '1.0.0.0',
+        'pretty_version' => '0.0.1',
+        'version' => '0.0.1.0',
         'reference' => NULL,
         'type' => 'kirby-plugin',
         'install_path' => __DIR__ . '/../../',
@@ -29,8 +29,8 @@
             'dev_requirement' => false,
         ),
         'tobimori/kirby-seo' => array(
-            'pretty_version' => '1.0.0',
-            'version' => '1.0.0.0',
+            'pretty_version' => '0.0.1',
+            'version' => '0.0.1.0',
             'reference' => NULL,
             'type' => 'kirby-plugin',
             'install_path' => __DIR__ . '/../../',

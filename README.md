@@ -1,5 +1,24 @@
 # Kirby SEO
 
+SEO for Kirby CMS – done right.
+
+## Requirements
+
+- Kirby 3.9+
+- PHP 8.1+
+
+## The Meta Cascade
+
+Kirby SEO is built with a cascading approach in mind. This means that you can define meta tags on multiple levels, and they will be merged together based on their priority:
+
+1. **Page fields**: The default page blueprint that allows you to specify most options
+2. **Programmatic content**: With Page models you can programmatically set meta tags like you want
+3. **Inherited fields from parent page**: Most fields can be configured to inherit to child pages
+4. **Site globals**: The site blueprint allows you to set global defaults for all pages
+5. **Options**: The last fallback is defined in the plugin options
+
+If any setting is left empty, it will fallback to the next level. In this way, the plugin provides _cascades_ to form the final meta data.
+
 ## Usage
 
 ### Schema.org usage
@@ -61,3 +80,29 @@ This example shows an FAQ page with multiple blocks, each containing a question 
   ]
 }
 ```
+
+## Roadmap
+
+- [ ] `seo/inheritables` page blueprint, containing only inheritable fields for use with pages that don't have a frontend representation
+- [ ] Toolkit for programmatic image generation with Puppeteer/BrowserShot (might be separate plugin)
+- [ ] Social Media Links handling in sameAs schema.org property, and `og:see_also` meta tag
+- [ ] Keywords/Tags field
+- [ ] `robots.txt` generation
+- [ ] `sitemap.xml` generation
+- [ ] Favicon and webmanifest generation
+- [ ] SEO Overview page/dashboard
+- [ ] Site Verification fields
+- [ ] Robots field section, for per-page overrides
+
+This roadmap is a courtesy and subject to change at any time.
+New features will be added as soon as I need them for my own projects.
+
+## Similiar plugins
+
+- [kirby-meta](https://github.com/fabianmichael/kirby-meta) by Fabian Michael
+- [kirby-meta-knight](https://github.com/diesdasdigital/kirby-meta-knight) by diesdas.digital (unmaintained, but have a look at forks!)
+
+## License
+
+[MIT License](./LICENSE)
+Copyright © 2023 Tobias Möritz

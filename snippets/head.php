@@ -50,7 +50,8 @@ $mapOg = [
   'og:image:width' => $ogImage?->width(),
   'og:image:height' => $ogImage?->height(),
   'og:image:alt' => $ogImage?->alt(),
-  'og:type' => 'website',
+  'og:type' => $meta->ogType(),
+  'og:locale' => $meta->ogLocale(),
 ];
 
 foreach ($mapOg as $property => $content) {

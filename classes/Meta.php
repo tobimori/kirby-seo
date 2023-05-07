@@ -29,7 +29,6 @@ class Meta
   public function get(string $key): Field
   {
     if (($field = $this->page->content($this->lang)->get($key)) && ($field->isNotEmpty() && $field->value() !== '[]')) { // Page field
-      if ($key == 'ogimage') ray($field);
       return $field;
     }
 
@@ -74,13 +73,19 @@ class Meta
     $title = $this->metaTitle();
     $template = $this->metaTemplate();
 
+    $useTemplate = $this->page->useTitleTemplate()->toBool() ?? true;
+    $string = $title;
+    if ($useTemplate) {
+      $string = $this->page->toSafeString(
+        $template,
+        ['title' => $title]
+      );
+    }
+
     return new Field(
       $this->page,
       'metaTitle',
-      $this->page->toSafeString(
-        $template,
-        ['title' => $title]
-      )
+      $string
     );
   }
 
@@ -89,13 +94,19 @@ class Meta
     $title = $this->metaTitle();
     $template = $this->ogTemplate();
 
+    $useTemplate = $this->page->useOgTemplate()->toBool() ?? true;
+    $string = $title;
+    if ($useTemplate) {
+      $string = $this->page->toSafeString(
+        $template,
+        ['title' => $title]
+      );
+    }
+
     return new Field(
       $this->page,
       'ogTitle',
-      $this->page->toSafeString(
-        $template,
-        ['title' => $title]
-      )
+      $string
     );
   }
 
@@ -111,6 +122,11 @@ class Meta
   public function twitterSite()
   {
     $accs = $this->page->site()->socialMediaAccounts()->toObject();
-    return $accs->twitter();
+
+    // tries to match all twitter urls, and extract the username
+    $matches = [];
+    preg_match('/^(https?:\/\/)?(www\.)?twitter\.com\/(#!\/)?@?(?<name>[^\/\?]*)$/', $accs->twitter()->value(), $matches);
+
+    return new Field($this->page, 'twitter', $matches['name'] ?? '');
   }
 }

@@ -1,13 +1,17 @@
 <template>
   <div class="k-heading-structure">
-    <div class="k-heading-structure-label k-field-label"><k-icon type="headline" /><span>{{ label || $t('heading-structure') }}</span></div>
+    <div class="k-heading-structure-label k-field-label">
+      <k-icon type="headline" /><span>{{ label || $t('heading-structure') }}</span>
+    </div>
     <k-box theme="">
       <ol class="k-heading-structure-list">
-        <li 
-          v-for="(item, index) in value" 
-          :key="index" 
-          :style="`z-index: ${value.length - index}`" 
-          :class="`k-heading-structure-item level-${item.level} ${itemInvalid(item, index) ? 'is-invalid' : ''}`"
+        <li
+          v-for="(item, index) in value"
+          :key="index"
+          :style="`z-index: ${value.length - index}`"
+          :class="`k-heading-structure-item level-${item.level} ${
+            itemInvalid(item, index) ? 'is-invalid' : ''
+          }`"
         >
           <span class="k-heading-structure-item-level">H{{ item.level }}</span>
           <span class="k-heading-structure-item-text">{{ item.text }}</span>
@@ -16,15 +20,15 @@
     </k-box>
     <k-box class="k-heading-structure-notice" theme="negative" v-if="incorrectOrder">
       <k-icon type="alert" />
-      <k-text>{{$t('incorrect-heading-order')}}</k-text>
+      <k-text>{{ $t('incorrect-heading-order') }}</k-text>
     </k-box>
     <k-box class="k-heading-structure-notice" theme="negative" v-if="multipleH1">
       <k-icon type="alert" />
-      <k-text>{{$t('multiple-h1-tags')}}</k-text>
+      <k-text>{{ $t('multiple-h1-tags') }}</k-text>
     </k-box>
     <k-box class="k-heading-structure-notice" theme="negative" v-if="noH1">
       <k-icon type="alert" />
-      <k-text>{{$t('missing-h1-tag')}}</k-text>
+      <k-text>{{ $t('missing-h1-tag') }}</k-text>
     </k-box>
   </div>
 </template>
@@ -33,8 +37,8 @@
 export default {
   data() {
     return {
-			label: null,
-      value: null,
+      label: null,
+      value: null
     }
   },
   created() {
@@ -48,28 +52,32 @@ export default {
       return this.value?.some((item, index) => item.level > (this.value[index - 1]?.level ?? 0) + 1)
     },
     multipleH1() {
-      return this.value?.filter(item => item.level === 1).length > 1
+      return this.value?.filter((item) => item.level === 1).length > 1
     },
     noH1() {
-      return this.value?.filter(item => item.level === 1).length === 0
+      return this.value?.filter((item) => item.level === 1).length === 0
     }
   },
   methods: {
     async handleLoad(changes) {
       let newChanges = {}
       Object.entries(changes ?? this.changes).map(([key, value]) => {
-        newChanges[key] = encodeURIComponent(JSON.stringify(value));
+        newChanges[key] = encodeURIComponent(JSON.stringify(value))
       })
-      const response = await this.$api.get(this.parent + '/sections/' + this.name, newChanges)
+
+      console.log(this)
+      const response = await this.$api.post('/plugins/tobimori/seo/test', newChanges)
+
+      console.log(response)
 
       this.value = response.value
-      this.label = response.label;
+      this.label = response.label
     },
     itemInvalid(item, index) {
       if (item.level > (this.value[index - 1]?.level ?? 0) + 1) return true // wrong order
       if (item.level === 1 && this.value[index - 1]) return true // wrong order
-      if (item.level === 1 && this.value.filter(item => item.level === 1).length > 1) return true // multiple h1
-      
+      if (item.level === 1 && this.value.filter((item) => item.level === 1).length > 1) return true // multiple h1
+
       return false
     }
   },
@@ -82,81 +90,81 @@ export default {
 </script>
 
 <style lang="scss">
-  .k-heading-structure {
-    &-label {
-      display: flex;
-      align-items: center;
+.k-heading-structure {
+  &-label {
+    display: flex;
+    align-items: center;
 
-      > .k-icon {
-        margin-right: var(--spacing-3);
-        color: var(--color-gray-700);
-      }
+    > .k-icon {
+      margin-right: var(--spacing-3);
+      color: var(--color-gray-700);
+    }
+  }
+
+  &-notice {
+    margin-top: var(--spacing-3);
+    display: flex;
+    align-items: flex-start;
+
+    > .k-icon {
+      margin-top: var(--spacing-1);
+      margin-right: var(--spacing-3);
+      color: var(--color-red);
+    }
+  }
+
+  &-list {
+    overflow: hidden;
+  }
+
+  &-item {
+    position: relative;
+    background: var(--color-white);
+    padding-block: var(--spacing-px);
+    display: flex;
+
+    &-level {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      margin-right: var(--spacing-2);
     }
 
-    &-notice {
-      margin-top: var(--spacing-3);
-      display: flex;
-      align-items: flex-start;
-
-      > .k-icon {
-        margin-top: var(--spacing-1);
-        margin-right: var(--spacing-3);
-        color: var(--color-red);
-      }
-    }
-
-    &-list {
+    &-text {
+      white-space: nowrap;
+      text-overflow: ellipsis;
       overflow: hidden;
     }
-    
-    &-item {
-      position: relative;
-      background: var(--color-white);
-      padding-block: var(--spacing-px);
-      display: flex;
 
-      &-level {
-        font-family: var(--font-mono);
-        font-weight: 700;
-        margin-right: var(--spacing-2);
-      }
+    &.is-invalid {
+      color: var(--color-red);
+    }
 
-      &-text {
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-      }
+    @for $i from 2 through 6 {
+      &.level-#{$i} {
+        margin-left: ($i - 2) * 1.6rem;
+        padding-left: 1.6rem;
 
-      &.is-invalid {
-        color: var(--color-red);
-      }
+        &::before {
+          content: '';
+          position: absolute;
+          top: calc(50% - 0.0625rem);
+          left: 0.4rem;
+          width: 0.8rem;
+          height: 0.125rem;
+          background-color: currentColor;
+        }
 
-      @for $i from 2 through 6 {
-        &.level-#{$i} {
-          margin-left: ($i - 2) * 1.6rem;
-          padding-left: 1.6rem;
-          
-          &::before {
-            content: "";
-            position: absolute;
-            top: calc(50% - 0.0625rem);
-            left: 0.4rem;
-            width: 0.8rem;
-            height: 0.125rem;
-            background-color: currentColor
-          }
-
-          &::after {
-            content: "";
-            position: absolute;
-            bottom: calc(50% - 0.0625rem);
-            left: 0.4rem;
-            height: 10rem;
-            width: 0.125rem;
-            background-color: currentColor;
-          }
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: calc(50% - 0.0625rem);
+          left: 0.4rem;
+          height: 9999px;
+          width: 0.125rem;
+          background-color: currentColor;
         }
       }
     }
   }
+}
 </style>

@@ -18,9 +18,18 @@ App::plugin('tobimori/seo', [
       'metaTemplate' => '{{ title }} - {{ site.title }}',
       'ogTemplate' => '{{ title }}',
       'ogSiteName' => fn (Page $page) => $page->site()->title(),
+      'ogType' => 'website',
+      'ogLocale' => fn (Page $page) => $page->kirby()->language()->code() ?? 'en',
       'twitterCardType' => 'summary',
       'ogDescription' => fn (Page $page) => $page->metadata()->metaDescription(),
       'twitterCreator' => fn (Page $page) => $page->metadata()->twitterSite(),
+    ],
+    'socialMedia' => [
+      'twitter' => 'https://twitter.com/my-company',
+      'facebook' => 'https://facebook.com/my-company',
+      'instagram' => 'https://instagram.com/my-company',
+      'youtube' => 'https://youtube.com/channel/my-company',
+      'linkedin' => 'https://linkedin.com/company/my-company',
     ],
     'canonicalIncludesWWW' => false,
     'dateFormat' => '%Y-%m-%d'
@@ -49,7 +58,8 @@ App::plugin('tobimori/seo', [
   'blueprints' => [
     'seo/site' => __DIR__ . '/blueprints/site.yml',
     'seo/page' => __DIR__ . '/blueprints/page.yml',
-    'seo/og-image' => __DIR__ . '/blueprints/og-image.yml',
+    'seo/fields/og-image' => __DIR__ . '/blueprints/fields/og-image.yml',
+    'seo/fields/social-media' => require __DIR__ . '/blueprints/fields/social-media.php',
   ],
   'hooks' => [
     'page.render:before' => function (string $contentType, array $data, Page $page) {

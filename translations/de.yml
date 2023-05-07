@@ -27,8 +27,6 @@ og-image-help: Empfohlene Größe von 1200x630 Pixeln.
 og-image-empty: Kein Open Graph-Bild ausgewählt
 twitter-card-type: Twitter-Kartentyp
 twitter-card-type-help: Der Twitter-Kartentyp bestimmt, wie deine Website aussieht, wenn sie auf Twitter geteilt wird. [Mehr Informationen](https://developer.twitter.com/en/docs/tweets/optimize-with-cards/overview/abouts-cards).
-twitter-separate-author: Twitter-Autor
-twitter-separate-author-help: Gibt an, ob für Unterseiten ein separater Autor angegeben werden soll, oder ob der Organisations-Account verwendet werden soll.
 
 social-media-accounts: Social Media-Accounts
 social-media-accounts-help: URLs bzw. @-Handles zu deinen Social Media-Accounts. Werden verwendet, um Links zu deinen Accounts in den Metadaten zu setzen.
@@ -41,8 +39,11 @@ summary: Karte mit quadratischem Bild
 summary_large_image: Karte mit großem Bild
 default-select: 'Standard:'
 twitter-author: '@username des Autors auf Twitter'
-twitter-author-help: wtf
 inherit-settings: Einstellungen vererben
 inherit-settings-help: |
   Wähle aus, welche Einstellungen an Unterseiten vererbt werden sollen.
-  Dies kann z.B. hilfreich sein, wenn alle Beiträge eines Blogs ein eigenes Titel-Template haben sollen, welches vom Seiten-Standard abweicht. Alle Einstellungen lassen sich weiterhin in der Seite überschreiben.
+  Dies kann z.B. hilfreich sein, wenn alle Beiträge eines Blogs ein eigenes Titel-Template haben sollen, welches vom Seiten-Standard abweicht. Alle Einstellungen lassen sich weiterhin in der Hauptseite überschreiben.
+use-title-template: Titel-Template verwenden?
+use-title-template-no: 'Nein - reiner Titel'
+use-title-template-yes: 'Ja - mit Template'
+use-title-template-help: Gibt an, ob das Titel-Template verwendet werden soll. Wird nicht vererbt.
