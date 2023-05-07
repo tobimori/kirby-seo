@@ -37,7 +37,6 @@
 export default {
   data() {
     return {
-      label: null,
       value: null
     }
   },
@@ -60,18 +59,12 @@ export default {
   },
   methods: {
     async handleLoad(changes) {
-      let newChanges = {}
-      Object.entries(changes ?? this.changes).map(([key, value]) => {
-        newChanges[key] = encodeURIComponent(JSON.stringify(value))
+      const response = await this.$api.post('tobimori/seo/heading-structure', {
+        page: this.parent.toString().split('/').pop().replaceAll('+', '/'),
+        changes: changes ?? this.changes
       })
 
-      console.log(this)
-      const response = await this.$api.post('/plugins/tobimori/seo/test', newChanges)
-
-      console.log(response)
-
-      this.value = response.value
-      this.label = response.label
+      this.value = response
     },
     itemInvalid(item, index) {
       if (item.level > (this.value[index - 1]?.level ?? 0) + 1) return true // wrong order
