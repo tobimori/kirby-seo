@@ -77,8 +77,10 @@ class Meta
     $title = $this->metaTitle();
     $template = $this->metaTemplate();
 
-    $useTemplate = $this->page->useTitleTemplate()->toBool() ?? true;
-    $string = $title;
+    $useTemplate = $this->page->useTitleTemplate();
+    $useTemplate = $useTemplate->isEmpty() ? true : $useTemplate->toBool();
+
+    $string = $title->value();
     if ($useTemplate) {
       $string = $this->page->toSafeString(
         $template,
@@ -98,8 +100,10 @@ class Meta
     $title = $this->metaTitle();
     $template = $this->ogTemplate();
 
-    $useTemplate = $this->page->useOgTemplate()->toBool() ?? true;
-    $string = $title;
+    $useTemplate = $this->page->useOgTemplate();
+    $useTemplate = $useTemplate->isEmpty() ? true : $useTemplate->toBool();
+
+    $string = $title->value();
     if ($useTemplate) {
       $string = $this->page->toSafeString(
         $template,
@@ -126,11 +130,15 @@ class Meta
   public function twitterSite()
   {
     $accs = $this->page->site()->socialMediaAccounts()->toObject();
+    $username = '';
 
-    // tries to match all twitter urls, and extract the username
-    $matches = [];
-    preg_match('/^(https?:\/\/)?(www\.)?twitter\.com\/(#!\/)?@?(?<name>[^\/\?]*)$/', $accs->twitter()->value(), $matches);
+    if ($accs->twitter()->isNotEmpty()) {
+      // tries to match all twitter urls, and extract the username
+      $matches = [];
+      preg_match('/^(https?:\/\/)?(www\.)?twitter\.com\/(#!\/)?@?(?<name>[^\/\?]*)$/', $accs->twitter()->value(), $matches);
+      $username = $matches['name'];
+    }
 
-    return new Field($this->page, 'twitter', $matches['name'] ?? '');
+    return new Field($this->page, 'twitter', $username);
   }
 }
