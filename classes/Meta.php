@@ -62,6 +62,10 @@ class Meta
         $option = $option($this->page);
       }
 
+      if (is_a($option, 'Kirby\Cms\Field')) {
+        return $option;
+      }
+
       return new Field($this->page, $key, $option);
     }
 

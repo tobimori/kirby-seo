@@ -39,14 +39,9 @@ App::plugin('tobimori/seo', [
     'en' => Yaml::decode(F::read(__DIR__ . '/translations/en.yml'))
   ],
   'sections' => [
-    'heading-structure' => [
-      'mixins' => ['headline'],
-    ],
-    'seo-preview' => [
-      'mixins' => ['headline'],
-    ],
+    'heading-structure' => require __DIR__ . '/config/sections/heading-structure.php',
+    'seo-preview' => require __DIR__ . '/config/sections/seo-preview.php',
   ],
-  'api' => require __DIR__ . '/config/api.php',
   'siteMethods' => [
     'schema' => fn ($type) => SchemaSingleton::getInstance($type),
     'schemas' => fn () => SchemaSingleton::getInstances(),

@@ -93,7 +93,7 @@ export default {
     font-size: 0.875em;
     line-height: 1.3em;
     color: #3c4043;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 3;
   }
 }
 </style>

@@ -1,33 +1,16 @@
 <template>
   <div class="k-seo-preview">
     <k-select-field
-      label="Preview Type"
+      label="Preview"
       type="select"
       v-model="type"
       :options="options"
       :empty="false"
     />
-    <div class="k-seo-preview__inner">
-      <google-preview
-        v-if="type === 'google'"
-        url="https://pitchguru.com"
-        title="PitchGuru | Professionelle Präsentation für Ihr Unternehmen"
-        description="PitchGuru ist der Ansprechpartner, dem Unternehmen bei ihren Präsentationen vertrauen. Schnell, einfach und effizient Zeit und Geld sparen."
-      />
-      <twitter-preview
-        v-if="type === 'twitter'"
-        url="https://pitchguru.com"
-        ogTitle="Professionelle Präsentation für Ihr Unternehmen"
-        ogDescription="PitchGuru ist der Ansprechpartner, dem Unternehmen bei ihren Präsentationen vertrauen. Schnell, einfach und effizient Zeit und Geld sparen."
-        ogImage="http://127.0.0.1:3000/media/site/be4ab3677e-1678205309/tmm03294-1-1200x630-crop-1.jpg"
-      />
-      <facebook-preview
-        v-if="type === 'facebook'"
-        url="https://pitchguru.com"
-        ogTitle="Professionelle Präsentation für Ihr Unternehmen"
-        ogDescription="PitchGuru ist der Ansprechpartner, dem Unternehmen bei ihren Präsentationen vertrauen. Schnell, einfach und effizient Zeit und Geld sparen."
-        ogImage="http://127.0.0.1:3000/media/site/be4ab3677e-1678205309/tmm03294-1-1200x630-crop-1.jpg"
-      />
+    <div class="k-seo-preview__inner" v-if="value">
+      <google-preview v-if="type === 'google'" v-bind="value" />
+      <twitter-preview v-if="type === 'twitter'" v-bind="value" />
+      <facebook-preview v-if="type === 'facebook'" v-bind="value" />
     </div>
   </div>
 </template>
@@ -39,11 +22,22 @@ import TwitterPreview from '../components/TwitterPreview.vue'
 
 export default {
   components: { GooglePreview, TwitterPreview, FacebookPreview },
-  props: {
-    label: String,
-    type: String
+  data() {
+    const type = localStorage.getItem('kSEOPreviewType') ?? 'google'
+
+    return {
+      label: null,
+      value: null,
+      type
+    }
+  },
+  created() {
+    this.handleLoad()
   },
   computed: {
+    changes() {
+      return this.$store.getters['content/changes']()
+    },
     options() {
       return [
         {
@@ -59,6 +53,30 @@ export default {
           text: 'Facebook'
         }
       ]
+    }
+  },
+  methods: {
+    async handleLoad(changes) {
+      this.isLoading = true
+
+      let newChanges = {}
+      Object.entries(changes ?? this.changes).map(([key, value]) => {
+        newChanges[key] = encodeURIComponent(JSON.stringify(value))
+      })
+      const response = await this.$api.get(this.parent + '/sections/' + this.name, newChanges)
+
+      this.value = response.value
+      this.label = response.label
+
+      this.isLoading = false
+    }
+  },
+  watch: {
+    changes(changes) {
+      this.$helper.debounce((changes) => this.handleLoad(changes), 200)(changes)
+    },
+    type() {
+      localStorage.setItem('kSEOPreviewType', this.type)
     }
   }
 }

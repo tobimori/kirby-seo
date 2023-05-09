@@ -1,7 +1,8 @@
 <template>
-  <div class="k-heading-structure">
+  <div class="k-heading-structure" v-if="value">
     <div class="k-heading-structure-label k-field-label">
       <k-icon type="headline" /><span>{{ label || $t('heading-structure') }}</span>
+      <k-loader v-if="isLoading" />
     </div>
     <k-box theme="">
       <ol class="k-heading-structure-list">
@@ -18,7 +19,7 @@
         </li>
       </ol>
     </k-box>
-    <k-box class="k-heading-structure-notice" theme="negative" v-if="incorrectOrder">
+    <k-box class="k-heading-structure-notice" theme="negative" v-if="incorrectOrder && !noH1">
       <k-icon type="alert" />
       <k-text>{{ $t('incorrect-heading-order') }}</k-text>
     </k-box>
@@ -37,7 +38,9 @@
 export default {
   data() {
     return {
-      value: null
+      label: null,
+      value: null,
+      isLoading: true
     }
   },
   created() {
@@ -59,12 +62,18 @@ export default {
   },
   methods: {
     async handleLoad(changes) {
-      const response = await this.$api.post('tobimori/seo/heading-structure', {
-        page: this.parent.toString().split('/').pop().replaceAll('+', '/'),
-        changes: changes ?? this.changes
-      })
+      this.isLoading = true
 
-      this.value = response
+      let newChanges = {}
+      Object.entries(changes ?? this.changes).map(([key, value]) => {
+        newChanges[key] = encodeURIComponent(JSON.stringify(value))
+      })
+      const response = await this.$api.get(this.parent + '/sections/' + this.name, newChanges)
+
+      this.value = response.value
+      this.label = response.label
+
+      this.isLoading = false
     },
     itemInvalid(item, index) {
       if (item.level > (this.value[index - 1]?.level ?? 0) + 1) return true // wrong order
@@ -76,7 +85,7 @@ export default {
   },
   watch: {
     changes(changes) {
-      this.handleLoad(changes)
+      this.$helper.debounce((changes) => this.handleLoad(changes), 200)(changes)
     }
   }
 }
@@ -90,6 +99,11 @@ export default {
 
     > .k-icon {
       margin-right: var(--spacing-3);
+      color: var(--color-gray-700);
+    }
+
+    > .k-loader {
+      margin-left: auto;
       color: var(--color-gray-700);
     }
   }
