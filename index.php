@@ -12,7 +12,6 @@ use tobimori\Seo\SchemaSingleton;
 
 App::plugin('tobimori/seo', [
   'options' => [
-    'generateSchema' => true,
     'default' => [
       'metaTitle' => fn (Page $page) => $page->title(),
       'metaTemplate' => '{{ title }} - {{ site.title }}',
@@ -31,6 +30,7 @@ App::plugin('tobimori/seo', [
       'youtube' => 'https://youtube.com/channel/my-company',
       'linkedin' => 'https://linkedin.com/company/my-company',
     ],
+    'generateSchema' => true,
     'canonicalIncludesWWW' => false,
     'dateFormat' => '%Y-%m-%d'
   ],

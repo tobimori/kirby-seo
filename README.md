@@ -2,12 +2,19 @@
 
 SEO for Kirby CMS – done right.
 
+## Features
+
+- All-in-one SEO and meta solution
+- The Meta Cascade: Intelligently merge meta data from multiple sources
+- Schema.org support with fluent classes
+- _to be extended_
+
 ## Requirements
 
 - Kirby 3.9+
 - PHP 8.1+
 
-## The Meta Cascade
+## How it works - The Meta Cascade
 
 Kirby SEO is built with a cascading approach in mind. This means that you can define meta tags on multiple levels, and they will be merged together based on their priority:
 
@@ -20,6 +27,39 @@ Kirby SEO is built with a cascading approach in mind. This means that you can de
 If any setting is left empty, it will fallback to the next level. In this way, the plugin provides _cascades_ to form the final meta data.
 
 ## Usage
+
+### Getting started
+
+Add the blueprint tabs to your blueprints.
+
+```yaml
+# site/blueprints/site.yml
+tabs:
+  content:
+    fields:
+      # your fields
+  seo: seo/site
+```
+
+```yaml
+# site/blueprints/pages/default.yml (or any other template)
+tabs:
+  content:
+    fields:
+      # your fields
+  seo: seo/page
+```
+
+Add the meta snippet to your templates.
+
+```php
+// site/templates/default.php
+<head>
+    <?php snippet('seo/head'); ?>
+</head>
+```
+
+..and start defining your meta data in panel.
 
 ### Schema.org usage
 
@@ -57,7 +97,7 @@ This example shows an FAQ page with multiple blocks, each containing a question 
 
 ```php
 // At the end of `site/templates/default.php`
-<?php snippet('schemas') ?>
+<?php snippet('seo/schemas') ?>
 ```
 
 ```json
@@ -81,8 +121,32 @@ This example shows an FAQ page with multiple blocks, each containing a question 
 }
 ```
 
+## Options
+
+| Option                 | Default                                                                    | Description                                                                                        |
+| ---------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `default.*`            | [see index.php](https://github.com/tobimori/kirby-seo/blob/main/index.php) | Sets several defaults for meta tags where necessary, see Meta Cascade                              |
+| `socialMedia.*`        | [see index.php](https://github.com/tobimori/kirby-seo/blob/main/index.php) | Customize the social media accounts field for the site blueprint (Format: `'id' => 'placeholder'`) |
+| `generateSchema`       | `true`                                                                     | Whether to generate Schema.org JSON-LD with the default 'website' type                             |
+| `canonicalIncludesWWW` | `false`                                                                    | Whether to include the www. subdomain in the automatically generated canonical URL                 |
+| `dateFormat`           | `%Y-%m-%d`                                                                 | Date format for generation of page modified meta tags                                              |
+
+Options allow you to fine tune the behaviour of the plugin. You can set them in your `config.php` file:
+
+```php
+return [
+    'tobimori.seo' => [
+        'generateSchema' => true,
+        'canonicalIncludesWWW' => false,
+        'dateFormat' => '%Y-%m-%d'
+    ],
+];
+```
+
 ## Roadmap
 
+- [ ] Robots page status as section
+- [ ] Google pixel length calculation for preview
 - [ ] `seo/inheritables` page blueprint, containing only inheritable fields for use with pages that don't have a frontend representation
 - [ ] Toolkit for programmatic image generation with Puppeteer/BrowserShot (might be separate plugin)
 - [ ] Social Media Links handling in sameAs schema.org property, and `og:see_also` meta tag
