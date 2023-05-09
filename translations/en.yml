@@ -1,5 +1,49 @@
 # Heading Structure
 heading-structure: Heading Structure
-incorrect-heading-order: Your heading structure has an incorrect order and considered invalid.
-missing-h1-tag: Your heading structure is missing an H1 tag and considered invalid.
-multiple-h1-tags: Your heading structure contains more than one H1 tag and considered invalid.
+incorrect-heading-order: Your heading structure has an incorrect order and is invalid.
+missing-h1-tag: Your heading structure does not contain an H1 and is invalid.
+multiple-h1-tags: Your heading structure contains more than one H1 and is invalid.
+
+# Blueprint - Site/Common
+metadata-site: Metadata & SEO
+global-meta-headline: Global SEO Settings
+global-meta-headline-help: |
+  These settings are used for all pages that do not have their own metadata.
+  You can override them for each page.
+meta-title-template: Title Template
+meta-title-template-help: |
+  A template to use for all page titles.
+  "\{ title }}" will be replaced with the page title. Supports [Kirby Query Language](https://getkirby.com/docs/guide/blueprints/query-language).
+meta-description: Page Description
+meta-description-help: Recommended length of 150 characters max. Used if no page description is specified.
+
+global-og-headline: Global Open Graph Settings
+global-og-headline-help: Set how your website appears when shared on social networks like Facebook or Twitter.
+og-title-template: Open Graph Title Template
+og-description: Open Graph Description
+og-site-name: Open Graph Site Name
+og-image: Open Graph Image
+og-image-help: Recommended size of 1200x630 pixels.
+og-image-empty: No Open Graph Image selected
+twitter-card-type: Twitter Card Type
+twitter-card-type-help: Twitter Card Type determines how your website looks when shared on Twitter. [Read more](https://developer.twitter.com/en/docs/tweets/optimize-with-cards/overview/abouts-cards).
+
+social-media-accounts: Social Media Accounts
+social-media-accounts-help: URLs or @handles to your social media accounts. Used to put links to your accounts in the metadata.
+
+# Blueprint - Page
+meta-headline: SEO Settings
+og-headline: Open Graph Settings
+title-overwrite: Title (overwrite)
+summary: Summary with Square Image
+summary_large_image: Summary with Large Image
+default-select: 'Default:'
+twitter-author: 'Author @username on Twitter'
+inherit-settings: Inherit Settings
+inherit-settings-help: |
+  Select which settings should be inherited by subpages.
+  This can be helpful, for example, if all posts of a blog should have their own title template, which differs from the page default. All settings can still be overridden in the main page.
+use-title-template: Use title template?
+use-title-template-no: 'No - only title'
+use-title-template-yes: 'Yes - with template'
+use-title-template-help: Specifies whether the title template should be used. Will not be inherited.
