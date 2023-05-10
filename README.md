@@ -1,6 +1,9 @@
-# Kirby SEO
+![Kirby SEO Banner](/.github/banner.png)
 
-SEO for Kirby CMS – done right.
+<h1 align="center">Kirby SEO</h1>
+<p align="center">SEO for Kirby CMS – done right.</p>
+
+---
 
 ## Features
 
