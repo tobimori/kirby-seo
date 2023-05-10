@@ -44,7 +44,16 @@ export default {
     }
   },
   created() {
-    this.handleLoad()
+    this.isLoading = true
+
+    this.load().then((data) => {
+      this.label = data.label
+    }) // loads label and properties
+    this.handleLoad() // handles metadata & title change
+
+    this.debouncedLoad = this.$helper.debounce((changes) => {
+      this.handleLoad(changes)
+    }, 200) // debounce function for dirty changes watcher
   },
   computed: {
     changes() {
@@ -64,15 +73,13 @@ export default {
     async handleLoad(changes) {
       this.isLoading = true
 
-      let newChanges = {}
-      Object.entries(changes ?? this.changes).map(([key, value]) => {
-        newChanges[key] = encodeURIComponent(JSON.stringify(value))
-      })
-      const response = await this.$api.get(this.parent + '/sections/' + this.name, newChanges)
+      const page = this.parent.toString().split('/').pop()
+      const response = await this.$api.post(
+        `/k-seo/${page}/heading-structure`,
+        changes ?? this.changes
+      )
 
-      this.value = response.value
-      this.label = response.label
-
+      this.value = response
       this.isLoading = false
     },
     itemInvalid(item, index) {
@@ -85,7 +92,7 @@ export default {
   },
   watch: {
     changes(changes) {
-      this.$helper.debounce((changes) => this.handleLoad(changes), 200)(changes)
+      this.debouncedLoad(changes)
     }
   }
 }

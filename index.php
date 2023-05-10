@@ -38,10 +38,8 @@ App::plugin('tobimori/seo', [
     'de' => Yaml::decode(F::read(__DIR__ . '/translations/de.yml')),
     'en' => Yaml::decode(F::read(__DIR__ . '/translations/en.yml'))
   ],
-  'sections' => [
-    'heading-structure' => require __DIR__ . '/config/sections/heading-structure.php',
-    'seo-preview' => require __DIR__ . '/config/sections/seo-preview.php',
-  ],
+  'sections' => require __DIR__ . '/config/sections.php',
+  'api' =>  require __DIR__ . '/config/api.php',
   'siteMethods' => [
     'schema' => fn ($type) => SchemaSingleton::getInstance($type),
     'schemas' => fn () => SchemaSingleton::getInstances(),

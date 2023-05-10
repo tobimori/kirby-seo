@@ -1,7 +1,7 @@
 {
   "name": "kirby-seo",
   "description": "The ultimate Kirby SEO toolkit",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "private": true,
   "license": "MIT",
   "author": "Tobias Möritz",
