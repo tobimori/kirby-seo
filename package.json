@@ -10,6 +10,7 @@
     "build": "kirbyup src/index.js"
   },
   "devDependencies": {
+    "husky": "^8.0.3",
     "kirbyup": "^0.21.1",
     "postcss": "^8.4.5",
     "sass": "^1.47.0"
