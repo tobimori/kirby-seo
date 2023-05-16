@@ -1,13 +1,14 @@
 {
   "name": "kirby-seo",
   "description": "The ultimate Kirby SEO toolkit",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "private": true,
   "license": "MIT",
   "author": "Tobias Möritz",
   "scripts": {
     "dev": "kirbyup src/index.js --watch",
-    "build": "kirbyup src/index.js"
+    "build": "kirbyup src/index.js",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "husky": "^8.0.3",

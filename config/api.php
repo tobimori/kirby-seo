@@ -1,6 +1,5 @@
 <?php
 
-use Kirby\Cms\App;
 use Kirby\Cms\Page;
 use Kirby\Cms\Site;
 use Kirby\Form\Form;
@@ -16,7 +15,7 @@ return [
         $form = Form::for($page, [ // Form class handles transformation of changed items
           'ignoreDisabled' => true,
           'input' => array_merge(['title' => $page->title()], $page->content()->data(), $this->requestBody()),
-          'language' => $kirby->language()->code()
+          'language' => $kirby->language()?->code()
         ]);
 
         $page = $page->clone(['content' => $form->data()]);

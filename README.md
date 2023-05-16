@@ -64,6 +64,19 @@ Add the meta snippet to your templates.
 
 ..and start defining your meta data in panel.
 
+#### Single-Language Setup
+
+If you're using a single-language setup, it's important to define the language code of your website in the config file:
+
+```php
+// config.php
+return [
+    'tobimori.seo.lang' => 'en_US',
+];
+```
+
+It's used for the `og:locale` meta tag, and can be applied to the `lang` attribute of your `<html>` tag using the `$site->lang()` site method.
+
 ### Schema.org usage
 
 The plugin exposes the [`spatie/schema-org`](https://github.com/spatie/schema-org) package as site & page methods, with a global store you can access anywhere.
@@ -133,6 +146,7 @@ This example shows an FAQ page with multiple blocks, each containing a question 
 | `generateSchema`       | `true`                                                                     | Whether to generate Schema.org JSON-LD with the default 'website' type                             |
 | `canonicalIncludesWWW` | `false`                                                                    | Whether to include the www. subdomain in the automatically generated canonical URL                 |
 | `dateFormat`           | `%Y-%m-%d`                                                                 | Date format for generation of page modified meta tags                                              |
+| `lang`                 | `en_US`                                                                    | Language code to be used in meta tags for single language setups                                   |
 
 Options allow you to fine tune the behaviour of the plugin. You can set them in your `config.php` file:
 

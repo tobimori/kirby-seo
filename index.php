@@ -18,10 +18,10 @@ App::plugin('tobimori/seo', [
       'ogTemplate' => '{{ title }}',
       'ogSiteName' => fn (Page $page) => $page->site()->title(),
       'ogType' => 'website',
-      'ogLocale' => fn (Page $page) => $page->kirby()->language()->code() ?? 'en',
       'twitterCardType' => 'summary',
       'ogDescription' => fn (Page $page) => $page->metadata()->metaDescription(),
       'twitterCreator' => fn (Page $page) => $page->metadata()->twitterSite(),
+      'lang' => fn (Page $page) => $page->kirby()->language()?->locale(LC_ALL) ?? $page->kirby()->option('tobimori.seo.lang', 'en_US'),
     ],
     'socialMedia' => [
       'twitter' => 'https://twitter.com/my-company',
@@ -32,7 +32,8 @@ App::plugin('tobimori/seo', [
     ],
     'generateSchema' => true,
     'canonicalIncludesWWW' => false,
-    'dateFormat' => '%Y-%m-%d'
+    'lang' => 'en_US',
+    'dateFormat' => '%Y-%m-%d',
   ],
   'translations' => [
     'de' => Yaml::decode(F::read(__DIR__ . '/translations/de.yml')),
@@ -43,6 +44,7 @@ App::plugin('tobimori/seo', [
   'siteMethods' => [
     'schema' => fn ($type) => SchemaSingleton::getInstance($type),
     'schemas' => fn () => SchemaSingleton::getInstances(),
+    'lang' => fn () => option('tobimori.seo.default.lang')($this->homePage())
   ],
   'pageMethods' => [
     'schema' => fn ($type) => SchemaSingleton::getInstance($type, $this),

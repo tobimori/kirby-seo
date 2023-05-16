@@ -51,7 +51,6 @@ $mapOg = [
   'og:image:height' => $ogImage?->height(),
   'og:image:alt' => $ogImage?->alt(),
   'og:type' => $meta->ogType(),
-  'og:locale' => $meta->ogLocale(),
 ];
 
 foreach ($mapOg as $property => $content) {
@@ -75,7 +74,10 @@ foreach ($mapOg as $property => $content) {
 
   <link rel="alternate" hreflang="x-default" href="<?= $page->url($kirby->defaultLanguage()->code()) ?>">
   <meta property="og:locale" content="<?= $kirby->language()->locale(LC_ALL) ?>">
+<?php else : ?>
+  <meta property="og:locale" content="<?= $meta->lang() ?>">
 <?php endif ?>
+
 
 <?php /** Robots */ ?>
 <?php if ($page->status() == 'unlisted') : ?>
