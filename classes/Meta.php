@@ -141,4 +141,21 @@ class Meta
 
     return new Field($this->page, 'twitter', $username);
   }
+
+  public function dateFormat()
+  {
+    if ($custom = $this->kirby()->option('tobimori.seo.dateFormat')) {
+      return $custom;
+    }
+
+    switch ($this->kirby()->option('date.handler')) {
+      case 'strftime':
+        return '%%Y-%m-%d';
+      case 'itl':
+        return 'yyyy-MM-dd';
+      case 'date':
+      default:
+        return 'Y-m-d';
+    }
+  }
 }

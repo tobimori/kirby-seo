@@ -33,7 +33,7 @@ App::plugin('tobimori/seo', [
     'generateSchema' => true,
     'canonicalIncludesWWW' => false,
     'lang' => 'en_US',
-    'dateFormat' => '%Y-%m-%d',
+    'dateFormat' => null,
   ],
   'translations' => [
     'de' => Yaml::decode(F::read(__DIR__ . '/translations/de.yml')),
