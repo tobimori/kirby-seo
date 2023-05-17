@@ -4,6 +4,9 @@ incorrect-heading-order: Your heading structure has an incorrect order and is in
 missing-h1-tag: Your heading structure does not contain an H1 and is invalid.
 multiple-h1-tags: Your heading structure contains more than one H1 and is invalid.
 
+# SEO Preview
+twitter-card-type-not-respected: The Twitter card type is not respected because there is no OG image.
+
 # Blueprint - Site/Common
 metadata-site: Metadata & SEO
 global-meta-headline: Global SEO Settings

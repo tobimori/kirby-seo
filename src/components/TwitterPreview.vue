@@ -1,13 +1,26 @@
 <template>
-  <div class="k-twitter-preview">
-    <div class="k-twitter-preview__image">
-      <img :src="ogImage" class="k-twitter-preview__img" />
+  <div>
+    <div
+      class="k-twitter-preview"
+      :class="{ 'is-horizontal': twitterCardType !== 'summary_large_image' || !ogImage }"
+    >
+      <div class="k-twitter-preview__image">
+        <img :src="ogImage" class="k-twitter-preview__img" :class="{ 'is-hidden': !ogImage }" />
+      </div>
+      <div class="k-twitter-preview__content">
+        <span class="k-twitter-preview__url">{{ host }}</span>
+        <span class="k-twitter-preview__title">{{ ogTitle }}</span>
+        <p class="k-twitter-preview__description">{{ ogDescription }}</p>
+      </div>
     </div>
-    <div class="k-twitter-preview__content">
-      <span class="k-twitter-preview__url">{{ host }}</span>
-      <span class="k-twitter-preview__title">{{ ogTitle }}</span>
-      <p class="k-twitter-preview__description">{{ ogDescription }}</p>
-    </div>
+    <k-box
+      class="k-twitter-preview-notice"
+      theme="info"
+      v-if="twitterCardType === 'summary_large_image' && !ogImage"
+    >
+      <k-icon type="alert" />
+      <k-text>{{ $t('twitter-card-type-not-respected') }}</k-text>
+    </k-box>
   </div>
 </template>
 
@@ -30,6 +43,8 @@ export default {
 
 <style lang="scss">
 .k-twitter-preview {
+  $c: &;
+
   border-radius: 1rem;
   border: 1px solid rgb(207, 217, 222);
   background: #fff;
@@ -38,6 +53,41 @@ export default {
 
   &:hover {
     background: rgb(247, 249, 249);
+  }
+
+  &-notice {
+    margin-top: var(--spacing-3);
+    display: flex;
+    align-items: flex-start;
+
+    > .k-icon {
+      margin-top: var(--spacing-1);
+      margin-right: var(--spacing-3);
+    }
+  }
+
+  &.is-horizontal {
+    display: flex;
+
+    #{$c} {
+      &__image {
+        width: 8.125rem;
+        padding-bottom: 8.125rem;
+        flex-shrink: 0;
+      }
+
+      &__content {
+        border-top: 0;
+        border-left: 1px solid rgb(207, 217, 222);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      &__description {
+        -webkit-line-clamp: 2;
+      }
+    }
   }
 
   &__content {
@@ -76,6 +126,10 @@ export default {
       width: 100%;
       height: 100%;
       object-fit: cover;
+
+      &.is-hidden {
+        display: none;
+      }
     }
 
     &::before {

@@ -4,6 +4,9 @@ incorrect-heading-order: Deine Überschriftenstruktur hat eine falsche Abfolge u
 missing-h1-tag: Deine Überschriftenstruktur enthält keine H1 und ist ungültig.
 multiple-h1-tags: Deine Überschriftenstruktur enthält mehr als eine H1 und ist ungültig.
 
+# SEO Preview
+twitter-card-type-not-respected: Der Twitter-Kartentyp kann nicht respektiert werden, da kein OG-Bild vorhanden ist.
+
 # Blueprint - Site/Common
 metadata-site: Metadaten & SEO
 global-meta-headline: Globale SEO-Einstellungen

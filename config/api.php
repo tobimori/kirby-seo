@@ -80,6 +80,7 @@ return [
             'ogTitle' => $meta->ogTitle()->value(),
             'ogDescription' => $meta->ogDescription()->value(),
             'ogImage' => $ogImage?->url(),
+            'twitterCardType' => $meta->twitterCardType()->value(),
           ];
         }
 
