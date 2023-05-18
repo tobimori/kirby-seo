@@ -5,7 +5,27 @@ missing-h1-tag: Deine Überschriftenstruktur enthält keine H1 und ist ungültig
 multiple-h1-tags: Deine Überschriftenstruktur enthält mehr als eine H1 und ist ungültig.
 
 # SEO Preview
+seo-preview: Vorschau
+seo-preview-for: Zeige mir
 twitter-card-type-not-respected: Der Twitter-Kartentyp kann nicht respektiert werden, da kein OG-Bild vorhanden ist.
+open-debugger: Sharing-Debugger öffnen
+open-search-console: Search Console öffnen
+
+# Robots
+indicator-index: Indexierung erlaubt
+indicator-any: Indexierung teilw. verboten
+indicator-noindex: Indexierung verboten
+robots: Richtlinien für Suchmaschinen & Crawler
+robots-index: Indexierung
+robots-index-help: Ob Suchmaschinen die Seite indexieren dürfen.
+robots-follow: Links folgen
+robots-follow-help: Ob Suchmaschinen Links auf dieser Seite folgen dürfen.
+robots-archive: Archivierung
+robots-archive-help: Ob Suchmaschinen zwischengespeicherte Versionen der Seite ausliefern dürfen.
+robots-imageindex: Bilder-Indexierung
+robots-imageindex-help: Ob Bilder dieser Seite in der Bildersuche angezeigt werden dürfen.
+robots-snippet: Snippets
+robots-snippet-help: Ob Suchmaschinen Textausschnitte aus der Seite anzeigen dürfen.
 
 # Blueprint - Site/Common
 metadata-site: Metadaten & SEO

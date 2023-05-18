@@ -1,19 +1,31 @@
 <template>
-  <div class="k-google-search-preview">
-    <span class="k-google-search-preview__url">
-      <span>{{ origin }}</span>
-      <span
-        v-for="(breadcrumb, index) in breadcrumbs"
-        :key="index"
-        class="k-google-search-preview__url__breadcrumb"
-      >
-        {{ breadcrumb }}
+  <div>
+    <div class="k-google-search-preview">
+      <span class="k-google-search-preview__url">
+        <span>{{ origin }}</span>
+        <span
+          v-for="(breadcrumb, index) in breadcrumbs"
+          :key="index"
+          class="k-google-search-preview__url__breadcrumb"
+        >
+          {{ breadcrumb }}
+        </span>
       </span>
-    </span>
-    <h2 class="k-google-search-preview__headline">{{ title }}</h2>
-    <p class="k-google-search-preview__paragraph">
-      {{ description }}
-    </p>
+      <h2 class="k-google-search-preview__headline">{{ title }}</h2>
+      <p class="k-google-search-preview__paragraph">
+        {{ description }}
+      </p>
+    </div>
+    <a
+      class="k-seo-preview__debugger"
+      href="https://search.google.com/search-console"
+      aria-label="Google Search Console"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {{ $t('open-search-console') }}
+      <k-icon type="open" />
+    </a>
   </div>
 </template>
 

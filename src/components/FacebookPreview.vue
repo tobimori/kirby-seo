@@ -1,13 +1,25 @@
 <template>
-  <div class="k-facebook-preview">
-    <div class="k-facebook-preview__image">
-      <img :src="ogImage" class="k-facebook-preview__img" />
+  <div>
+    <div class="k-facebook-preview">
+      <div class="k-facebook-preview__image" v-if="ogImage">
+        <img :src="ogImage" class="k-facebook-preview__img" />
+      </div>
+      <div class="k-facebook-preview__content">
+        <span class="k-facebook-preview__url">{{ host }}</span>
+        <span class="k-facebook-preview__title">{{ ogTitle }}</span>
+        <p class="k-facebook-preview__description">{{ ogDescription }}</p>
+      </div>
     </div>
-    <div class="k-facebook-preview__content">
-      <span class="k-facebook-preview__url">{{ host }}</span>
-      <span class="k-facebook-preview__title">{{ ogTitle }}</span>
-      <p class="k-facebook-preview__description">{{ ogDescription }}</p>
-    </div>
+    <a
+      class="k-seo-preview__debugger"
+      href="https://developers.facebook.com/tools/debug/"
+      aria-label="Facebook Sharing Debugger"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {{ $t('open-debugger') }}
+      <k-icon type="open" />
+    </a>
   </div>
 </template>
 

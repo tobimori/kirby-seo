@@ -18,7 +18,7 @@ columns:
         type: textarea
         help: meta-description-help
         buttons: false
-      seoL:ine1:
+      seoLine1:
         type: line
       ogHeadline:
         label: global-og-headline
@@ -59,6 +59,7 @@ columns:
         help: twitter-card-type-help
       seoLine2:
         type: line
+      robots: seo/fields/site-robots
       socialMediaAccounts: seo/fields/social-media
   - width: 5/12
     sticky: true

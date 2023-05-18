@@ -1,0 +1,33 @@
+type: group
+fields:
+  metaHeadline:
+    label: meta-headline
+    type: headline
+    numbered: false
+  metaTitle:
+    label: title-overwrite
+    type: text
+    placeholder: '{{ page.title }}'
+  metaTemplate:
+    label: meta-title-template
+    type: text
+    help: meta-title-template-help
+    width: 2/3
+    placeholder: '{{ page.metadata.metaTemplate }}'
+  useTitleTemplate:
+    label: use-title-template
+    type: toggle
+    help: use-title-template-help
+    width: 1/3
+    default: true
+    text:
+      - "{{ t('use-title-template-no') }}"
+      - "{{ t('use-title-template-yes') }}"
+  metaDescription:
+    label: meta-description
+    type: textarea
+    help: meta-description-help
+    placeholder: '{{ page.metadata.metaDescription }}'
+    buttons: false
+  seoLine1:
+    type: line

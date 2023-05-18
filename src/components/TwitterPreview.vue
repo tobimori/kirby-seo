@@ -21,6 +21,16 @@
       <k-icon type="alert" />
       <k-text>{{ $t('twitter-card-type-not-respected') }}</k-text>
     </k-box>
+    <a
+      class="k-seo-preview__debugger"
+      href="https://cards-dev.twitter.com/validator"
+      aria-label="Twitter Card Validator"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {{ $t('open-debugger') }}
+      <k-icon type="open" />
+    </a>
   </div>
 </template>
 

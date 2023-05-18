@@ -4,6 +4,7 @@ use Kirby\Cms\Page;
 use Kirby\Cms\Site;
 use Kirby\Form\Form;
 use Kirby\Toolkit\Str;
+use Kirby\Toolkit\A;
 
 return [
   'data' => [
@@ -77,6 +78,7 @@ return [
             'url' => $model->url(),
             'title' => $meta->title()->value(),
             'description' => $meta->metaDescription()->value(),
+            'ogSiteName' => $meta->ogSiteName()->value(),
             'ogTitle' => $meta->ogTitle()->value(),
             'ogDescription' => $meta->ogDescription()->value(),
             'ogImage' => $ogImage?->url(),
@@ -85,6 +87,30 @@ return [
         }
 
         return null;
+      }
+    ],
+    [
+      'pattern' => '/k-seo/(:any)/robots',
+      'method' => 'POST',
+      'action' => function (string $slug) {
+        $model = $this->dirtyPageOrSite($slug);
+
+        if (!($model instanceof Page)) return null;
+
+        $robots = $model->robots();
+
+        $defaults = [];
+        foreach (option('tobimori.seo.robots.types') as $type) {
+          if (!$model->metadata()->getFallback('robots' . Str::ucfirst($type))->toBool()) {
+            $defaults[] = 'no' . Str::lower($type);
+          }
+        };
+
+        return [
+          'active' => option('tobimori.seo.robots.indicator', option('tobimori.seo.robots.active', true)),
+          'state' => $robots,
+          'defaults' => A::join($defaults, ',')
+        ];
       }
     ]
   ]

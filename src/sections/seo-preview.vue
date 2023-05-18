@@ -1,8 +1,12 @@
 <template>
   <div class="k-seo-preview">
+    <div class="k-seo-preview__label k-field-label">
+      <k-icon type="preview" /><span>{{ label || $t('seo-preview') }}</span>
+      <k-loader v-if="isLoading" />
+    </div>
     <k-select-field
-      label="Preview"
       type="select"
+      :before="$t('seo-preview-for')"
       v-model="type"
       :options="options"
       :empty="false"
@@ -11,6 +15,7 @@
       <google-preview v-if="type === 'google'" v-bind="value" />
       <twitter-preview v-if="type === 'twitter'" v-bind="value" />
       <facebook-preview v-if="type === 'facebook'" v-bind="value" />
+      <slack-preview v-if="type === 'slack'" v-bind="value" />
     </div>
   </div>
 </template>
@@ -19,15 +24,17 @@
 import FacebookPreview from '../components/FacebookPreview.vue'
 import GooglePreview from '../components/GooglePreview.vue'
 import TwitterPreview from '../components/TwitterPreview.vue'
+import SlackPreview from '../components/SlackPreview.vue'
 
 export default {
-  components: { GooglePreview, TwitterPreview, FacebookPreview },
+  components: { GooglePreview, TwitterPreview, FacebookPreview, SlackPreview },
   data() {
     const type = localStorage.getItem('kSEOPreviewType') ?? 'google'
 
     return {
       label: null,
       value: null,
+      isLoading: true,
       type
     }
   },
@@ -60,6 +67,10 @@ export default {
         {
           value: 'facebook',
           text: 'Facebook'
+        },
+        {
+          value: 'slack',
+          text: 'Slack'
         }
       ]
     }
@@ -90,6 +101,41 @@ export default {
 .k-seo-preview {
   &__inner {
     margin-top: 1em;
+  }
+
+  &__debugger {
+    margin-top: 1rem;
+    display: flex;
+    font-size: var(--text-sm);
+    color: var(--color-gray-600);
+    line-height: 1.25rem;
+    width: max-content;
+    margin-left: auto;
+
+    &:hover {
+      text-decoration: underline;
+      color: var(--text-gray-700);
+    }
+
+    > .k-icon {
+      margin-left: var(--spacing-3);
+    }
+  }
+
+  &__label {
+    display: flex;
+    align-items: center;
+    margin-bottom: -2rem;
+
+    > .k-icon {
+      margin-right: var(--spacing-3);
+      color: var(--color-gray-700);
+    }
+
+    > .k-loader {
+      margin-left: auto;
+      color: var(--color-gray-700);
+    }
   }
 }
 </style>

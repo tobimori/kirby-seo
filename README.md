@@ -7,17 +7,20 @@
 
 ## Features
 
-- All-in-one SEO and meta solution
-- The Meta Cascade: Intelligently merge meta data from multiple sources
-- Schema.org support with fluent classes
-- _to be extended_
+- 🔎 All-in-one SEO and meta solution
+- 🪜 The Meta Cascade: Intelligently merge meta data from multiple sources
+- 🎛 Completely configurable: Disable features you don't need
+- 💻 Simple Panel UI with previews for Google, Twitter, Facebook & Co.
+- 📮 [Schema.org](https://schema.org/) support with fluent classes
+- 🤖 Automatic Robots rule generation, based on page status
+- [_to be extended_](#roadmap)
 
 ## Requirements
 
 - Kirby 3.9+
 - PHP 8.1+
 
-## How it works - The Meta Cascade
+## How it works - The Meta Cascade 🪜
 
 Kirby SEO is built with a cascading approach in mind. This means that you can define meta tags on multiple levels, and they will be merged together based on their priority:
 
@@ -30,6 +33,18 @@ Kirby SEO is built with a cascading approach in mind. This means that you can de
 If any setting is left empty, it will fallback to the next level. In this way, the plugin provides _cascades_ to form the final meta data.
 
 ## Usage
+
+### Installation
+
+#### Recommended: Composer
+
+```
+composer require tobimori/kirby-seo
+```
+
+#### Manual installation
+
+Download and copy this repository to `/site/plugins/kirby-seo`, or apply this repository as Git submodule.
 
 ### Getting started
 
@@ -57,9 +72,13 @@ Add the meta snippet to your templates.
 
 ```php
 // site/templates/default.php
-<head>
+<head lang="<?= $site->lang() ?>">
     <?php snippet('seo/head'); ?>
 </head>
+<body>
+    [...]
+    <?php snippet('seo/schemas'); ?>
+</body>
 ```
 
 ..and start defining your meta data in panel.
@@ -81,7 +100,7 @@ It's used for the `og:locale` meta tag, and can be applied to the `lang` attribu
 
 The plugin exposes the [`spatie/schema-org`](https://github.com/spatie/schema-org) package as site & page methods, with a global store you can access anywhere.
 
-By default, the `$page`s `WebSite` schema will be pre-filled with data from fields. You can override the data with the methods listed below.
+By default, the `$page`s `WebSite` schema will be pre-filled with data from fields. You can override the data with the methods listed below. This can also be configured via the `generateSchema` option.
 
 #### `$page->schema($type)` / `$site->schema($type)`
 
@@ -139,14 +158,14 @@ This example shows an FAQ page with multiple blocks, each containing a question 
 
 ## Options
 
-| Option                 | Default                                                                    | Description                                                                                        |
-| ---------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| `default.*`            | [see index.php](https://github.com/tobimori/kirby-seo/blob/main/index.php) | Sets several defaults for meta tags where necessary, see Meta Cascade                              |
-| `socialMedia.*`        | [see index.php](https://github.com/tobimori/kirby-seo/blob/main/index.php) | Customize the social media accounts field for the site blueprint (Format: `'id' => 'placeholder'`) |
-| `generateSchema`       | `true`                                                                     | Whether to generate Schema.org JSON-LD with the default 'website' type                             |
-| `canonicalIncludesWWW` | `false`                                                                    | Whether to include the www. subdomain in the automatically generated canonical URL                 |
-| `dateFormat`           | `%Y-%m-%d`                                                                 | Date format for generation of page modified meta tags                                              |
-| `lang`                 | `en_US`                                                                    | Language code to be used in meta tags for single language setups                                   |
+| Option                 | Default                                                                    | Description                                                                                                   |
+| ---------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `default.*`            | [see index.php](https://github.com/tobimori/kirby-seo/blob/main/index.php) | Sets several defaults for meta tags where necessary, see Meta Cascade                                         |
+| `socialMedia.*`        | [see index.php](https://github.com/tobimori/kirby-seo/blob/main/index.php) | Customize the social media accounts field for the site blueprint (Format: `'id' => 'placeholder'`)            |
+| `generateSchema`       | `true`                                                                     | Whether to generate Schema.org JSON-LD with the default 'website' type                                        |
+| `canonicalIncludesWWW` | `false`                                                                    | Whether to include the www. subdomain in the automatically generated canonical URL                            |
+| `dateFormat`           | `null`                                                                     | Date format for generation of page modified meta tags, will be set automatically based on your `data.handler` |
+| `lang`                 | `en_US`                                                                    | Language code to be used in meta tags for single language setups                                              |
 
 Options allow you to fine tune the behaviour of the plugin. You can set them in your `config.php` file:
 
@@ -162,18 +181,16 @@ return [
 
 ## Roadmap
 
-- [ ] Robots page status as section
 - [ ] Google pixel length calculation for preview
 - [ ] `seo/inheritables` page blueprint, containing only inheritable fields for use with pages that don't have a frontend representation
 - [ ] Toolkit for programmatic image generation with Puppeteer/BrowserShot (might be separate plugin)
 - [ ] Social Media Links handling in sameAs schema.org property, and `og:see_also` meta tag
-- [ ] Keywords/Tags field
-- [ ] `robots.txt` generation
-- [ ] `sitemap.xml` generation
+- [ ] `sitemap.xml` generation, with multi-lang support
 - [ ] Favicon and webmanifest generation
 - [ ] SEO Overview page/dashboard
 - [ ] Site Verification fields
-- [ ] Robots field section, for per-page overrides
+- [ ] Browser title preview w/ Favicon
+- [ ] Social Preview for LinkedIn, Pinterest & Discord
 
 This roadmap is a courtesy and subject to change at any time.
 New features will be added as soon as I need them for my own projects.

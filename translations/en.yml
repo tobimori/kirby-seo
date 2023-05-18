@@ -5,7 +5,27 @@ missing-h1-tag: Your heading structure does not contain an H1 and is invalid.
 multiple-h1-tags: Your heading structure contains more than one H1 and is invalid.
 
 # SEO Preview
-twitter-card-type-not-respected: The Twitter card type is not respected because there is no OG image.
+seo-preview: Preview
+seo-preview-for: Show me
+twitter-card-type-not-respected: Twitter Card Type is not respected because the OG image is unavailable.
+open-debugger: Open Sharing Debugger
+open-search-console: Open Search Console
+
+# Robots
+indicator-index: Indexing allowed
+indicator-any: Indexing partly forbidden
+indicator-noindex: Indexing forbidden
+robots: Robots Directives
+robots-index: Indexing
+robots-index-help: Whether search engines may index this page.
+robots-follow: Follow Links
+robots-follow-help: Whether search engines may follow links on this page.
+robots-archive: Archive
+robots-archive-help: Whether search engines may archive this page.
+robots-imageindex: Image Indexing
+robots-imageindex-help: Whether search engines may index images on this page.
+robots-snippet: Snippets
+robots-snippet-help: Whether search engines may show text snippets of this page.
 
 # Blueprint - Site/Common
 metadata-site: Metadata & SEO

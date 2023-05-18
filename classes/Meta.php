@@ -4,14 +4,19 @@ namespace tobimori\Seo;
 
 use Kirby\Cms\Field;
 use Kirby\Cms\Page;
+use Kirby\Toolkit\Str;
+use Kirby\Toolkit\A;
+
 
 class Meta
 {
+  const DEFAULT_VALUES = ['[]', 'default'];
+
   protected Page $page;
   protected ?string $lang;
   protected array $meta = [];
 
-  public function __call($name, $args): mixed
+  public function __call($name, $args = null): mixed
   {
     return $this->get($name);
   }
@@ -28,36 +33,46 @@ class Meta
 
   public function get(string $key): Field
   {
-    if (($field = $this->page->content($this->lang)->get($key)) && ($field->isNotEmpty() && $field->value() !== '[]')) { // Page field
-      return $field;
+    if (($field = $this->page->content($this->lang)->get($key))) { // Page field
+      if (Str::contains($key, 'robots') && !option('tobimori.seo.robots.pageSettings')) return $this->getFallback($key);
+
+      if ($field->isNotEmpty() && !A::has(self::DEFAULT_VALUES, $field->value())) {
+        return $field;
+      }
     }
 
+    return $this->getFallback($key);
+  }
+
+  public function getFallback(string $key): Field
+  {
     if ($this->meta && array_key_exists($key, $this->meta)) { // Programmatic content
       $val = $this->meta[$key];
-
-      if (is_a($val, 'Kirby\Cms\Field')) {
-        return $val;
-      }
 
       if (is_callable($val)) {
         $val = $val($this->page);
       }
 
+      if (is_a($val, 'Kirby\Cms\Field')) {
+        return $val;
+      }
+
       return new Field($this->page, $key, $val);
     }
 
-    if (($parent = $this->page->parent()) && in_array($key, $parent->metaInherit()->split())) { // Inheritance from parent
+    if ($this->canInherit($key)) { // Inheritance from parent
+      $parent = $this->page->parent();
       $parentMeta = new Meta($parent, $this->lang);
       if ($value = $parentMeta->get($key)) {
         return $value;
       }
     }
 
-    if (($site = $this->page->site()->content($this->lang)->get($key)) && ($site->isNotEmpty() && $site->value() !== '[]')) { // Site globals
+    if (($site = $this->page->site()->content($this->lang)->get($key)) && ($site->isNotEmpty() && !A::has(self::DEFAULT_VALUES, $site->value))) { // Site globals
       return $site;
     }
 
-    if ($option = $this->page->kirby()->option("tobimori.seo.default.{$key}")) { // Options fallback
+    if ($option = option("tobimori.seo.default.{$key}")) { // Options fallback
       if (is_callable($option)) {
         $option = $option($this->page);
       }
@@ -72,6 +87,22 @@ class Meta
     return new Field($this->page, $key, '');
   }
 
+  /**
+   * Checks if the page can inherit a meta value from its parent
+   */
+  private function canInherit(string $key): bool
+  {
+    $parent = $this->page->parent();
+    if (!$parent) return false;
+
+    $inherit = $parent->metaInherit()->split();
+    if (Str::contains($key, 'robots') && A::has($inherit, 'robots')) return true;
+    return A::has($inherit, $key);
+  }
+
+  /**
+   * Applies the title template, and returns the correct title 
+   */
   public function title()
   {
     $title = $this->metaTitle();
@@ -95,6 +126,9 @@ class Meta
     );
   }
 
+  /**
+   * Applies the OG title template, and returns the OG Title 
+   */
   public function ogTitle()
   {
     $title = $this->metaTitle();
@@ -118,6 +152,9 @@ class Meta
     );
   }
 
+  /**
+   * Gets the canonical url for the page
+   */
   public function canonicalUrl()
   {
     if (option('tobimori.seo.canonicalIncludesWWW') === false) {
@@ -127,6 +164,9 @@ class Meta
     }
   }
 
+  /**
+   * Get the Twitter username from an account url set in the site options
+   */
   public function twitterSite()
   {
     $accs = $this->page->site()->socialMediaAccounts()->toObject();
@@ -142,13 +182,20 @@ class Meta
     return new Field($this->page, 'twitter', $username);
   }
 
-  public function dateFormat()
+  /**
+   * Gets the date format for modified meta tags, based on the registered date handler
+   */
+  public function dateFormat(): string
   {
-    if ($custom = $this->kirby()->option('tobimori.seo.dateFormat')) {
+    if ($custom = option('tobimori.seo.dateFormat')) {
+      if (is_callable($custom)) {
+        return $custom($this->page);
+      }
+
       return $custom;
     }
 
-    switch ($this->kirby()->option('date.handler')) {
+    switch (option('date.handler')) {
       case 'strftime':
         return '%%Y-%m-%d';
       case 'itl':
@@ -157,5 +204,24 @@ class Meta
       default:
         return 'Y-m-d';
     }
+  }
+
+  /**
+   * Get the pages' robots rules as string
+   */
+  public function robots()
+  {
+    $robots = [];
+    foreach (option('tobimori.seo.robots.types') as $type) {
+      if (!$this->get('robots' . Str::ucfirst($type))->toBool()) {
+        $robots[] = 'no' . Str::lower($type);
+      }
+    };
+
+    if (A::count($robots) === 0) {
+      $robots = ['all'];
+    }
+
+    return A::join($robots, ',');
   }
 }
