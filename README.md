@@ -158,14 +158,22 @@ This example shows an FAQ page with multiple blocks, each containing a question 
 
 ## Options
 
-| Option                 | Default                                                                    | Description                                                                                                   |
-| ---------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `default.*`            | [see index.php](https://github.com/tobimori/kirby-seo/blob/main/index.php) | Sets several defaults for meta tags where necessary, see Meta Cascade                                         |
-| `socialMedia.*`        | [see index.php](https://github.com/tobimori/kirby-seo/blob/main/index.php) | Customize the social media accounts field for the site blueprint (Format: `'id' => 'placeholder'`)            |
-| `generateSchema`       | `true`                                                                     | Whether to generate Schema.org JSON-LD with the default 'website' type                                        |
-| `canonicalIncludesWWW` | `false`                                                                    | Whether to include the www. subdomain in the automatically generated canonical URL                            |
-| `dateFormat`           | `null`                                                                     | Date format for generation of page modified meta tags, will be set automatically based on your `data.handler` |
-| `lang`                 | `en_US`                                                                    | Language code to be used in meta tags for single language setups                                              |
+| Option                    | Default                                                                    | Description                                                                                                                            |
+| ------------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `default.*`               | [see index.php](https://github.com/tobimori/kirby-seo/blob/main/index.php) | Sets several defaults for meta tags where necessary, see Meta Cascade                                                                  |
+| `socialMedia.*`           | [see index.php](https://github.com/tobimori/kirby-seo/blob/main/index.php) | Customize the social media accounts field for the site blueprint, disable them with `false` (Format: `'id' => 'placeholder'`)          |
+| `robots.active`           | `true`                                                                     | Whether the Robots module should be active (Robots.txt & Meta Tags generation)                                                         |
+| `robots.followPageStatus` | `true`                                                                     | Whether an unlisted page should be marked as non-indexable                                                                             |
+| `robots.pageSettings`     | `true`                                                                     | Whether to have the Robots settings as fields in the tab blueprints                                                                    |
+| `robots.indicator`        | `true`                                                                     | Show a page indexing state indicator next to the page status                                                                           |
+| `robots.index`            | `fn () => !option('debug')`                                                | Set a general indexing status for the site, can be a callable function, indexing is disallowed for pages with debug enabled by default |
+| `robots.sitemap`          | `null`                                                                     | A link to your sitemap, to be included in your `robots.txt`                                                                            |
+| `robots.content`          | `[]`                                                                       | A string or array of robots.txt rules, will fall back to a general `Allow`/`Disallow` depending on `robots.index`                      |
+| `robots.types`            | `['index', 'follow', 'archive', 'imageindex', 'snippet']`                  | Internally used option for available fields and Robots directive types, doesn't need to be changed                                     |
+| `generateSchema`          | `true`                                                                     | Whether to generate Schema.org JSON-LD with the default 'website' type                                                                 |
+| `canonicalIncludesWWW`    | `false`                                                                    | Whether to include the www. subdomain in the automatically generated canonical URL                                                     |
+| `dateFormat`              | `null`                                                                     | Date format for generation of page modified meta tags, will be set automatically by default based on your `data.handler`               |
+| `lang`                    | `en_US`                                                                    | Language code to be used in meta tags for single language setups                                                                       |
 
 Options allow you to fine tune the behaviour of the plugin. You can set them in your `config.php` file:
 
@@ -174,7 +182,16 @@ return [
     'tobimori.seo' => [
         'generateSchema' => true,
         'canonicalIncludesWWW' => false,
-        'dateFormat' => '%Y-%m-%d'
+        'dateFormat' => 'Y-m-d',
+        'robots' => [
+            'active' => true,
+            'content' => [
+                '*' => [
+                    'Allow' => ['/'],
+                    'Disallow' => ['/kirby', '/panel', '/content']
+                ]
+            ]
+        ]
     ],
 ];
 ```

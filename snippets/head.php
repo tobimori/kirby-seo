@@ -80,6 +80,6 @@ foreach ($mapOg as $property => $content) {
 
 
 <?php /** Robots */ ?>
-<?php if ($page->status() == 'unlisted') : ?>
-  <meta name="robots" content="none">
+<?php if ($meta->robots()) : ?>
+  <meta name="robots" content="<?= $meta->robots() ?>">
 <?php endif ?>
