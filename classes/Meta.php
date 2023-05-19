@@ -198,7 +198,7 @@ class Meta
     switch (option('date.handler')) {
       case 'strftime':
         return '%%Y-%m-%d';
-      case 'itl':
+      case 'intl':
         return 'yyyy-MM-dd';
       case 'date':
       default:
