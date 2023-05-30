@@ -35,7 +35,7 @@ return [
         if ($model instanceof Page) {
           $page = $model->render();
           $dom = new DOMDocument();
-          $dom->loadHTML(htmlspecialchars_decode(iconv('UTF-8', 'ISO-8859-1', htmlentities($page, ENT_COMPAT, 'UTF-8')), ENT_QUOTES), libxml_use_internal_errors(true));
+          $dom->loadHTML(htmlspecialchars_decode(mb_convert_encoding(htmlentities($page, ENT_COMPAT, 'UTF-8'), 'ISO-8859-1', 'UTF-8'), ENT_QUOTES), libxml_use_internal_errors(true));
 
           $xpath = new DOMXPath($dom);
           $headings = $xpath->query('//h1|//h2|//h3|//h4|//h5|//h6');

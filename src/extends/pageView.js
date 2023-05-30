@@ -22,7 +22,7 @@ export const pageView = () => {
       async handleLoad(changes) {
         if (!this.tabs.some((tab) => tab.name === 'seo')) return
 
-        const page = this.model.id.split('/').pop()
+        const page = this.model.id.replace('/', '+')
         const response = await this.$api.post(`/k-seo/${page}/robots`, changes ?? this.changes)
 
         if (!response.active) return
