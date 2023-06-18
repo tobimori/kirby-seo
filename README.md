@@ -174,6 +174,8 @@ This example shows an FAQ page with multiple blocks, each containing a question 
 | `canonicalIncludesWWW`    | `false`                                                                    | Whether to include the www. subdomain in the automatically generated canonical URL                                                     |
 | `dateFormat`              | `null`                                                                     | Date format for generation of page modified meta tags, will be set automatically by default based on your `data.handler`               |
 | `lang`                    | `en_US`                                                                    | Language code to be used in meta tags for single language setups                                                                       |
+| `files.parent`            | `null`                                                                     | Upload your OG images to a different page, e.g. `site.find('assets')`                                                                  |
+| `files.template`          | `null`                                                                     | Upload your OG images with a different template, e.g. `image`                                                                          |
 
 Options allow you to fine tune the behaviour of the plugin. You can set them in your `config.php` file:
 
