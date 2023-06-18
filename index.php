@@ -59,7 +59,11 @@ App::plugin('tobimori/seo', [
     'generateSchema' => true, // whether to generate default schema.org data
     'canonicalIncludesWWW' => false, // whether to include www. in canonical URLs
     'lang' => 'en_US', // default language, used for single-language sites
-    'dateFormat' => null, // custom date format
+    'dateFormat' => null, // custom date format,
+    'files' => [
+      'parent' => null,
+      'template' => null,
+    ]
   ],
   'translations' => [
     'de' => Yaml::decode(F::read(__DIR__ . '/translations/de.yml')),
@@ -86,7 +90,7 @@ App::plugin('tobimori/seo', [
   'blueprints' => [
     'seo/site' => __DIR__ . '/blueprints/site.yml',
     'seo/page' => __DIR__ . '/blueprints/page.yml',
-    'seo/fields/og-image' => __DIR__ . '/blueprints/fields/og-image.yml',
+    'seo/fields/og-image' => require __DIR__ . '/blueprints/fields/og-image.php',
     'seo/fields/og-group' => __DIR__ . '/blueprints/fields/og-group.yml',
     'seo/fields/meta-group' => __DIR__ . '/blueprints/fields/meta-group.yml',
     'seo/fields/robots' => require __DIR__ . '/blueprints/fields/robots.php',

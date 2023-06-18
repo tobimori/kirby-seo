@@ -6,3 +6,4 @@
 # Development files
 .editorconfig export-ignore
 composer.lock export-ignore
+pnpm-lock.yaml export-ignore

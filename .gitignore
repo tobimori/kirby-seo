@@ -4,6 +4,7 @@
 *.cache
 
 node_modules
+index.dev.mjs
 
 # files of Composer dependencies that are not needed for the plugin
 /vendor/**/.*

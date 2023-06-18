@@ -76,12 +76,15 @@ export default {
   }
 
   &__url {
-    display: flex;
-    align-items: center;
+    display: inline-block;
     margin-bottom: 0.5em;
     font-size: 0.875em;
     line-height: 1.3;
     color: #202124;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 100%;
 
     > * {
       margin-right: 0.25em;
@@ -89,6 +92,7 @@ export default {
 
     &__breadcrumb {
       color: #5f6368;
+      display: inline-block;
 
       &::before {
         content: '› ';
