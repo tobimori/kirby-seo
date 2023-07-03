@@ -1,0 +1,71 @@
+# Heading Structure
+heading-structure: Structure des titres
+incorrect-heading-order: Votre structure de titres a un ordre incorrect et est invalide.
+missing-h1-tag: Votre structure de titres ne contient pas de balise H1 et est invalide.
+multiple-h1-tags: Votre structure de titres contient plus d’une balise H1 et est invalide.
+
+# SEO Preview
+seo-preview: Aperçu
+seo-preview-for: Montre-moi
+twitter-card-type-not-respected: Le type de carte Twitter n’est pas respecté car l’image OG n’est pas disponible.
+open-debugger: Ouvrir le débogueur de partage
+open-search-console: Ouvrir la Console de recherche
+
+# Robots
+indicator-index: Indexation autorisée
+indicator-any: Indexation partiellement interdite
+indicator-noindex: Indexation interdite
+robots: Directives des robots
+robots-index: Indexation
+robots-index-help: Indique si les moteurs de recherche peuvent indexer cette page.
+robots-follow: Suivre les liens
+robots-follow-help: Indique si les moteurs de recherche peuvent suivre les liens de cette page.
+robots-archive: Archiver
+robots-archive-help: Indique si les moteurs de recherche peuvent archiver cette page.
+robots-imageindex: Indexation des images
+robots-imageindex-help: Indique si les moteurs de recherche peuvent indexer les images de cette page.
+robots-snippet: Extraits
+robots-snippet-help: Indique si les moteurs de recherche peuvent afficher des extraits de texte de cette page.
+
+# Blueprint - Site/Common
+metadata-site: Métadonnées et SEO
+global-meta-headline: Paramètres SEO globaux
+global-meta-headline-help: |
+  Ces paramètres sont utilisés pour toutes les pages qui n’ont pas leurs propres métadonnées.
+  Vous pouvez les remplacer pour chaque page.
+meta-title-template: Modèle de titre
+meta-title-template-help: |
+  Un modèle à utiliser pour tous les titres de page.
+  "\{ title }}" sera remplacé par le titre de la page. Prend en charge le [langage de requête Kirby](https://getkirby.com/docs/guide/blueprints/query-language).
+meta-description: Description de la page
+meta-description-help: Longueur recommandée de 150 caractères maximum. Utilisée si aucune description de page n’est spécifiée.
+
+global-og-headline: Paramètres globaux Open Graph
+global-og-headline-help: Définissez l’apparence de votre site web lorsqu’il est partagé sur les réseaux sociaux tels que Facebook ou Twitter.
+og-title-template: Modèle de titre Open Graph
+og-description: Description Open Graph
+og-site-name: Nom du site Open Graph
+og-image: Image Open Graph
+og-image-help: Taille recommandée de 1200x630 pixels.
+og-image-empty: Aucune image Open Graph sélectionnée
+twitter-card-type: Type de carte Twitter
+twitter-card-type-help: Le type de carte Twitter détermine l’apparence de votre site web lorsqu’il est partagé sur Twitter. [En savoir plus](https://developer.twitter.com/en/docs/tweets/optimize-with-cards/overview/abouts-cards).
+
+social-media-accounts: Comptes de réseaux sociaux
+social-media-accounts-help: URLs ou @nom_utilisateur de vos comptes de réseaux sociaux. Utilisés pour mettre des liens vers vos comptes dans les métadonnées.​
+# Blueprint - Page
+meta-headline: Paramètres SEO
+og-headline: Paramètres Open Graph
+title-overwrite: Titre (remplacement)
+summary: Résumé avec une image carrée
+summary_large_image: Résumé avec une grande image
+default-select: 'Par défaut :'
+twitter-author: 'Auteur @nom_utilisateur sur Twitter'
+inherit-settings: Hériter des paramètres
+inherit-settings-help: |
+  Sélectionnez les paramètres à hériter par les sous-pages.
+  Cela peut être utile, par exemple, si tous les articles d’un blog doivent avoir leur propre modèle de titre, différent de celui de la page par défaut. Tous les paramètres peuvent toujours être remplacés dans la page principale.
+use-title-template: Utiliser le modèle de titre ?
+use-title-template-no: 'Non - seulement le titre'
+use-title-template-yes: 'Oui - avec le modèle'
+use-title-template-help: Indique si le modèle de titre doit être utilisé. Ne sera pas hérité.

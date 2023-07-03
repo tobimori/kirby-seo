@@ -67,7 +67,8 @@ App::plugin('tobimori/seo', [
   ],
   'translations' => [
     'de' => Yaml::decode(F::read(__DIR__ . '/translations/de.yml')),
-    'en' => Yaml::decode(F::read(__DIR__ . '/translations/en.yml'))
+    'en' => Yaml::decode(F::read(__DIR__ . '/translations/en.yml')),
+    'fr' => Yaml::decode(F::read(__DIR__ . '/translations/fr.yml'))
   ],
   'sections' => require __DIR__ . '/config/sections.php',
   'api' =>  require __DIR__ . '/config/api.php',
