@@ -72,13 +72,15 @@ Add the meta snippet to your templates.
 
 ```php
 // site/templates/default.php
-<head lang="<?= $site->lang() ?>">
+<html lang="<?= $site->lang() ?>">
+  <head>
     <?php snippet('seo/head'); ?>
-</head>
-<body>
+  </head>
+  <body>
     [...]
     <?php snippet('seo/schemas'); ?>
-</body>
+  </body>
+</html>
 ```
 
 ..and start defining your meta data in panel.
