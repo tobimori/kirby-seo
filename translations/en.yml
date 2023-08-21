@@ -36,7 +36,7 @@ global-meta-headline-help: |
 meta-title-template: Title Template
 meta-title-template-help: |
   A template to use for all page titles.
-  "\{ title }}" will be replaced with the page title. Supports [Kirby Query Language](https://getkirby.com/docs/guide/blueprints/query-language).
+  "\{\{ title }}" will be replaced with the page title. Supports [Kirby Query Language](https://getkirby.com/docs/guide/blueprints/query-language).
 meta-description: Page Description
 meta-description-help: Recommended length of 150 characters max. Used if no page description is specified.
 
