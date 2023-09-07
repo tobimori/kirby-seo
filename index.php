@@ -5,11 +5,21 @@
 use Kirby\Cms\App;
 use Kirby\Cms\Page;
 use Kirby\Filesystem\F;
+use Kirby\Toolkit\A;
 use Kirby\Data\Yaml;
+use Kirby\Filesystem\Dir;
 use Kirby\Http\Response;
 use Spatie\SchemaOrg\Schema;
 use tobimori\Seo\Meta;
 use tobimori\Seo\SchemaSingleton;
+
+// shamelessly borrowed from distantnative/retour-for-kirby
+if (
+  version_compare(App::version() ?? '0.0.0', '4.0.0-beta.1', '<') === true ||
+  version_compare(App::version() ?? '0.0.0', '5.0.0', '>') === true
+) {
+  throw new Exception('Kirby SEO requires Kirby 4');
+}
 
 App::plugin('tobimori/seo', [
   'options' => [
@@ -65,11 +75,20 @@ App::plugin('tobimori/seo', [
       'template' => null,
     ]
   ],
-  'translations' => [
-    'de' => Yaml::decode(F::read(__DIR__ . '/translations/de.yml')),
-    'en' => Yaml::decode(F::read(__DIR__ . '/translations/en.yml')),
-    'fr' => Yaml::decode(F::read(__DIR__ . '/translations/fr.yml'))
-  ],
+  // load all commands automatically
+  'commands' => A::keyBy(A::map(
+    Dir::read(__DIR__ . '/config/commands'),
+    fn ($file) => A::merge([
+      'id' => 'seo:' . F::name($file),
+    ], require __DIR__ . '/config/commands/' . $file)
+  ), 'id'),
+  // get all files from /translations and register them as language files
+  'translations' => A::keyBy(A::map(
+    Dir::read(__DIR__ . '/translations'),
+    fn ($file) => A::merge([
+      'lang' => F::name($file),
+    ], Yaml::decode(F::read(__DIR__ . '/translations/' . $file)))
+  ), 'lang'),
   'sections' => require __DIR__ . '/config/sections.php',
   'api' =>  require __DIR__ . '/config/api.php',
   'siteMethods' => [
@@ -117,7 +136,7 @@ App::plugin('tobimori/seo', [
         $this->next();
       }
     ]
-  ]
+  ],
 ]);
 
 if (!function_exists('schema')) {

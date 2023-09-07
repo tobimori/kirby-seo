@@ -32,7 +32,7 @@ $map = [
 ];
 
 foreach ($map as $name => $content) {
-  if (is_a($content, 'Kirby\Cms\Field') && $content->isEmpty()) continue;
+  if (is_a($content, 'Kirby\Content\Field') && $content->isEmpty()) continue;
   if (!$content) continue;
 
   echo Html::tag('meta', null, [
@@ -54,7 +54,7 @@ $mapOg = [
 ];
 
 foreach ($mapOg as $property => $content) {
-  if (is_a($content, 'Kirby\Cms\Field') && $content->isEmpty()) continue;
+  if (is_a($content, 'Kirby\Content\Field') && $content->isEmpty()) continue;
   if (!$content) continue;
 
   echo Html::tag('meta', null, [

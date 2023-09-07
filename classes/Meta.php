@@ -2,7 +2,7 @@
 
 namespace tobimori\Seo;
 
-use Kirby\Cms\Field;
+use Kirby\Content\Field;
 use Kirby\Cms\Page;
 use Kirby\Toolkit\Str;
 use Kirby\Toolkit\A;
@@ -53,7 +53,7 @@ class Meta
         $val = $val($this->page);
       }
 
-      if (is_a($val, 'Kirby\Cms\Field')) {
+      if (is_a($val, 'Kirby\Content\Field')) {
         return $val;
       }
 
@@ -77,7 +77,7 @@ class Meta
         $option = $option($this->page);
       }
 
-      if (is_a($option, 'Kirby\Cms\Field')) {
+      if (is_a($option, 'Kirby\Content\Field')) {
         return $option;
       }
 
@@ -197,7 +197,7 @@ class Meta
 
     switch (option('date.handler')) {
       case 'strftime':
-        return '%%Y-%m-%d';
+        return '%Y-%m-%d';
       case 'intl':
         return 'yyyy-MM-dd';
       case 'date':
