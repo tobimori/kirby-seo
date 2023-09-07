@@ -36,7 +36,7 @@ global-meta-headline-help: |
 meta-title-template: Modèle de titre
 meta-title-template-help: |
   Un modèle à utiliser pour tous les titres de page.
-  "\{ title }}" sera remplacé par le titre de la page. Prend en charge le [langage de requête Kirby](https://getkirby.com/docs/guide/blueprints/query-language).
+  "\{\{ title }}" sera remplacé par le titre de la page. Prend en charge le [langage de requête Kirby](https://getkirby.com/docs/guide/blueprints/query-language).
 meta-description: Description de la page
 meta-description-help: Longueur recommandée de 150 caractères maximum. Utilisée si aucune description de page n’est spécifiée.
 
