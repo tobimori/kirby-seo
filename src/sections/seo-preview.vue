@@ -87,7 +87,7 @@ export default {
 
 .k-seo-preview {
   &__inner {
-    margin-top: 1em;
+    margin-top: var(--spacing-2);
   }
 
   &__debugger {

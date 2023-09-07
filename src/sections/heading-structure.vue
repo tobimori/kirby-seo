@@ -105,7 +105,7 @@ export default {
     align-items: center;
 
     > .k-icon {
-      margin-right: var(--spacing-3);
+      margin-right: var(--spacing-2);
       color: var(--color-gray-700);
     }
 
