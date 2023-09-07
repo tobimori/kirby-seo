@@ -69,3 +69,9 @@ use-title-template: Utiliser le modèle de titre ?
 use-title-template-no: 'Non - seulement le titre'
 use-title-template-yes: 'Oui - avec le modèle'
 use-title-template-help: Indique si le modèle de titre doit être utilisé. Ne sera pas hérité.
+
+# Labels
+google: Google
+facebook: Facebook
+twitter: Twitter
+slack: Slack

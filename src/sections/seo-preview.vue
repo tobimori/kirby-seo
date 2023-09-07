@@ -1,11 +1,12 @@
 <template>
-  <div class="k-seo-preview">
-    <div class="k-seo-preview__label k-field-label">
-      <k-icon type="preview" /><span>{{ label || $t('seo-preview') }}</span>
+  <div class="k-section k-seo-preview">
+    <div class="k-field-header k-seo-preview__label k-label k-field-label">
+      <k-icon type="preview" /><span class="k-label-text">{{ label || $t("seo-preview") }}</span>
       <k-loader v-if="isLoading" />
     </div>
     <k-select-field
       type="select"
+      name="seo-preview-type"
       :before="$t('seo-preview-for')"
       v-model="type"
       :options="options"
@@ -21,20 +22,21 @@
 </template>
 
 <script>
-import FacebookPreview from '../components/FacebookPreview.vue'
-import GooglePreview from '../components/GooglePreview.vue'
-import TwitterPreview from '../components/TwitterPreview.vue'
-import SlackPreview from '../components/SlackPreview.vue'
+import FacebookPreview from "../components/FacebookPreview.vue"
+import GooglePreview from "../components/GooglePreview.vue"
+import TwitterPreview from "../components/TwitterPreview.vue"
+import SlackPreview from "../components/SlackPreview.vue"
 
 export default {
   components: { GooglePreview, TwitterPreview, FacebookPreview, SlackPreview },
   data() {
-    const type = localStorage.getItem('kSEOPreviewType') ?? 'google'
+    const type = localStorage.getItem("kSEOPreviewType") ?? "google"
 
     return {
       label: null,
       value: null,
       isLoading: true,
+      options: [],
       type
     }
   },
@@ -43,6 +45,7 @@ export default {
 
     this.load().then((data) => {
       this.label = data.label
+      this.options = data.options
     }) // loads label and properties
     this.handleLoad() // handles metadata & title change
 
@@ -52,34 +55,14 @@ export default {
   },
   computed: {
     changes() {
-      return this.$store.getters['content/changes']()
-    },
-    options() {
-      return [
-        {
-          value: 'google',
-          text: 'Google'
-        },
-        {
-          value: 'twitter',
-          text: 'Twitter'
-        },
-        {
-          value: 'facebook',
-          text: 'Facebook'
-        },
-        {
-          value: 'slack',
-          text: 'Slack'
-        }
-      ]
+      return this.$store.getters["content/changes"]()
     }
   },
   methods: {
     async handleLoad(changes) {
       this.isLoading = true
 
-      const page = this.parent.toString().split('/').pop()
+      const page = this.parent.toString().split("/").pop()
       const response = await this.$api.post(`/k-seo/${page}/seo-preview`, changes ?? this.changes)
 
       this.value = response
@@ -91,13 +74,17 @@ export default {
       this.debouncedLoad(changes)
     },
     type() {
-      localStorage.setItem('kSEOPreviewType', this.type)
+      localStorage.setItem("kSEOPreviewType", this.type)
     }
   }
 }
 </script>
 
 <style lang="scss">
+.k-field-name-seo-preview-type .k-field-header {
+  display: none;
+}
+
 .k-seo-preview {
   &__inner {
     margin-top: 1em;
@@ -107,25 +94,24 @@ export default {
     margin-top: 1rem;
     display: flex;
     font-size: var(--text-sm);
-    color: var(--color-gray-600);
+    color: var(--color-gray-700);
     line-height: 1.25rem;
     width: max-content;
     margin-left: auto;
 
     &:hover {
       text-decoration: underline;
-      color: var(--text-gray-700);
+      color: var(--text-gray-800);
     }
 
     > .k-icon {
-      margin-left: var(--spacing-3);
+      margin-left: var(--spacing-2);
     }
   }
 
   &__label {
     display: flex;
     align-items: center;
-    margin-bottom: -2rem;
 
     > .k-icon {
       margin-right: var(--spacing-3);

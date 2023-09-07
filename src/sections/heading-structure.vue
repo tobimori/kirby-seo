@@ -1,35 +1,35 @@
 <template>
-  <div class="k-heading-structure" v-if="value">
-    <div class="k-heading-structure-label k-field-label">
-      <k-icon type="headline" /><span>{{ label || $t('heading-structure') }}</span>
+  <div class="k-section k-heading-structure" v-if="value">
+    <div class="k-field-header k-heading-structure__label k-label k-field-label">
+      <k-icon type="headline" /><span>{{ label || $t("heading-structure") }}</span>
       <k-loader v-if="isLoading" />
     </div>
-    <k-box theme="">
-      <ol class="k-heading-structure-list">
+    <k-box theme="white">
+      <ol class="k-heading-structure__list">
         <li
           v-for="(item, index) in value"
           :key="index"
           :style="`z-index: ${value.length - index}`"
-          :class="`k-heading-structure-item level-${item.level} ${
+          :class="`k-heading-structure__item level-${item.level} ${
             itemInvalid(item, index) ? 'is-invalid' : ''
           }`"
         >
-          <span class="k-heading-structure-item-level">H{{ item.level }}</span>
-          <span class="k-heading-structure-item-text">{{ item.text }}</span>
+          <span class="k-heading-structure__item__level">H{{ item.level }}</span>
+          <span class="k-heading-structure__item__text">{{ item.text }}</span>
         </li>
       </ol>
     </k-box>
-    <k-box class="k-heading-structure-notice" theme="negative" v-if="incorrectOrder && !noH1">
+    <k-box class="k-heading-structure__notice" theme="negative" v-if="incorrectOrder && !noH1">
       <k-icon type="alert" />
-      <k-text>{{ $t('incorrect-heading-order') }}</k-text>
+      <k-text>{{ $t("incorrect-heading-order") }}</k-text>
     </k-box>
-    <k-box class="k-heading-structure-notice" theme="negative" v-if="multipleH1">
+    <k-box class="k-heading-structure__notice" theme="negative" v-if="multipleH1">
       <k-icon type="alert" />
-      <k-text>{{ $t('multiple-h1-tags') }}</k-text>
+      <k-text>{{ $t("multiple-h1-tags") }}</k-text>
     </k-box>
-    <k-box class="k-heading-structure-notice" theme="negative" v-if="noH1">
+    <k-box class="k-heading-structure__notice" theme="negative" v-if="noH1">
       <k-icon type="alert" />
-      <k-text>{{ $t('missing-h1-tag') }}</k-text>
+      <k-text>{{ $t("missing-h1-tag") }}</k-text>
     </k-box>
   </div>
 </template>
@@ -57,7 +57,7 @@ export default {
   },
   computed: {
     changes() {
-      return this.$store.getters['content/changes']()
+      return this.$store.getters["content/changes"]()
     },
     incorrectOrder() {
       return this.value?.some((item, index) => item.level > (this.value[index - 1]?.level ?? 0) + 1)
@@ -73,7 +73,7 @@ export default {
     async handleLoad(changes) {
       this.isLoading = true
 
-      const page = this.parent.toString().split('/').pop()
+      const page = this.parent.toString().split("/").pop()
       const response = await this.$api.post(
         `/k-seo/${page}/heading-structure`,
         changes ?? this.changes
@@ -100,7 +100,7 @@ export default {
 
 <style lang="scss">
 .k-heading-structure {
-  &-label {
+  &__label {
     display: flex;
     align-items: center;
 
@@ -115,35 +115,35 @@ export default {
     }
   }
 
-  &-notice {
-    margin-top: var(--spacing-3);
+  &__notice {
+    margin-top: var(--spacing-2);
     display: flex;
     align-items: flex-start;
 
     > .k-icon {
-      margin-top: var(--spacing-1);
-      margin-right: var(--spacing-3);
+      margin-top: 0.125rem;
+      margin-right: var(--spacing-1);
       color: var(--color-red);
     }
   }
 
-  &-list {
+  &__list {
     overflow: hidden;
   }
 
-  &-item {
+  &__item {
     position: relative;
-    background: var(--color-white);
+    background: var(--theme-color-back);
     padding-block: var(--spacing-px);
     display: flex;
 
-    &-level {
+    &__level {
       font-family: var(--font-mono);
       font-weight: 700;
       margin-right: var(--spacing-2);
     }
 
-    &-text {
+    &__text {
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
@@ -159,7 +159,7 @@ export default {
         padding-left: 1.6rem;
 
         &::before {
-          content: '';
+          content: "";
           position: absolute;
           top: calc(50% - 0.0625rem);
           left: 0.4rem;
@@ -169,7 +169,7 @@ export default {
         }
 
         &::after {
-          content: '';
+          content: "";
           position: absolute;
           bottom: calc(50% - 0.0625rem);
           left: 0.4rem;

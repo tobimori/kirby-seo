@@ -36,6 +36,12 @@ return [
     'youtube' => 'https://youtube.com/channel/my-company',
     'linkedin' => 'https://linkedin.com/company/my-company',
   ],
+  'previews' => [
+    'google',
+    'facebook',
+    'twitter',
+    'slack'
+  ],
   'robots' => [
     'active' => true, // whether robots handling should be done by the plugin
     'followPageStatus' => true, // should unlisted pages be noindex by default?

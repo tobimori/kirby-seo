@@ -70,3 +70,9 @@ use-title-template: Use title template?
 use-title-template-no: 'No - only title'
 use-title-template-yes: 'Yes - with template'
 use-title-template-help: Specifies whether the title template should be used. Will not be inherited.
+
+# Labels
+google: Google
+facebook: Facebook
+twitter: Twitter
+slack: Slack

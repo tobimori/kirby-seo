@@ -70,3 +70,9 @@ use-title-template: Titel-Template verwenden?
 use-title-template-no: 'Nein - reiner Titel'
 use-title-template-yes: 'Ja - mit Template'
 use-title-template-help: Gibt an, ob das Titel-Template verwendet werden soll. Wird nicht vererbt.
+
+# Labels
+google: Google
+facebook: Facebook
+twitter: Twitter
+slack: Slack
