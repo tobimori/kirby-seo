@@ -1,11 +1,13 @@
 <?php
 
-use Kirby\Cms\App;
+use Kirby\Toolkit\Str;
 
-return function () {
+return function ($app) {
   $blueprint = [
     'type' => 'files',
     'multiple' => false,
+    'uploads' => [],
+    'query' => Str::contains($app->path(), 'site') ? "site.images" : "page.images" // small hack to get context for field using api path
   ];
 
   if ($parent = option('tobimori.seo.files.parent')) {
@@ -20,10 +22,6 @@ return function () {
       ...$blueprint['uploads'],
       'template' => $template
     ];
-
-    if (!isset($blueprint['query'])) {
-      $blueprint['query'] = "page.images";
-    }
 
     $blueprint['query'] = "{$blueprint['query']}.filterBy('template', '{$template}')";
   }
