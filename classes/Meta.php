@@ -176,7 +176,7 @@ class Meta
       // tries to match all twitter urls, and extract the username
       $matches = [];
       preg_match('/^(https?:\/\/)?(www\.)?twitter\.com\/(#!\/)?@?(?<name>[^\/\?]*)$/', $accs->twitter()->value(), $matches);
-      $username = $matches['name'];
+      if (isset($matches['name'])) $username = $matches['name'];
     }
 
     return new Field($this->page, 'twitter', $username);
