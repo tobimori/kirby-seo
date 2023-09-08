@@ -1,8 +1,9 @@
 <?php
 
+use Kirby\Cms\App;
 use Kirby\Toolkit\Str;
 
-return function ($app) {
+return function (App $app) {
   $blueprint = [
     'type' => 'files',
     'multiple' => false,

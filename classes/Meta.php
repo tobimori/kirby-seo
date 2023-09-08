@@ -4,6 +4,7 @@ namespace tobimori\Seo;
 
 use Kirby\Content\Field;
 use Kirby\Cms\Page;
+use Kirby\Exception\InvalidArgumentException;
 use Kirby\Toolkit\Str;
 use Kirby\Toolkit\A;
 
@@ -223,5 +224,27 @@ class Meta
     }
 
     return A::join($robots, ',');
+  }
+
+  /**
+   * Get the og:image url
+   */
+  public function ogImage(): string|null
+  {
+    $field = $this->get('ogImage');
+
+    if ($ogImage = $field->toFile()?->thumb([
+      'width' => 1200,
+      'height' => 630,
+      'crop' => true,
+    ])) {
+      return $ogImage->url();
+    }
+
+    if ($field->isNotEmpty()) {
+      return $field->value();
+    }
+
+    return null;
   }
 }

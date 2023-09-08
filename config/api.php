@@ -67,12 +67,6 @@ return [
         if ($model instanceof Page) {
           $meta = $model->metadata();
 
-          $ogImage = $meta->ogImage()->toFile()?->thumb([
-            'width' => 1200,
-            'height' => 630,
-            'crop' => true,
-          ]);
-
           return [
             'page' => $model->slug(),
             'url' => $model->url(),
@@ -81,7 +75,7 @@ return [
             'ogSiteName' => $meta->ogSiteName()->value(),
             'ogTitle' => $meta->ogTitle()->value(),
             'ogDescription' => $meta->ogDescription()->value(),
-            'ogImage' => $ogImage?->url(),
+            'ogImage' => $meta->ogImage(),
             'twitterCardType' => $meta->twitterCardType()->value(),
           ];
         }

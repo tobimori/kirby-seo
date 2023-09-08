@@ -12,12 +12,6 @@ $meta = $page->metadata(); ?>
 
 <?php
 
-$ogImage = $meta->ogImage()->toFile()?->thumb([
-  'width' => 1200,
-  'height' => 630,
-  'crop' => true,
-]);
-
 $map = [
   'description' => $meta->metaDescription(),
   'author' => $meta->metaAuthor(),
@@ -26,7 +20,7 @@ $map = [
   'twitter:card' => $meta->twitterCardType(),
   'twitter:title' => $meta->ogTitle(),
   'twitter:description' => $meta->ogDescription(),
-  'twitter:image' => $ogImage?->url(),
+  'twitter:image' => $ogImage = $meta->ogImage(),
   'twitter:site' => $meta->twitterSite(),
   'twitter:creator' => $meta->twitterCreator(),
 ];
@@ -46,10 +40,10 @@ $mapOg = [
   'og:description' => $meta->ogDescription(),
   'og:url' => $meta->canonicalUrl(),
   'og:site_name' => $meta->ogSiteName(),
-  'og:image' => $ogImage?->url(),
-  'og:image:width' => $ogImage?->width(),
-  'og:image:height' => $ogImage?->height(),
-  'og:image:alt' => $ogImage?->alt(),
+  'og:image' => $ogImage,
+  'og:image:width' => $ogImage ? 1200 : null, // TODO: replace this with custom crop preset
+  'og:image:height' => $ogImage ? 630 : null,
+  'og:image:alt' => $meta->get('ogImage')->toFile()?->alt(),
   'og:type' => $meta->ogType(),
 ];
 
