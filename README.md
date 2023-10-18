@@ -204,7 +204,6 @@ return [
 
 - [ ] Google pixel length calculation for preview
 - [ ] `seo/inheritables` page blueprint, containing only inheritable fields for use with pages that don't have a frontend representation
-- [ ] Toolkit for programmatic image generation with Puppeteer/BrowserShot (might be separate plugin)
 - [ ] Social Media Links handling in sameAs schema.org property, and `og:see_also` meta tag
 - [ ] `sitemap.xml` generation, with multi-lang support
 - [ ] Favicon and webmanifest generation
