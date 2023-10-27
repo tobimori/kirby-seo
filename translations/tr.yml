@@ -1,0 +1,78 @@
+# Başlık Yapısı
+heading-structure: Başlık Yapısı
+incorrect-heading-order: Başlık yapınız yanlış bir sıraya sahip ve geçersizdir.
+missing-h1-tag: Başlık yapınızda bir H1 etiketi bulunmuyor ve geçersizdir.
+multiple-h1-tags: Başlık yapınızda birden fazla H1 etiketi bulunuyor ve geçersizdir.
+
+# SEO Önizleme
+seo-preview: Önizleme
+seo-preview-for: Bana göster
+twitter-card-type-not-respected: Twitter Kart Türü, Açık Grafik (OG) görüntüsü kullanılamadığı için dikkate alınmıyor.
+open-debugger: Paylaşım Hata Ayıklayıcıyı Aç
+open-search-console: Arama Konsolunu Aç
+
+# Robotlar
+indicator-index: İndekslemeye izin verildi
+indicator-any: İndeksleme kısmen yasaklandı
+indicator-noindex: İndeksleme yasaklandı
+robots: Robot Talimatları
+robots-index: İndeksleme
+robots-index-help: Arama motorlarının bu sayfayı indeksleyip indekslemeyeceğini belirtir.
+robots-follow: Bağlantıları Takip Et
+robots-follow-help: Arama motorlarının bu sayfadaki bağlantıları takip edip etmeyeceğini belirtir.
+robots-archive: Arşivle
+robots-archive-help: Arama motorlarının bu sayfayı arşivleyip arşivlemeyeceğini belirtir.
+robots-imageindex: İmaj İndeksleme
+robots-imageindex-help: Arama motorlarının bu sayfadaki görüntüleri indeksleyip indekslemeyeceğini belirtir.
+robots-snippet: Özetler
+robots-snippet-help: Arama motorlarının bu sayfanın metin özetlerini gösterip göstermeyeceğini belirtir.
+
+# Şablona Dayalı - Site/Ortak
+metadata-site: Meta Verileri ve SEO
+global-meta-headline: Genel SEO Ayarları
+global-meta-headline-help: |
+  Bu ayarlar, kendi meta verileri olmayan tüm sayfalar için kullanılır.
+  Her sayfa için bunları geçersiz kılabilirsiniz.
+meta-title-template: Başlık Şablonu
+meta-title-template-help: |
+  Tüm sayfa başlıkları için kullanılacak bir şablon.
+  "\{\{ başlık }}" sayfa başlığı ile değiştirilecektir. [Kirby Sorgu Dili](https://getkirby.com/docs/guide/blueprints/query-language) desteği sunar.
+meta-description: Sayfa Açıklaması
+meta-description-help: Maksimum 150 karakter uzunluğunda önerilen bir sayfa açıklamasıdır. Sayfa açıklaması belirtilmemişse kullanılır.
+
+global-og-headline: Genel Açık Grafik (OG) Ayarları
+global-og-headline-help: Web sitenizin Facebook veya Twitter gibi sosyal ağlarda paylaşıldığında nasıl göründüğünü ayarlar.
+og-title-template: Açık Grafik (OG) Başlık Şablonu
+og-description: Açık Grafik (OG) Açıklaması
+og-site-name: Açık Grafik (OG) Site Adı
+og-image: Açık Grafik (OG) Görseli
+og-image-help: Önerilen boyut 1200x630 pikseldir.
+og-image-empty: Boş Açık Grafik (OG) Görseli
+twitter-card-type: Twitter Kart Türü
+twitter-card-type-help: Twitter Kart Türü, Twitter'da paylaşıldığında web sitenizin nasıl göründüğünü belirler. [Daha fazla bilgi](https://developer.twitter.com/en/docs/tweets/optimize-with-cards/overview/abouts-cards).
+
+social-media-accounts: Sosyal Medya Hesapları
+social-media-accounts-help: Sosyal medya hesaplarınızın URL'leri veya @kullanici_adi. Meta verilerinde hesaplarınıza bağlantı eklemek için kullanılır.
+
+# Şablona Dayalı - Sayfa
+meta-headline: SEO Ayarları
+og-headline: Açık Grafik (OG) Ayarları
+title-overwrite: Başlık (üzerine yaz)
+summary: Kare İmaj ile Özet
+summary_large_image: Büyük İmaj ile Özet
+default-select: 'Varsayılan:'
+twitter-author: 'Twitter\'da @kullanici_adi'
+inherit-settings: Ayarları Miras Al
+inherit-settings-help: |
+  Alt sayfalar tarafından miras alınacak ayarları seçin.
+  Örneğin, bir blogun tüm yazılarının sayfa varsayılanından farklı bir başlık şablonuna sahip olması gerekiyorsa bu yardımcı olabilir. Tüm ayarlar ana sayfada hala geçersiz kılınabilir.
+use-title-template: Başlık şablonunu kullan?
+use-title-template-no: 'Hayır - sadece başlık'
+use-title-template-yes: 'Evet - şablonla'
+use-title-template-help: Başlık şablonunun kullanılıp kullanılmayacağını belirtir. Miras alınmayacaktır.
+
+# Etiketler
+google: Google
+facebook: Facebook
+twitter: Twitter
+slack: Slack
