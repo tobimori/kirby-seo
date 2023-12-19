@@ -12,26 +12,39 @@ $meta = $page->metadata(); ?>
 
 <?php
 
-$map = [
+$mapMeta = [
   'description' => $meta->metaDescription(),
-  'author' => $meta->metaAuthor(),
   'date' => $page->modified($meta->dateFormat()),
-  'canonical' => $meta->canonicalUrl(),
   'twitter:card' => $meta->twitterCardType(),
   'twitter:title' => $meta->ogTitle(),
   'twitter:description' => $meta->ogDescription(),
-  'twitter:image' => $ogImage = $meta->ogImage(),
+  'twitter:image' => $ogImage?->url(),
   'twitter:site' => $meta->twitterSite(),
   'twitter:creator' => $meta->twitterCreator(),
 ];
 
-foreach ($map as $name => $content) {
-  if (is_a($content, 'Kirby\Content\Field') && $content->isEmpty()) continue;
+foreach ($mapMeta as $name => $content) {
+  if (is_a($content, 'Kirby\Cms\Field') && $content->isEmpty()) continue;
   if (!$content) continue;
 
   echo Html::tag('meta', null, [
     'name' => $name,
     'content' => $content,
+  ]) . PHP_EOL;
+};
+
+$mapLink = [
+  'author' => $meta->metaAuthor(),
+  'canonical' => $meta->canonicalUrl(),
+];
+
+foreach ($mapLink as $rel => $content) {
+  if (is_a($content, 'Kirby\Cms\Field') && $content->isEmpty()) continue;
+  if (!$content) continue;
+
+  echo Html::tag('link', null, [
+    'rel' => $rel,
+    'href' => $content,
   ]) . PHP_EOL;
 };
 
