@@ -24,7 +24,7 @@ $mapMeta = [
 ];
 
 foreach ($mapMeta as $name => $content) {
-  if (is_a($content, 'Kirby\Cms\Field') && $content->isEmpty()) continue;
+  if (is_a($content, 'Kirby\Content\Field') && $content->isEmpty()) continue;
   if (!$content) continue;
 
   echo Html::tag('meta', null, [
@@ -39,7 +39,7 @@ $mapLink = [
 ];
 
 foreach ($mapLink as $rel => $content) {
-  if (is_a($content, 'Kirby\Cms\Field') && $content->isEmpty()) continue;
+  if (is_a($content, 'Kirby\Content\Field') && $content->isEmpty()) continue;
   if (!$content) continue;
 
   echo Html::tag('link', null, [
