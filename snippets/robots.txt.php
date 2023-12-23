@@ -41,5 +41,13 @@ if ($content = option('tobimori.seo.robots.content')) {
 }
 
 if ($sitemap = option('tobimori.seo.robots.sitemap')) {
-  echo "\n\nSitemap: {$sitemap}";
+  // Allow closure to be used
+  if (is_callable($sitemap)) {
+    $sitemap = $sitemap();
+  }
+
+  // Check again, so falsy values can't be used
+  if ($sitemap) {
+    echo "\n\nSitemap: {$sitemap}";
+  }
 }
