@@ -8,7 +8,7 @@ return function (App $app) {
     'type' => 'files',
     'multiple' => false,
     'uploads' => [],
-    'query' => Str::contains($app->path(), 'site') ? "site.images" : "page.images" // small hack to get context for field using api path
+    'query' => Str::contains($app->path(), '/site') && !Str::contains($app->path(), 'pages') ? "site.images" : "page.images" // small hack to get context for field using api path
   ];
 
   if ($parent = option('tobimori.seo.files.parent')) {
