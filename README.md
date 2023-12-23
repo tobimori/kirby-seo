@@ -200,25 +200,9 @@ return [
 ];
 ```
 
-## Roadmap
-
-- [ ] Google pixel length calculation for preview
-- [ ] `seo/inheritables` page blueprint, containing only inheritable fields for use with pages that don't have a frontend representation
-- [ ] Social Media Links handling in sameAs schema.org property, and `og:see_also` meta tag
-- [ ] `sitemap.xml` generation, with multi-lang support
-- [ ] Favicon and webmanifest generation
-- [ ] SEO Overview page/dashboard
-- [ ] Site Verification fields
-- [ ] Browser title preview w/ Favicon
-- [ ] Social Preview for LinkedIn, Pinterest & Discord
-
-This roadmap is a courtesy and subject to change at any time.
-New features will be added as soon as I need them for my own projects.
-
-## Similiar plugins
+## Similar plugins
 
 - [kirby-meta](https://github.com/fabianmichael/kirby-meta) by Fabian Michael
-- [kirby-meta-knight](https://github.com/diesdasdigital/kirby-meta-knight) by diesdas.digital (unmaintained, but have a look at forks!)
 
 ## License
 

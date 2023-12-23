@@ -21,7 +21,9 @@ class Meta
 
   protected Page $page;
   protected ?string $lang;
-  protected array $meta = [];
+  protected array $consumed = [];
+  protected array $metaDefaults = [];
+  protected array $metaArray = [];
 
   /**
    * Creates a new Meta instance
@@ -32,8 +34,183 @@ class Meta
     $this->lang = $lang;
 
     if (method_exists($this->page, 'metaDefaults')) {
-      $this->meta = $this->page->metaDefaults($this->lang);
+      $this->metaDefaults = $this->page->metaDefaults($this->lang);
     }
+  }
+
+
+  /**
+   * Returns the meta array which maps meta tags to their fieldnames
+   */
+  protected function metaArray(): array
+  {
+    if ($this->metaArray) return $this->metaArray;
+
+    /**
+     * We have to specify field names and resolve them later, so we can use this 
+     * function to resolve meta tags from field names in the programmatic function
+     * 
+     * Specify a callable if the value is not using the default cascade, so we know
+     * whether it's a normal field in normalizeMetaArray
+     */
+    $meta =
+      [
+        'title' => 'title',
+        'description' => 'metaDescription',
+        'date' => fn () => $this->page->modified($this->dateFormat()),
+        'canonical' => 'canonicalUrl',
+        'og:title' => 'ogTitle',
+        'og:description' => 'ogDescription',
+        'og:url' => 'canonicalUrl',
+        'og:site_name' => 'ogSiteName',
+        'og:image' => 'ogImage',
+        'og:image:width' => fn () => $this->ogImage() ? 1200 : null,
+        'og:image:height' => fn () => $this->ogImage() ? 630 : null,
+        'og:image:alt' => fn () => $this->get('ogImage')->toFile()?->alt(),
+        'og:type' => 'ogType',
+      ];
+
+
+    // Multi-lang
+    if (kirby()->languages()->count() > 1 && kirby()->language() !== null) {
+      foreach (kirby()->languages() as $lang) {
+        $meta['alternate'][] = [
+          'hreflang' => fn () => $lang->code(),
+          'href' => fn () => $this->page->url($lang->code()),
+        ];
+
+        if ($lang !== kirby()->language()) {
+          $meta['og:locale:alternate'][] = fn () => $lang->code();
+        }
+      }
+
+      $meta['alternate'][] = [
+        'hreflang' => fn () => 'x-default',
+        'href' => fn () => $this->page->url(kirby()->language()->code()),
+      ];
+      $meta['og:locale'] = fn () => kirby()->language()->locale(LC_ALL);
+    } else {
+      $meta['og:locale'] = fn () => $this->locale(LC_ALL);
+    }
+
+
+    // Twitter tags "opt-in"
+    if (option('tobimori.seo.twitter', true)) {
+      $meta = array_merge($meta, [
+        'twitter:card' => 'twitterCardType',
+        'twitter:title' => 'ogTitle',
+        'twitter:description' => 'ogDescription',
+        'twitter:image' => 'ogImage',
+        'twitter:site' => 'twitterSite',
+        'twitter:creator' => 'twitterCreator',
+      ]);
+    }
+
+    // Robots
+    if ($this->robots()) {
+      $meta['robots'] = fn () => $this->robots();
+    }
+
+    // This array will be normalized for use in the snippet in $this->normalizeMetaArray()
+    return $this->metaArray = $meta;
+  }
+
+  /**
+   * This array defines what HTML tag the corresponding meta tags are using including the attributes,
+   * so everything is a bit more elegant when defining programmatic content (supports regex)
+   */
+  const TAG_TYPE_MAP = [
+    [
+      'tag' => 'title',
+      'tags' => [
+        'title'
+      ]
+    ],
+    [
+      'tag' => 'link',
+      'attributes' => [
+        'name' => 'rel',
+        'content' => 'href',
+      ],
+      'tags' => [
+        'canonical',
+        'alternate',
+      ]
+    ],
+    [
+      'tag' => 'meta',
+      'attributes' => [
+        'name' => 'property',
+        'content' => 'content',
+      ],
+      'tags' => [
+        '/og:.+/'
+      ]
+    ]
+  ];
+
+  /**
+   * Normalize the meta array and remaining meta defaults to be used in the snippet,
+   * also resolve the content, if necessary
+   */
+  public function snippetData(): array
+  {
+    $metaRaw = array_merge($this->metaArray(), array_diff($this->metaDefaults, $this->consumed));
+    $meta = [];
+    foreach ($metaRaw as $tag => $valueOrKey) {
+      if (is_callable($valueOrKey)) {
+        $meta[$tag] = $valueOrKey();
+        continue;
+      }
+
+      $meta[$tag] = $this->$valueOrKey();
+    }
+
+    $tags = [];
+    foreach ($meta as $name => $value) {
+      $tag = $this->resolveTag($name);
+
+      foreach ((is_array($value) ? $value : [$value]) as $value) {
+        if (is_a($value, 'Kirby\Content\Field') && $value->isEmpty()) continue;
+        if (!$value) continue;
+
+        $tags[] = [
+          'tag' => $tag['tag'],
+          'attributes' => isset($tag['attributes']) ? [
+            $tag['attributes']['name'] => $name,
+            $tag['attributes']['content'] => $value,
+          ] : null,
+          'content' => !isset($tag['attributes']) ? $value : null,
+        ];
+      }
+    }
+
+    return $tags;
+  }
+
+  /**
+   * Resolves the tag type from the meta array
+   */
+  protected function resolveTag(string $tag): array
+  {
+    foreach (self::TAG_TYPE_MAP as $type) {
+      foreach ($type['tags'] as $regexOrString) {
+        // Check if the supplied tag is a regex or a normal tag name
+        if (Str::startsWith($regexOrString, '/') && Str::endsWith($regexOrString, '/') ?
+          Str::match($tag, $regexOrString) : $tag === $regexOrString
+        ) {
+          return $type;
+        }
+      }
+    }
+
+    return [
+      'tag' => 'meta',
+      'attributes' => [
+        'name' => 'name',
+        'content' => 'content',
+      ]
+    ];
   }
 
   /**
@@ -52,6 +229,11 @@ class Meta
     $cascade = option('tobimori.seo.cascade');
     if (count(array_intersect(get_class_methods($this), $cascade)) !== count($cascade)) {
       throw new InvalidArgumentException('Invalid cascade method in config. Please check your options for `tobimori.seo.cascade`.');
+    }
+
+    // Track consumed keys, so we don't output legacy field values
+    if (A::has($this->metaDefaults, $key)) {
+      $this->consumed[] = $key;
     }
 
     foreach ($cascade as $method) {
@@ -124,15 +306,42 @@ class Meta
 
   /**
    * Get the meta value for a given key from the page's meta
-   * array, which can be set in the page's metaDefaults method
+   * array, which can be set in the page's model metaDefaults method
    */
   protected function programmatic(string $key): Field|null
   {
-    if ($this->meta && array_key_exists($key, $this->meta)) {
-      $val = $this->meta[$key];
+    if (!$this->metaDefaults) {
+      return null;
+    }
 
+    // Check if the key (field name) is in the array syntax
+    if (array_key_exists($key, $this->metaDefaults)) {
+      $val = $this->metaDefaults[$key];
+    }
+
+    /* If there is no programmatic value for the key, 
+     * try looking it up in the meta array
+     * maybe it is a meta tag and not a field name? 
+     */
+    if (!$val && ($key = array_search($key, $this->metaArray())) && array_key_exists($key, $this->metaDefaults)) {
+      $val = $this->metaDefaults[$key];
+    }
+
+    if ($val) {
       if (is_callable($val)) {
         $val = $val($this->page);
+      }
+
+      if (is_array($val)) {
+        $val = $val['content'] ?? $val['href'] ?? null;
+
+        // Last sanity check, if the array syntax doesn't have a supported key
+        if ($val === null) {
+          // Remove the key from the consumed array, so it doesn't get filtered out
+          // (we can assume the entry is a custom meta tag that uses different attributes)
+          $this->consumed = array_filter($this->consumed, fn ($item) => $item !== $key);
+          return null;
+        }
       }
 
       if (is_a($val, 'Kirby\Content\Field')) {
