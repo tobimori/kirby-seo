@@ -1,7 +1,7 @@
 <template>
   <div class="k-section k-seo-preview">
     <div class="k-field-header k-seo-preview__label k-label k-field-label">
-      <k-icon type="preview" /><span class="k-label-text">{{ label || $t("seo-preview") }}</span>
+      <k-icon type="preview" /><span class="k-label-text">{{ label || $t('seo-preview') }}</span>
       <k-loader v-if="isLoading" />
     </div>
     <k-select-field
@@ -22,15 +22,15 @@
 </template>
 
 <script>
-import FacebookPreview from "../components/FacebookPreview.vue"
-import GooglePreview from "../components/GooglePreview.vue"
-import TwitterPreview from "../components/TwitterPreview.vue"
-import SlackPreview from "../components/SlackPreview.vue"
+import FacebookPreview from '../components/FacebookPreview.vue'
+import GooglePreview from '../components/GooglePreview.vue'
+import TwitterPreview from '../components/TwitterPreview.vue'
+import SlackPreview from '../components/SlackPreview.vue'
 
 export default {
   components: { GooglePreview, TwitterPreview, FacebookPreview, SlackPreview },
   data() {
-    const type = localStorage.getItem("kSEOPreviewType") ?? "google"
+    const type = localStorage.getItem('kSEOPreviewType') ?? 'google'
 
     return {
       label: null,
@@ -55,14 +55,14 @@ export default {
   },
   computed: {
     changes() {
-      return this.$store.getters["content/changes"]()
+      return this.$store.getters['content/changes']()
     }
   },
   methods: {
     async handleLoad(changes) {
       this.isLoading = true
 
-      const page = this.parent.toString().split("/").pop()
+      const page = this.parent.toString().split('/').pop()
       const response = await this.$api.post(`/k-seo/${page}/seo-preview`, changes ?? this.changes)
 
       this.value = response
@@ -74,7 +74,7 @@ export default {
       this.debouncedLoad(changes)
     },
     type() {
-      localStorage.setItem("kSEOPreviewType", this.type)
+      localStorage.setItem('kSEOPreviewType', this.type)
     }
   }
 }
@@ -112,9 +112,10 @@ export default {
   &__label {
     display: flex;
     align-items: center;
+    justify-content: flex-start;
+    gap: var(--spacing-3);
 
     > .k-icon {
-      margin-right: var(--spacing-3);
       color: var(--color-gray-700);
     }
 
