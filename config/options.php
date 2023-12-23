@@ -3,6 +3,14 @@
 use Kirby\Cms\Page;
 
 return [
+  'cascade' => [
+    'fields',
+    'programmatic',
+    // 'fallbackFields', // fallback to meta fields for open graph fields
+    'parent',
+    'site',
+    'options'
+  ],
   'default' => [ // default field values for metadata, format is [field => value]
     'metaTitle' => fn (Page $page) => $page->title(),
     'metaTemplate' => '{{ title }} - {{ site.title }}',

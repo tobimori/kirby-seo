@@ -9,19 +9,23 @@ use Kirby\Toolkit\Str;
 use Kirby\Toolkit\A;
 
 
+/**
+ * The Meta class is responsible for handling the meta data & cascading
+ */
 class Meta
 {
+  /** 
+   * These values will be handled as 'field is empty' 
+   */
   const DEFAULT_VALUES = ['[]', 'default'];
 
   protected Page $page;
   protected ?string $lang;
   protected array $meta = [];
 
-  public function __call($name, $args = null): mixed
-  {
-    return $this->get($name);
-  }
-
+  /**
+   * Creates a new Meta instance
+   */
   public function __construct(Page $page, ?string $lang = null)
   {
     $this->page = $page;
@@ -32,22 +36,99 @@ class Meta
     }
   }
 
+  /**
+   * Magic method to get a meta value by calling the method name
+   */
+  public function __call($name, $args = null): mixed
+  {
+    return $this->get($name);
+  }
+
+  /**
+   * Get the meta value for a given key
+   */
   public function get(string $key): Field
   {
-    if (($field = $this->page->content($this->lang)->get($key))) { // Page field
-      if (Str::contains($key, 'robots') && !option('tobimori.seo.robots.pageSettings')) return $this->getFallback($key);
+    $cascade = option('tobimori.seo.cascade');
+    if (count(array_intersect(get_class_methods($this), $cascade)) !== count($cascade)) {
+      throw new InvalidArgumentException('Invalid cascade method in config. Please check your options for `tobimori.seo.cascade`.');
+    }
+
+    foreach ($cascade as $method) {
+      if ($field = $this->$method($key)) {
+        return $field;
+      }
+    }
+
+    return new Field($this->page, $key, '');
+  }
+
+  /**
+   * Get the meta value for a given key from the page's fields
+   */
+  protected function fields(string $key): Field|null
+  {
+    if (($field = $this->page->content($this->lang)->get($key))) {
+      if (Str::contains($key, 'robots') && !option('tobimori.seo.robots.pageSettings')) return null;
 
       if ($field->isNotEmpty() && !A::has(self::DEFAULT_VALUES, $field->value())) {
         return $field;
       }
     }
 
-    return $this->getFallback($key);
+    return null;
   }
 
-  public function getFallback(string $key): Field
+  /**
+   * Maps Open Graph fields to Meta fields for fallbackFields 
+   * cascade method
+   */
+  const FALLBACK_MAP = [
+    'ogTitle' => 'metaTitle',
+    'ogDescription' => 'metaDescription',
+    'ogTemplate' => 'metaTemplate',
+  ];
+
+  /**
+   * We only allow the following cascade methods for fallbacks,
+   * because we don't want to fallback to the config defaults for
+   * Meta fields, because we most likely already have those set 
+   * for the Open Graph fields
+   */
+  const FALLBACK_CASCADE = [
+    'fields',
+    'programmatic',
+    'parent',
+    'site'
+  ];
+
+  /**
+   * Get the meta value for a given key using the fallback fields
+   * defined above (usually Open Graph > Meta Fields)
+   */
+  protected function fallbackFields(string $key): Field|null
   {
-    if ($this->meta && array_key_exists($key, $this->meta)) { // Programmatic content
+    if (array_key_exists($key, self::FALLBACK_MAP)) {
+      $fallback = self::FALLBACK_MAP[$key];
+      $cascade = option('tobimori.seo.cascade');
+
+      foreach (array_intersect($cascade, self::FALLBACK_CASCADE) as $method) {
+        if ($field = $this->$method($fallback)) {
+          return $field;
+        }
+      }
+    }
+
+    return null;
+  }
+
+  /**
+   * Get the meta value for a given key from the page's meta
+   * array, which can be set in the page's metaDefaults method
+   */
+  protected function programmatic(string $key): Field|null
+  {
+    if ($this->meta && array_key_exists($key, $this->meta)) {
       $val = $this->meta[$key];
 
       if (is_callable($val)) {
@@ -61,7 +142,16 @@ class Meta
       return new Field($this->page, $key, $val);
     }
 
-    if ($this->canInherit($key)) { // Inheritance from parent
+    return null;
+  }
+
+  /**
+   * Get the meta value for a given key from the page's parent,
+   * if the page is allowed to inherit the value
+   */
+  protected function parent(string $key): Field|null
+  {
+    if ($this->canInherit($key)) {
       $parent = $this->page->parent();
       $parentMeta = new Meta($parent, $this->lang);
       if ($value = $parentMeta->get($key)) {
@@ -69,11 +159,29 @@ class Meta
       }
     }
 
-    if (($site = $this->page->site()->content($this->lang)->get($key)) && ($site->isNotEmpty() && !A::has(self::DEFAULT_VALUES, $site->value))) { // Site globals
+    return null;
+  }
+
+  /**
+   * Get the meta value for a given key from the 
+   * site's meta blueprint & content
+   */
+  protected function site(string $key): Field|null
+  {
+    if (($site = $this->page->site()->content($this->lang)->get($key)) && ($site->isNotEmpty() && !A::has(self::DEFAULT_VALUES, $site->value))) {
       return $site;
     }
 
-    if ($option = option("tobimori.seo.default.{$key}")) { // Options fallback
+    return null;
+  }
+
+  /**
+   * Get the meta value for a given key from the 
+   * config.php options
+   */
+  protected function options(string $key): Field|null
+  {
+    if ($option = option("tobimori.seo.default.{$key}")) {
       if (is_callable($option)) {
         $option = $option($this->page);
       }
@@ -85,7 +193,7 @@ class Meta
       return new Field($this->page, $key, $option);
     }
 
-    return new Field($this->page, $key, '');
+    return null;
   }
 
   /**
