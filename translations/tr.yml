@@ -61,7 +61,7 @@ title-overwrite: Başlık (üzerine yaz)
 summary: Kare İmaj ile Özet
 summary_large_image: Büyük İmaj ile Özet
 default-select: 'Varsayılan:'
-twitter-author: 'Twitter\'da @kullanici_adi'
+twitter-author: Twitter'da @kullanici_adi
 inherit-settings: Ayarları Miras Al
 inherit-settings-help: |
   Alt sayfalar tarafından miras alınacak ayarları seçin.
