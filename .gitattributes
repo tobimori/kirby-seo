@@ -7,3 +7,6 @@
 .editorconfig export-ignore
 composer.lock export-ignore
 pnpm-lock.yaml export-ignore
+
+# Docs
+docs/ export-ignore

@@ -59,12 +59,12 @@ return [
     'content' => [], // custom robots content
     'types' => ['index', 'follow', 'archive', 'imageindex', 'snippet'] // available robots types
   ],
-  'generateSchema' => true, // whether to generate default schema.org data
-  'canonicalIncludesWWW' => false, // whether to include www. in canonical URLs
-  'lang' => 'en_US', // default language, used for single-language sites
-  'dateFormat' => null, // custom date format,
   'files' => [
     'parent' => null,
     'template' => null,
-  ]
+  ],
+  'generateSchema' => true, // whether to generate default schema.org data
+  'canonicalIncludesWWW' => false, // whether to include www. in canonical URLs
+  'lang' => 'en_US', // default language, used for single-language sites
+  'dateFormat' => null, // custom date format
 ];

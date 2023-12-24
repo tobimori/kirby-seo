@@ -73,9 +73,14 @@ export default {
     async handleLoad(changes) {
       this.isLoading = true
 
-      const page = panel.view.props.model.id.replaceAll('/', '+')
+      const page = panel.view.props.model.id
+
+      if (!page) {
+        throw new Error('The Heading structure section is only available for pages')
+      }
+
       const response = await panel.api.post(
-        `/k-seo/${page}/heading-structure`,
+        `/k-seo/${page.replaceAll('/', '+')}/heading-structure`,
         changes ?? this.changes
       )
 

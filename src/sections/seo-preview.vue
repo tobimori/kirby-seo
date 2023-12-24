@@ -60,7 +60,7 @@ export default {
     async handleLoad(changes) {
       this.isLoading = true
 
-      const page = panel.view.props.model.id.replaceAll('/', '+')
+      const page = panel.view.props.model?.id?.replaceAll('/', '+') ?? 'site'
       const response = await panel.api.post(`/k-seo/${page}/seo-preview`, changes ?? this.changes)
 
       this.value = response
