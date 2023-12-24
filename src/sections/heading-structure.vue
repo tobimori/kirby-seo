@@ -1,7 +1,7 @@
 <template>
   <div class="k-section k-heading-structure" v-if="value">
     <div class="k-field-header k-heading-structure__label k-label k-field-label">
-      <k-icon type="headline" /><span>{{ label || $t("heading-structure") }}</span>
+      <k-icon type="headline" /><span>{{ label || $t('heading-structure') }}</span>
       <k-loader v-if="isLoading" />
     </div>
     <k-box theme="white">
@@ -21,15 +21,15 @@
     </k-box>
     <k-box class="k-heading-structure__notice" theme="negative" v-if="incorrectOrder && !noH1">
       <k-icon type="alert" />
-      <k-text>{{ $t("incorrect-heading-order") }}</k-text>
+      <k-text>{{ $t('incorrect-heading-order') }}</k-text>
     </k-box>
     <k-box class="k-heading-structure__notice" theme="negative" v-if="multipleH1">
       <k-icon type="alert" />
-      <k-text>{{ $t("multiple-h1-tags") }}</k-text>
+      <k-text>{{ $t('multiple-h1-tags') }}</k-text>
     </k-box>
     <k-box class="k-heading-structure__notice" theme="negative" v-if="noH1">
       <k-icon type="alert" />
-      <k-text>{{ $t("missing-h1-tag") }}</k-text>
+      <k-text>{{ $t('missing-h1-tag') }}</k-text>
     </k-box>
   </div>
 </template>
@@ -57,7 +57,7 @@ export default {
   },
   computed: {
     changes() {
-      return this.$store.getters["content/changes"]()
+      return this.$store.getters['content/changes']()
     },
     incorrectOrder() {
       return this.value?.some((item, index) => item.level > (this.value[index - 1]?.level ?? 0) + 1)
@@ -73,8 +73,8 @@ export default {
     async handleLoad(changes) {
       this.isLoading = true
 
-      const page = this.parent.toString().split("/").pop()
-      const response = await this.$api.post(
+      const page = panel.view.props.model.id.replaceAll('/', '+')
+      const response = await panel.api.post(
         `/k-seo/${page}/heading-structure`,
         changes ?? this.changes
       )
@@ -159,7 +159,7 @@ export default {
         padding-left: 1.6rem;
 
         &::before {
-          content: "";
+          content: '';
           position: absolute;
           top: calc(50% - 0.0625rem);
           left: 0.4rem;
@@ -169,7 +169,7 @@ export default {
         }
 
         &::after {
-          content: "";
+          content: '';
           position: absolute;
           bottom: calc(50% - 0.0625rem);
           left: 0.4rem;
