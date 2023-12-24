@@ -7,7 +7,6 @@ multiple-h1-tags: Başlık yapınızda birden fazla H1 etiketi bulunuyor ve geç
 # SEO Önizleme
 seo-preview: Önizleme
 seo-preview-for: Bana göster
-twitter-card-type-not-respected: Twitter Kart Türü, Açık Grafik (OG) görüntüsü kullanılamadığı için dikkate alınmıyor.
 open-debugger: Paylaşım Hata Ayıklayıcıyı Aç
 open-search-console: Arama Konsolunu Aç
 
@@ -74,5 +73,4 @@ use-title-template-help: Başlık şablonunun kullanılıp kullanılmayacağın�
 # Etiketler
 google: Google
 facebook: Facebook
-twitter: Twitter
 slack: Slack

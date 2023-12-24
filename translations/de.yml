@@ -7,7 +7,6 @@ multiple-h1-tags: Deine Überschriftenstruktur enthält mehr als eine H1 und ist
 # SEO Preview
 seo-preview: Vorschau
 seo-preview-for: Zeige mir
-twitter-card-type-not-respected: Der Twitter-Kartentyp kann nicht respektiert werden, da kein OG-Bild vorhanden ist.
 open-debugger: Sharing-Debugger öffnen
 open-search-console: Search Console öffnen
 
@@ -74,5 +73,4 @@ use-title-template-help: Gibt an, ob das Titel-Template verwendet werden soll. W
 # Labels
 google: Google
 facebook: Facebook
-twitter: Twitter
 slack: Slack

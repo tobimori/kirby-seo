@@ -47,7 +47,6 @@ return [
   'previews' => [
     'google',
     'facebook',
-    'twitter',
     'slack'
   ],
   'robots' => [

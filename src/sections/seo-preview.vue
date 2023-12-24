@@ -14,7 +14,6 @@
     />
     <div class="k-seo-preview__inner" v-if="value">
       <google-preview v-if="type === 'google'" v-bind="value" />
-      <twitter-preview v-if="type === 'twitter'" v-bind="value" />
       <facebook-preview v-if="type === 'facebook'" v-bind="value" />
       <slack-preview v-if="type === 'slack'" v-bind="value" />
     </div>
@@ -22,13 +21,12 @@
 </template>
 
 <script>
-import FacebookPreview from '../components/FacebookPreview.vue'
-import GooglePreview from '../components/GooglePreview.vue'
-import TwitterPreview from '../components/TwitterPreview.vue'
-import SlackPreview from '../components/SlackPreview.vue'
+import FacebookPreview from '../components/Previews/FacebookPreview.vue'
+import GooglePreview from '../components/Previews/GooglePreview.vue'
+import SlackPreview from '../components/Previews/SlackPreview.vue'
 
 export default {
-  components: { GooglePreview, TwitterPreview, FacebookPreview, SlackPreview },
+  components: { GooglePreview, FacebookPreview, SlackPreview },
   data() {
     const type = localStorage.getItem('kSEOPreviewType') ?? 'google'
 
@@ -62,8 +60,8 @@ export default {
     async handleLoad(changes) {
       this.isLoading = true
 
-      const page = this.parent.toString().split('/').pop()
-      const response = await this.$api.post(`/k-seo/${page}/seo-preview`, changes ?? this.changes)
+      const page = panel.view.props.model.id.replaceAll('/', '+')
+      const response = await panel.api.post(`/k-seo/${page}/seo-preview`, changes ?? this.changes)
 
       this.value = response
       this.isLoading = false

@@ -7,7 +7,6 @@ multiple-h1-tags: Votre structure de titres contient plus d’une balise H1 et e
 # SEO Preview
 seo-preview: Aperçu
 seo-preview-for: Montre-moi
-twitter-card-type-not-respected: Le type de carte Twitter n’est pas respecté car l’image OG n’est pas disponible.
 open-debugger: Ouvrir le débogueur de partage
 open-search-console: Ouvrir la Console de recherche
 
@@ -73,5 +72,4 @@ use-title-template-help: Indique si le modèle de titre doit être utilisé. Ne 
 # Labels
 google: Google
 facebook: Facebook
-twitter: Twitter
 slack: Slack

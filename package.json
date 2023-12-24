@@ -1,7 +1,4 @@
 {
-  "name": "kirby-seo",
-  "description": "The ultimate Kirby SEO toolkit",
-  "version": "0.3.4",
   "private": true,
   "license": "MIT",
   "author": "Tobias Möritz",
@@ -13,8 +10,8 @@
   },
   "devDependencies": {
     "husky": "^8.0.3",
-    "kirbyup": "^2.2.1",
-    "postcss": "^8.4.24",
-    "sass": "^1.63.4"
+    "kirbyup": "^3.1.0",
+    "postcss": "^8.4.32",
+    "sass": "^1.69.5"
   }
 }

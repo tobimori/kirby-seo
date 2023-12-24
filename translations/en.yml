@@ -7,7 +7,6 @@ multiple-h1-tags: Your heading structure contains more than one H1 and is invali
 # SEO Preview
 seo-preview: Preview
 seo-preview-for: Show me
-twitter-card-type-not-respected: Twitter Card Type is not respected because the OG image is unavailable.
 open-debugger: Open Sharing Debugger
 open-search-console: Open Search Console
 
@@ -74,5 +73,4 @@ use-title-template-help: Specifies whether the title template should be used. Wi
 # Labels
 google: Google
 facebook: Facebook
-twitter: Twitter
 slack: Slack

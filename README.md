@@ -17,7 +17,7 @@
 
 ## Requirements
 
-- Kirby 4.0+ (Kirby 3 support is available for <=0.3.4)
+- Kirby 4.0+
 - PHP 8.1+
 
 ## How it works - The Meta Cascade 🪜

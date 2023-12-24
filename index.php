@@ -8,6 +8,7 @@ use Kirby\Toolkit\A;
 use Kirby\Data\Yaml;
 use Kirby\Filesystem\Dir;
 use Spatie\SchemaOrg\Schema;
+use tobimori\Seo\SitemapPage;
 
 // shamelessly borrowed from distantnative/retour-for-kirby
 if (
@@ -25,6 +26,9 @@ App::plugin('tobimori/seo', [
   'pageMethods' => require __DIR__ . '/config/pageMethods.php',
   'hooks' => require __DIR__ . '/config/hooks.php',
   'routes' => require __DIR__ . '/config/routes.php',
+  'pageModels' => [
+    'sitemap' => SitemapPage::class,
+  ],
   // load all commands automatically
   'commands' => A::keyBy(A::map(
     Dir::read(__DIR__ . '/config/commands'),

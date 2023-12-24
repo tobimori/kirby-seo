@@ -88,22 +88,12 @@ return [
       'method' => 'POST',
       'action' => function (string $slug) {
         $model = $this->dirtyPageOrSite($slug);
-
         if (!($model instanceof Page)) return null;
-
         $robots = $model->robots();
-
-        $defaults = [];
-        foreach (option('tobimori.seo.robots.types') as $type) {
-          if (!$model->metadata()->getFallback('robots' . Str::ucfirst($type))->toBool()) {
-            $defaults[] = 'no' . Str::lower($type);
-          }
-        };
 
         return [
           'active' => option('tobimori.seo.robots.indicator', option('tobimori.seo.robots.active', true)),
           'state' => $robots,
-          'defaults' => A::join($defaults, ',')
         ];
       }
     ]

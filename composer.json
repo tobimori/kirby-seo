@@ -2,7 +2,7 @@
   "name": "tobimori/kirby-seo",
   "description": "The ultimate Kirby SEO toolkit",
   "type": "kirby-plugin",
-  "version": "0.4.0",
+  "version": "1.0.0",
   "license": "MIT",
   "homepage": "https://github.com/tobimori/kirby-seo#readme",
   "authors": [
@@ -22,8 +22,8 @@
     "spatie/schema-org": "^3.14"
   },
   "require-dev": {
-    "getkirby/cms": "^4.0-beta.1",
-    "getkirby/cli": "^1.1"
+    "getkirby/cms": "^4.0",
+    "getkirby/cli": "^1.2"
   },
   "scripts": {
     "dist": "composer install --no-dev --optimize-autoloader"
