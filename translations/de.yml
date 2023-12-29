@@ -74,3 +74,14 @@ use-title-template-help: Gibt an, ob das Titel-Template verwendet werden soll. W
 google: Google
 facebook: Facebook
 slack: Slack
+
+# Sitemap
+sitemap: Sitemap
+sitemap-index: Sitemap-Index
+sitemap-description: Dies ist die Sitemap für deine Website, die Suchmaschinen über die Seiten auf deiner Website informiert, die indexiert werden können.
+sitemap-by: von
+sitemap-changefreq: Änderungsfrequenz
+sitemap-last-updated: Letzte Änderung
+sitemap-priority: Priorität
+sitemap-url: URL
+sitemap-no-entries: Keine Einträge

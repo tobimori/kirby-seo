@@ -1795,6 +1795,7 @@ return array(
     'Spatie\\SchemaOrg\\Zoo' => $vendorDir . '/spatie/schema-org/src/Zoo.php',
     'tobimori\\Seo\\Meta' => $baseDir . '/classes/Meta.php',
     'tobimori\\Seo\\SchemaSingleton' => $baseDir . '/classes/SchemaSingleton.php',
-    'tobimori\\Seo\\Sitemap' => $baseDir . '/classes/Sitemap.php',
-    'tobimori\\Seo\\SitemapPage' => $baseDir . '/classes/SitemapPage.php',
+    'tobimori\\Seo\\Sitemap\\Sitemap' => $baseDir . '/classes/Sitemap/Sitemap.php',
+    'tobimori\\Seo\\Sitemap\\SitemapIndex' => $baseDir . '/classes/Sitemap/SitemapIndex.php',
+    'tobimori\\Seo\\Sitemap\\SitemapUrl' => $baseDir . '/classes/Sitemap/SitemapUrl.php',
 );

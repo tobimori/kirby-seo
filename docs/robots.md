@@ -26,9 +26,7 @@ You can disable following the page status by setting `tobimori.seo.robots.follow
 
 The default indexing behavior for published pages can be customized by setting `tobimori.seo.robots.index` to a boolean or callable that returns a boolean.
 
-## All Options
-
-## Options
+## [Options](/config/options.php)
 
 | Option                    | Default                     | Description                                                               |
 | ------------------------- | --------------------------- | ------------------------------------------------------------------------- |
@@ -40,7 +38,6 @@ The default indexing behavior for published pages can be customized by setting `
 | `robots.sitemap`          | `null`                      | Sitemap URL to include in `robots.txt`                                    |
 | `robots.content`          | `[]`                        | Custom `robots.txt` rules                                                 |
 | `robots.types`            | _internal_                  | Valid robot directive types - do not modify                               |
-|                           |
 
 Options allow you to fine tune the behaviour of the plugin. You can set them in your `config.php` file:
 

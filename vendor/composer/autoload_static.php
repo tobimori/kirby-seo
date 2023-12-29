@@ -1826,8 +1826,9 @@ class ComposerStaticInit3e4bc37d480117d497c8333636c62d44
         'Spatie\\SchemaOrg\\Zoo' => __DIR__ . '/..' . '/spatie/schema-org/src/Zoo.php',
         'tobimori\\Seo\\Meta' => __DIR__ . '/../..' . '/classes/Meta.php',
         'tobimori\\Seo\\SchemaSingleton' => __DIR__ . '/../..' . '/classes/SchemaSingleton.php',
-        'tobimori\\Seo\\Sitemap' => __DIR__ . '/../..' . '/classes/Sitemap.php',
-        'tobimori\\Seo\\SitemapPage' => __DIR__ . '/../..' . '/classes/SitemapPage.php',
+        'tobimori\\Seo\\Sitemap\\Sitemap' => __DIR__ . '/../..' . '/classes/Sitemap/Sitemap.php',
+        'tobimori\\Seo\\Sitemap\\SitemapIndex' => __DIR__ . '/../..' . '/classes/Sitemap/SitemapIndex.php',
+        'tobimori\\Seo\\Sitemap\\SitemapUrl' => __DIR__ . '/../..' . '/classes/Sitemap/SitemapUrl.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

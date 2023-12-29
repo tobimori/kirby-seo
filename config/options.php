@@ -59,12 +59,19 @@ return [
     'content' => [], // custom robots content
     'types' => ['index', 'follow', 'archive', 'imageindex', 'snippet'] // available robots types
   ],
+  'sitemap' => [
+    'active' => true,
+    'lang' => 'en',
+    'generator' => require __DIR__ . '/options/sitemap.php',
+    'changefreq' => 'weekly',
+    'priority' => fn (Page $p) => number_format(($p->isHomePage()) ? 1 : max(1 - 0.2 * $p->depth(), 0.2), 1),
+  ],
   'files' => [
     'parent' => null,
     'template' => null,
   ],
+  'canonicalBase' => fn () => $site->url(), // base url for canonical links, defaults to site url
   'generateSchema' => true, // whether to generate default schema.org data
-  'canonicalIncludesWWW' => false, // whether to include www. in canonical URLs
   'lang' => 'en_US', // default language, used for single-language sites
   'dateFormat' => null, // custom date format
 ];

@@ -107,7 +107,7 @@ class Meta
     }
 
     // Robots
-    if ($this->robots()) {
+    if (option('tobimori.seo.robots.active')) {
       $meta['robots'] = fn () => $this->robots();
     }
 
@@ -218,6 +218,10 @@ class Meta
    */
   public function __call($name, $args = null): mixed
   {
+    if (method_exists($this, $name)) {
+      return $this->$name($args);
+    }
+
     return $this->get($name);
   }
 
@@ -323,11 +327,11 @@ class Meta
      * try looking it up in the meta array
      * maybe it is a meta tag and not a field name? 
      */
-    if (!$val && ($key = array_search($key, $this->metaArray())) && array_key_exists($key, $this->metaDefaults)) {
+    if (!isset($val) && ($key = array_search($key, $this->metaArray())) && array_key_exists($key, $this->metaDefaults)) {
       $val = $this->metaDefaults[$key];
     }
 
-    if ($val) {
+    if (isset($val)) {
       if (is_callable($val)) {
         $val = $val($this->page);
       }

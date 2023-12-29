@@ -15,9 +15,18 @@ In short, Kirby SEO implements the following relevant features:
 
 All configurable through easy config options or simple panel blueprints, with sensible defaults, so you can get started right away.
 
+## Used By
+
+Some sites that run on Kirby SEO:
+
+- [Lovers Magazine](https://loversmagazine.com/)
+- [Vierbeiner in Not](https://vierbeinerinnot.de/) with programmatic OG image generation based on [kirby-paparazzi](https://github.com/tobimori/kirby-paparazzi)
+- [Meine Erde](https://www.meine-erde.de/)
+
 ## Topics
 
 - [Getting started](./getting-started.md)
+- [Migrating to 1.0.0](./migrating.md)
 - [Robots.txt bot directives](./robots.md)
 
 ## Support the project
