@@ -79,6 +79,23 @@ The `seo/head` snippet will output all meta tags, including the `<title>` tag. T
 
 It's important to place the `seo/head` snippet in the `<head>` tag, and the `seo/schemas` snippet at the end of the `<body>` tag.
 
+## Setting your canonical URL
+
+The canonical URL is the URL that you want search engines to index. It's important to set it correctly, otherwise you might get penalized for duplicate content - especially if you run your site both with and without `www`.
+
+You can set the canonical URL in your config file:
+
+```php
+// config.php
+return [
+    'tobimori.seo.canonicalBase' => 'https://www.example.com',
+];
+```
+
+You can also supply a function that returns the canonical URL. This is helpful for specialized setups that run explicitly on multiple domains.
+
+> While there is a graceful fallback for this to the `$site->url()` method, it's just _safer_ to set it explicitly to prevent any configuration hickups to penalize your site indexing.
+
 ## Single-Language Setup
 
 If you're using a single-language setup, it's important to define the language code of your website in the config file:

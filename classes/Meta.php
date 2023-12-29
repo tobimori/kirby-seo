@@ -479,11 +479,7 @@ class Meta
    */
   public function canonicalUrl()
   {
-    if (option('tobimori.seo.canonicalIncludesWWW') === false) {
-      return preg_replace(array('/http:/', '/www\./'), array('https:', ''), $this->page->url());
-    } else {
-      return preg_replace('/http(s)?:\/\/(www.)?/', 'https://www.', $this->page->url());
-    }
+    return $this->page->site()->canonicalFor($this->page->url());
   }
 
   /**

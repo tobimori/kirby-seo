@@ -70,7 +70,7 @@ return [
 
       kirby()->response()->type('text/xml');
       return Page::factory([
-        'slug' => 'sitemap',
+        'slug' => 'sitemap-' . $index,
         'template' => 'sitemap',
         'model' => 'sitemap',
         'content' => [

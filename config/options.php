@@ -54,7 +54,7 @@ return [
     'followPageStatus' => true, // should unlisted pages be noindex by default?
     'pageSettings' => true, // whether to have robots settings on each page
     'indicator' => true, // whether the indicator should be shown in the panel
-    'index' => fn () => !option('debug'), // default site-wide robots setting
+    'index' => fn () => true, //!option('debug'), // default site-wide robots setting
     'sitemap' => null, // sets sitemap url, will be replaced by plugin sitemap in the future
     'content' => [], // custom robots content
     'types' => ['index', 'follow', 'archive', 'imageindex', 'snippet'] // available robots types
@@ -64,13 +64,15 @@ return [
     'lang' => 'en',
     'generator' => require __DIR__ . '/options/sitemap.php',
     'changefreq' => 'weekly',
+    'groupByTemplate' => true,
+    'excludeTemplates' => ['error'],
     'priority' => fn (Page $p) => number_format(($p->isHomePage()) ? 1 : max(1 - 0.2 * $p->depth(), 0.2), 1),
   ],
   'files' => [
     'parent' => null,
     'template' => null,
   ],
-  'canonicalBase' => fn () => $site->url(), // base url for canonical links, defaults to site url
+  'canonicalBase' => null, // base url for canonical links
   'generateSchema' => true, // whether to generate default schema.org data
   'lang' => 'en_US', // default language, used for single-language sites
   'dateFormat' => null, // custom date format

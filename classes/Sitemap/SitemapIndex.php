@@ -20,14 +20,14 @@ class SitemapIndex extends Collection
     return static::$instance;
   }
 
-  public function create(string $key = 'default'): Sitemap
+  public function create(string $key = 'pages'): Sitemap
   {
     $sitemap = $this->make($key);
     $this->append($sitemap);
     return $sitemap;
   }
 
-  public static function make(string $key = 'default'): Sitemap
+  public static function make(string $key = 'pages'): Sitemap
   {
     return new Sitemap($key);
   }
@@ -75,6 +75,16 @@ class SitemapIndex extends Collection
 
   public function render(Page $page): string|null
   {
+    // There always has to be at least one index, 
+    // otherwise the sitemap will fail to render
+    if ($this->count() === 0) {
+      $this->generate();
+    }
+
+    if ($this->count() === 0) {
+      $this->create();
+    }
+
     if (($index = $page->content()->get('index'))->isEmpty()) {
       // If there is only one index, we do not need to render the index page
       return $this->count() > 1 ? $this->toString() : $this->first()->toString();

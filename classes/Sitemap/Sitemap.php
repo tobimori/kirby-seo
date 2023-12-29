@@ -20,12 +20,21 @@ class Sitemap extends Collection
 
   public function loc(): string
   {
-    return 'sitemap-' . $this->key . '.xml';
+    return kirby()->site()->canonicalFor('sitemap-' . $this->key . '.xml');
   }
 
   public function lastmod(): string
   {
-    return '';
+    $lastmod = 0;
+    foreach ($this as $url) {
+      $lastmod = max($lastmod, strtotime($url->lastmod()));
+    }
+
+    if ($lastmod > 0) {
+      return date('c', $lastmod);
+    }
+
+    return date('c');
   }
 
   public function createUrl(string $loc): SitemapUrl

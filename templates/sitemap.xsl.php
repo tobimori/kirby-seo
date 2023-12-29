@@ -98,6 +98,12 @@
 				td {
 					background: #fff;
 				}
+
+				@media only screen and (max-width: 48rem) {
+					.k-sitemap-secondary {
+						display: none;
+					}
+				}
 			</style>
 		</head>
 
@@ -111,7 +117,7 @@
 						<thead>
 							<tr>
 								<th width="66%"><?= t('sitemap') ?></th>
-								<th width="33%"><?= t('sitemap-last-updated') ?></th>
+								<th width="33%" class="k-sitemap-secondary"><?= t('sitemap-last-updated') ?></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -123,7 +129,7 @@
 										</xsl:variable>
 										<a href="{$link}"><xsl:value-of select="sitemap:loc" /></a>
 									</td>
-									<td>
+									<td class="k-sitemap-secondary">
 										<xsl:value-of select="concat(substring(sitemap:lastmod,0,11),concat(' ', substring(sitemap:lastmod,12,5)))" />
 									</td>
 								</tr>
@@ -137,9 +143,9 @@
 						<thead>
 							<tr>
 								<th width="55%"><?= t('sitemap-url') ?></th>
-								<th width="10%"><?= t('sitemap-priority') ?></th>
-								<th width="15%"><?= t('sitemap-changefreq') ?></th>
-								<th width="20%"><?= t('sitemap-last-updated') ?></th>
+								<th width="10%" class="k-sitemap-secondary"><?= t('sitemap-priority') ?></th>
+								<th width="15%" class="k-sitemap-secondary"><?= t('sitemap-changefreq') ?></th>
+								<th width="20%" class="k-sitemap-secondary"><?= t('sitemap-last-updated') ?></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -151,13 +157,13 @@
 										</xsl:variable>
 										<a target="_blank" rel="noopener nofollow" href="{$link}"><xsl:value-of select="sitemap:loc" /></a>
 									</td>
-									<td>
+									<td class="k-sitemap-secondary">
 										<xsl:value-of select="sitemap:priority" />
 									</td>
-									<td>
+									<td class="k-sitemap-secondary">
 										<xsl:value-of select="sitemap:changefreq" />
 									</td>
-									<td>
+									<td class="k-sitemap-secondary">
 										<xsl:value-of select="concat(substring(sitemap:lastmod,0,11),concat(' ', substring(sitemap:lastmod,12,5)))" />
 									</td>
 								</tr>
