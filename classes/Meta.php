@@ -153,17 +153,18 @@ class Meta
    * Normalize the meta array and remaining meta defaults to be used in the snippet,
    * also resolve the content, if necessary
    */
-  public function snippetData(): array
+  public function snippetData(array $raw = null): array
   {
-    $metaRaw = array_merge($this->metaArray(), array_diff($this->metaDefaults, $this->consumed));
     $meta = [];
-    foreach ($metaRaw as $tag => $valueOrKey) {
+    foreach (($raw ?? $this->metaArray()) as $tag => $valueOrKey) {
       if (is_callable($valueOrKey)) {
         $meta[$tag] = $valueOrKey();
         continue;
       }
 
-      $meta[$tag] = $this->$valueOrKey();
+      if (is_string($valueOrKey)) {
+        $meta[$tag] = $this->$valueOrKey();
+      }
     }
 
     $tags = [];
@@ -183,6 +184,11 @@ class Meta
           'content' => !isset($tag['attributes']) ? $value : null,
         ];
       }
+    }
+
+    // Add the remaining meta defaults, if they are not consumed
+    if ($raw === null) {
+      $tags = array_merge($tags, $this->snippetData(array_diff($this->metaDefaults, $this->consumed)));
     }
 
     return $tags;
