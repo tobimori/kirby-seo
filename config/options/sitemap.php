@@ -17,10 +17,19 @@ return function (SitemapIndex $sitemap) {
     $index = $sitemap->create($group ? $group->first()->intendedTemplate()->name() : 'pages');
 
     foreach ($group as $page) {
-      $index->createUrl($page->metadata()->canonicalUrl())
+      $url = $index->createUrl($page->metadata()->canonicalUrl())
         ->lastmod($page->modified())
         ->changefreq(is_callable($changefreq = option('tobimori.seo.sitemap.changefreq')) ? $changefreq($page) : $changefreq)
         ->priority(is_callable($priority = option('tobimori.seo.sitemap.priority')) ? $priority($page) : $priority);
+
+      if (kirby()->languages()->count() > 1 && kirby()->language() !== null) {
+        $url->alternates(
+          kirby()->languages()->map(fn ($language) => [
+            'hreflang' => $language->code() !== kirby()->language()->code() ? 'x-default' : $language->code(),
+            'href' => $page->url($language->code()),
+          ])->toArray()
+        );
+      }
     }
   };
 };

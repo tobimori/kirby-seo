@@ -4,12 +4,14 @@ namespace tobimori\Seo\Sitemap;
 
 use DOMDocument;
 use DOMNode;
+use Kirby\Exception\Exception;
 
 class SitemapUrl
 {
   protected string $lastmod;
   protected string $changefreq;
   protected string $priority;
+  protected array $alternates = [];
 
   public function __construct(protected string $loc)
   {
@@ -55,14 +57,44 @@ class SitemapUrl
     return $this;
   }
 
+  public function alternates(array $alternates = []): SitemapUrl|array
+  {
+    if (empty($alternates)) {
+      return $this->alternates;
+    }
+
+    foreach ($alternates as $alternate) {
+      foreach (['href', 'hreflang'] as $key) {
+        if (!array_key_exists($key, $alternate)) {
+          new Exception("[kirby-seo] The alternate link to '{$this->loc()} is missing the '{$key}' attribute");
+        }
+      }
+    }
+
+
+    $this->alternates = $alternates;
+    return $this;
+  }
+
   public function toDOMNode(DOMDocument $doc = new DOMDocument('1.0', 'UTF-8')): DOMNode
   {
     $doc->formatOutput = true;
 
     $node = $doc->createElement('url');
 
-    foreach (array_diff(get_object_vars($this), ['alternates']) as $key => $value) {
+    foreach (array_diff_key(get_object_vars($this), array_flip(['alternates'])) as $key => $value) {
       $node->appendChild($doc->createElement($key, $value));
+    }
+
+    if (!empty($this->alternates())) {
+      foreach ($this->alternates() as $alternate) {
+        $alternateNode = $doc->createElement('xhtml:link');
+        foreach ($alternate as $key => $value) {
+          $alternateNode->setAttribute($key, $value);
+        }
+
+        $node->appendChild($alternateNode);
+      }
     }
 
     return $node;

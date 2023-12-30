@@ -76,7 +76,7 @@ export default {
       const page = panel.view.props.model.id
 
       if (!page) {
-        throw new Error('The Heading structure section is only available for pages')
+        throw new Error('[kirby-seo] The Heading structure section is only available for pages')
       }
 
       const response = await panel.api.post(

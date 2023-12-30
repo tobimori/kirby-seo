@@ -232,7 +232,7 @@ class Meta
   {
     $cascade = option('tobimori.seo.cascade');
     if (count(array_intersect(get_class_methods($this), $cascade)) !== count($cascade)) {
-      throw new InvalidArgumentException('Invalid cascade method in config. Please check your options for `tobimori.seo.cascade`.');
+      throw new InvalidArgumentException('[kirby-seo] Invalid cascade method in config. Please check your options for `tobimori.seo.cascade`.');
     }
 
     // Track consumed keys, so we don't output legacy field values
