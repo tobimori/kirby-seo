@@ -3,12 +3,12 @@
 use Kirby\Cms\App;
 use Kirby\Toolkit\Str;
 
-return function (App $app) {
+return function (App $kirby) {
   $blueprint = [
     'type' => 'files',
     'multiple' => false,
     'uploads' => [],
-    'query' => Str::contains($app->path(), '/site') && !Str::contains($app->path(), 'pages') ? "site.images" : "page.images" // small hack to get context for field using api path
+    'query' => Str::contains($kirby->path(), '/site') && !Str::contains($kirby->path(), 'pages') ? "site.images" : "page.images" // small hack to get context for field using api path
   ];
 
   if ($parent = option('tobimori.seo.files.parent')) {

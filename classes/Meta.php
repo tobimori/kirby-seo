@@ -234,7 +234,7 @@ class Meta
   /**
    * Get the meta value for a given key
    */
-  public function get(string $key): Field
+  public function get(string $key, array $exclude = []): Field
   {
     $cascade = option('tobimori.seo.cascade');
     if (count(array_intersect(get_class_methods($this), $cascade)) !== count($cascade)) {
@@ -246,7 +246,7 @@ class Meta
       $this->consumed[] = $key;
     }
 
-    foreach ($cascade as $method) {
+    foreach (array_diff($cascade, $exclude) as $method) {
       if ($field = $this->$method($key)) {
         return $field;
       }

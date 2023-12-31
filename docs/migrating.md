@@ -15,4 +15,5 @@ You can also use a function that returns the canonical URL. This is helpful for 
 
 ## Miscellaneous
 
+- The minimum required Kirby version is now 4.0.2.
 - The Twitter preview has been removed. Twitter Meta tags are still being generated, but the preview is no longer available, because I don't want to take on the updating burden. If you have manually set the `tobimori.seo.previews` option, make sure to remove it from your config.
