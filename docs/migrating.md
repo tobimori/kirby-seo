@@ -11,6 +11,8 @@ return [
 ];
 ```
 
+You can also use a function that returns the canonical URL. This is helpful for specialized setups that run explicitly on multiple domains.
+
 ## Miscellaneous
 
-- The Twitter preview has been removed. Twitter Meta tags are still being generated, but the preview is no longer available due to some changes on X/Twitter. If you have manually set the `tobimori.seo.previews` option, make sure to remove it from your config.
+- The Twitter preview has been removed. Twitter Meta tags are still being generated, but the preview is no longer available, because I don't want to take on the updating burden. If you have manually set the `tobimori.seo.previews` option, make sure to remove it from your config.

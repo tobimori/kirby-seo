@@ -28,16 +28,16 @@ The default indexing behavior for published pages can be customized by setting `
 
 ## [Options](/config/options.php)
 
-| Option                    | Default                     | Description                                                               |
-| ------------------------- | --------------------------- | ------------------------------------------------------------------------- |
-| `robots.active`           | `true`                      | Enable/disable the entire robots module                                   |
-| `robots.followPageStatus` | `true`                      | Disable default behavior of blocking drafts/unlisted pages                |
-| `robots.pageSettings`     | `true`                      | Show/hide Robots fields in the panel blueprint tab                        |
-| `robots.indicator`        | `true`                      | Show/hide indexing indicator next to page status                          |
-| `robots.index`            | `fn () => !option('debug')` | Default indexing setting for published pages (can be boolean or callable) |
-| `robots.sitemap`          | `null`                      | Sitemap URL to include in `robots.txt`                                    |
-| `robots.content`          | `[]`                        | Custom `robots.txt` rules                                                 |
-| `robots.types`            | _internal_                  | Valid robot directive types - do not modify                               |
+| Option                    | Default                     | Accepts           | Description                                                                               |
+| ------------------------- | --------------------------- | ----------------- | ----------------------------------------------------------------------------------------- |
+| `robots.active`           | `true`                      | Boolean           | Enable/disable the entire robots module                                                   |
+| `robots.followPageStatus` | `true`                      | Boolean           | Disable default behavior of blocking drafts/unlisted pages                                |
+| `robots.pageSettings`     | `true`                      | Boolean           | Show/hide Robots fields in the panel blueprint tab                                        |
+| `robots.indicator`        | `true`                      | Boolean           | Show/hide indexing indicator next to page status                                          |
+| `robots.index`            | `fn () => !option('debug')` | Boolean / Closure | Default indexing setting for published pages                                              |
+| `robots.sitemap`          | `null`                      | String / Closure  | Sitemap URL to include in `robots.txt`, filled automatically if sitemap module is enabled |
+| `robots.content`          | `[]`                        | Array             | Custom `robots.txt` rules                                                                 |
+| `robots.types`            | _internal_                  | Array             | Valid robot directive types - do not modify                                               |
 
 Options allow you to fine tune the behaviour of the plugin. You can set them in your `config.php` file:
 

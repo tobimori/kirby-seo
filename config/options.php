@@ -64,7 +64,7 @@ return [
     'lang' => 'en',
     'generator' => require __DIR__ . '/options/sitemap.php',
     'changefreq' => 'weekly',
-    'groupByTemplate' => true,
+    'groupByTemplate' => false,
     'excludeTemplates' => ['error'],
     'priority' => fn (Page $p) => number_format(($p->isHomePage()) ? 1 : max(1 - 0.2 * $p->depth(), 0.2), 1),
   ],

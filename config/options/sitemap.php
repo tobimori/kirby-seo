@@ -3,14 +3,15 @@
 use tobimori\Seo\Sitemap\SitemapIndex;
 
 return function (SitemapIndex $sitemap) {
-  $pages = site()->index()->filter(fn ($page) => $page->metadata()->robotsIndex()->toBool());
+  $exclude = option('tobimori.seo.sitemap.excludeTemplates', []);
+  $pages = site()->index()->filter(fn ($page) => $page->metadata()->robotsIndex()->toBool() && !in_array($page->intendedTemplate()->name(), $exclude));
 
   if ($group = option('tobimori.seo.sitemap.groupByTemplate')) {
     $pages = $pages->group('intendedTemplate');
   }
 
   if (is_a($pages->first(), 'Kirby\Cms\Page')) {
-    $pages->group(fn () => 'pages');
+    $pages = $pages->group(fn () => 'pages');
   }
 
   foreach ($pages as $group) {

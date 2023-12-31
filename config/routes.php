@@ -24,14 +24,19 @@ return [
       }
 
       kirby()->response()->type('text/xsl');
-      kirby()->setCurrentTranslation(option('tobimori.seo.sitemap.lang', 'en'));
+
+      $lang = option('tobimori.seo.sitemap.lang', 'en');
+      if (is_callable($lang)) {
+        $lang = $lang();
+      }
+      kirby()->setCurrentTranslation($lang);
 
       return Page::factory([
         'slug' => 'sitemap',
         'template' => 'sitemap',
         'model' => 'sitemap',
         'content' => [
-          'title' => 'Sitemap',
+          'title' => t('sitemap'),
         ],
       ])->render(contentType: 'xsl');
     }
@@ -50,7 +55,7 @@ return [
         'template' => 'sitemap',
         'model' => 'sitemap',
         'content' => [
-          'title' => 'Sitemap',
+          'title' => t('sitemap'),
           'index' => null,
         ],
       ])->render(contentType: 'xml');
@@ -74,7 +79,7 @@ return [
         'template' => 'sitemap',
         'model' => 'sitemap',
         'content' => [
-          'title' => 'Sitemap',
+          'title' => t('sitemap'),
           'index' => $index,
         ],
       ])->render(contentType: 'xml');

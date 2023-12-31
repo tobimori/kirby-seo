@@ -40,10 +40,15 @@ if ($content = option('tobimori.seo.robots.content')) {
 	}
 }
 
-if ($sitemap = option('tobimori.seo.robots.sitemap')) {
+if (($sitemap = option('tobimori.seo.robots.sitemap')) || ($sitemapModule = option('tobimori.seo.sitemap.active'))) {
 	// Allow closure to be used
 	if (is_callable($sitemap)) {
 		$sitemap = $sitemap();
+	}
+
+	// Use default sitemap if none is set
+	if (!$sitemap && $sitemapModule) {
+		$sitemap = site()->canonicalFor('/sitemap.xml');
 	}
 
 	// Check again, so falsy values can't be used
