@@ -74,3 +74,14 @@ use-title-template-help: Başlık şablonunun kullanılıp kullanılmayacağın�
 google: Google
 facebook: Facebook
 slack: Slack
+
+# Sitemap
+sitemap: Site Haritası
+sitemap-index: Site Haritası Dizini
+sitemap-description: Web sitenizdeki dizine eklenebilecek sayfalar hakkında arama motorlarını bilgilendiren web sitenizin site haritasıdır.
+sitemap-by: tarafından
+sitemap-changefreq: Değişim Sıklığı
+sitemap-last-updated: Son Güncelleme
+sitemap-priority: Öncelik
+sitemap-url: URL
+sitemap-no-entries: Giriş yok
