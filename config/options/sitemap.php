@@ -1,6 +1,7 @@
 <?php
 
 use tobimori\Seo\Sitemap\SitemapIndex;
+use Kirby\Toolkit\Obj;
 
 return function (SitemapIndex $sitemap) {
   $exclude = option('tobimori.seo.sitemap.excludeTemplates', []);
@@ -25,10 +26,10 @@ return function (SitemapIndex $sitemap) {
 
       if (kirby()->languages()->count() > 1 && kirby()->language() !== null) {
         $url->alternates(
-          kirby()->languages()->map(fn ($language) => [
+          kirby()->languages()->map(fn ($language) => new Obj([
             'hreflang' => $language->code() !== kirby()->language()->code() ? 'x-default' : $language->code(),
             'href' => $page->url($language->code()),
-          ])->toArray()
+          ]))->toArray()
         );
       }
     }
