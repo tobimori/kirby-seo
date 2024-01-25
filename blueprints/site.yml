@@ -2,7 +2,8 @@ label: metadata-site
 icon: search
 
 columns:
-  - width: 7/12
+  main:
+    width: 7/12
     fields:
       metaHeadline:
         label: global-meta-headline
@@ -61,7 +62,8 @@ columns:
         type: line
       robots: seo/fields/site-robots
       socialMediaAccounts: seo/fields/social-media
-  - width: 5/12
+  sidebar:
+    width: 5/12
     sticky: true
     sections:
       seoPreview:

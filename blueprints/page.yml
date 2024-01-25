@@ -2,7 +2,8 @@ label: metadata-site
 icon: search
 
 columns:
-  - width: 7/12
+  main:
+    width: 7/12
     fields:
       metaGroup: seo/fields/meta-group
       ogGroup: seo/fields/og-group
@@ -20,8 +21,8 @@ columns:
           twitterCardType: "{{ t('twitter-card-type') }}"
           twitterAuthor: "{{ t('twitter-author') }}"
           robots: '{{ t("robots") }}'
-
-  - width: 5/12
+  sidebar:
+    width: 5/12
     sticky: true
     sections:
       seoPreview:
