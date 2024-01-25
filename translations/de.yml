@@ -35,7 +35,7 @@ global-meta-headline-help: |
 meta-title-template: Titel-Template
 meta-title-template-help: |
   Ein Template, das für alle Seitentitel verwendet werden soll.
-  "\{\{ title }}" wird durch den Titel der Seite ersetzt. Unterstützt die [Kirby Query Language](https://getkirby.com/docs/guide/blueprints/query-language).
+  "\{\{ title }}" wird durch den Titel der Seite ersetzt.
 meta-description: Seitenbeschreibung
 meta-description-help: Empfohlene Länge von max. 150 Zeichen. Wird verwendet, falls keine Seitenbeschreibung angegeben ist.
 

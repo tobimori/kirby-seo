@@ -35,7 +35,7 @@ global-meta-headline-help: |
 meta-title-template: Başlık Şablonu
 meta-title-template-help: |
   Tüm sayfa başlıkları için kullanılacak bir şablon.
-  "\{\{ başlık }}" sayfa başlığı ile değiştirilecektir. [Kirby Sorgu Dili](https://getkirby.com/docs/guide/blueprints/query-language) desteği sunar.
+  "\{\{ başlık }}" sayfa başlığı ile değiştirilecektir.
 meta-description: Sayfa Açıklaması
 meta-description-help: Maksimum 150 karakter uzunluğunda önerilen bir sayfa açıklamasıdır. Sayfa açıklaması belirtilmemişse kullanılır.
 
