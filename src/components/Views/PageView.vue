@@ -54,7 +54,7 @@ https://github.com/getkirby/kirby/blob/main/panel/src/components/Views/Pages/Pag
           />
 
           <k-button
-            class="k-page-view-status"
+            class="k-page-view-status k-page-view-robots"
             v-if="robots && robots.active"
             v-bind="robotsBtn"
             @click="openSeoTab"
@@ -142,3 +142,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.k-page-view-robots {
+  --color-green-boost: -15%;
+}
+</style>

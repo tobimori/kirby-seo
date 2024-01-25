@@ -441,7 +441,7 @@ class Meta
 
     $string = $title->value();
     if ($useTemplate) {
-      $string = $this->page->toSafeString(
+      $string = $this->page->toString(
         $template,
         ['title' => $title]
       );
@@ -467,7 +467,7 @@ class Meta
 
     $string = $title->value();
     if ($useTemplate) {
-      $string = $this->page->toSafeString(
+      $string = $this->page->toString(
         $template,
         ['title' => $title]
       );
