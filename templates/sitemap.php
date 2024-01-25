@@ -1,1 +1,3 @@
-<?php go($page->url() . '.xml');
+<?php
+
+go($page->url() . '.xml');

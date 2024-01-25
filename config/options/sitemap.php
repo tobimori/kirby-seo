@@ -20,7 +20,7 @@ return function (SitemapIndex $sitemap) {
 
 		foreach ($group as $page) {
 			$url = $index->createUrl($page->metadata()->canonicalUrl())
-				->lastmod($page->modified() ?? intval(date('c')))
+				->lastmod($page->modified() ?? (int)(date('c')))
 				->changefreq(is_callable($changefreq = option('tobimori.seo.sitemap.changefreq')) ? $changefreq($page) : $changefreq)
 				->priority(is_callable($priority = option('tobimori.seo.sitemap.priority')) ? $priority($page) : $priority);
 
@@ -33,5 +33,5 @@ return function (SitemapIndex $sitemap) {
 				);
 			}
 		}
-	};
+	}
 };

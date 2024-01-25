@@ -14,7 +14,7 @@ Kirby SEO is built with a cascading approach in mind. This means that you can de
 
 If any setting is left empty, it will fallback to the next level. In this way, the plugin provides _cascades_ to form the final meta data.
 
-The cascade is fully configurable in your config.php. You can disable any of the above levels, or change their priority.
+The cascade is fully configurable in your config.php. You can disable any of the above levels, or change their priority, using the ID written in the parenthesis.
 
 There is also another optional cascade level that is not enabled by default:
 

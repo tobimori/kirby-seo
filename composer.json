@@ -23,7 +23,8 @@
   },
   "require-dev": {
     "getkirby/cms": "^4.0",
-    "getkirby/cli": "^1.2"
+    "getkirby/cli": "^1.2",
+    "friendsofphp/php-cs-fixer": "^3.48"
   },
   "scripts": {
     "dist": "composer install --no-dev --optimize-autoloader"

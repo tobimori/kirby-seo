@@ -8,23 +8,23 @@
 use Kirby\Cms\App;
 
 return function (App $kirby) {
-  $fields = [];
+	$fields = [];
 
-  foreach ($kirby->option('tobimori.seo.socialMedia') as $key => $value) {
-    if ($value) {
-      $fields[$key] = [
-        'label' => ucfirst($key),
-        'type' => 'url',
-        'icon' => strtolower($key),
-        'placeholder' => $value
-      ];
-    }
-  }
+	foreach ($kirby->option('tobimori.seo.socialMedia') as $key => $value) {
+		if ($value) {
+			$fields[$key] = [
+				'label' => ucfirst($key),
+				'type' => 'url',
+				'icon' => strtolower($key),
+				'placeholder' => $value
+			];
+		}
+	}
 
-  return [
-    'label' => 'social-media-accounts',
-    'type' => 'object',
-    'help' => 'social-media-accounts-help',
-    'fields' => $fields
-  ];
+	return [
+		'label' => 'social-media-accounts',
+		'type' => 'object',
+		'help' => 'social-media-accounts-help',
+		'fields' => $fields
+	];
 };

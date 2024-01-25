@@ -29,6 +29,7 @@ Some sites that run on Kirby SEO:
 - [Migrating to 1.0.0](./migrating.md)
 - [Robots.txt bot directives](./robots.md)
 - [Sitemap](./sitemap.md)
+- [Advanced Usage](./advanced.md)
 
 ## Support the project
 

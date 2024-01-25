@@ -33,10 +33,10 @@ if ($content = option('tobimori.seo.robots.content')) {
 	}
 
 	if ($index) {
-		echo "Allow: /";
+		echo 'Allow: /';
 		echo "\nDisallow: /panel";
 	} else {
-		echo "Disallow: /";
+		echo 'Disallow: /';
 	}
 }
 
