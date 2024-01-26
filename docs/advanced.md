@@ -2,41 +2,47 @@
 
 ## Programmatic/Computed Content
 
-By default, the second level of the cascade allows you to specify default content for the SEO fields using a page model. This is especially helpful if you want a certain field to default to another field's content or you're using a plugin like [kirby-paparazzi](https://github.com/tobimori/kirby-paparazzi) to programmatically generate OG images.
+By default, the second level of the cascade allows you to specify default content for the SEO fields using a page model.
 
-You can also use page models to add custom meta tags to your pages.
+This is especially helpful if you want a certain field to default to another field's content or you're using a plugin like [kirby-paparazzi](https://github.com/tobimori/kirby-paparazzi) to programmatically generate OG images. You can also use page models to add custom meta tags to your pages.
+
+An example page model could look like this:
 
 ```php
 <?php
-// site/models/some-page.php
+// site/models/template.php
 
-class SomePage extends Page {
+use Kirby\Cms\Page;
+
+class TemplatePage extends Page
+{
 	public function metaDefaults(string $lang = null): array
 	{
 		$content = $this->content($lang);
 
 		return [
-			 // you can use field names (from blueprint)
-			'metaDescription' => $page->summary(),
+			// you can use field names (from blueprint)
+			'metaDescription' => $content->summary(),
 
 			// or any meta tag
-			'og:image' => "{$page->url()}.png"
-			"og:image:width" => 1200,
-			"og:image:height" => 630,
+			'og:image' => "{$this->url()}.png",
+			"og:image:width" => 1230,
+			"og:image:height" => 600,
 
 			// kirby-seo tries to guess the correct syntax of the tag
 			// (e.g. open graph tags always use "property" and "content" attributes)
 			// but you can also specify them manually
 			[
-				"tag" => "meta",
-				"attributes" => [
+				'tag' => 'meta',
+				'attributes' => [
 					"property" => 'og:image:alt',
-					"content" => $page->title()
+					"content" => "An image showing the beautiful city of {$this->title()}"
 				],
 			]
 		];
 	}
 }
+
 ```
 
 ## Extending Blueprints
@@ -50,7 +56,7 @@ Although sometimes, you might want to go the extra mile and change the provided 
 In this case, you can extend the provided blueprints with your own fields. This is done by using the `extends` keyword in your blueprint.
 
 ```yaml
-# site/blueprints/pages/some-page.yml
+# site/blueprints/pages/template.yml
 
 tabs:
 	content:

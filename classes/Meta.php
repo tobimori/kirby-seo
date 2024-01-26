@@ -37,7 +37,6 @@ class Meta
 		}
 	}
 
-
 	/**
 	 * Returns the meta array which maps meta tags to their fieldnames
 	 */
@@ -50,27 +49,36 @@ class Meta
 		/**
 		 * We have to specify field names and resolve them later, so we can use this
 		 * function to resolve meta tags from field names in the programmatic function
-		 *
-		 * Specify a callable if the value is not using the default cascade, so we know
-		 * whether it's a normal field in snippetData
 		 */
 		$meta =
-		  [
-		  	'title' => 'title',
-		  	'description' => 'metaDescription',
-		  	'date' => fn () => $this->page->modified($this->dateFormat()),
-		  	'canonical' => 'canonicalUrl',
-		  	'og:title' => 'ogTitle',
-		  	'og:description' => 'ogDescription',
-		  	'og:url' => 'canonicalUrl',
-		  	'og:site_name' => 'ogSiteName',
-		  	'og:image' => 'ogImage',
-		  	'og:image:width' => fn () => $this->ogImage() ? 1200 : null,
-		  	'og:image:height' => fn () => $this->ogImage() ? 630 : null,
-		  	'og:image:alt' => fn () => $this->get('ogImage')->toFile()?->alt(),
-		  	'og:type' => 'ogType',
-		  ];
+			[
+				'title' => 'title',
+				'description' => 'metaDescription',
+				'date' => fn () => $this->page->modified($this->dateFormat()),
+				'canonical' => 'canonicalUrl',
+				'og:title' => 'ogTitle',
+				'og:description' => 'ogDescription',
+				'og:url' => 'canonicalUrl',
+				'og:site_name' => 'ogSiteName',
+				'og:image' => 'ogImage',
+				'og:image:width' => fn () => $this->ogImage() ? $this->get('ogImage')->toFile()?->width() : null,
+				'og:image:height' => fn () => $this->ogImage() ? $this->get('ogImage')->toFile()?->height() : null,
+				'og:image:alt' => fn () => $this->get('ogImage')->toFile()?->alt(),
+				'og:type' => 'ogType',
+			];
 
+
+		// Twitter tags "opt-in" - TODO: wip
+		if (option('tobimori.seo.twitter', true)) {
+			$meta = array_merge($meta, [
+				'twitter:card' => 'twitterCardType',
+				'twitter:title' => 'ogTitle',
+				'twitter:description' => 'ogDescription',
+				'twitter:image' => 'ogImage',
+				'twitter:site' => 'twitterSite',
+				'twitter:creator' => 'twitterCreator',
+			]);
+		}
 
 		// Multi-lang
 		if (kirby()->languages()->count() > 1 && kirby()->language() !== null) {
@@ -92,19 +100,6 @@ class Meta
 			$meta['og:locale'] = fn () => kirby()->language()->locale(LC_ALL);
 		} else {
 			$meta['og:locale'] = fn () => $this->locale(LC_ALL);
-		}
-
-
-		// Twitter tags "opt-in"
-		if (option('tobimori.seo.twitter', true)) {
-			$meta = array_merge($meta, [
-				'twitter:card' => 'twitterCardType',
-				'twitter:title' => 'ogTitle',
-				'twitter:description' => 'ogDescription',
-				'twitter:image' => 'ogImage',
-				'twitter:site' => 'twitterSite',
-				'twitter:creator' => 'twitterCreator',
-			]);
 		}
 
 		// Robots
@@ -156,44 +151,94 @@ class Meta
 	 */
 	public function snippetData(array $raw = null): array
 	{
-		$meta = [];
-		foreach (($raw ?? $this->metaArray()) as $tag => $valueOrKey) {
-			if (is_callable($valueOrKey)) {
-				$meta[$tag] = $valueOrKey();
+		$mergeWithDefaults = !isset($raw);
+		$raw ??= $this->metaArray();
+		$tags = [];
+
+		foreach ($raw as $name => $value) {
+			// if the key is numeric, it is already normalized to the correct array syntax
+			if (is_numeric($name)) {
+				// but we still check if the array is valid
+				if (!is_array($value) || count(array_intersect(['tag', 'content', 'attributes'], array_keys($value))) !== count($value)) {
+					throw new InvalidArgumentException("[kirby-seo] Invalid array structure found in programmatic content for page {$this->slug()}. Please check your metaDefaults method for template {$this->template()->name()}.");
+				}
+
+				$tags[] = $value;
 				continue;
 			}
 
-			if (is_string($valueOrKey)) {
-				$meta[$tag] = $this->$valueOrKey();
-			}
-		}
+			// allow overrides from metaDefaults for keys that are a callable or array by default
+			// (all fields from meta array that are not part of the regular cascade)
 
-		$tags = [];
-		foreach ($meta as $name => $value) {
+			if (is_callable($value) || is_array($value)) {
+				if ($mergeWithDefaults && array_key_exists($name, $this->metaDefaults)) {
+					$this->consumed[] = $name;
+					$value = $this->metaDefaults[$name];
+				}
+			}
+
+			// if the value is a callable, we resolve it
+			if (is_callable($value)) {
+				$value = $value($this->page);
+			}
+
+			// if the value is a string, we know it's a field name
+			if (is_string($value)) {
+				$value = $this->$value($name);
+			}
+
+			// if the value is empty, we don't want to output it
+			if ((is_a($value, 'Kirby\Content\Field') && $value->isEmpty()) || !$value) {
+				continue;
+			}
+
+			// resolve the tag type from the meta array
+			// so we can use the correct attributes to normalize it
 			$tag = $this->resolveTag($name);
 
-			foreach ((is_array($value) ? $value : [$value]) as $value) {
-				if (is_a($value, 'Kirby\Content\Field') && $value->isEmpty()) {
-					continue;
-				}
-				if (!$value) {
+			// if the value is an associative array now, all of them are attributes
+			// and we don't look for what the TAG_TYPE_MAP says
+			// or there should be multiple tags with the same name (non-associative array)
+			if (is_array($value)) {
+				if (!A::isAssociative($value)) {
+					foreach ($value as $val) {
+						$tags = array_merge($tags, $this->snippetData([$name => $val]));
+					}
 					continue;
 				}
 
+				// array is associative, so it's an array of attributes
+				// we resolve the values, if they are callable
+				array_walk($value, function (&$item) {
+					if (is_callable($item)) {
+						$item = $item($this->page);
+					}
+				});
+
+				// add the tag to the array
 				$tags[] = [
 					'tag' => $tag['tag'],
-					'attributes' => isset($tag['attributes']) ? [
-						$tag['attributes']['name'] => $name,
-						$tag['attributes']['content'] => $value,
-					] : null,
-					'content' => !isset($tag['attributes']) ? $value : null,
+					'attributes' => $value,
+					'content' => null,
 				];
+				continue;
 			}
+
+			// if the value is a string, we use the TAG_TYPE_MAP
+			// to correctly map the attributes
+			$tags[] = [
+				'tag' => $tag['tag'],
+				'attributes' => isset($tag['attributes']) ? [
+					$tag['attributes']['name'] => $name,
+					$tag['attributes']['content'] => $value,
+				] : null,
+				'content' => !isset($tag['attributes']) ? $value : null,
+			];
 		}
 
-		// Add the remaining meta defaults, if they are not consumed
-		if ($raw === null) {
-			$tags = array_merge($tags, $this->snippetData(array_diff($this->metaDefaults, $this->consumed)));
+		if ($mergeWithDefaults) {
+			// merge the remaining meta defaults
+			$tags = array_merge($tags, $this->snippetData(array_diff_key($this->metaDefaults, array_flip($this->consumed))));
 		}
 
 		return $tags;
@@ -208,7 +253,7 @@ class Meta
 			foreach ($type['tags'] as $regexOrString) {
 				// Check if the supplied tag is a regex or a normal tag name
 				if (Str::startsWith($regexOrString, '/') && Str::endsWith($regexOrString, '/') ?
-				  Str::match($tag, $regexOrString) : $tag === $regexOrString
+					Str::match($tag, $regexOrString) : $tag === $regexOrString
 				) {
 					return $type;
 				}
