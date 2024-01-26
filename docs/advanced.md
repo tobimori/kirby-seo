@@ -59,8 +59,8 @@ In this case, you can extend the provided blueprints with your own fields. This 
 # site/blueprints/pages/template.yml
 
 tabs:
-	content:
-		# your blueprint
+  content:
+    # your blueprint
   seo:
     extends: seo/page
     columns:
