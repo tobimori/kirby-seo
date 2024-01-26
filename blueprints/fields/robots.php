@@ -21,7 +21,7 @@ return function (App $kirby) {
 
 
 	$path = $kirby->request()->path()->data()[2];
-	$page = page(Str::replace($path, '+', '/'));
+	$page = App::instance()->site()->findPageOrDraft(Str::replace($path, '+', '/'));
 
 	foreach ($kirby->option('tobimori.seo.robots.types') as $robots) {
 		$upper = Str::ucfirst($robots);
