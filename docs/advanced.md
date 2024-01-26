@@ -47,7 +47,8 @@ class TemplatePage extends Page
 
 ## Extending Blueprints
 
-> **NOTE**: Blueprints touch an internal part of kirby-seo and structure is potentially subject to change in future releases with an alternate way of modyifing provided.
+> [!NOTE]
+> Blueprints touch an internal part of kirby-seo and structure is potentially subject to change in future releases with an alternate way of modyifing provided.
 
 Kirby SEO tries to be as minimal as possible, while still providing a complete SEO solution. This means that some features offer the ability to disable them (like the Robots fields).
 
