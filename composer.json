@@ -2,7 +2,7 @@
   "name": "tobimori/kirby-seo",
   "description": "The ultimate Kirby SEO toolkit",
   "type": "kirby-plugin",
-  "version": "1.0.0-rc.1",
+  "version": "1.0.0-rc.2",
   "license": "MIT",
   "homepage": "https://github.com/tobimori/kirby-seo#readme",
   "authors": [
