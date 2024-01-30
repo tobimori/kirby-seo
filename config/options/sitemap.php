@@ -27,7 +27,7 @@ return function (SitemapIndex $sitemap) {
 			if (kirby()->languages()->count() > 1 && kirby()->language() !== null) {
 				$url->alternates(
 					kirby()->languages()->map(fn ($language) => new Obj([
-						'hreflang' => $language->code() !== kirby()->language()->code() ? 'x-default' : $language->code(),
+						'hreflang' => $language->code() === kirby()->language()->code() ? 'x-default' : $language->code(),
 						'href' => $page->url($language->code()),
 					]))->toArray()
 				);
