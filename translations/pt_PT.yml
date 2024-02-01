@@ -36,7 +36,6 @@ meta-title-template: Template de Título
 meta-title-template-help: |
   Template para usar em todos os títulos de páginas.
   "\{\{ title }}" será substituído pelo título da página.
-  "\{\{ site.title }}" será substituído pelo título do site.
 meta-description: Descrição de Página
 meta-description-help: Recomendado um tamanho de 150 caracteres no máximo. Usada se nenhuma descrição de página for especificada.
 
