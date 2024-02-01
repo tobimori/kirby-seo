@@ -1,0 +1,87 @@
+# Heading Structure
+heading-structure: Estrutura de Títulos
+incorrect-heading-order: A estrutura de títulos tem uma ordem incorrecta e é inválida.
+missing-h1-tag: A estrutura de títulos não contém uma tag H1 e é inválida.
+multiple-h1-tags: A estrutura de títulos contém mais do que uma tag H1 e é inválida.
+
+# SEO Preview
+seo-preview: Pré-visualização
+seo-preview-for: Mostrar
+open-debugger: Abrir Sharing Debugger
+open-search-console: Abrir Search Console
+
+# Robots
+indicator-index: Indexação permitida
+indicator-any: Indexação parcialmente proibida
+indicator-noindex: Indexação proibida
+robots: Diretivas Robots
+robots-index: Indexação
+robots-index-help: Se os motores de pesquisa podem indexar esta página.
+robots-follow: Seguir Links
+robots-follow-help: Se os motores de pesquisa podem seguir links nesta página.
+robots-archive: Arquivo
+robots-archive-help: Se os motores de pesquisa podem arquivar esta página.
+robots-imageindex: Indexação de Imagens
+robots-imageindex-help: Se os motores de pesquisa podem indexar imagens desta página.
+robots-snippet: Snippets
+robots-snippet-help: Se os motores de pesquisa podem mostrar snippets de texto desta página.
+
+# Blueprint - Site/Common
+metadata-site: Metadados & SEO
+global-meta-headline: Configurações Globais SEO
+global-meta-headline-help: |
+  Estas configurações são usadas para todas as páginas que não têm os seus próprios metadados.
+  Pode substituí-las em cada página.
+meta-title-template: Template de Título
+meta-title-template-help: |
+  Template para usar em todos os títulos de páginas.
+  "\{\{ title }}" será substituído pelo título da página.
+meta-description: Descrição de Página
+meta-description-help: Recomendado um tamanho de 150 caracteres no máximo. Usada se nenhuma descrição de página for especificada.
+
+global-og-headline: Configurações Globais Open Graph
+global-og-headline-help: Defina como o seu site aparece quando é partilhado em redes sociais como o Facebook ou o Twitter.
+og-title-template: Template de Título Open Graph
+og-description: Descrição Open Graph
+og-site-name: Nome do Site Open Graph
+og-image: Imagem Open Graph
+og-image-help: Tamanho recomendado de 1200x630 pixels.
+og-image-empty: Nenhuma Imagem Open Graph selecionada
+twitter-card-type: Tipo de Twitter Card
+twitter-card-type-help: O tipo de Twitter Card determina a aparência do seu site quando é partilhado no Twitter. [Leia mais](https://developer.twitter.com/en/docs/tweets/optimize-with-cards/overview/abouts-cards).
+
+social-media-accounts: Contas de Redes Sociais
+social-media-accounts-help: URLs ou @handles para as suas contas de redes sociais. Usado para colocar links para as suas contas nos metadados.
+
+# Blueprint - Page
+meta-headline: Configurações SEO
+og-headline: Configurações Open Graph
+title-overwrite: Título (substituir)
+summary: Resumo com Imagem Quadrada
+summary_large_image: Resumo com Imagem Grande
+default-select: 'Por defeito:'
+twitter-author: 'Autor @username no Twitter'
+inherit-settings: Herdar Configurações
+inherit-settings-help: |
+  Selecione quais as configurações que devem ser herdadas pelas subpáginas.
+  Isto pode ser útil, por exemplo, se todos os posts de um blog tiverem o seu próprio template de título, que pode ser diferente do pré-configurado na página. Todas as configurações continuam a poder ser substituídas na página principal.
+use-title-template: Usar o template de título?
+use-title-template-no: 'Não - apenas o título'
+use-title-template-yes: 'Sim - com template'
+use-title-template-help: Especifica se o template de título deve ser usado. Não será herdado.
+
+# Labels
+google: Google
+facebook: Facebook
+slack: Slack
+
+# Sitemap
+sitemap: Sitemap
+sitemap-index: Índice Sitemap
+sitemap-description: Este é o sitemap do site que informa os motores de pesquisa sobre as páginas que podem ser indexadas.
+sitemap-by: por
+sitemap-changefreq: Frequência de Mudança
+sitemap-last-updated: Última Atualização
+sitemap-priority: Prioridade
+sitemap-url: URL
+sitemap-no-entries: Sem registos
