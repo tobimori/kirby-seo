@@ -19,8 +19,9 @@ All configurable through easy config options or simple panel blueprints, with se
 
 Some sites that run on Kirby SEO:
 
-- [Lovers Magazine](https://loversmagazine.com/)
+- [Lovers Magazine by Spaces](https://spaces.is/loversmagazine/)
 - [Vierbeiner in Not](https://vierbeinerinnot.de/) with programmatic OG image generation based on [kirby-paparazzi](https://github.com/tobimori/kirby-paparazzi)
+- [SEW Morlaix](https://sew-morlaix.com/)
 - [Meine Erde](https://www.meine-erde.de/)
 
 ## Topics
