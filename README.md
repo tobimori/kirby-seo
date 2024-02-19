@@ -8,7 +8,7 @@
 ## Features
 
 - 🔎 All-in-one SEO and meta solution
-- 🪜 The Meta Cascade: Intelligently merge meta data from multiple sources
+- 🪜 The Meta Cascade: Intelligently merge metadata from multiple sources
 - 🎛 Completely configurable: Disable features you don't need
 - 💻 Simple Panel UI with previews for Google, Twitter, Facebook & Co.
 - 📮 [Schema.org (JSON-LD)](https://schema.org/) support with fluent classes
@@ -22,7 +22,7 @@
 ## Support the project
 
 > [!NOTE]
-> This plugin is provided free of charge & published under the permissive MIT License. If you use it in a commercial project, please consider to sponsor me on GitHub to support further development and continued maintenance of Kirby SEO.
+> This plugin is provided free of charge & published under the permissive MIT License. If you use it in a commercial project, please consider sponsoring me on GitHub to support further development and continued maintenance of Kirby SEO.
 
 ## License
 
