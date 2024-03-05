@@ -20,8 +20,9 @@ return function (App $kirby) {
 	];
 
 
-	$path = $kirby->request()->path()->data()[2];
-	$page = App::instance()->site()->findPageOrDraft(Str::replace($path, '+', '/'));
+	$path = App::instance()->request()->url()->toString();
+	$matches = Str::match($path, "/pages\/([a-zA-Z0-9+]+)\/?/m");
+	$page = App::instance()->site()->findPageOrDraft(Str::replace($matches[1], '+', '/'));
 
 	foreach ($kirby->option('tobimori.seo.robots.types') as $robots) {
 		$upper = Str::ucfirst($robots);
