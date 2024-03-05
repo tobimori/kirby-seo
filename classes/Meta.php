@@ -177,14 +177,14 @@ class Meta
 				}
 			}
 
-			// if the value is a callable, we resolve it
-			if (is_callable($value)) {
-				$value = $value($this->page);
-			}
-
 			// if the value is a string, we know it's a field name
 			if (is_string($value)) {
 				$value = $this->$value($name);
+			}
+
+			// if the value is a callable, we resolve it
+			if (is_callable($value)) {
+				$value = $value($this->page);
 			}
 
 			// if the value is empty, we don't want to output it
