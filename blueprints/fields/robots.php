@@ -21,7 +21,7 @@ return function (App $kirby) {
 
 
 	$path = App::instance()->request()->url()->toString();
-	$matches = Str::match($path, "/pages\/([a-zA-Z0-9+]+)\/?/m");
+	$matches = Str::match($path, "/pages\/([a-zA-Z0-9-_+]+)\/?/m");
 	$page = App::instance()->site()->findPageOrDraft(Str::replace($matches[1], '+', '/'));
 
 	foreach ($kirby->option('tobimori.seo.robots.types') as $robots) {
