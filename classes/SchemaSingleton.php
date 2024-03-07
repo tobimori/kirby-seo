@@ -16,7 +16,7 @@ class SchemaSingleton
 	public static function getInstance(string $type, Page|null $page = null): mixed
 	{
 		if (!isset(self::$instances[$page?->id() ?? 'default'][$type])) {
-			self::$instances[$page->id() ?? 'default'][$type] = Schema::{$type}();
+			self::$instances[$page?->id() ?? 'default'][$type] = Schema::{$type}();
 		}
 
 		return self::$instances[$page?->id() ?? 'default'][$type];
