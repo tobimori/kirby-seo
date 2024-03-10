@@ -55,10 +55,8 @@ class Meta
 				'title' => 'title',
 				'description' => 'metaDescription',
 				'date' => fn () => $this->page->modified($this->dateFormat()),
-				'canonical' => 'canonicalUrl',
 				'og:title' => 'ogTitle',
 				'og:description' => 'ogDescription',
-				'og:url' => 'canonicalUrl',
 				'og:site_name' => 'ogSiteName',
 				'og:image' => 'ogImage',
 				'og:image:width' => fn () => $this->ogImage() ? $this->get('ogImage')->toFile()?->width() : null,
@@ -67,6 +65,39 @@ class Meta
 				'og:type' => 'ogType',
 			];
 
+
+		// Robots
+		if ($robotsActive = option('tobimori.seo.robots.active')) {
+			$meta['robots'] = fn () => $this->robots();
+		}
+
+		// only add canonical and alternate tags if the page is indexable
+		if (!$robotsActive || !Str::contains($this->robots(), 'noindex')) {
+			$meta['canonical'] = 'canonicalUrl';
+			$meta['og:url'] = 'canonicalUrl';
+
+			// Multi-lang
+			if (kirby()->languages()->count() > 1 && kirby()->language() !== null) {
+				foreach (kirby()->languages() as $lang) {
+					$meta['alternate'][] = [
+						'hreflang' => fn () => $lang->code(),
+						'href' => fn () => $this->page->url($lang->code()),
+					];
+
+					if ($lang !== kirby()->language()) {
+						$meta['og:locale:alternate'][] = fn () => $lang->code();
+					}
+				}
+
+				$meta['alternate'][] = [
+					'hreflang' => fn () => 'x-default',
+					'href' => fn () => $this->page->url(kirby()->language()->code()),
+				];
+				$meta['og:locale'] = fn () => kirby()->language()->locale(LC_ALL);
+			} else {
+				$meta['og:locale'] = fn () => $this->locale(LC_ALL);
+			}
+		}
 
 		// Twitter tags "opt-in" - TODO: wip
 		if (option('tobimori.seo.twitter', true)) {
@@ -78,33 +109,6 @@ class Meta
 				'twitter:site' => 'twitterSite',
 				'twitter:creator' => 'twitterCreator',
 			]);
-		}
-
-		// Multi-lang
-		if (kirby()->languages()->count() > 1 && kirby()->language() !== null) {
-			foreach (kirby()->languages() as $lang) {
-				$meta['alternate'][] = [
-					'hreflang' => fn () => $lang->code(),
-					'href' => fn () => $this->page->url($lang->code()),
-				];
-
-				if ($lang !== kirby()->language()) {
-					$meta['og:locale:alternate'][] = fn () => $lang->code();
-				}
-			}
-
-			$meta['alternate'][] = [
-				'hreflang' => fn () => 'x-default',
-				'href' => fn () => $this->page->url(kirby()->language()->code()),
-			];
-			$meta['og:locale'] = fn () => kirby()->language()->locale(LC_ALL);
-		} else {
-			$meta['og:locale'] = fn () => $this->locale(LC_ALL);
-		}
-
-		// Robots
-		if (option('tobimori.seo.robots.active')) {
-			$meta['robots'] = fn () => $this->robots();
 		}
 
 		// This array will be normalized for use in the snippet in $this->snippetData()

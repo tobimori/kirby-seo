@@ -2,6 +2,8 @@
 
 By default, Kirby SEO will dynamically generate a `robots.txt` file and add the `robots` meta tag to any page.
 
+If a page is set to `noindex`, canonical tags and similar will not be added to the page as well.
+
 You can disable all Robots handling, by setting `tobimori.seo.robots.active` to `false` in your config.php.
 
 ## Panel
