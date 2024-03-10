@@ -111,7 +111,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    gap: var(--spacing-3);
+    gap: var(--spacing-2);
 
     > .k-icon {
       color: var(--color-gray-700);

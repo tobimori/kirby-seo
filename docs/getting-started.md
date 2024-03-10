@@ -108,3 +108,22 @@ return [
 ```
 
 It's used for the `og:locale` meta tag, and can be applied to the `lang` attribute of your `<html>` tag using the `$site->lang()` site method.
+
+## Heading Structure
+
+The plugin adds a heading structure section to the panel. It dynamically renders your page and allows you to check on the fly if your headings are semantically correct.
+
+You can add the heading structure section to your blueprints:
+
+```yaml
+# site/blueprints/pages/default.yml (or any other template)
+
+columns:
+	- width: 2/3
+		fields:
+			# your content-related fields
+	- width: 1/3
+		sections:
+			headings:
+				type: heading-structure
+```

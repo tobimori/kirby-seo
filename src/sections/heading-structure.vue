@@ -1,7 +1,8 @@
 <template>
   <div class="k-section k-heading-structure" v-if="value">
     <div class="k-field-header k-heading-structure__label k-label k-field-label">
-      <k-icon type="headline" /><span>{{ label || $t('heading-structure') }}</span>
+      <k-icon type="headline" />
+      <span class="k-label-text">{{ label || $t('heading-structure') }}</span>
       <k-loader v-if="isLoading" />
     </div>
     <k-box theme="white">
@@ -108,9 +109,10 @@ export default {
   &__label {
     display: flex;
     align-items: center;
+    justify-content: flex-start;
+    gap: var(--spacing-2);
 
     > .k-icon {
-      margin-right: var(--spacing-2);
       color: var(--color-gray-700);
     }
 
