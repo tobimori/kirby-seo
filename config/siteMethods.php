@@ -7,7 +7,7 @@ use tobimori\Seo\SchemaSingleton;
 return [
 	'schema' => fn ($type) => SchemaSingleton::getInstance($type),
 	'schemas' => fn () => SchemaSingleton::getInstances(),
-	'lang' => fn () => option('tobimori.seo.default.lang')($this->homePage()),
+	'lang' => fn () => Str::replace(option('tobimori.seo.default.lang')($this->homePage()), '_', '-'),
 	'canonicalFor' => function (string $url) {
 		$base = option('tobimori.seo.canonicalBase');
 		if (is_callable($base)) {
