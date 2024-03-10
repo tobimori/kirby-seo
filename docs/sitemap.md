@@ -2,6 +2,8 @@
 
 Sitemaps are enabled by default. You can disable them by setting `tobimori.seo.sitemap.active` to `false` in your `config.php`.
 
+Pages will only be listed if the [Robots rules](/docs/robots.md) (and its cascading fields) allow it; except if a custom generator function is provided that might provide different behaviour.
+
 ![Sitemap Example](/docs/_assets/sitemap-example.png)
 
 A nice looking stylesheet inspired by the Kirby panel will be added automatically as well.
@@ -61,4 +63,5 @@ return [
 (This is a simplified version of the actual function, which you can find in the [source code](/config/options/sitemap.php).)
 
 If only a single sitemap is defined, the sitemap index route will directly render that sitemap instead of first generating a sitemap index file.
+
 Note that if you provide a custom sitemap generator function, the standard sitemap configuration options are ignored. However, you can access and utilize those configuration values within your own generator function if desired.
