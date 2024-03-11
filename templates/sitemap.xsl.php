@@ -5,7 +5,7 @@
 		<html>
 
 		<head>
-			<title><?= $page->metadata()->title() ?></title>
+			<title><?= $page->metadata()->title()->escape() ?></title>
 			<style>
 				/* Document styles */
 				body {
