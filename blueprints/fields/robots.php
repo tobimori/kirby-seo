@@ -3,9 +3,13 @@
 use Kirby\Cms\App;
 use Kirby\Toolkit\A;
 use Kirby\Toolkit\Str;
+use tobimori\Seo\Meta;
 
 return function (App $kirby) {
-	if (!$kirby->option('tobimori.seo.robots.pageSettings', $kirby->option('tobimori.seo.robots.active', false))) {
+	if (
+		!$kirby->option('tobimori.seo.robots.pageSettings', $kirby->option('tobimori.seo.robots.active', false))
+		|| !($page = Meta::currentPage())
+	) {
 		return [
 			'type' => 'hidden'
 		];
@@ -18,11 +22,6 @@ return function (App $kirby) {
 			'numbered' => false,
 		]
 	];
-
-
-	$path = App::instance()->request()->url()->toString();
-	$matches = Str::match($path, "/pages\/([a-zA-Z0-9-_+]+)\/?/m");
-	$page = App::instance()->site()->findPageOrDraft(Str::replace($matches[1], '+', '/'));
 
 	foreach ($kirby->option('tobimori.seo.robots.types') as $robots) {
 		$upper = Str::ucfirst($robots);
