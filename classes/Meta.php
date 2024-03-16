@@ -2,6 +2,7 @@
 
 namespace tobimori\Seo;
 
+use Kirby\Cms\App;
 use Kirby\Cms\Page;
 use Kirby\Content\Field;
 use Kirby\Exception\InvalidArgumentException;
@@ -52,7 +53,7 @@ class Meta
 		 */
 		$meta =
 			[
-				'title' => 'metaTitle',
+				'title' => 'title',
 				'description' => 'metaDescription',
 				'date' => fn () => $this->page->modified($this->dateFormat()),
 				'og:title' => 'ogTitle',
@@ -72,36 +73,31 @@ class Meta
 		}
 
 		// only add canonical and alternate tags if the page is indexable
-		// we have to resolve this lazily (using a callable) to avoid an infinite loop
-		$allowsIndexFn = fn () => !$robotsActive || !Str::contains($this->robots(), 'noindex');
+		if (!$robotsActive || !Str::contains($this->robots(), 'noindex')) {
+			$meta['canonical'] = 'canonicalUrl';
+			$meta['og:url'] = 'canonicalUrl';
 
-		// canonical
-		$canonicalFn = fn () => $allowsIndexFn() ? $this->canonicalUrl() : null;
-		$meta['canonical'] = $canonicalFn;
-		$meta['og:url'] = $canonicalFn;
+			// Multi-lang
+			if (kirby()->languages()->count() > 1 && kirby()->language() !== null) {
+				foreach (kirby()->languages() as $lang) {
+					$meta['alternate'][] = [
+						'hreflang' => fn () => $lang->code(),
+						'href' => fn () => $this->page->url($lang->code()),
+					];
 
-		// Multi-lang alternate tags
-		if (kirby()->languages()->count() > 1 && kirby()->language() !== null) {
-			foreach (kirby()->languages() as $lang) {
-				// only add alternate tags if the page is indexable
-				$meta['alternate'][] = fn () => $allowsIndexFn() ? [
-					'hreflang' => $lang->code(),
-					'href' => $this->page->url($lang->code()),
-				] : null;
-
-				if ($lang !== kirby()->language()) {
-					$meta['og:locale:alternate'][] = fn () => $lang->code();
+					if ($lang !== kirby()->language()) {
+						$meta['og:locale:alternate'][] = fn () => $lang->code();
+					}
 				}
-			}
 
-			// only add alternate tags if the page is indexable
-			$meta['alternate'][] = fn () => $allowsIndexFn() ? [
-				'hreflang' => 'x-default',
-				'href' => $this->page->url(kirby()->language()->code()),
-			] : null;
-			$meta['og:locale'] = fn () => kirby()->language()->locale(LC_ALL);
-		} else {
-			$meta['og:locale'] = fn () => $this->locale(LC_ALL);
+				$meta['alternate'][] = [
+					'hreflang' => fn () => 'x-default',
+					'href' => fn () => $this->page->url(kirby()->language()->code()),
+				];
+				$meta['og:locale'] = fn () => kirby()->language()->locale(LC_ALL);
+			} else {
+				$meta['og:locale'] = fn () => $this->locale(LC_ALL);
+			}
 		}
 
 		// Twitter tags "opt-in" - TODO: wip
@@ -178,9 +174,12 @@ class Meta
 
 			// allow overrides from metaDefaults for keys that are a callable or array by default
 			// (all fields from meta array that are not part of the regular cascade)
-			if ((is_callable($value) || is_array($value)) && $mergeWithDefaults && array_key_exists($name, $this->metaDefaults)) {
-				$this->consumed[] = $name;
-				$value = $this->metaDefaults[$name];
+
+			if (is_callable($value) || is_array($value)) {
+				if ($mergeWithDefaults && array_key_exists($name, $this->metaDefaults)) {
+					$this->consumed[] = $name;
+					$value = $this->metaDefaults[$name];
+				}
 			}
 
 			// if the value is a string, we know it's a field name
@@ -298,13 +297,8 @@ class Meta
 		}
 
 		// Track consumed keys, so we don't output legacy field values
-		$toBeConsumed = $key;
-		if (
-			(array_key_exists($toBeConsumed, $this->metaDefaults)
-				|| array_key_exists($toBeConsumed = $this->findTagForField($toBeConsumed), $this->metaDefaults))
-			&& !in_array($toBeConsumed, $this->consumed)
-		) {
-			$this->consumed[] = $toBeConsumed;
+		if (A::has($this->metaDefaults, $key)) {
+			$this->consumed[] = $key;
 		}
 
 		foreach (array_diff($cascade, $exclude) as $method) {
@@ -377,12 +371,6 @@ class Meta
 		return null;
 	}
 
-
-	protected function findTagForField(string $fieldName): string|null
-	{
-		return array_search($fieldName, $this->metaArray());
-	}
-
 	/**
 	 * Get the meta value for a given key from the page's meta
 	 * array, which can be set in the page's model metaDefaults method
@@ -402,7 +390,7 @@ class Meta
 		 * try looking it up in the meta array
 		 * maybe it is a meta tag and not a field name?
 		 */
-		if (!isset($val) && ($key = $this->findTagForField($key)) && array_key_exists($key, $this->metaDefaults)) {
+		if (!isset($val) && ($key = array_search($key, $this->metaArray())) && array_key_exists($key, $this->metaDefaults)) {
 			$val = $this->metaDefaults[$key];
 		}
 
@@ -424,7 +412,7 @@ class Meta
 			}
 
 			if (is_a($val, 'Kirby\Content\Field')) {
-				return new Field($this->page, $key, $val->value());
+				return $val;
 			}
 
 			return new Field($this->page, $key, $val);
@@ -504,10 +492,10 @@ class Meta
 	/**
 	 * Applies the title template, and returns the correct title
 	 */
-	public function metaTitle()
+	public function title()
 	{
-		$title = $this->get('metaTitle');
-		$template = $this->get('metaTemplate');
+		$title = $this->metaTitle();
+		$template = $this->metaTemplate();
 
 		$useTemplate = $this->page->useTitleTemplate();
 		$useTemplate = $useTemplate->isEmpty() ? true : $useTemplate->toBool();
@@ -532,8 +520,8 @@ class Meta
 	 */
 	public function ogTitle()
 	{
-		$title = $this->get('metaTitle');
-		$template = $this->get('ogTemplate');
+		$title = $this->metaTitle();
+		$template = $this->ogTemplate();
 
 		$useTemplate = $this->page->useOgTemplate();
 		$useTemplate = $useTemplate->isEmpty() ? true : $useTemplate->toBool();
@@ -644,5 +632,27 @@ class Meta
 		}
 
 		return null;
+	}
+
+	/**
+	 * Helper method the get the current page from the URL path,
+	 * for use in programmatic blueprints
+	 */
+	public static function currentPage(): Page|null
+	{
+		$path = App::instance()->request()->url()->toString();
+		$matches = Str::match($path, "/pages\/([a-zA-Z0-9-_+]+)\/?/m");
+		$segments = Str::split($matches[1], '+');
+
+		$page = App::instance()->site();
+		foreach ($segments as $segment) {
+			if ($page = $page->findPageOrDraft($segment)) {
+				continue;
+			}
+
+			return null;
+		}
+
+		return $page;
 	}
 }
