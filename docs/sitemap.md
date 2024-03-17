@@ -43,7 +43,7 @@ The generator function allows you to programmatically generate sitemaps and add 
 
 ```php
 return [
-    `tobimori.seo.sitemap.generator` => function (SitemapIndex $sitemap) {
+    'tobimori.seo.sitemap.generator' => function (SitemapIndex $sitemap) {
         $pages = site()->index()->filter(fn ($page) => $page->metadata()->robotsIndex()->toBool())->group('intendedTemplate');
 
         foreach ($pages as $group) {
