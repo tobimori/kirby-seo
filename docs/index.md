@@ -6,7 +6,7 @@ Kirby SEO is an all-in-one toolkit for implementing SEO & Meta best practices in
 
 In short, Kirby SEO implements the following relevant features:
 
-- Basic HTML meta tags)
+- Basic HTML meta tags
 - [Open Graph](https://ogp.me/) tags
 - [Twitter Cards](https://developer.twitter.com/en/docs/twitter-for-websites/cards/guides/getting-started) tags
 - [Sitemaps](https://www.sitemaps.org/protocol.html)
