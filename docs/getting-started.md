@@ -119,11 +119,11 @@ You can add the heading structure section to your blueprints:
 # site/blueprints/pages/default.yml (or any other template)
 
 columns:
-	- width: 2/3
-		fields:
-			# your content-related fields
-	- width: 1/3
-		sections:
-			headings:
-				type: heading-structure
+  - width: 2/3
+    fields:
+      # your content-related fields
+  - width: 1/3
+    sections:
+      headings:
+        type: heading-structure
 ```
