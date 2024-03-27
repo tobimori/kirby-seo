@@ -1,4 +1,4 @@
-![Kirby SEO Banner](/.github/banner.png)
+![Kirby SEO Banner](/.github/new-banner.png)
 
 <h1 align="center">Kirby SEO</h1>
 <p align="center">All-in-one toolkit that makes implementing SEO & Meta best practices a breeze</p>
@@ -17,7 +17,7 @@
 
 ## Get started
 
-[Read the documentation](https://plugins.andkindness.com/seo) to get started with Kirby SEO.
+[Read the documentation](https://plugins.andkindness.com/seo/docs/get-started/feature-overview) to get started with Kirby SEO.
 
 ## Support the project
 
