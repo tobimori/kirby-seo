@@ -30,7 +30,7 @@ return function (App $kirby) {
 			'help' => "robots-{$robots}-help",
 			'width' => '1/2',
 			'default' => 'default',
-			'required' => true,
+			'reset' => false,
 			'options' => [
 				'default' => $page ?
 					A::join([
