@@ -1,0 +1,87 @@
+# Heading Structure
+heading-structure: Struktura nadpisů
+incorrect-heading-order: Struktura nadpisů má nesprávné pořadí a je tedy chybná.
+missing-h1-tag: Struktura nadpisů neobsahuje H1 a je tedy chybná.
+multiple-h1-tags: Struktura nadpisů obsahuje více než jeden H1 a je tedy chybná.
+
+# SEO Preview
+seo-preview: Náhled
+seo-preview-for: Ukaž mi
+open-debugger: Otevřít Sharing Debugger
+open-search-console: Otevřít Search Console
+
+# Robots
+indicator-index: Indexace povolena
+indicator-any: Částečný zákaz indexace
+indicator-noindex: Indexace zakázána
+robots: Vyhledávače a crawlery
+robots-index: Indexace
+robots-index-help: Zda mohou vyhledávače tuto stránku indexovat.
+robots-follow: Sledovat odkazy
+robots-follow-help: Zda mohou vyhledávače sledovat odkazy na této stránce.
+robots-archive: Archivace
+robots-archive-help: Zda mohou vyhledávače tuto stránku archivovat.
+robots-imageindex: Indexace obrázků
+robots-imageindex-help: Zda mohou vyhledávače indexovat obrázky na této stránce.
+robots-snippet: Tvorba snippetů
+robots-snippet-help: Zda mohou vyhledávače vytvářet snippety z této stránky.
+
+# Blueprint - Site/Common
+metadata-site: Metadata & SEO
+global-meta-headline: Globální nastavení SEO
+global-meta-headline-help: |
+    Toto nastavení bude použito pro všechny stránky, které nemají vlastní metadata.
+    Můžete jej přepsat pro každou stránku.
+meta-title-template: Šablona titulku stránky
+meta-title-template-help: |
+    Šablona pro všechny titulky stránek.
+    Značka "\{\{ title }}" bude nahrazena názvem stránky.
+meta-description: Popisek stránky (description)
+meta-description-help: Doporučená délka je maximálně 150 znaků. Používá se, pokud není zadán popisek stránky.
+
+global-og-headline: Globální nastavení Open Graph
+global-og-headline-help: Nastavte, jak se vaše webové stránky zobrazují při sdílení na sociálních sítích, jako je Facebook nebo Twitter.
+og-title-template: Šablona Open Graph titulku
+og-description: Open Graph popisek (description)
+og-site-name: Open Graph název webu (site name)
+og-image: Open Graph obrázek
+og-image-help: Doporučená velikost 1200x630 pixelů.
+og-image-empty: Nebyl vybrán žádný obrázek
+twitter-card-type: Formát Twitter karty
+twitter-card-type-help: Určuje, jak se vaše webové stránky zobrazují při sdílení na Twitteru. [Více informací](https://developer.twitter.com/en/docs/tweets/optimize-with-cards/overview/abouts-cards).
+
+social-media-accounts: Účty na sociálních sítích
+social-media-accounts-help: Adresy URL nebo @uzivatelska-jmena vašich účtů na sociálních sítích. Slouží k umístění odkazů na vaše účty do metadat.
+
+# Blueprint - Page
+meta-headline: Nastavení SEO
+og-headline: Nastavení Open Graph
+title-overwrite: Titulek stránky (přepsat)
+summary: Karta se čtvercovým obrázkem
+summary_large_image: Karta s velkým obrázkem
+default-select: 'Výchozí:'
+twitter-author: '@username autora na Twitteru'
+inherit-settings: Zdědit nastavení
+inherit-settings-help: |
+    Vyberte, která nastavení by měla být zděděna podstránkami.
+    To může být užitečné například v případě, že všechny příspěvky blogu by měly mít vlastní šablonu titulku, která se liší od výchozího nastavení webu. Všechna nastavení lze stále na hlavní stránce přepsat.
+use-title-template: Použít šablonu titulku?
+use-title-template-no: 'Ne - pouze název stránky'
+use-title-template-yes: 'Ano - použít šablonu'
+use-title-template-help: Určuje, zda se má použít šablona titulku. Nebude zděděno.
+
+# Labels
+google: Google
+facebook: Facebook
+slack: Slack
+
+# Sitemap
+sitemap: Sitemap
+sitemap-index: Sitemap Index
+sitemap-description: Toto je mapa stránek vašeho webu, která informuje vyhledávače o stránkách, které lze indexovat.
+sitemap-by: od
+sitemap-changefreq: Frekvence změn
+sitemap-last-updated: Poslední aktualizace
+sitemap-priority: Priorita
+sitemap-url: URL
+sitemap-no-entries: Žádné záznamy
