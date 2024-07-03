@@ -108,6 +108,8 @@ interface WebApplicationContract
 
     public function device($device);
 
+    public function digitalSourceType($digitalSourceType);
+
     public function disambiguatingDescription($disambiguatingDescription);
 
     public function discussionUrl($discussionUrl);
@@ -279,6 +281,8 @@ interface WebApplicationContract
     public function temporalCoverage($temporalCoverage);
 
     public function text($text);
+
+    public function thumbnail($thumbnail);
 
     public function thumbnailUrl($thumbnailUrl);
 

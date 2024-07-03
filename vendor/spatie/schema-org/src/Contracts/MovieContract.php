@@ -96,6 +96,8 @@ interface MovieContract
 
     public function description($description);
 
+    public function digitalSourceType($digitalSourceType);
+
     public function director($director);
 
     public function directors($directors);
@@ -245,6 +247,8 @@ interface MovieContract
     public function temporalCoverage($temporalCoverage);
 
     public function text($text);
+
+    public function thumbnail($thumbnail);
 
     public function thumbnailUrl($thumbnailUrl);
 

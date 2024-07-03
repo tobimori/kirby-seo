@@ -98,6 +98,8 @@ interface UserReviewContract
 
     public function description($description);
 
+    public function digitalSourceType($digitalSourceType);
+
     public function disambiguatingDescription($disambiguatingDescription);
 
     public function discussionUrl($discussionUrl);
@@ -247,6 +249,8 @@ interface UserReviewContract
     public function temporalCoverage($temporalCoverage);
 
     public function text($text);
+
+    public function thumbnail($thumbnail);
 
     public function thumbnailUrl($thumbnailUrl);
 

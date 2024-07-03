@@ -96,6 +96,8 @@ interface TVEpisodeContract
 
     public function description($description);
 
+    public function digitalSourceType($digitalSourceType);
+
     public function director($director);
 
     public function directors($directors);
@@ -253,6 +255,8 @@ interface TVEpisodeContract
     public function temporalCoverage($temporalCoverage);
 
     public function text($text);
+
+    public function thumbnail($thumbnail);
 
     public function thumbnailUrl($thumbnailUrl);
 

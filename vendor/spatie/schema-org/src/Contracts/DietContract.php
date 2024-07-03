@@ -96,6 +96,8 @@ interface DietContract
 
     public function dietFeatures($dietFeatures);
 
+    public function digitalSourceType($digitalSourceType);
+
     public function disambiguatingDescription($disambiguatingDescription);
 
     public function discussionUrl($discussionUrl);
@@ -253,6 +255,8 @@ interface DietContract
     public function temporalCoverage($temporalCoverage);
 
     public function text($text);
+
+    public function thumbnail($thumbnail);
 
     public function thumbnailUrl($thumbnailUrl);
 

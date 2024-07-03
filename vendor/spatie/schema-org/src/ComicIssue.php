@@ -161,7 +161,7 @@ class ComicIssue extends BaseType implements ComicIssueContract, CreativeWorkCon
      * deficiencies, consistent with the other accessibility metadata but
      * expressing subtleties such as "short descriptions are present but long
      * descriptions will be needed for non-visual users" or "short descriptions
-     * are present and no long descriptions are needed."
+     * are present and no long descriptions are needed".
      *
      * @param string|string[] $accessibilitySummary
      *
@@ -209,10 +209,14 @@ class ComicIssue extends BaseType implements ComicIssueContract, CreativeWorkCon
     /**
      * An additional type for the item, typically used for adding more specific
      * types from external vocabularies in microdata syntax. This is a
-     * relationship between something and a class that the thing is in. In RDFa
-     * syntax, it is better to use the native RDFa syntax - the 'typeof'
-     * attribute - for multiple types. Schema.org tools may have only weaker
-     * understanding of extra types, in particular those defined externally.
+     * relationship between something and a class that the thing is in.
+     * Typically the value is a URI-identified RDF class, and in this case
+     * corresponds to the
+     *     use of rdf:type in RDF. Text values can be used sparingly, for cases
+     * where useful information can be added without their being an appropriate
+     * schema to reference. In the case of text values, the class label should
+     * follow the schema.org [style
+     * guide](https://schema.org/docs/styleguide.html).
      *
      * @param string|string[] $additionalType
      *
@@ -625,6 +629,7 @@ class ComicIssue extends BaseType implements ComicIssueContract, CreativeWorkCon
      *
      * @see https://schema.org/correction
      * @see https://pending.schema.org
+     * @link https://github.com/schemaorg/schemaorg/issues/1950
      */
     public function correction($correction)
     {
@@ -754,7 +759,7 @@ class ComicIssue extends BaseType implements ComicIssueContract, CreativeWorkCon
     /**
      * A description of the item.
      *
-     * @param string|string[] $description
+     * @param \Spatie\SchemaOrg\Contracts\TextObjectContract|\Spatie\SchemaOrg\Contracts\TextObjectContract[]|string|string[] $description
      *
      * @return static
      *
@@ -763,6 +768,23 @@ class ComicIssue extends BaseType implements ComicIssueContract, CreativeWorkCon
     public function description($description)
     {
         return $this->setProperty('description', $description);
+    }
+
+    /**
+     * Indicates an IPTCDigitalSourceEnumeration code indicating the nature of
+     * the digital source(s) for some [[CreativeWork]].
+     *
+     * @param \Spatie\SchemaOrg\Contracts\IPTCDigitalSourceEnumerationContract|\Spatie\SchemaOrg\Contracts\IPTCDigitalSourceEnumerationContract[] $digitalSourceType
+     *
+     * @return static
+     *
+     * @see https://schema.org/digitalSourceType
+     * @see https://pending.schema.org
+     * @link https://github.com/schemaorg/schemaorg/issues/3392
+     */
+    public function digitalSourceType($digitalSourceType)
+    {
+        return $this->setProperty('digitalSourceType', $digitalSourceType);
     }
 
     /**
@@ -954,7 +976,6 @@ class ComicIssue extends BaseType implements ComicIssueContract, CreativeWorkCon
      * @return static
      *
      * @see https://schema.org/exampleOfWork
-     * @link http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_bibex
      */
     public function exampleOfWork($exampleOfWork)
     {
@@ -1025,6 +1046,7 @@ class ComicIssue extends BaseType implements ComicIssueContract, CreativeWorkCon
      *
      * @see https://schema.org/funding
      * @see https://pending.schema.org
+     * @link https://github.com/schemaorg/schemaorg/issues/383
      */
     public function funding($funding)
     {
@@ -1054,7 +1076,6 @@ class ComicIssue extends BaseType implements ComicIssueContract, CreativeWorkCon
      * @return static
      *
      * @see https://schema.org/hasPart
-     * @link http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_bibex
      */
     public function hasPart($hasPart)
     {
@@ -1208,7 +1229,7 @@ class ComicIssue extends BaseType implements ComicIssueContract, CreativeWorkCon
 
     /**
      * A resource from which this work is derived or from which it is a
-     * modification or adaption.
+     * modification or adaptation.
      *
      * @param \Spatie\SchemaOrg\Contracts\CreativeWorkContract|\Spatie\SchemaOrg\Contracts\CreativeWorkContract[]|\Spatie\SchemaOrg\Contracts\ProductContract|\Spatie\SchemaOrg\Contracts\ProductContract[]|string|string[] $isBasedOn
      *
@@ -1274,7 +1295,6 @@ class ComicIssue extends BaseType implements ComicIssueContract, CreativeWorkCon
      * @return static
      *
      * @see https://schema.org/issueNumber
-     * @link http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_bibex
      */
     public function issueNumber($issueNumber)
     {
@@ -1508,7 +1528,6 @@ class ComicIssue extends BaseType implements ComicIssueContract, CreativeWorkCon
      * @return static
      *
      * @see https://schema.org/pageEnd
-     * @link http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_bibex
      */
     public function pageEnd($pageEnd)
     {
@@ -1523,7 +1542,6 @@ class ComicIssue extends BaseType implements ComicIssueContract, CreativeWorkCon
      * @return static
      *
      * @see https://schema.org/pageStart
-     * @link http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_bibex
      */
     public function pageStart($pageStart)
     {
@@ -1539,7 +1557,6 @@ class ComicIssue extends BaseType implements ComicIssueContract, CreativeWorkCon
      * @return static
      *
      * @see https://schema.org/pagination
-     * @link http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_bibex
      */
     public function pagination($pagination)
     {
@@ -1805,7 +1822,7 @@ class ComicIssue extends BaseType implements ComicIssueContract, CreativeWorkCon
 
     /**
      * Indicates the date on which the current structured data was generated /
-     * published. Typically used alongside [[sdPublisher]]
+     * published. Typically used alongside [[sdPublisher]].
      *
      * @param \DateTimeInterface|\DateTimeInterface[] $sdDatePublished
      *
@@ -2038,6 +2055,20 @@ class ComicIssue extends BaseType implements ComicIssueContract, CreativeWorkCon
     }
 
     /**
+     * Thumbnail image for an image or video.
+     *
+     * @param \Spatie\SchemaOrg\Contracts\ImageObjectContract|\Spatie\SchemaOrg\Contracts\ImageObjectContract[] $thumbnail
+     *
+     * @return static
+     *
+     * @see https://schema.org/thumbnail
+     */
+    public function thumbnail($thumbnail)
+    {
+        return $this->setProperty('thumbnail', $thumbnail);
+    }
+
+    /**
      * A thumbnail image relevant to the Thing.
      *
      * @param string|string[] $thumbnailUrl
@@ -2052,9 +2083,8 @@ class ComicIssue extends BaseType implements ComicIssueContract, CreativeWorkCon
     }
 
     /**
-     * Approximate or typical time it takes to work with or through this
-     * learning resource for the typical intended target audience, e.g. 'PT30M',
-     * 'PT1H25M'.
+     * Approximate or typical time it usually takes to work with or through the
+     * content of this work for the typical or target audience.
      *
      * @param \Spatie\SchemaOrg\Contracts\DurationContract|\Spatie\SchemaOrg\Contracts\DurationContract[] $timeRequired
      *
@@ -2210,7 +2240,6 @@ class ComicIssue extends BaseType implements ComicIssueContract, CreativeWorkCon
      * @return static
      *
      * @see https://schema.org/workExample
-     * @link http://www.w3.org/wiki/WebSchemas/SchemaDotOrgSources#source_bibex
      */
     public function workExample($workExample)
     {

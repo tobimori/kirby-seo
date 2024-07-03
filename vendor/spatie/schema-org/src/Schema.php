@@ -827,6 +827,11 @@ class Schema
         return new Consortium();
     }
 
+    public static function constraintNode(): ConstraintNode
+    {
+        return new ConstraintNode();
+    }
+
     public static function consumeAction(): ConsumeAction
     {
         return new ConsumeAction();
@@ -1837,6 +1842,11 @@ class Schema
         return new HyperTocEntry();
     }
 
+    public static function iPTCDigitalSourceEnumeration(): IPTCDigitalSourceEnumeration
+    {
+        return new IPTCDigitalSourceEnumeration();
+    }
+
     public static function iceCreamShop(): IceCreamShop
     {
         return new IceCreamShop();
@@ -1865,6 +1875,11 @@ class Schema
     public static function imagingTest(): ImagingTest
     {
         return new ImagingTest();
+    }
+
+    public static function individualPhysician(): IndividualPhysician
+    {
+        return new IndividualPhysician();
     }
 
     public static function individualProduct(): IndividualProduct
@@ -2177,9 +2192,19 @@ class Schema
         return new MaximumDoseSchedule();
     }
 
+    public static function measurementMethodEnum(): MeasurementMethodEnum
+    {
+        return new MeasurementMethodEnum();
+    }
+
     public static function measurementTypeEnumeration(): MeasurementTypeEnumeration
     {
         return new MeasurementTypeEnumeration();
+    }
+
+    public static function mediaEnumeration(): MediaEnumeration
+    {
+        return new MediaEnumeration();
     }
 
     public static function mediaGallery(): MediaGallery
@@ -3022,6 +3047,11 @@ class Schema
         return new Physician();
     }
 
+    public static function physiciansOffice(): PhysiciansOffice
+    {
+        return new PhysiciansOffice();
+    }
+
     public static function place(): Place
     {
         return new Place();
@@ -3080,6 +3110,11 @@ class Schema
     public static function policeStation(): PoliceStation
     {
         return new PoliceStation();
+    }
+
+    public static function politicalParty(): PoliticalParty
+    {
+        return new PoliticalParty();
     }
 
     public static function pond(): Pond
@@ -3852,6 +3887,11 @@ class Schema
         return new StatisticalPopulation();
     }
 
+    public static function statisticalVariable(): StatisticalVariable
+    {
+        return new StatisticalVariable();
+    }
+
     public static function statusEnumeration(): StatusEnumeration
     {
         return new StatusEnumeration();
@@ -3910,6 +3950,11 @@ class Schema
     public static function suspendAction(): SuspendAction
     {
         return new SuspendAction();
+    }
+
+    public static function syllabus(): Syllabus
+    {
+        return new Syllabus();
     }
 
     public static function synagogue(): Synagogue
@@ -4000,6 +4045,11 @@ class Schema
     public static function textDigitalDocument(): TextDigitalDocument
     {
         return new TextDigitalDocument();
+    }
+
+    public static function textObject(): TextObject
+    {
+        return new TextObject();
     }
 
     public static function theaterEvent(): TheaterEvent
@@ -4210,6 +4260,11 @@ class Schema
     public static function userTweets(): UserTweets
     {
         return new UserTweets();
+    }
+
+    public static function vacationRental(): VacationRental
+    {
+        return new VacationRental();
     }
 
     public static function vehicle(): Vehicle

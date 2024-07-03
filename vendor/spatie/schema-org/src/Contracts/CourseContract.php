@@ -46,6 +46,8 @@ interface CourseContract
 
     public function author($author);
 
+    public function availableLanguage($availableLanguage);
+
     public function award($award);
 
     public function awards($awards);
@@ -98,6 +100,8 @@ interface CourseContract
 
     public function description($description);
 
+    public function digitalSourceType($digitalSourceType);
+
     public function disambiguatingDescription($disambiguatingDescription);
 
     public function discussionUrl($discussionUrl);
@@ -125,6 +129,8 @@ interface CourseContract
     public function expires($expires);
 
     public function fileFormat($fileFormat);
+
+    public function financialAidEligible($financialAidEligible);
 
     public function funder($funder);
 
@@ -236,6 +242,8 @@ interface CourseContract
 
     public function subjectOf($subjectOf);
 
+    public function syllabusSections($syllabusSections);
+
     public function teaches($teaches);
 
     public function temporal($temporal);
@@ -244,9 +252,13 @@ interface CourseContract
 
     public function text($text);
 
+    public function thumbnail($thumbnail);
+
     public function thumbnailUrl($thumbnailUrl);
 
     public function timeRequired($timeRequired);
+
+    public function totalHistoricalEnrollment($totalHistoricalEnrollment);
 
     public function translationOfWork($translationOfWork);
 

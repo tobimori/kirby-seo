@@ -94,6 +94,8 @@ interface DataCatalogContract
 
     public function description($description);
 
+    public function digitalSourceType($digitalSourceType);
+
     public function disambiguatingDescription($disambiguatingDescription);
 
     public function discussionUrl($discussionUrl);
@@ -170,6 +172,8 @@ interface DataCatalogContract
 
     public function materialExtent($materialExtent);
 
+    public function measurementMethod($measurementMethod);
+
     public function measurementTechnique($measurementTechnique);
 
     public function mentions($mentions);
@@ -233,6 +237,8 @@ interface DataCatalogContract
     public function temporalCoverage($temporalCoverage);
 
     public function text($text);
+
+    public function thumbnail($thumbnail);
 
     public function thumbnailUrl($thumbnailUrl);
 

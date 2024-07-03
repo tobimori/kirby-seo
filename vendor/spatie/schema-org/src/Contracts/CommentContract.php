@@ -92,6 +92,8 @@ interface CommentContract
 
     public function description($description);
 
+    public function digitalSourceType($digitalSourceType);
+
     public function disambiguatingDescription($disambiguatingDescription);
 
     public function discussionUrl($discussionUrl);
@@ -214,6 +216,8 @@ interface CommentContract
 
     public function sdPublisher($sdPublisher);
 
+    public function sharedContent($sharedContent);
+
     public function size($size);
 
     public function sourceOrganization($sourceOrganization);
@@ -233,6 +237,8 @@ interface CommentContract
     public function temporalCoverage($temporalCoverage);
 
     public function text($text);
+
+    public function thumbnail($thumbnail);
 
     public function thumbnailUrl($thumbnailUrl);
 

@@ -94,6 +94,8 @@ interface TVSeasonContract
 
     public function description($description);
 
+    public function digitalSourceType($digitalSourceType);
+
     public function director($director);
 
     public function disambiguatingDescription($disambiguatingDescription);
@@ -252,9 +254,13 @@ interface TVSeasonContract
 
     public function text($text);
 
+    public function thumbnail($thumbnail);
+
     public function thumbnailUrl($thumbnailUrl);
 
     public function timeRequired($timeRequired);
+
+    public function titleEIDR($titleEIDR);
 
     public function trailer($trailer);
 
