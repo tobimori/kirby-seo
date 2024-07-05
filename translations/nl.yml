@@ -1,0 +1,87 @@
+# Heading Structure
+heading-structure: Heading structuur
+incorrect-heading-order: Je heading structuur heeft een onjuiste volgorde en is ongeldig.
+missing-h1-tag: Je heading structuur bevat geen H1 en is ongeldig.
+multiple-h1-tags: Je heading structuur bevat meer dan één H1 en is ongeldig.
+
+# SEO Preview
+seo-preview: Voorvertoning
+seo-preview-for: Voorbeeld op
+open-debugger: Open Sharing Debugger
+open-search-console: Open Search Console
+
+# Robots
+indicator-index: Indexeren toegestaan
+indicator-any: Indexeren gedeeltelijk niet toegestaan
+indicator-noindex: Indexeren niet toegestaan
+robots: Robots Directives
+robots-index: Indexeren
+robots-index-help: Of zoekmachines deze pagina mogen indexeren.
+robots-follow: Volg Links
+robots-follow-help: Of zoekmachines links op deze pagina mogen volgen.
+robots-archive: Archiveren
+robots-archive-help: Of zoekmachines deze pagina mogen archiveren.
+robots-imageindex: Afbeeldingen indexeren
+robots-imageindex-help: Of zoekmachines afbeeldingen op deze pagina mogen indexeren.
+robots-snippet: Fragmenten
+robots-snippet-help: Of zoekmachines tekstfragmenten van deze pagina mogen tonen.
+
+# Blueprint - Site/Common
+metadata-site: Metadata & SEO
+global-meta-headline: Globale SEO Instellingen
+global-meta-headline-help: |
+  Deze instellingen worden gebruikt voor alle pagina's die geen eigen metadata hebben.
+  Je kunt ze voor elke pagina overschrijven.
+meta-title-template: Titel template
+meta-title-template-help: |
+  Een sjabloon om te gebruiken voor alle paginatitels.
+  "\{\{ title }}" wordt vervangen door de paginatitel.
+meta-description: Paginabeschrijving
+meta-description-help: Aanbevolen lengte van maximaal 150 tekens. Gebruikt als er geen paginabeschrijving is opgegeven.
+
+global-og-headline: Globale Open Graph Instellingen
+global-og-headline-help: Bepaal hoe je website verschijnt wanneer deze wordt gedeeld op sociale netwerken zoals Facebook of Twitter.
+og-title-template: Open Graph Titel Template
+og-description: Open Graph Beschrijving
+og-site-name: Open Graph Sitenaam
+og-image: Open Graph Afbeelding
+og-image-help: Aanbevolen grootte van 1200x630 pixels.
+og-image-empty: Geen Open Graph Afbeelding geselecteerd
+twitter-card-type: Twitter Kaart Type
+twitter-card-type-help: Twitter Kaart Type bepaalt hoe je website eruitziet wanneer deze wordt gedeeld op Twitter. [Lees meer](https://developer.twitter.com/en/docs/tweets/optimize-with-cards/overview/abouts-cards).
+
+social-media-accounts: Sociale Media Accounts
+social-media-accounts-help: URL's of @handles naar je sociale media accounts. Gebruikt om links naar je accounts in de metadata te plaatsen.
+
+# Blueprint - Page
+meta-headline: SEO Instellingen
+og-headline: Open Graph Instellingen
+title-overwrite: Titel (overschrijven)
+summary: Samenvatting met vierkante afbeelding
+summary_large_image: Samenvatting met grote afbeelding
+default-select: 'Standaard:'
+twitter-author: 'Auteur @gebruikersnaam op Twitter'
+inherit-settings: Instellingen Overerven
+inherit-settings-help: |
+  Selecteer welke instellingen door subpagina's moeten worden geërfd.
+  Dit kan nuttig zijn, bijvoorbeeld als alle berichten van een blog hun eigen titelsjabloon moeten hebben, die verschilt van de standaard van de pagina. Alle instellingen kunnen nog steeds worden overschreven op de hoofdpagina.
+use-title-template: Titelsjabloon gebruiken?
+use-title-template-no: 'Nee - alleen titel'
+use-title-template-yes: 'Ja - met sjabloon'
+use-title-template-help: Geeft aan of het titelsjabloon moet worden gebruikt. Wordt niet geërfd.
+
+# Labels
+google: Google
+facebook: Facebook
+slack: Slack
+
+# Sitemap
+sitemap: Sitemap
+sitemap-index: Sitemap Index
+sitemap-description: Dit is de sitemap voor je website die zoekmachines informeert over de pagina's op je website die geïndexeerd kunnen worden.
+sitemap-by: door
+sitemap-changefreq: Veranderingsfrequentie
+sitemap-last-updated: Laatst bijgewerkt
+sitemap-priority: Prioriteit
+sitemap-url: URL
+sitemap-no-entries: Geen vermeldingen
