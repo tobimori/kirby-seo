@@ -76,6 +76,9 @@ class Meta
 		// we have to resolve this lazily (using a callable) to avoid an infinite loop
 		$allowsIndexFn = fn () => !$robotsActive || !Str::contains($this->robots(), 'noindex');
 
+		// check if a translation exists for this page
+		$translationExists = fn ($code) => $this->page->translation($code)->exists();
+
 		// canonical
 		$canonicalFn = fn () => $allowsIndexFn() ? $this->canonicalUrl() : null;
 		$meta['canonical'] = $canonicalFn;
@@ -85,12 +88,13 @@ class Meta
 		if (kirby()->languages()->count() > 1 && kirby()->language() !== null) {
 			foreach (kirby()->languages() as $lang) {
 				// only add alternate tags if the page is indexable
-				$meta['alternate'][] = fn () => $allowsIndexFn() ? [
+				// and if a translation for the language exists
+				$meta['alternate'][] = fn () => $allowsIndexFn() && $translationExists($lang->code()) ? [
 					'hreflang' => $lang->code(),
 					'href' => $this->page->url($lang->code()),
 				] : null;
 
-				if ($lang !== kirby()->language()) {
+				if ($lang !== kirby()->language() && $translationExists($lang->code())) {
 					$meta['og:locale:alternate'][] = fn () => $lang->code();
 				}
 			}
