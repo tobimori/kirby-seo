@@ -27,14 +27,14 @@ App::plugin('tobimori/seo', [
 	'routes' => require __DIR__ . '/config/routes.php',
 	// load all commands automatically
 	'commands' => A::keyBy(A::map(
-		Dir::read(__DIR__ . '/config/commands'),
+		Dir::files(__DIR__ . '/config/commands'),
 		fn ($file) => A::merge([
 			'id' => 'seo:' . F::name($file),
 		], require __DIR__ . '/config/commands/' . $file)
 	), 'id'),
 	// get all files from /translations and register them as language files
 	'translations' => A::keyBy(A::map(
-		Dir::read(__DIR__ . '/translations'),
+		Dir::files(__DIR__ . '/translations'),
 		fn ($file) => A::merge([
 			'lang' => F::name($file),
 		], Yaml::decode(F::read(__DIR__ . '/translations/' . $file)))
