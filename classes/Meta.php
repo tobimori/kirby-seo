@@ -88,6 +88,7 @@ class Meta
 				$meta['alternate'][] = fn () => $allowsIndexFn() ? [
 					'hreflang' => $lang->code(),
 					'href' => $this->page->url($lang->code()),
+					'rel' => 'alternate',
 				] : null;
 
 				if ($lang !== kirby()->language()) {
@@ -99,6 +100,7 @@ class Meta
 			$meta['alternate'][] = fn () => $allowsIndexFn() ? [
 				'hreflang' => 'x-default',
 				'href' => $this->page->url(kirby()->language()->code()),
+				'rel' => 'alternate',
 			] : null;
 			$meta['og:locale'] = fn () => kirby()->language()->locale(LC_ALL);
 		} else {
