@@ -9,12 +9,14 @@ class SchemaSingleton
 {
 	private static $instances = [];
 
-	private function __construct()
-	{
-	}
+	private function __construct() {}
 
 	public static function getInstance(string $type, Page|null $page = null): mixed
 	{
+		if (!class_exists('Spatie\SchemaOrg\Schema')) {
+			return null;
+		}
+
 		if (!isset(self::$instances[$page?->id() ?? 'default'][$type])) {
 			self::$instances[$page?->id() ?? 'default'][$type] = Schema::{$type}();
 		}
@@ -24,6 +26,10 @@ class SchemaSingleton
 
 	public static function getInstances(Page|null $page = null): array
 	{
+		if (!class_exists('Spatie\SchemaOrg\Schema')) {
+			return [];
+		}
+
 		return self::$instances[$page?->id() ?? 'default'] ?? [];
 	}
 }

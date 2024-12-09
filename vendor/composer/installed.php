@@ -1,8 +1,8 @@
 <?php return array(
     'root' => array(
         'name' => 'tobimori/kirby-seo',
-        'pretty_version' => '1.1.2',
-        'version' => '1.1.2.0',
+        'pretty_version' => '2.0.0-alpha.1',
+        'version' => '2.0.0.0-alpha1',
         'reference' => null,
         'type' => 'kirby-plugin',
         'install_path' => __DIR__ . '/../../',
@@ -19,18 +19,9 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
-        'spatie/schema-org' => array(
-            'pretty_version' => '3.23.0',
-            'version' => '3.23.0.0',
-            'reference' => 'c95abf7da59f16570aec18ca11d861255e645c39',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../spatie/schema-org',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
         'tobimori/kirby-seo' => array(
-            'pretty_version' => '1.1.2',
-            'version' => '1.1.2.0',
+            'pretty_version' => '2.0.0-alpha.1',
+            'version' => '2.0.0.0-alpha1',
             'reference' => null,
             'type' => 'kirby-plugin',
             'install_path' => __DIR__ . '/../../',

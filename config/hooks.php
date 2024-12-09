@@ -15,6 +15,10 @@ return [
 		}
 	},
 	'page.render:before' => function (string $contentType, array $data, Page $page) {
+		if (!class_exists('Spatie\SchemaOrg\Schema')) {
+			return;
+		}
+
 		if (option('tobimori.seo.generateSchema')) {
 			$page->schema('WebSite')
 				->url($page->metadata()->canonicalUrl())
