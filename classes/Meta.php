@@ -159,7 +159,7 @@ class Meta
 	 * Normalize the meta array and remaining meta defaults to be used in the snippet,
 	 * also resolve the content, if necessary
 	 */
-	public function snippetData(array $raw = null): array
+	public function snippetData(?array $raw = null): array
 	{
 		$mergeWithDefaults = !isset($raw);
 		$raw ??= $this->metaArray();
