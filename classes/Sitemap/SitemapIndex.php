@@ -56,7 +56,7 @@ class SitemapIndex extends Collection
 		return $doc->saveXML();
 	}
 
-	public function isValidIndex(string $key = null): bool
+	public function isValidIndex(?string $key = null): bool
 	{
 		if ($key === null) {
 			return $this->count() > 1;
