@@ -8,6 +8,7 @@ use Kirby\Content\Field;
 use Kirby\Exception\InvalidArgumentException;
 use Kirby\Toolkit\A;
 use Kirby\Toolkit\Str;
+use Kirby\Cms\Language;
 
 /**
  * The Meta class is responsible for handling the meta data & cascading
@@ -36,6 +37,48 @@ class Meta
 		if (method_exists($this->page, 'metaDefaults')) {
 			$this->metaDefaults = $this->page->metaDefaults($this->lang);
 		}
+	}
+	
+	/**
+	 * Return the Language as attribute for a hreflang value inside Meta or Sitemap
+	 * Specification: langtag = language["-" region]
+	 * https://en.wikipedia.org/wiki/Hreflang
+	 * https://datatracker.ietf.org/doc/html/rfc8288
+	 * https://datatracker.ietf.org/doc/html/rfc5646 langtag
+     * https://developers.google.com/search/docs/specialty/international/localized-versions#language-codes
+	 * 
+	 * @param Language $language
+	 * @return string the value for the hreflang attribute
+	 */
+	public static function languageToHreflang(Language $language) {
+		// intentionally not a one-liner, for documentation
+		$r = $language->locale(LC_ALL);
+		// Locale uses underline '_', hreflang dash '-'
+		$r = str_replace('_', '-', $r);
+		// Locale may contain encoding in Kirby, example: 'de_DE.utf8'
+		if ($dotpos = strpos($r, '.')) {
+			$r = substr($r, 0, $dotpos);
+		}
+		return $r;
+	}
+	
+	/**
+	 * Return the Language as attribute for an opengraph of og:locale or og:locale:alternate
+	 * Specification:  "Of the format language_TERRITORY. Default is en_US."
+	 * https://ogp.me/#optional
+	 * @param Language $language
+	 * @return string the value for the content attribute 
+	 */
+	public static function languageToOgpContent(Language $language) {
+		// intentionally not a one-liner, for documentation
+		$r = $language->locale(LC_ALL);
+		// Locale uses underline '_' or '-', content uses locale with underline '_'
+		$r = str_replace('-', '_', $r);
+		// Locale may contain encoding in Kirby, example: 'de_DE.utf8'
+		if ($dotpos = strpos($r, '.')) {
+			$r = substr($r, 0, $dotpos);
+		}
+		return $r;
 	}
 
 	/**
@@ -76,9 +119,6 @@ class Meta
 		// we have to resolve this lazily (using a callable) to avoid an infinite loop
 		$allowsIndexFn = fn () => !$robotsActive || !Str::contains($this->robots(), 'noindex');
 
-		// check if a translation exists for this page
-		$translationExists = fn ($code) => $this->page->translation($code)->exists();
-
 		// canonical
 		$canonicalFn = fn () => $allowsIndexFn() ? $this->canonicalUrl() : null;
 		$meta['canonical'] = $canonicalFn;
@@ -86,28 +126,43 @@ class Meta
 
 		// Multi-lang alternate tags
 		if (kirby()->languages()->count() > 1 && kirby()->language() !== null) {
+			
 			foreach (kirby()->languages() as $lang) {
+				// only if this language is translated for this page and exists
+				// note: can be checked now, does not cause infinite loop
+				if (!$this->page->translation($lang->code())->exists())
+					continue;
+				
 				// only add alternate tags if the page is indexable
-				// and if a translation for the language exists
-				$meta['alternate'][] = fn () => $allowsIndexFn() && $translationExists($lang->code()) ? [
-					'hreflang' => $lang->code(),
-					'href' => $this->page->url($lang->code()),
-				] : null;
+				$meta['alternate'][] = fn () => $allowsIndexFn()  ? [
 
-				if ($lang !== kirby()->language() && $translationExists($lang->code())) {
-					$meta['og:locale:alternate'][] = fn () => $lang->code();
+					'hreflang' => Meta::languageToHreflang($lang),
+					'href' => $this->page->url($lang->code()),
+					'rel' => 'alternate',
+				] : null;
+				
+				if ($lang !== kirby()->language()) {
+					$meta['og:locale:alternate'][] = fn () => Meta::languageToOgpContent($lang);
 				}
 			}
-
+			
 			// only add alternate tags if the page is indexable
 			$meta['alternate'][] = fn () => $allowsIndexFn() ? [
 				'hreflang' => 'x-default',
-				'href' => $this->page->url(kirby()->language()->code()),
+				// use 'index' to get the x-default without language
+				// https://forum.getkirby.com/t/multilanguage-how-to-get-the-siteurl-without-the-language-slug/26376/2?u=leo_portatour
+				// Google: "fallback page for unmatched languages, especially on language/country selectors or auto-redirecting home pages."
+				// https://developers.google.com/search/docs/specialty/international/localized-versions#all-method-guidelines
+				'href' => $this->page->url('index'),
+				'rel' => 'alternate',
 			] : null;
-			$meta['og:locale'] = fn () => kirby()->language()->locale(LC_ALL);
+			$meta['og:locale'] = fn () => Meta::languageToOgpContent(kirby()->language());
 		} else {
+			// TODO: verify if this really reads the single language or tobimori.seo.lang, which is probably stored in tobimori.seo.default.lang by kirby-seo/config/options.php
+			// TODO: process the locale, if this reads from langugue->locale(LC_ALL), it must remove the encoding after the dot '.'
 			$meta['og:locale'] = fn () => $this->locale(LC_ALL);
 		}
+
 
 		// Twitter tags "opt-in" - TODO: wip
 		if (option('tobimori.seo.twitter', true)) {
