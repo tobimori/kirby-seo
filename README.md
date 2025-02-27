@@ -27,4 +27,4 @@ Copyright 2023-2024 © Tobias Möritz - Love & Kindness GmbH
 
 ---
 
-Kirby SEO 1.0 is licensed unter the MIT license.
+Kirby SEO 1.0 is licensed under the MIT license.
