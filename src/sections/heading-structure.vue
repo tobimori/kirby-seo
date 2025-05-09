@@ -58,7 +58,7 @@ export default {
   },
   computed: {
     changes() {
-      return this.$store.getters['content/changes']()
+      return this.$panel.content.diff();
     },
     incorrectOrder() {
       return this.value?.some((item, index) => item.level > (this.value[index - 1]?.level ?? 0) + 1)

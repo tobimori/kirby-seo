@@ -53,7 +53,7 @@ export default {
   },
   computed: {
     changes() {
-      return this.$store.getters['content/changes']()
+      return this.$panel.content.diff();
     }
   },
   methods: {
