@@ -19,12 +19,12 @@
 
 [Read the documentation](https://plugins.andkindness.com/seo/docs/get-started/feature-overview) to get started with Kirby SEO.
 
-## Support the project
-
-> [!NOTE]
-> This plugin is provided free of charge & published under the permissive MIT License. If you use it in a commercial project, please consider sponsoring me on GitHub to support further development and continued maintenance of Kirby SEO.
-
 ## License
 
-[MIT License](./../LICENSE)
-Copyright © 2023-2024 Tobias Möritz
+Kirby SEO 2.0 is not free software. In order to run it on a public server, you'll have to purchase a valid Kirby license & a valid SEO license.
+
+Copyright 2023-2024 © Tobias Möritz - Love & Kindness GmbH
+
+---
+
+Kirby SEO 1.0 is licensed unter the MIT license.

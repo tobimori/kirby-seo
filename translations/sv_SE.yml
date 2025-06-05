@@ -1,0 +1,87 @@
+# Heading Structure
+heading-structure: Rubrikstruktur
+incorrect-heading-order: Din rubrikstruktur har en felaktig ordning och är ogiltig.
+missing-h1-tag: Din rubrikstruktur innehåller ingen H1 och är ogiltig.
+multiple-h1-tags: Din rubrikstruktur innehåller mer än en H1 och är ogiltig.
+
+# SEO Preview
+seo-preview: Förhandsvisning
+seo-preview-for: Visa mig
+open-debugger: Öppna Sharing Debugger
+open-search-console: Öppna Search Console
+
+# Robots
+indicator-index: Indexering tillåten
+indicator-any: Indexering delvis förbjuden
+indicator-noindex: Indexering förbjuden
+robots: Robotdirektiv
+robots-index: Indexering
+robots-index-help: Om sökmotorer får indexera den här sidan.
+robots-follow: Följ länkar
+robots-follow-help: Om sökmotorer får följa länkar på den här sidan.
+robots-archive: Arkiv
+robots-archive-help: Om sökmotorer får arkivera den här sidan.
+robots-imageindex: Bildindexering
+robots-imageindex-help: Om sökmotorer får indexera bilder på den här sidan.
+robots-snippet: Textutdrag
+robots-snippet-help: Om sökmotorer får visa textutdrag från den här sidan.
+
+# Blueprint - Site/Common
+metadata-site: Metadata & SEO
+global-meta-headline: Globala SEO-inställningar
+global-meta-headline-help: |
+  Dessa inställningar används för alla sidor som inte har egna metadata.
+  Du kan åsidosätta dem för varje sida.
+meta-title-template: Titelmall
+meta-title-template-help: |
+  En mall att använda för alla sidtitlar.
+  "\{\{ title }}" kommer att ersättas med sidtiteln.
+meta-description: Sidbeskrivning
+meta-description-help: Rekommenderad längd på max 150 tecken. Används om ingen sidbeskrivning anges.
+
+global-og-headline: Globala Open Graph-inställningar
+global-og-headline-help: Ställ in hur din webbplats visas när den delas på sociala nätverk som Facebook eller Twitter.
+og-title-template: Open Graph titelmall
+og-description: Open Graph beskrivning
+og-site-name: Open Graph webbplatsnamn
+og-image: Open Graph bild
+og-image-help: Rekommenderad storlek på 1200x630 pixlar.
+og-image-empty: Ingen Open Graph-bild har valts
+twitter-card-type: Twitter korttyp
+twitter-card-type-help: Twitter korttyp avgör hur din webbplats ser ut när den delas på Twitter. [Läs mer](https://developer.twitter.com/en/docs/tweets/optimize-with-cards/overview/abouts-cards).
+
+social-media-accounts: Konton för sociala medier
+social-media-accounts-help: URL:er eller @användarnamn till dina sociala mediekonton. Används för att lägga länkar till dina konton i metadata.
+
+# Blueprint - Page
+meta-headline: SEO-inställningar
+og-headline: Open Graph inställningar
+title-overwrite: Titel (skriv över)
+summary: Sammanfattning med kvadratisk bild
+summary_large_image: Sammanfattning med stor bild
+default-select: "Standard:"
+twitter-author: "Författare @username på Twitter"
+inherit-settings: Ärv inställningar
+inherit-settings-help: |
+  Välj vilka inställningar som ska ärvas av undersidor.
+  Detta kan till exempel vara användbart om alla inlägg på en blogg ska ha en egen titelmall, som skiljer sig från sidans standard. Alla inställningar kan fortfarande åsidosättas på huvudsidan.
+use-title-template: Använd titelmall?
+use-title-template-no: "Nej - bara titel"
+use-title-template-yes: "Ja - med mall"
+use-title-template-help: Anger om titelmallen ska användas. Kommer inte att ärvas.
+
+# Labels
+google: Google
+facebook: Facebook
+slack: Slack
+
+# Sitemap
+sitemap: Webbplatskarta
+sitemap-index: Webbplatskartans index
+sitemap-description: Detta är webbplatskartan för din webbplats som informerar sökmotorer om vilka sidor på din webbplats som kan indexeras.
+sitemap-by: av
+sitemap-changefreq: Ändra frekvens
+sitemap-last-updated: Senast uppdaterad
+sitemap-priority: Prioritet
+sitemap-url: URL
+sitemap-no-entries: Inga poster

@@ -9,12 +9,11 @@ use Kirby\Filesystem\F;
 use Kirby\Toolkit\A;
 use Spatie\SchemaOrg\Schema;
 
-// shamelessly borrowed from distantnative/retour-for-kirby
 if (
-	version_compare(App::version() ?? '0.0.0', '4.0.2', '<') === true ||
-	version_compare(App::version() ?? '0.0.0', '5.0.0', '>') === true
+	version_compare(App::version() ?? '0.0.0', '5.0.0-beta.1', '<') === true ||
+	version_compare(App::version() ?? '0.0.0', '6.0.0', '>') === true
 ) {
-	throw new Exception('Kirby SEO requires Kirby 4.0.2 or higher.');
+	throw new Exception('Kirby SEO requires Kirby 5');
 }
 
 App::plugin('tobimori/seo', [
@@ -28,14 +27,14 @@ App::plugin('tobimori/seo', [
 	// load all commands automatically
 	'commands' => A::keyBy(A::map(
 		Dir::read(__DIR__ . '/config/commands'),
-		fn ($file) => A::merge([
+		fn($file) => A::merge([
 			'id' => 'seo:' . F::name($file),
 		], require __DIR__ . '/config/commands/' . $file)
 	), 'id'),
 	// get all files from /translations and register them as language files
 	'translations' => A::keyBy(A::map(
 		Dir::read(__DIR__ . '/translations'),
-		fn ($file) => A::merge([
+		fn($file) => A::merge([
 			'lang' => F::name($file),
 		], Yaml::decode(F::read(__DIR__ . '/translations/' . $file)))
 	), 'lang'),
@@ -64,6 +63,10 @@ App::plugin('tobimori/seo', [
 if (!function_exists('schema')) {
 	function schema($type)
 	{
+		if (!class_exists('Spatie\SchemaOrg\Schema')) {
+			return null;
+		}
+
 		return Schema::{$type}();
 	}
 }

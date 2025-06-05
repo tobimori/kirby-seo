@@ -1,5 +1,9 @@
 <?php
 
+if (!class_exists('Spatie\SchemaOrg\Schema')) {
+	return;
+}
+
 $siteSchema ??= true;
 $pageSchema ??= true;
 
