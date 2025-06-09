@@ -17,12 +17,12 @@ App::plugin('tobimori/seo', [
 	'options' => require __DIR__ . '/config/options.php',
 	'sections' => require __DIR__ . '/config/sections.php',
 	'api' =>  require __DIR__ . '/config/api.php',
-	'siteMethods' => require __DIR__ . '/config/siteMethods.php',
-	'pageMethods' => require __DIR__ . '/config/pageMethods.php',
+	'siteMethods' => require __DIR__ . '/config/site-methods.php',
+	'pageMethods' => require __DIR__ . '/config/page-methods.php',
 	'hooks' => require __DIR__ . '/config/hooks.php',
 	'routes' => require __DIR__ . '/config/routes.php',
 	'commands' => [
-		'seo:hello' => require __DIR__ . '/config/commands/hello.php',
+		//	'seo:hello' => require __DIR__ . '/config/commands/hello.php',
 	],
 	'translations' => [
 		'cs' => Yaml::read(__DIR__ . '/translations/cs.yml'),

@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      kirbyuse:
+        specifier: ^0.12.1
+        version: 0.12.1
     devDependencies:
       husky:
         specifier: ^9.1.7
@@ -741,6 +745,9 @@ packages:
     resolution: {integrity: sha512-oMFOYnLEoW62SCPlNmvzFi47tcC/WJqn6IeFhWLeqPhLCSv/w2Shpomu+BWtWa2sJ2azt7L7DG/JXkvh1q3enw==}
     engines: {node: '>=18'}
     hasBin: true
+
+  kirbyuse@0.12.1:
+    resolution: {integrity: sha512-KMEl4n3fCWupghc6MZvZMbsakqM+2eysjgcdhjeTUhPayCbZpejw8fk9+V/wUa4bbyVzA/XzVHkar8R7dlOKeg==}
 
   lilconfig@3.1.3:
     resolution: {integrity: sha512-/vlFKAoH5Cgt3Ie+JLhRbwOsCQePABiU3tJ1egGvyQ+33R/vcwM2Zl2QR/LzjsBeItPt3oSVXapn+m4nQDvpzw==}
@@ -1628,6 +1635,10 @@ snapshots:
       - terser
       - tsx
       - yaml
+
+  kirbyuse@0.12.1:
+    dependencies:
+      vue: 2.7.16
 
   lilconfig@3.1.3: {}
 

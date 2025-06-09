@@ -1,126 +1,118 @@
-<template>
-  <div class="k-section k-seo-preview">
-    <div class="k-field-header k-seo-preview__label k-label k-field-label">
-      <k-icon type="preview" /><span class="k-label-text">{{ label || $t('seo-preview') }}</span>
-      <k-loader v-if="isLoading" />
-    </div>
-    <k-select-field
-      type="select"
-      name="seo-preview-type"
-      :before="$t('seo-preview-for')"
-      v-model="type"
-      :options="options"
-      :empty="false"
-    />
-    <div class="k-seo-preview__inner" v-if="value">
-      <google-preview v-if="type === 'google'" v-bind="value" />
-      <facebook-preview v-if="type === 'facebook'" v-bind="value" />
-      <slack-preview v-if="type === 'slack'" v-bind="value" />
-    </div>
-  </div>
-</template>
+<script setup>
+import {
+	ref,
+	watch,
+	onMounted,
+	onUnmounted,
+	usePanel,
+	useSection
+} from "kirbyuse"
+import { section } from "kirbyuse/props"
 
-<script>
-import FacebookPreview from '../components/Previews/FacebookPreview.vue'
-import GooglePreview from '../components/Previews/GooglePreview.vue'
-import SlackPreview from '../components/Previews/SlackPreview.vue'
+import FacebookPreview from "../components/previews/facebook-preview.vue"
+import GooglePreview from "../components/previews/google-preview.vue"
+import SlackPreview from "../components/previews/slack-preview.vue"
 
-export default {
-  components: { GooglePreview, FacebookPreview, SlackPreview },
-  data() {
-    const type = localStorage.getItem('kSEOPreviewType') ?? 'google'
+const props = defineProps(section)
 
-    return {
-      label: null,
-      value: null,
-      isLoading: true,
-      options: [],
-      type
-    }
-  },
-  created() {
-    this.isLoading = true
+const panel = usePanel()
+const { load } = useSection()
 
-    this.load().then((data) => {
-      this.label = data.label
-      this.options = data.options
-    }) // loads label and properties
-    this.handleLoad() // handles metadata & title change
+const meta = ref(null)
+const options = ref([])
 
-    this.debouncedLoad = this.$helper.debounce((changes) => {
-      this.handleLoad(changes)
-    }, 200) // debounce function for dirty changes watcher
-  },
-  computed: {
-    changes() {
-      return this.$store.getters['content/changes']()
-    }
-  },
-  methods: {
-    async handleLoad(changes) {
-      this.isLoading = true
+const type = ref(localStorage.getItem("kSEOPreviewType") ?? options.value[0].id)
+watch(type, (newType) => {
+	localStorage.setItem("kSEOPreviewType", newType)
+})
 
-      const page = panel.view.props.model?.id?.replaceAll('/', '+') ?? 'site'
-      const response = await panel.api.post(`/k-seo/${page}/seo-preview`, changes ?? this.changes)
+const handleLoad = () =>
+	load({
+		parent: props.parent,
+		name: props.name
+	}).then((response) => {
+		meta.value = response.meta
+		options.value = response.options
+	})
 
-      this.value = response
-      this.isLoading = false
-    }
-  },
-  watch: {
-    changes(changes) {
-      this.debouncedLoad(changes)
-    },
-    type() {
-      localStorage.setItem('kSEOPreviewType', this.type)
-    }
-  }
-}
+onMounted(() => {
+	handleLoad()
+
+	// this will trigger after the server has finished processing the request as changes
+	panel.events.on("content.save", (_event) => {
+		handleLoad()
+	})
+})
+
+onUnmounted(() => panel.events.off("content.save"))
 </script>
 
-<style lang="scss">
+<template>
+	<div class="k-section k-seo-preview">
+		<div class="k-field-header k-seo-preview__label k-label k-field-label">
+			<k-icon type="preview" />
+			<span class="k-label-text">
+				{{ props.label || $t("seo-preview") }}
+			</span>
+		</div>
+		<k-select-field
+			type="select"
+			name="seo-preview-type"
+			:before="$t('seo-preview-for')"
+			v-model="type"
+			:options="options"
+			:required="true"
+			:empty="false"
+		/>
+		<div class="k-seo-preview__inner" v-if="meta">
+			<google-preview v-if="type === 'google'" v-bind="meta" />
+			<facebook-preview v-if="type === 'facebook'" v-bind="meta" />
+			<slack-preview v-if="type === 'slack'" v-bind="meta" />
+		</div>
+	</div>
+</template>
+
+<style>
 .k-field-name-seo-preview-type .k-field-header {
-  display: none;
+	display: none;
 }
 
-.k-seo-preview {
-  &__inner {
-    margin-top: var(--spacing-2);
-  }
+.k-seo-preview__inner {
+	margin-top: var(--spacing-2);
+}
 
-  &__debugger {
-    margin-top: 1rem;
-    display: flex;
-    font-size: var(--text-sm);
-    color: var(--color-gray-700);
-    line-height: 1.25rem;
-    width: max-content;
-    margin-left: auto;
+.k-seo-preview__debugger {
+	margin-top: 1rem;
+	display: flex;
+	font-size: var(--text-sm);
+	color: var(--color-gray-700);
+	line-height: 1.25rem;
+	width: max-content;
+	margin-left: auto;
 
-    &:hover {
-      text-decoration: underline;
-      color: var(--text-gray-800);
-    }
+	&:hover {
+		text-decoration: underline;
+		color: var(--text-gray-800);
+	}
 
-    > .k-icon {
-      margin-left: var(--spacing-2);
-    }
-  }
+	> .k-icon {
+		margin-left: var(--spacing-2);
+	}
+}
 
-  &__label {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: var(--spacing-2);
+.k-seo-preview__label {
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	gap: var(--spacing-2);
 
-    > .k-icon {
-      color: var(--color-gray-700);
-    }
+	> .k-icon {
+		color: var(--color-gray-700);
+	}
 
-    > .k-loader {
-      margin-left: auto;
-      color: var(--color-gray-700);
-    }
-  }
+	> .k-loader {
+		margin-left: auto;
+		color: var(--color-gray-700);
+	}
 }
 </style>
