@@ -121,8 +121,15 @@ class Meta
 		$meta['canonical'] = $canonicalFn;
 		$meta['og:url'] = $canonicalFn;
 
+		// Check if the current URL is canonical
+		// Compare the current request URL with the canonical URL
+		$currentUrl = kirby()->request()->url()->toString();
+		$canonicalUrl = $this->canonicalUrl();
+		$isCanonical = $currentUrl === $canonicalUrl;
+		
 		// Multi-lang alternate tags
-		if (kirby()->languages()->count() > 1 && $this->lang !== null) {
+		// Skip hreflang tags if URL is not canonical (has query params, Kirby params, etc.)
+		if (kirby()->languages()->count() > 1 && $this->lang !== null && $isCanonical) {
 			foreach (kirby()->languages() as $lang) {
 				// only if this language is translated for this page and exists
 				// note: can be checked now, does not cause infinite loop
@@ -156,6 +163,11 @@ class Meta
 		} else {
 			// Single-language site: get locale from cascade (will fallback to 'locale' option)
 			$meta['og:locale'] = fn() => Meta::normalizeLocale($this->get('locale')->value(), '_');
+		}
+		
+		// If URL is not canonical, also skip og:locale:alternate tags
+		if (!$isCanonical) {
+			unset($meta['og:locale:alternate']);
 		}
 
 		$meta['me'] = fn() => (
