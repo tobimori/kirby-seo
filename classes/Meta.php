@@ -3,6 +3,7 @@
 namespace tobimori\Seo;
 
 use Kirby\Cms\App;
+use Kirby\Cms\FileVersion;
 use Kirby\Cms\Page;
 use Kirby\Content\Field;
 use Kirby\Exception\InvalidArgumentException;
@@ -100,9 +101,9 @@ class Meta
 				'og:description' => 'ogDescription',
 				'og:site_name' => 'ogSiteName',
 				'og:image' => 'ogImage',
-				'og:image:width' => fn () => $this->ogImage() ? $this->get('ogImage')->toFile()?->width() : null,
-				'og:image:height' => fn () => $this->ogImage() ? $this->get('ogImage')->toFile()?->height() : null,
-				'og:image:alt' => fn () => $this->get('ogImage')->toFile()?->alt(),
+				'og:image:width' => fn () => $this->ogImageThumb()?->width() ?? null,
+				'og:image:height' => fn () => $this->ogImageThumb()?->height() ?? null,
+				'og:image:alt' => fn () => $this->get('ogImage')->toFile()?->alt() ?? null,
 				'og:type' => 'ogType',
 			];
 
@@ -660,20 +661,47 @@ class Meta
 	}
 
 	/**
+	 * Get the og:image thumb object
+	 */
+	public function ogImageThumb(): FileVersion|null
+	{
+		$field = $this->get('ogImage');
+
+		// Only process if we have a file object
+		if ($file = $field->toFile()) {
+			$cropOgImage = $this->get('cropOgImage')->toBool();
+
+			if ($cropOgImage) {
+				// Crop to 1200x630
+				return $file->thumb([
+					'width' => 1200,
+					'height' => 630,
+					'crop' => true,
+				]);
+			} else {
+				// Resize to max 1500px on the longest side
+				return $file->thumb([
+					'width' => 1500,
+					'height' => 1500,
+					'upscale' => false,
+				]);
+			}
+		}
+
+		// Return null if it's a custom URL or empty
+		return null;
+	}
+
+	/**
 	 * Get the og:image url
 	 */
 	public function ogImage(): string|null
 	{
-		$field = $this->get('ogImage');
-
-		if ($ogImage = $field->toFile()?->thumb([
-			'width' => 1200,
-			'height' => 630,
-			'crop' => true,
-		])) {
+		if ($ogImage = $this->ogImageThumb()) {
 			return $ogImage->url();
 		}
 
+		$field = $this->get('ogImage');
 		if ($field->isNotEmpty()) {
 			return $field->value();
 		}

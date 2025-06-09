@@ -6,14 +6,15 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
-    'Kirby\\ComposerInstaller\\CmsInstaller' => $vendorDir . '/getkirby/composer-installer/src/ComposerInstaller/CmsInstaller.php',
-    'Kirby\\ComposerInstaller\\Installer' => $vendorDir . '/getkirby/composer-installer/src/ComposerInstaller/Installer.php',
-    'Kirby\\ComposerInstaller\\Plugin' => $vendorDir . '/getkirby/composer-installer/src/ComposerInstaller/Plugin.php',
-    'Kirby\\ComposerInstaller\\PluginInstaller' => $vendorDir . '/getkirby/composer-installer/src/ComposerInstaller/PluginInstaller.php',
-    'tobimori\\Seo\\Meta' => $baseDir . '/classes/Meta.php',
-    'tobimori\\Seo\\SchemaSingleton' => $baseDir . '/classes/SchemaSingleton.php',
-    'tobimori\\Seo\\Sitemap\\Sitemap' => $baseDir . '/classes/Sitemap/Sitemap.php',
-    'tobimori\\Seo\\Sitemap\\SitemapIndex' => $baseDir . '/classes/Sitemap/SitemapIndex.php',
-    'tobimori\\Seo\\Sitemap\\SitemapUrl' => $baseDir . '/classes/Sitemap/SitemapUrl.php',
+	'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
+	'Kirby\\ComposerInstaller\\CmsInstaller' => $vendorDir . '/getkirby/composer-installer/src/ComposerInstaller/CmsInstaller.php',
+	'Kirby\\ComposerInstaller\\Installer' => $vendorDir . '/getkirby/composer-installer/src/ComposerInstaller/Installer.php',
+	'Kirby\\ComposerInstaller\\Plugin' => $vendorDir . '/getkirby/composer-installer/src/ComposerInstaller/Plugin.php',
+	'Kirby\\ComposerInstaller\\PluginInstaller' => $vendorDir . '/getkirby/composer-installer/src/ComposerInstaller/PluginInstaller.php',
+	'tobimori\\Seo\\Meta' => $baseDir . '/classes/Meta.php',
+	'tobimori\\Seo\\SchemaSingleton' => $baseDir . '/classes/SchemaSingleton.php',
+	'tobimori\\Seo\\Seo' => $baseDir . '/classes/Seo.php',
+	'tobimori\\Seo\\Sitemap\\Sitemap' => $baseDir . '/classes/Sitemap/Sitemap.php',
+	'tobimori\\Seo\\Sitemap\\SitemapIndex' => $baseDir . '/classes/Sitemap/SitemapIndex.php',
+	'tobimori\\Seo\\Sitemap\\SitemapUrl' => $baseDir . '/classes/Sitemap/SitemapUrl.php',
 );

@@ -6,48 +6,49 @@ namespace Composer\Autoload;
 
 class ComposerStaticInit3e4bc37d480117d497c8333636c62d44
 {
-    public static $prefixLengthsPsr4 = array (
-        't' => 
-        array (
-            'tobimori\\Seo\\' => 13,
-        ),
-        'K' => 
-        array (
-            'Kirby\\' => 6,
-        ),
-    );
+	public static $prefixLengthsPsr4 = array(
+		't' =>
+		array(
+			'tobimori\\Seo\\' => 13,
+		),
+		'K' =>
+		array(
+			'Kirby\\' => 6,
+		),
+	);
 
-    public static $prefixDirsPsr4 = array (
-        'tobimori\\Seo\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/classes',
-        ),
-        'Kirby\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/getkirby/composer-installer/src',
-        ),
-    );
+	public static $prefixDirsPsr4 = array(
+		'tobimori\\Seo\\' =>
+		array(
+			0 => __DIR__ . '/../..' . '/classes',
+		),
+		'Kirby\\' =>
+		array(
+			0 => __DIR__ . '/..' . '/getkirby/composer-installer/src',
+		),
+	);
 
-    public static $classMap = array (
-        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
-        'Kirby\\ComposerInstaller\\CmsInstaller' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/CmsInstaller.php',
-        'Kirby\\ComposerInstaller\\Installer' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/Installer.php',
-        'Kirby\\ComposerInstaller\\Plugin' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/Plugin.php',
-        'Kirby\\ComposerInstaller\\PluginInstaller' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/PluginInstaller.php',
-        'tobimori\\Seo\\Meta' => __DIR__ . '/../..' . '/classes/Meta.php',
-        'tobimori\\Seo\\SchemaSingleton' => __DIR__ . '/../..' . '/classes/SchemaSingleton.php',
-        'tobimori\\Seo\\Sitemap\\Sitemap' => __DIR__ . '/../..' . '/classes/Sitemap/Sitemap.php',
-        'tobimori\\Seo\\Sitemap\\SitemapIndex' => __DIR__ . '/../..' . '/classes/Sitemap/SitemapIndex.php',
-        'tobimori\\Seo\\Sitemap\\SitemapUrl' => __DIR__ . '/../..' . '/classes/Sitemap/SitemapUrl.php',
-    );
+	public static $classMap = array(
+		'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+		'Kirby\\ComposerInstaller\\CmsInstaller' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/CmsInstaller.php',
+		'Kirby\\ComposerInstaller\\Installer' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/Installer.php',
+		'Kirby\\ComposerInstaller\\Plugin' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/Plugin.php',
+		'Kirby\\ComposerInstaller\\PluginInstaller' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/PluginInstaller.php',
+		'tobimori\\Seo\\Meta' => __DIR__ . '/../..' . '/classes/Meta.php',
+		'tobimori\\Seo\\SchemaSingleton' => __DIR__ . '/../..' . '/classes/SchemaSingleton.php',
+		'tobimori\\Seo\\Seo' => __DIR__ . '/../..' . '/classes/Seo.php',
+		'tobimori\\Seo\\Sitemap\\Sitemap' => __DIR__ . '/../..' . '/classes/Sitemap/Sitemap.php',
+		'tobimori\\Seo\\Sitemap\\SitemapIndex' => __DIR__ . '/../..' . '/classes/Sitemap/SitemapIndex.php',
+		'tobimori\\Seo\\Sitemap\\SitemapUrl' => __DIR__ . '/../..' . '/classes/Sitemap/SitemapUrl.php',
+	);
 
-    public static function getInitializer(ClassLoader $loader)
-    {
-        return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit3e4bc37d480117d497c8333636c62d44::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit3e4bc37d480117d497c8333636c62d44::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit3e4bc37d480117d497c8333636c62d44::$classMap;
+	public static function getInitializer(ClassLoader $loader)
+	{
+		return \Closure::bind(function () use ($loader) {
+			$loader->prefixLengthsPsr4 = ComposerStaticInit3e4bc37d480117d497c8333636c62d44::$prefixLengthsPsr4;
+			$loader->prefixDirsPsr4 = ComposerStaticInit3e4bc37d480117d497c8333636c62d44::$prefixDirsPsr4;
+			$loader->classMap = ComposerStaticInit3e4bc37d480117d497c8333636c62d44::$classMap;
 
-        }, null, ClassLoader::class);
-    }
+		}, null, ClassLoader::class);
+	}
 }
