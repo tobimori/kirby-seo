@@ -4,13 +4,10 @@
 
 use Kirby\Cms\App;
 use Kirby\Data\Yaml;
-use Kirby\Filesystem\Dir;
-use Kirby\Filesystem\F;
-use Kirby\Toolkit\A;
 use Spatie\SchemaOrg\Schema;
 
 if (
-	version_compare(App::version() ?? '0.0.0', '5.0.0-beta.1', '<') === true ||
+	version_compare(App::version() ?? '0.0.0', '5.0.0-rc.1', '<') === true ||
 	version_compare(App::version() ?? '0.0.0', '6.0.0', '>') === true
 ) {
 	throw new Exception('Kirby SEO requires Kirby 5');
@@ -24,20 +21,19 @@ App::plugin('tobimori/seo', [
 	'pageMethods' => require __DIR__ . '/config/pageMethods.php',
 	'hooks' => require __DIR__ . '/config/hooks.php',
 	'routes' => require __DIR__ . '/config/routes.php',
-	// load all commands automatically
-	'commands' => A::keyBy(A::map(
-		Dir::read(__DIR__ . '/config/commands'),
-		fn($file) => A::merge([
-			'id' => 'seo:' . F::name($file),
-		], require __DIR__ . '/config/commands/' . $file)
-	), 'id'),
-	// get all files from /translations and register them as language files
-	'translations' => A::keyBy(A::map(
-		Dir::read(__DIR__ . '/translations'),
-		fn($file) => A::merge([
-			'lang' => F::name($file),
-		], Yaml::decode(F::read(__DIR__ . '/translations/' . $file)))
-	), 'lang'),
+	'commands' => [
+		'seo:hello' => require __DIR__ . '/config/commands/hello.php',
+	],
+	'translations' => [
+		'cs' => Yaml::read(__DIR__ . '/translations/cs.yml'),
+		'de' => Yaml::read(__DIR__ . '/translations/de.yml'),
+		'en' => Yaml::read(__DIR__ . '/translations/en.yml'),
+		'fr' => Yaml::read(__DIR__ . '/translations/fr.yml'),
+		'nl' => Yaml::read(__DIR__ . '/translations/nl.yml'),
+		'pt_PT' => Yaml::read(__DIR__ . '/translations/pt_PT.yml'),
+		'sv_SE' => Yaml::read(__DIR__ . '/translations/sv_SE.yml'),
+		'tr' => Yaml::read(__DIR__ . '/translations/tr.yml'),
+	],
 	'snippets' => [
 		'seo/schemas' => __DIR__ . '/snippets/schemas.php',
 		'seo/head' => __DIR__ . '/snippets/head.php',

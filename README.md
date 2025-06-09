@@ -23,8 +23,8 @@
 
 Kirby SEO 2.0 is not free software. In order to run it on a public server, you'll have to purchase a valid Kirby license & a valid SEO license.
 
-Copyright 2023-2024 © Tobias Möritz - Love & Kindness GmbH
+Copyright 2023-2025 © Tobias Möritz - Love & Kindness GmbH
 
 ---
 
-Kirby SEO 1.0 is licensed unter the MIT license.
+Kirby SEO 1.0 is licensed under the MIT license.
