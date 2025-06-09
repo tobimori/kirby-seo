@@ -11,7 +11,7 @@ return [
 			'options' => function () {
 				return A::map(option('tobimori.seo.previews'), fn($item) => [
 					'value' => $item,
-					'text' => t("seo.preview.{$item}")
+					'text' => t("seo.sections.preview.{$item}")
 				]);
 			},
 			'meta' => function () {
