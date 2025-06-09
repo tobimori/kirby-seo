@@ -18,13 +18,13 @@ return [
 				$model = $this->model();
 
 				if ($model instanceof Site || $model instanceof Page) {
-					// Clone the model with the content from the changes version
+					// clone the model with the content from the changes version
 					$changesVersion = $model->version('changes');
 					if ($changesVersion->exists('current')) {
 						$model = $model->clone(['content' => $changesVersion->content()->toArray()]);
 					}
 
-					// For display purposes, if it's a site, show the home page URL
+					// if it's a site, show the home page URL
 					$displayModel = $model instanceof Site ? $model->homePage() : $model;
 					$meta = $model->metadata();
 
@@ -49,18 +49,16 @@ return [
 		'mixins' => ['headline'],
 		'computed' => [
 			'data' => function () {
-				// Get the parent model
 				$model = $this->model();
-
-				// This section only works for pages (not site)
 				if (!($model instanceof Page)) {
+					// only works for pages (not site, files, etc.)
 					return [];
 				}
 
 				// In Kirby 5, use the changes version if it exists
+				// clone the model with the content from the changes version
 				$changesVersion = $model->version('changes');
 				if ($changesVersion->exists('current')) {
-					// Clone the page with the content from the changes version
 					$model = $model->clone(['content' => $changesVersion->content()->toArray()]);
 				}
 

@@ -45,6 +45,8 @@ return [
 		'instagram' => 'https://instagram.com/my-company',
 		'youtube' => 'https://youtube.com/channel/my-company',
 		'linkedin' => 'https://linkedin.com/company/my-company',
+		'bluesky' => 'https://bsky.app/profile/example.bsky.social',
+		'mastodon' => 'https://mastodon.social/@example'
 	],
 	'previews' => [
 		'google',
@@ -80,6 +82,6 @@ return [
 		'trailingSlash' => false, // whether to add trailing slashes to canonical URLs (except for files)
 	],
 	'generateSchema' => true, // whether to generate default schema.org data
-	'lang' => LC_ALL, // default language, used for single-language sites
+	'lang' => 'en_US', // default language, used for single-language sites
 	'dateFormat' => null, // custom date format
 ];

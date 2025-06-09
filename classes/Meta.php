@@ -55,29 +55,29 @@ class Meta
 			[
 				'title' => 'metaTitle',
 				'description' => 'metaDescription',
-				'date' => fn () => $this->page->modified($this->dateFormat()),
+				'date' => fn() => $this->page->modified($this->dateFormat()),
 				'og:title' => 'ogTitle',
 				'og:description' => 'ogDescription',
 				'og:site_name' => 'ogSiteName',
 				'og:image' => 'ogImage',
-				'og:image:width' => fn () => $this->ogImage() ? $this->get('ogImage')->toFile()?->width() : null,
-				'og:image:height' => fn () => $this->ogImage() ? $this->get('ogImage')->toFile()?->height() : null,
-				'og:image:alt' => fn () => $this->get('ogImage')->toFile()?->alt(),
+				'og:image:width' => fn() => $this->ogImage() ? $this->get('ogImage')->toFile()?->width() : null,
+				'og:image:height' => fn() => $this->ogImage() ? $this->get('ogImage')->toFile()?->height() : null,
+				'og:image:alt' => fn() => $this->get('ogImage')->toFile()?->alt(),
 				'og:type' => 'ogType',
 			];
 
 
 		// Robots
-		if ($robotsActive = option('tobimori.seo.robots.active')) {
-			$meta['robots'] = fn () => $this->robots();
+		if ($robotsActive = Seo::option('robots.active')) {
+			$meta['robots'] = fn() => $this->robots();
 		}
 
 		// only add canonical and alternate tags if the page is indexable
 		// we have to resolve this lazily (using a callable) to avoid an infinite loop
-		$allowsIndexFn = fn () => !$robotsActive || !Str::contains($this->robots(), 'noindex');
+		$allowsIndexFn = fn() => !$robotsActive || !Str::contains($this->robots(), 'noindex');
 
 		// canonical
-		$canonicalFn = fn () => $allowsIndexFn() ? $this->canonicalUrl() : null;
+		$canonicalFn = fn() => $allowsIndexFn() ? $this->canonicalUrl() : null;
 		$meta['canonical'] = $canonicalFn;
 		$meta['og:url'] = $canonicalFn;
 
@@ -85,37 +85,30 @@ class Meta
 		if (kirby()->languages()->count() > 1 && kirby()->language() !== null) {
 			foreach (kirby()->languages() as $lang) {
 				// only add alternate tags if the page is indexable
-				$meta['alternate'][] = fn () => $allowsIndexFn() ? [
+				$meta['alternate'][] = fn() => $allowsIndexFn() ? [
 					'hreflang' => $lang->code(),
 					'href' => $this->page->url($lang->code()),
 				] : null;
 
 				if ($lang !== kirby()->language()) {
-					$meta['og:locale:alternate'][] = fn () => $lang->code();
+					$meta['og:locale:alternate'][] = fn() => $lang->code();
 				}
 			}
 
 			// only add alternate tags if the page is indexable
-			$meta['alternate'][] = fn () => $allowsIndexFn() ? [
+			$meta['alternate'][] = fn() => $allowsIndexFn() ? [
 				'hreflang' => 'x-default',
 				'href' => $this->page->url(kirby()->language()->code()),
 			] : null;
-			$meta['og:locale'] = fn () => kirby()->language()->locale(LC_ALL);
+			$meta['og:locale'] = fn() => kirby()->language()->locale(LC_ALL);
 		} else {
-			$meta['og:locale'] = fn () => $this->locale(LC_ALL);
+			$meta['og:locale'] = fn() => $this->locale(LC_ALL);
 		}
 
-		// Twitter tags "opt-in" - TODO: wip
-		if (option('tobimori.seo.twitter', true)) {
-			$meta = array_merge($meta, [
-				'twitter:card' => 'twitterCardType',
-				'twitter:title' => 'ogTitle',
-				'twitter:description' => 'ogDescription',
-				'twitter:image' => 'ogImage',
-				'twitter:site' => 'twitterSite',
-				'twitter:creator' => 'twitterCreator',
-			]);
-		}
+		$meta['me'] = fn() => (
+			($socialMedia = $this->site('socialMediaAccounts')?->toObject())
+			&& ($mastodon = $socialMedia->mastodon()->value())
+		) ? $mastodon : null;
 
 		// This array will be normalized for use in the snippet in $this->snippetData()
 		return $this->metaArray = $meta;
@@ -139,6 +132,7 @@ class Meta
 				'content' => 'href',
 			],
 			'tags' => [
+				'me',
 				'canonical',
 				'alternate',
 			]
@@ -293,7 +287,7 @@ class Meta
 	 */
 	public function get(string $key, array $exclude = []): Field
 	{
-		$cascade = option('tobimori.seo.cascade');
+		$cascade = Seo::option('cascade');
 		if (count(array_intersect(get_class_methods($this), $cascade)) !== count($cascade)) {
 			throw new InvalidArgumentException('[kirby-seo] Invalid cascade method in config. Please check your options for `tobimori.seo.cascade`.');
 		}
@@ -323,7 +317,7 @@ class Meta
 	protected function fields(string $key): Field|null
 	{
 		if (($field = $this->page->content($this->lang)->get($key))) {
-			if (Str::contains($key, 'robots') && !option('tobimori.seo.robots.pageSettings')) {
+			if (Str::contains($key, 'robots') && !Seo::option('robots.pageSettings')) {
 				return null;
 			}
 
@@ -366,7 +360,7 @@ class Meta
 	{
 		if (array_key_exists($key, self::FALLBACK_MAP)) {
 			$fallback = self::FALLBACK_MAP[$key];
-			$cascade = option('tobimori.seo.cascade');
+			$cascade = Seo::option('cascade');
 
 			foreach (array_intersect($cascade, self::FALLBACK_CASCADE) as $method) {
 				if ($field = $this->$method($fallback)) {
@@ -418,7 +412,7 @@ class Meta
 				if ($val === null) {
 					// Remove the key from the consumed array, so it doesn't get filtered out
 					// (we can assume the entry is a custom meta tag that uses different attributes)
-					$this->consumed = array_filter($this->consumed, fn ($item) => $item !== $key);
+					$this->consumed = array_filter($this->consumed, fn($item) => $item !== $key);
 					return null;
 				}
 			}
@@ -469,11 +463,7 @@ class Meta
 	 */
 	protected function options(string $key): Field|null
 	{
-		if ($option = option("tobimori.seo.default.{$key}")) {
-			if (is_callable($option)) {
-				$option = $option($this->page);
-			}
-
+		if ($option = Seo::option("default.{$key}", args: [$this->page])) {
 			if (is_a($option, 'Kirby\Content\Field')) {
 				return $option;
 			}
@@ -586,11 +576,7 @@ class Meta
 	 */
 	public function dateFormat(): string
 	{
-		if ($custom = option('tobimori.seo.dateFormat')) {
-			if (is_callable($custom)) {
-				return $custom($this->page);
-			}
-
+		if ($custom = Seo::option('dateFormat')) {
 			return $custom;
 		}
 
@@ -611,7 +597,7 @@ class Meta
 	public function robots()
 	{
 		$robots = [];
-		foreach (option('tobimori.seo.robots.types') as $type) {
+		foreach (Seo::option('robots.types') as $type) {
 			if (!$this->get('robots' . Str::ucfirst($type))->toBool()) {
 				$robots[] = 'no' . Str::lower($type);
 			}
