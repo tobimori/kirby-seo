@@ -1,8 +1,9 @@
 <?php
 
 use Kirby\Toolkit\A;
+use tobimori\Seo\Seo;
 
-if ($content = option('tobimori.seo.robots.content')) {
+if ($content = Seo::option('robots.content')) {
 	if (is_callable($content)) {
 		$content = $content();
 	}
@@ -27,10 +28,7 @@ if ($content = option('tobimori.seo.robots.content')) {
 	// output default
 	echo "User-agent: *\n";
 
-	$index = option('tobimori.seo.robots.index');
-	if (is_callable($index)) {
-		$index = $index();
-	}
+	$index = Seo::option('robots.index');
 
 	if ($index) {
 		echo 'Allow: /';
@@ -40,15 +38,11 @@ if ($content = option('tobimori.seo.robots.content')) {
 	}
 }
 
-if (($sitemap = option('tobimori.seo.robots.sitemap')) || ($sitemapModule = option('tobimori.seo.sitemap.active'))) {
-	// Allow closure to be used
-	if (is_callable($sitemap)) {
-		$sitemap = $sitemap();
-	}
+if (($sitemap = Seo::option('robots.sitemap')) || ($sitemapModule = Seo::option('sitemap.active'))) {
 
 	// Use default sitemap if none is set
 	if (!$sitemap && $sitemapModule) {
-		$sitemap = site()->canonicalFor('/sitemap.xml');
+		$sitemap = site()->canonicalFor('/sitemap.xml', true);
 	}
 
 	// Check again, so falsy values can't be used

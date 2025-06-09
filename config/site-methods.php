@@ -9,8 +9,18 @@ return [
 	'schema' => fn($type) => SchemaSingleton::getInstance($type),
 	'schemas' => fn() => SchemaSingleton::getInstances(),
 	'lang' => fn() => Str::replace(Seo::option('default.lang')($this->homePage()), '_', '-'),
-	'canonicalFor' => function (string $url) {
-		$base = Seo::option('canonical.base', Seo::option('canonicalBase', $this->url()));
+	'canonicalFor' => function (string $url, bool $useRootUrl = false) {
+		// Determine the base URL
+		$base = Seo::option('canonical.base', Seo::option('canonicalBase'));
+		if (!$base) {
+			// If useRootUrl is true or this is a multilang site requesting root URL, use kirby()->url()
+			if ($useRootUrl && kirby()->multilang()) {
+				$base = kirby()->url();
+			} else {
+				$base = $this->url();
+			}
+		}
+		
 		if (Str::startsWith($url, $base)) {
 			$canonicalUrl = $url;
 		} else {
