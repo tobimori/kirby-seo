@@ -12,6 +12,7 @@ return array(
 	'Kirby\\ComposerInstaller\\Plugin' => $vendorDir . '/getkirby/composer-installer/src/ComposerInstaller/Plugin.php',
 	'Kirby\\ComposerInstaller\\PluginInstaller' => $vendorDir . '/getkirby/composer-installer/src/ComposerInstaller/PluginInstaller.php',
 	'tobimori\\Seo\\Meta' => $baseDir . '/classes/Meta.php',
+	'tobimori\\Seo\\RobotsViewButton' => $baseDir . '/classes/RobotsViewButton.php',
 	'tobimori\\Seo\\SchemaSingleton' => $baseDir . '/classes/SchemaSingleton.php',
 	'tobimori\\Seo\\Seo' => $baseDir . '/classes/Seo.php',
 	'tobimori\\Seo\\Sitemap\\Sitemap' => $baseDir . '/classes/Sitemap/Sitemap.php',

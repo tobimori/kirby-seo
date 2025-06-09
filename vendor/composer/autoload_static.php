@@ -35,6 +35,7 @@ class ComposerStaticInit3e4bc37d480117d497c8333636c62d44
 		'Kirby\\ComposerInstaller\\Plugin' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/Plugin.php',
 		'Kirby\\ComposerInstaller\\PluginInstaller' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/PluginInstaller.php',
 		'tobimori\\Seo\\Meta' => __DIR__ . '/../..' . '/classes/Meta.php',
+		'tobimori\\Seo\\RobotsViewButton' => __DIR__ . '/../..' . '/classes/RobotsViewButton.php',
 		'tobimori\\Seo\\SchemaSingleton' => __DIR__ . '/../..' . '/classes/SchemaSingleton.php',
 		'tobimori\\Seo\\Seo' => __DIR__ . '/../..' . '/classes/Seo.php',
 		'tobimori\\Seo\\Sitemap\\Sitemap' => __DIR__ . '/../..' . '/classes/Sitemap/Sitemap.php',

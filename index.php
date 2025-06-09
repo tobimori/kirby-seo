@@ -19,7 +19,7 @@ if (
 App::plugin('tobimori/seo', [
 	'options' => require __DIR__ . '/config/options.php',
 	'sections' => require __DIR__ . '/config/sections.php',
-	'api' =>  require __DIR__ . '/config/api.php',
+	'areas' => require __DIR__ . '/config/areas.php',
 	'siteMethods' => require __DIR__ . '/config/site-methods.php',
 	'pageMethods' => require __DIR__ . '/config/page-methods.php',
 	'hooks' => require __DIR__ . '/config/hooks.php',
