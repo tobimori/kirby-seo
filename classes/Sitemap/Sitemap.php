@@ -71,7 +71,11 @@ class Sitemap extends Collection
 
 		$root = $doc->createElementNS('http://www.sitemaps.org/schemas/sitemap/0.9', 'urlset');
 		$root->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xhtml', 'http://www.w3.org/1999/xhtml');
-		$root->setAttribute('seo-version', App::plugin('tobimori/seo')->version());
+
+		// version can be null when installing branches during development
+		if ($version = App::plugin('tobimori/seo')->version()) {
+			$root->setAttribute('seo-version', $version);
+		}
 
 		foreach ($this as $url) {
 			$root->appendChild($url->toDOMNode($doc));

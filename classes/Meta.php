@@ -121,6 +121,7 @@ class Meta
 	public const TAG_TYPE_MAP = [
 		[
 			'tag' => 'title',
+			'priority' => true,
 			'tags' => [
 				'title'
 			]
@@ -221,6 +222,7 @@ class Meta
 					'tag' => $tag['tag'],
 					'attributes' => $value,
 					'content' => null,
+					'priority' => $tag['priority'] ?? false,
 				];
 				continue;
 			}
@@ -234,6 +236,7 @@ class Meta
 					$tag['attributes']['content'] => $value,
 				] : null,
 				'content' => !isset($tag['attributes']) ? $value : null,
+				'priority' => $tag['priority'] ?? false,
 			];
 		}
 
