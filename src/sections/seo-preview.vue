@@ -21,7 +21,9 @@ const { load } = useSection()
 const meta = ref(null)
 const options = ref([])
 
-const type = ref(window.localStorage.getItem("kSEOPreviewType") ?? options.value[0].id)
+const type = ref(
+	window.localStorage.getItem("kSEOPreviewType") ?? options.value[0].id
+)
 watch(type, (newType) => {
 	window.localStorage.setItem("kSEOPreviewType", newType)
 })

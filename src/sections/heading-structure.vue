@@ -18,7 +18,9 @@
 						itemInvalid(item, index) ? 'is-invalid' : ''
 					}`"
 				>
-					<span class="k-heading-structure__item__level">H{{ item.level }}</span>
+					<span class="k-heading-structure__item__level">
+						H{{ item.level }}
+					</span>
 					<span class="k-heading-structure__item__text">{{ item.text }}</span>
 				</li>
 			</ol>
