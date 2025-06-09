@@ -19,7 +19,7 @@ return [
 		'ogType' => 'website',
 		'ogDescription' => fn(Page $page) => $page->metadata()->metaDescription(),
 		'cropOgImage' => true,
-		'lang' => fn(Page $page) => $page->kirby()->language()?->locale(LC_ALL) ?? $page->kirby()->option('tobimori.seo.lang', 'en_US'),
+		'locale' => fn(Page $page) => $page->kirby()->language()?->locale(LC_ALL) ?? $page->kirby()->option('tobimori.seo.locale', 'en_US'),
 		// default for robots: noIndex if global index configuration is set, otherwise fall back to page status
 		'robotsIndex' => function (Page $page) {
 			$index = $page->kirby()->option('tobimori.seo.robots.index');
@@ -65,7 +65,7 @@ return [
 	'sitemap' => [
 		'active' => true,
 		'redirect' => true, // redirect /sitemap to /sitemap.xml
-		'lang' => 'en',
+		'locale' => 'en',
 		'generator' => require __DIR__ . '/options/sitemap.php',
 		'changefreq' => 'weekly',
 		'groupByTemplate' => false,
@@ -81,6 +81,6 @@ return [
 		'trailingSlash' => false, // whether to add trailing slashes to canonical URLs (except for files)
 	],
 	'generateSchema' => true, // whether to generate default schema.org data
-	'lang' => 'en_US', // default language, used for single-language sites
+	'locale' => 'en_US', // default locale, used for single-language sites
 	'dateFormat' => null, // custom date format
 ];

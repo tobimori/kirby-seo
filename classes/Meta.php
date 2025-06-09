@@ -8,6 +8,7 @@ use Kirby\Content\Field;
 use Kirby\Exception\InvalidArgumentException;
 use Kirby\Toolkit\A;
 use Kirby\Toolkit\Str;
+use Kirby\Cms\Language;
 
 /**
  * The Meta class is responsible for handling the meta data & cascading
@@ -20,7 +21,7 @@ class Meta
 	public const DEFAULT_VALUES = ['[]', 'default'];
 
 	protected Page $page;
-	protected ?string $lang;
+	protected ?Language $lang;
 	protected array $consumed = [];
 	protected array $metaDefaults = [];
 	protected array $metaArray = [];
@@ -28,14 +29,55 @@ class Meta
 	/**
 	 * Creates a new Meta instance
 	 */
-	public function __construct(Page $page, ?string $lang = null)
+	public function __construct(Page $page, ?Language $lang = null)
 	{
 		$this->page = $page;
-		$this->lang = $lang;
+		$this->lang = $lang ?? kirby()->language();
 
 		if (method_exists($this->page, 'metaDefaults')) {
-			$this->metaDefaults = $this->page->metaDefaults($this->lang);
+			$this->metaDefaults = $this->page->metaDefaults($this->lang?->code());
 		}
+	}
+
+	/**
+	 * Normalize a locale string to use a specific separator
+	 *
+	 * @param string $locale The locale string (e.g., 'en_US.UTF-8', 'en-US', 'en_US')
+	 * @param string $separator The separator to use ('-' for BCP47/hreflang, '_' for Open Graph)
+	 * @return string The normalized locale (e.g., 'en-US' or 'en_US')
+	 */
+	public static function normalizeLocale(string $locale, string $separator = '-'): string
+	{
+		// Remove encoding suffix if present (e.g., '.UTF-8')
+		$locale = Str::before($locale, '.');
+		
+		// Replace both underscores and hyphens with the desired separator
+		$locale = Str::replace($locale, '_', $separator);
+		$locale = Str::replace($locale, '-', $separator);
+		
+		return $locale;
+	}
+
+	/**
+	 * Convert a Language to BCP 47 language tag format for hreflang attributes
+	 *
+	 * @param Language $language
+	 * @return string The BCP 47 compliant language tag (e.g., 'en-US', 'de-DE')
+	 */
+	public static function toBCP47(Language $language): string
+	{
+		return self::normalizeLocale($language->locale(LC_ALL), '-');
+	}
+
+	/**
+	 * Convert a Language to Open Graph locale format
+	 *
+	 * @param Language $language
+	 * @return string The Open Graph locale format (e.g., 'en_US', 'de_DE')
+	 */
+	public static function toOpenGraphLocale(Language $language): string
+	{
+		return self::normalizeLocale($language->locale(LC_ALL), '_');
 	}
 
 	/**
@@ -47,10 +89,8 @@ class Meta
 			return $this->metaArray;
 		}
 
-		/**
-		 * We have to specify field names and resolve them later, so we can use this
-		 * function to resolve meta tags from field names in the programmatic function
-		 */
+		// We have to specify field names and resolve them later, so we can use this
+		// function to resolve meta tags from field names in the programmatic function
 		$meta =
 			[
 				'title' => 'metaTitle',
@@ -82,27 +122,40 @@ class Meta
 		$meta['og:url'] = $canonicalFn;
 
 		// Multi-lang alternate tags
-		if (kirby()->languages()->count() > 1 && kirby()->language() !== null) {
+		if (kirby()->languages()->count() > 1 && $this->lang !== null) {
 			foreach (kirby()->languages() as $lang) {
+				// only if this language is translated for this page and exists
+				// note: can be checked now, does not cause infinite loop
+				if (!$this->page->translation($lang->code())->exists())
+					continue;
+
 				// only add alternate tags if the page is indexable
-				$meta['alternate'][] = fn() => $allowsIndexFn() ? [
-					'hreflang' => $lang->code(),
+				$meta['alternate'][] = fn() => $allowsIndexFn()  ? [
+
+					'hreflang' => Meta::toBCP47($lang),
 					'href' => $this->page->url($lang->code()),
+					'rel' => 'alternate',
 				] : null;
 
-				if ($lang !== kirby()->language()) {
-					$meta['og:locale:alternate'][] = fn() => $lang->code();
+				if ($lang !== $this->lang) {
+					$meta['og:locale:alternate'][] = fn() => Meta::toOpenGraphLocale($lang);
 				}
 			}
 
 			// only add alternate tags if the page is indexable
 			$meta['alternate'][] = fn() => $allowsIndexFn() ? [
 				'hreflang' => 'x-default',
-				'href' => $this->page->url(kirby()->language()->code()),
+				// use 'index' to get the x-default without language
+				// https://forum.getkirby.com/t/multilanguage-how-to-get-the-siteurl-without-the-language-slug/26376/2?u=leo_portatour
+				// Google: "fallback page for unmatched languages, especially on language/country selectors or auto-redirecting home pages."
+				// https://developers.google.com/search/docs/specialty/international/localized-versions#all-method-guidelines
+				'href' => $this->page->url('index'),
+				'rel' => 'alternate',
 			] : null;
-			$meta['og:locale'] = fn() => kirby()->language()->locale(LC_ALL);
+			$meta['og:locale'] = fn() => Meta::toOpenGraphLocale($this->lang);
 		} else {
-			$meta['og:locale'] = fn() => $this->locale(LC_ALL);
+			// Single-language site: get locale from cascade (will fallback to 'locale' option)
+			$meta['og:locale'] = fn() => Meta::normalizeLocale($this->get('locale')->value(), '_');
 		}
 
 		$meta['me'] = fn() => (
@@ -165,7 +218,7 @@ class Meta
 			if (is_numeric($name)) {
 				// but we still check if the array is valid
 				if (!is_array($value) || count(array_intersect(['tag', 'content', 'attributes'], array_keys($value))) !== count($value)) {
-					throw new InvalidArgumentException("[kirby-seo] Invalid array structure found in programmatic content for page {$this->slug()}. Please check your metaDefaults method for template {$this->template()->name()}.");
+					throw new InvalidArgumentException("[Kirby SEO] Invalid array structure found in programmatic content for page {$this->slug()}. Please check your metaDefaults method for template {$this->template()->name()}.");
 				}
 
 				$tags[] = $value;
@@ -292,7 +345,7 @@ class Meta
 	{
 		$cascade = Seo::option('cascade');
 		if (count(array_intersect(get_class_methods($this), $cascade)) !== count($cascade)) {
-			throw new InvalidArgumentException('[kirby-seo] Invalid cascade method in config. Please check your options for `tobimori.seo.cascade`.');
+			throw new InvalidArgumentException('[Kirby SEO] Invalid cascade method in config. Please check your options for `tobimori.seo.cascade`.');
 		}
 
 		// Track consumed keys, so we don't output legacy field values
@@ -319,7 +372,7 @@ class Meta
 	 */
 	protected function fields(string $key): Field|null
 	{
-		if (($field = $this->page->content($this->lang)->get($key))) {
+		if (($field = $this->page->content($this->lang?->code())->get($key))) {
 			if (Str::contains($key, 'robots') && !Seo::option('robots.pageSettings')) {
 				return null;
 			}
@@ -453,7 +506,7 @@ class Meta
 	 */
 	protected function site(string $key): Field|null
 	{
-		if (($site = $this->page->site()->content($this->lang)->get($key)) && ($site->isNotEmpty() && !A::has(self::DEFAULT_VALUES, $site->value))) {
+		if (($site = $this->page->site()->content($this->lang?->code())->get($key)) && ($site->isNotEmpty() && !A::has(self::DEFAULT_VALUES, $site->value))) {
 			return $site;
 		}
 

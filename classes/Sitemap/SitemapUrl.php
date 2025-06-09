@@ -13,9 +13,7 @@ class SitemapUrl
 	protected string $priority;
 	protected array $alternates = [];
 
-	public function __construct(protected string $loc)
-	{
-	}
+	public function __construct(protected string $loc) {}
 
 	public function loc(?string $url = null): SitemapUrl|string
 	{
@@ -66,7 +64,7 @@ class SitemapUrl
 		foreach ($alternates as $alternate) {
 			foreach (['href', 'hreflang'] as $key) {
 				if (!array_key_exists($key, $alternate)) {
-					new Exception("[kirby-seo] The alternate link to '{$this->loc()} is missing the '{$key}' attribute");
+					new Exception("[Kirby SEO] The alternate link to '{$this->loc()} is missing the '{$key}' attribute");
 				}
 			}
 		}

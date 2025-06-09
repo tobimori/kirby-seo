@@ -2,13 +2,14 @@
 
 use Kirby\Cms\Page;
 use Kirby\Http\Response;
+use tobimori\Seo\Seo;
 use tobimori\Seo\Sitemap\SitemapIndex;
 
 return [
 	[
 		'pattern' => 'robots.txt',
 		'action' => function () {
-			if (option('tobimori.seo.robots.active', true)) {
+			if (Seo::option('robots.active')) {
 				$content = snippet('seo/robots.txt', [], true);
 				return new Response($content, 'text/plain', 200);
 			}
@@ -19,7 +20,7 @@ return [
 	[
 		'pattern' => 'sitemap',
 		'action' => function () {
-			if (!option('tobimori.seo.sitemap.redirect', true) || !option('tobimori.seo.sitemap.active', true)) {
+			if (!Seo::option('sitemap.redirect') || !Seo::option('sitemap.active')) {
 				$this->next();
 			}
 
@@ -29,16 +30,13 @@ return [
 	[
 		'pattern' => 'sitemap.xsl',
 		'action' => function () {
-			if (!option('tobimori.seo.sitemap.active', true)) {
+			if (!Seo::option('sitemap.active')) {
 				$this->next();
 			}
 
 			kirby()->response()->type('text/xsl');
 
-			$lang = option('tobimori.seo.sitemap.lang', 'en');
-			if (is_callable($lang)) {
-				$lang = $lang();
-			}
+			$lang = Seo::option('sitemap.locale', 'en');
 			kirby()->setCurrentTranslation($lang);
 
 			return Page::factory([
@@ -54,7 +52,7 @@ return [
 	[
 		'pattern' => 'sitemap.xml',
 		'action' => function () {
-			if (!option('tobimori.seo.sitemap.active', true)) {
+			if (!Seo::option('sitemap.active', true)) {
 				$this->next();
 			}
 
@@ -74,7 +72,7 @@ return [
 	[
 		'pattern' => 'sitemap-(:any).xml',
 		'action' => function (string $index) {
-			if (!option('tobimori.seo.sitemap.active', true)) {
+			if (!Seo::option('sitemap.active', true)) {
 				$this->next();
 			}
 

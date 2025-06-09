@@ -2,6 +2,7 @@
 
 use Kirby\Toolkit\Obj;
 use tobimori\Seo\Sitemap\SitemapIndex;
+use tobimori\Seo\Meta;
 
 return function (SitemapIndex $sitemap) {
 	$exclude = option('tobimori.seo.sitemap.excludeTemplates', []);
@@ -25,12 +26,31 @@ return function (SitemapIndex $sitemap) {
 				->priority(is_callable($priority = option('tobimori.seo.sitemap.priority')) ? $priority($page) : $priority);
 
 			if (kirby()->languages()->count() > 1 && kirby()->language() !== null) {
-				$url->alternates(
-					kirby()->languages()->map(fn ($language) => new Obj([
-						'hreflang' => $language->code() === kirby()->language()->code() ? 'x-default' : $language->code(),
-						'href' => $page->url($language->code()),
-					]))->toArray()
-				);
+				$alternates = [];
+				foreach (kirby()->languages() as $language) {
+					// only if this language is translated for this page and exists
+					if ($page->translation($language->code())->exists()) {
+						/*
+						 * Specification: "lists every alternate version of the page, including itself."
+						 * https://developers.google.com/search/docs/specialty/international/localized-versions#sitemap
+						 */						
+						$alternates []=
+						[
+							'hreflang' => Meta::toBCP47($language),
+							'href' => $page->url($language->code()),
+						];
+					}
+				}
+				
+				// add x-default
+				$alternates []=
+				[
+					'hreflang' => 'x-default',
+					// see Meta->metaArray() for documentation why 'index'
+					'href' => $page->url('index'),
+				];
+				
+				$url->alternates($alternates);
 			}
 		}
 	}

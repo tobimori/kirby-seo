@@ -26,7 +26,7 @@ checksums:
     fields.robots.imageindex.help: 25e6149a368dfd54bfaa5b6fe5b9a742
     fields.robots.snippet.label: 212557d85735ea42d0a7eebd9fd4b4a8
     fields.robots.snippet.help: d0628db04b212d12b2d448a5dcc08e3c
-    site.metadata.title: 409943763eadfd4953bdaf3ac25ce5a0
+    tabs.seo: 409943763eadfd4953bdaf3ac25ce5a0
     site.meta.headline: d97df20cd05af70b8652a56e7fe91860
     site.meta.headline.help: 953faf8b7ad67cc6b88fc41f383617e9
     fields.metaTitleTemplate.label: c59eb2caa5e6d129c62d727a9958313f
@@ -45,8 +45,8 @@ checksums:
     fields.cropOgImage.help: 9a808c642aeb6ea6f6b52e01ba6f8b6e
     fields.socialMediaAccounts.label: ea0f66cfaecb243744f30608a50b1c5d
     fields.socialMediaAccounts.help: 2f39a2564881d6e046374ba2aed8ad51
-    fields.meta.headline: 942cbca3a33f4242068a9330b8d299e7
-    fields.og.headline: 06f86c49a0027e65f69df6ed376e5bc1
+    page.meta.headline: 942cbca3a33f4242068a9330b8d299e7
+    page.og.headline: 06f86c49a0027e65f69df6ed376e5bc1
     fields.titleOverwrite.label: 2d87f4b1e263236b3708406bcd5753ce
     fields.inheritSettings.label: 26e84de2f62066cfb834d3e77d341bb0
     fields.inheritSettings.help: 71fdeb668f42629128e7723906d03af5
