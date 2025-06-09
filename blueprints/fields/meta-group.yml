@@ -1,7 +1,7 @@
 type: group
 fields:
   _metaHeadline:
-    label: seo.fields.meta.headline
+    label: seo.page.meta.headline
     type: headline
     numbered: false
   metaTitle:

@@ -1,4 +1,4 @@
-label: seo.site.metadata.title
+label: seo.tabs.seo
 icon: search
 
 columns:
@@ -45,7 +45,7 @@ columns:
       ogImage:
         label: seo.fields.ogImage.label
         extends: seo/fields/og-image
-        empty: fields.ogImage.empty
+        empty: seo.fields.ogImage.empty
         width: 1/2
       cropOgImage:
         label: seo.fields.cropOgImage.label

@@ -85,14 +85,14 @@ onUnmounted(() => panel.events.off("content.save"))
 	margin-top: 1rem;
 	display: flex;
 	font-size: var(--text-sm);
-	color: var(--color-gray-700);
+	color: var(--color-text-dimmed);
 	line-height: 1.25rem;
 	width: max-content;
 	margin-left: auto;
 
 	&:hover {
 		text-decoration: underline;
-		color: var(--text-gray-800);
+		color: var(--theme-color-text);
 	}
 
 	> .k-icon {
@@ -107,12 +107,7 @@ onUnmounted(() => panel.events.off("content.save"))
 	gap: var(--spacing-2);
 
 	> .k-icon {
-		color: var(--color-gray-700);
-	}
-
-	> .k-loader {
-		margin-left: auto;
-		color: var(--color-gray-700);
+		color: var(--theme-color-icon);
 	}
 }
 </style>

@@ -1,7 +1,7 @@
 type: group
 fields:
   _ogHeadline:
-    label: seo.fields.og.headline
+    label: seo.page.og.headline
     type: headline
     numbered: false
     help: seo.site.og.headline.help

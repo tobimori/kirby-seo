@@ -36,7 +36,7 @@ const breadcrumbs = computed(() => props.url.split("/").slice(3))
 			target="_blank"
 			rel="noopener noreferrer"
 		>
-			{{ $t("sections.preview.openSearchConsole") }}
+			{{ $t("seo.sections.preview.openSearchConsole") }}
 			<k-icon type="open" />
 		</a>
 	</div>
