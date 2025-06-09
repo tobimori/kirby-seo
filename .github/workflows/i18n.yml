@@ -1,0 +1,20 @@
+name: i18n
+
+on: push
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  i18n:
+    name: update translations
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: translation magic ✨
+        uses: lingodotdev/lingo.dev@main
+        with:
+          api-key: ${{ secrets.LINGODOTDEV_API_KEY }}

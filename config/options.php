@@ -17,9 +17,8 @@ return [
 		'ogTemplate' => '{{ title }}',
 		'ogSiteName' => fn(Page $page) => $page->site()->title(),
 		'ogType' => 'website',
-		'twitterCardType' => 'summary',
 		'ogDescription' => fn(Page $page) => $page->metadata()->metaDescription(),
-		'twitterCreator' => fn(Page $page) => $page->metadata()->twitterSite(),
+		'cropOgImage' => true,
 		'lang' => fn(Page $page) => $page->kirby()->language()?->locale(LC_ALL) ?? $page->kirby()->option('tobimori.seo.lang', 'en_US'),
 		// default for robots: noIndex if global index configuration is set, otherwise fall back to page status
 		'robotsIndex' => function (Page $page) {

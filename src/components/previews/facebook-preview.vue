@@ -30,7 +30,7 @@ const host = computed(() => new URL(props.url).host)
 			target="_blank"
 			rel="noopener noreferrer"
 		>
-			{{ $t("open-debugger") }}
+			{{ $t("sections.preview.openDebugger") }}
 			<k-icon type="open" />
 		</a>
 	</div>

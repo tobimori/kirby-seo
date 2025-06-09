@@ -11,7 +11,7 @@ return [
 			'options' => function () {
 				return A::map(option('tobimori.seo.previews'), fn($item) => [
 					'value' => $item,
-					'text' => t($item)
+					'text' => t("seo.preview.{$item}")
 				]);
 			},
 			'meta' => function () {
@@ -37,7 +37,7 @@ return [
 						'ogTitle' => $meta->ogTitle()->value(),
 						'ogDescription' => $meta->ogDescription()->value(),
 						'ogImage' => $meta->ogImage(),
-						'twitterCardType' => $meta->twitterCardType()->value(),
+						'cropOgImage' => $meta->cropOgImage()->toBool(),
 					];
 				}
 

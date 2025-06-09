@@ -5,12 +5,12 @@
  * Allows social media account list to be filled by config options
  */
 
-use Kirby\Cms\App;
+use tobimori\Seo\Seo;
 
-return function (App $kirby) {
+return function () {
 	$fields = [];
 
-	foreach ($kirby->option('tobimori.seo.socialMedia') as $key => $value) {
+	foreach (Seo::option('socialMedia') as $key => $value) {
 		if ($value) {
 			$fields[$key] = [
 				'label' => ucfirst($key),
@@ -22,9 +22,9 @@ return function (App $kirby) {
 	}
 
 	return [
-		'label' => 'social-media-accounts',
+		'label' => 'seo.fields.socialMediaAccounts.label',
 		'type' => 'object',
-		'help' => 'social-media-accounts-help',
+		'help' => 'seo.fields.socialMediaAccounts.help',
 		'fields' => $fields
 	];
 };

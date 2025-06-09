@@ -1,4 +1,4 @@
-label: metadata-site
+label: seo.site.metadata.title
 icon: search
 
 columns:
@@ -9,18 +9,24 @@ columns:
       ogGroup: seo/fields/og-group
       robots: seo/fields/robots
       metaInherit:
-        label: inherit-settings
+        label: seo.fields.inheritSettings.label
         type: multiselect
-        help: inherit-settings-help
+        help: seo.fields.inheritSettings.help
         options:
-          metaTemplate: "{{ t('meta-title-template') }}"
-          metaDescription: "{{ t('meta-description') }}"
-          ogTemplate: "{{ t('og-title-template') }}"
-          ogDescription: "{{ t('og-description') }}"
-          ogImage: "{{ t('og-image') }}"
-          twitterCardType: "{{ t('twitter-card-type') }}"
-          twitterAuthor: "{{ t('twitter-author') }}"
-          robots: '{{ t("robots") }}'
+          metaTemplate:
+            "*": seo.fields.metaTitleTemplate.label
+          metaDescription:
+            "*": seo.fields.metaDescription.label
+          ogTemplate:
+            "*": seo.fields.ogTitleTemplate.label
+          ogDescription:
+            "*": seo.fields.ogDescription.label
+          ogImage:
+            "*": seo.fields.ogImage.label
+          cropOgImage:
+            "*": seo.fields.cropOgImage.label
+          robots:
+            "*": seo.fields.robots.label
   sidebar:
     width: 5/12
     sticky: true

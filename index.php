@@ -3,8 +3,11 @@
 @include_once __DIR__ . '/vendor/autoload.php';
 
 use Kirby\Cms\App;
-use Kirby\Data\Yaml;
+use Kirby\Data\Json;
 use Spatie\SchemaOrg\Schema;
+use Kirby\Toolkit\A;
+use Kirby\Filesystem\Dir;
+use Kirby\Filesystem\F;
 
 if (
 	version_compare(App::version() ?? '0.0.0', '5.0.0-rc.1', '<') === true ||
@@ -24,16 +27,24 @@ App::plugin('tobimori/seo', [
 	'commands' => [
 		//	'seo:hello' => require __DIR__ . '/config/commands/hello.php',
 	],
-	'translations' => [
-		'cs' => Yaml::read(__DIR__ . '/translations/cs.yml'),
-		'de' => Yaml::read(__DIR__ . '/translations/de.yml'),
-		'en' => Yaml::read(__DIR__ . '/translations/en.yml'),
-		'fr' => Yaml::read(__DIR__ . '/translations/fr.yml'),
-		'nl' => Yaml::read(__DIR__ . '/translations/nl.yml'),
-		'pt_PT' => Yaml::read(__DIR__ . '/translations/pt_PT.yml'),
-		'sv_SE' => Yaml::read(__DIR__ . '/translations/sv_SE.yml'),
-		'tr' => Yaml::read(__DIR__ . '/translations/tr.yml'),
-	],
+	// get all files from /translations and register them as language files
+	'translations' => A::keyBy(
+		A::map(
+			Dir::files(__DIR__ . '/translations'),
+			function ($file) {
+				$translations = [];
+				foreach (Json::read(__DIR__ . '/translations/' . $file) as $key => $value) {
+					$translations["seo.{$key}"] = $value;
+				}
+
+				return A::merge(
+					['lang' => F::name($file)],
+					$translations
+				);
+			}
+		),
+		'lang'
+	),
 	'snippets' => [
 		'seo/schemas' => __DIR__ . '/snippets/schemas.php',
 		'seo/head' => __DIR__ . '/snippets/head.php',

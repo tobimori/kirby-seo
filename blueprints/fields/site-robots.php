@@ -10,8 +10,8 @@ return function (App $kirby) {
 	}
 
 	$fields = [
-		'robotsHeadline' => [
-			'label' => 'robots',
+		'_robotsHeadline' => [
+			'label' => 'seo.fields.robots.label',
 			'type' => 'headline',
 			'numbered' => false,
 		]
@@ -24,21 +24,21 @@ return function (App $kirby) {
 		}
 
 		$fields["robots{$robots}"] = [
-			'label' =>  "robots-{$robots}",
+			'label' =>  "seo.fields.robots.{$robots}.label",
 			'type' => 'toggles',
-			'help' => "robots-{$robots}-help",
+			'help' => "seo.fields.robots.{$robots}.help",
 			'width' => '1/2',
 			'default' => 'default',
 			'reset' => false,
 			'options' => [
-				'default' => t('default-select') . ' ' . ($index ? t('yes') : t('no')),
-				'true' => t('yes'),
-				'false' => t('no'),
+				'default' => t('seo.common.default') . ' ' . ($index ? t('seo.common.yes') : t('seo.common.no')),
+				'true' => t('seo.common.yes'),
+				'false' => t('seo.common.no'),
 			]
 		];
 	}
 
-	$fields['seoLine3'] = [
+	$fields['_seoLine3'] = [
 		'type' => 'line'
 	];
 

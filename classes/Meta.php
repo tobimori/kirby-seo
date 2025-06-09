@@ -555,26 +555,6 @@ class Meta
 	}
 
 	/**
-	 * Get the Twitter username from an account url set in the site options
-	 */
-	public function twitterSite()
-	{
-		$accs = $this->page->site()->socialMediaAccounts()->toObject();
-		$username = '';
-
-		if ($accs->twitter()->isNotEmpty()) {
-			// tries to match all twitter urls, and extract the username
-			$matches = [];
-			preg_match('/^(https?:\/\/)?(www\.)?twitter\.com\/(#!\/)?@?(?<name>[^\/\?]*)$/', $accs->twitter()->value(), $matches);
-			if (isset($matches['name'])) {
-				$username = $matches['name'];
-			}
-		}
-
-		return new Field($this->page, 'twitter', $username);
-	}
-
-	/**
 	 * Gets the date format for modified meta tags, based on the registered date handler
 	 */
 	public function dateFormat(): string

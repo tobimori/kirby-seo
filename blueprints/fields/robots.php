@@ -4,17 +4,18 @@ use Kirby\Cms\App;
 use Kirby\Toolkit\A;
 use Kirby\Toolkit\Str;
 use tobimori\Seo\Meta;
+use tobimori\Seo\Seo;
 
 return function (App $kirby) {
-	if (!$kirby->option('tobimori.seo.robots.active') || !$kirby->option('tobimori.seo.robots.pageSettings')) {
+	if (!Seo::option('robots.active') || !Seo::option('robots.pageSettings')) {
 		return [
 			'type' => 'hidden'
 		];
 	}
 
 	$fields = [
-		'robotsHeadline' => [
-			'label' => 'robots',
+		'_robotsHeadline' => [
+			'label' => 'seo.fields.robots.label',
 			'type' => 'headline',
 			'numbered' => false,
 		]
@@ -25,26 +26,26 @@ return function (App $kirby) {
 		$upper = Str::ucfirst($robots);
 
 		$fields["robots{$upper}"] = [
-			'label' =>  "robots-{$robots}",
+			'label' =>  "seo.fields.robots.{$robots}.label",
 			'type' => 'toggles',
-			'help' => "robots-{$robots}-help",
+			'help' => "seo.fields.robots.{$robots}.help",
 			'width' => '1/2',
 			'default' => 'default',
 			'reset' => false,
 			'options' => [
 				'default' => $page ?
 					A::join([
-						t('default-select'),
-						$page->metadata()->get("robots{$upper}", ['fields'])->toBool() ? t('yes') : t('no')
+						t('seo.common.default'),
+						$page->metadata()->get("robots{$upper}", ['fields'])->toBool() ? t('seo.common.yes') : t('seo.common.no')
 					], ' ')
-					: t('default-select'),
-				'true' => t('yes'),
-				'false' => t('no'),
+					: t('seo.common.default'),
+				'true' => t('seo.common.yes'),
+				'false' => t('seo.common.no'),
 			]
 		];
 	}
 
-	$fields['seoLine3'] = [
+	$fields['_seoLine3'] = [
 		'type' => 'line'
 	];
 

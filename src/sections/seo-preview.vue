@@ -52,13 +52,13 @@ onUnmounted(() => panel.events.off("content.save"))
 		<div class="k-field-header k-seo-preview__label k-label k-field-label">
 			<k-icon type="preview" />
 			<span class="k-label-text">
-				{{ props.label || $t("seo-preview") }}
+				{{ props.label || $t("seo.sections.preview.title") }}
 			</span>
 		</div>
 		<k-select-field
 			type="select"
 			name="seo-preview-type"
-			:before="$t('seo-preview-for')"
+			:before="$t('seo.sections.preview.showFor')"
 			v-model="type"
 			:options="options"
 			:required="true"

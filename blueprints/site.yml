@@ -1,64 +1,61 @@
-label: metadata-site
+label: seo.site.metadata.title
 icon: search
 
 columns:
   main:
     width: 7/12
     fields:
-      metaHeadline:
-        label: global-meta-headline
+      _metaHeadline:
+        label: seo.site.meta.headline
         type: headline
-        numbered: false
-        help: global-meta-headline-help
+        help: seo.site.meta.headline.help
       metaTemplate:
-        label: meta-title-template
+        label: seo.fields.metaTitleTemplate.label
         type: text
-        help: meta-title-template-help
+        help: seo.fields.metaTitleTemplate.help
       metaDescription:
-        label: meta-description
+        label: seo.fields.metaDescription.label
         type: textarea
-        help: meta-description-help
+        help: seo.fields.metaDescription.help
         buttons: false
-      seoLine1:
+      _seoLine1:
         type: line
-      ogHeadline:
-        label: global-og-headline
+      _ogHeadline:
+        label: seo.site.og.headline
         type: headline
         numbered: false
-        help: global-og-headline-help
+        help: seo.site.og.headline.help
       ogTemplate:
-        label: og-title-template
+        label: seo.fields.ogTitleTemplate.label
         type: text
-        default: '{{ title }}'
-        help: meta-title-template-help
-        placeholder: '{{ site.metaTemplate }}'
+        default: "{{ title }}"
+        help: seo.fields.metaTitleTemplate.help
+        placeholder: "{{ site.metaTemplate }}"
       ogDescription:
-        label: og-description
+        label: seo.fields.ogDescription.label
         type: textarea
         buttons: false
-        placeholder: '{{ site.metaDescription }}'
+        placeholder: "{{ site.metaDescription }}"
       ogSiteName:
-        label: og-site-name
+        label: seo.fields.ogSiteName.label
         type: text
-        default: '{{ site.title }}'
-        placeholder: '{{ site.title }}'
+        default: "{{ site.title }}"
+        placeholder: "{{ site.title }}"
         width: 1/2
       ogImage:
-        label: og-image
+        label: seo.fields.ogImage.label
         extends: seo/fields/og-image
-        empty: og-image-empty
+        empty: fields.ogImage.empty
         width: 1/2
-      twitterCardType:
-        label: twitter-card-type
-        width: 1/2
-        type: select
-        default: summary
-        required: true
-        options:
-          summary: "{{ t('summary') }}"
-          summary_large_image: "{{ t('summary_large_image') }}"
-        help: twitter-card-type-help
-      seoLine2:
+      cropOgImage:
+        label: seo.fields.cropOgImage.label
+        type: toggle
+        default: true
+        text:
+          - "{{ t('seo.common.no') }}"
+          - "{{ t('seo.common.yes') }}"
+        help: seo.fields.cropOgImage.help
+      _seoLine2:
         type: line
       robots: seo/fields/site-robots
       socialMediaAccounts: seo/fields/social-media
