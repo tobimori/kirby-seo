@@ -8,13 +8,13 @@ const props = defineProps({
 	ogImage: String
 })
 
-const host = computed(() => new URL(props.url).host)
+const host = computed(() => new window.URL(props.url).host)
 </script>
 
 <template>
 	<div>
 		<div class="k-facebook-preview">
-			<div class="k-facebook-preview__image" v-if="ogImage">
+			<div v-if="ogImage" class="k-facebook-preview__image">
 				<img :src="ogImage" class="k-facebook-preview__img" />
 			</div>
 			<div class="k-facebook-preview__content">

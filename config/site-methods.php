@@ -6,9 +6,9 @@ use tobimori\Seo\SchemaSingleton;
 use tobimori\Seo\Seo;
 
 return [
-	'schema' => fn($type) => SchemaSingleton::getInstance($type),
-	'schemas' => fn() => SchemaSingleton::getInstances(),
-	'lang' => fn() => Str::replace(Seo::option('default.lang')($this->homePage()), '_', '-'),
+	'schema' => fn ($type) => SchemaSingleton::getInstance($type),
+	'schemas' => fn () => SchemaSingleton::getInstances(),
+	'lang' => fn () => Str::replace(Seo::option('default.lang')($this->homePage()), '_', '-'),
 	'canonicalFor' => function (string $url, bool $useRootUrl = false) {
 		// Determine the base URL
 		$base = Seo::option('canonical.base', Seo::option('canonicalBase'));
@@ -20,7 +20,7 @@ return [
 				$base = $this->url();
 			}
 		}
-		
+
 		if (Str::startsWith($url, $base)) {
 			$canonicalUrl = $url;
 		} else {

@@ -9,7 +9,7 @@ return [
 		'mixins' => ['headline'],
 		'computed' => [
 			'options' => function () {
-				return A::map(option('tobimori.seo.previews'), fn($item) => [
+				return A::map(option('tobimori.seo.previews'), fn ($item) => [
 					'value' => $item,
 					'text' => t("seo.sections.preview.{$item}")
 				]);

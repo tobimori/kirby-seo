@@ -9,7 +9,7 @@ const props = defineProps({
 	url: String
 })
 
-const origin = computed(() => new URL(props.url).origin)
+const origin = computed(() => new window.URL(props.url).origin)
 </script>
 
 <template>
@@ -19,7 +19,7 @@ const origin = computed(() => new URL(props.url).origin)
 			<span class="k-slack-preview__title">{{ ogTitle }}</span>
 			<p class="k-slack-preview__description">{{ ogDescription }}</p>
 		</div>
-		<div class="k-slack-preview__image" v-if="ogImage">
+		<div v-if="ogImage" class="k-slack-preview__image">
 			<img :src="ogImage" />
 		</div>
 	</div>

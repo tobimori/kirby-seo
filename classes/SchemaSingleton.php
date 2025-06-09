@@ -9,7 +9,9 @@ class SchemaSingleton
 {
 	private static $instances = [];
 
-	private function __construct() {}
+	private function __construct()
+	{
+	}
 
 	public static function getInstance(string $type, Page|null $page = null): mixed
 	{

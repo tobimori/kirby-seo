@@ -21,9 +21,9 @@ const { load } = useSection()
 const meta = ref(null)
 const options = ref([])
 
-const type = ref(localStorage.getItem("kSEOPreviewType") ?? options.value[0].id)
+const type = ref(window.localStorage.getItem("kSEOPreviewType") ?? options.value[0].id)
 watch(type, (newType) => {
-	localStorage.setItem("kSEOPreviewType", newType)
+	window.localStorage.setItem("kSEOPreviewType", newType)
 })
 
 const handleLoad = () =>
@@ -56,15 +56,15 @@ onUnmounted(() => panel.events.off("content.save"))
 			</span>
 		</div>
 		<k-select-field
+			v-model="type"
 			type="select"
 			name="seo-preview-type"
 			:before="$t('seo.sections.preview.showFor')"
-			v-model="type"
 			:options="options"
 			:required="true"
 			:empty="false"
 		/>
-		<div class="k-seo-preview__inner" v-if="meta">
+		<div v-if="meta" class="k-seo-preview__inner">
 			<google-preview v-if="type === 'google'" v-bind="meta" />
 			<facebook-preview v-if="type === 'facebook'" v-bind="meta" />
 			<slack-preview v-if="type === 'slack'" v-bind="meta" />

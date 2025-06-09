@@ -30,7 +30,8 @@
 		"getkirby/cms": "^5.0.0"
 	},
 	"scripts": {
-		"dist": "composer install --no-dev --optimize-autoloader"
+		"dist": "composer install --no-dev --optimize-autoloader",
+		"fix": "php-cs-fixer fix"
 	},
 	"config": {
 		"optimize-autoloader": true,

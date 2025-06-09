@@ -1,5 +1,5 @@
 <template>
-	<div class="k-section k-heading-structure" v-if="data">
+	<div v-if="data" class="k-section k-heading-structure">
 		<div
 			class="k-field-header k-heading-structure__label k-label k-field-label"
 		>
@@ -18,17 +18,15 @@
 						itemInvalid(item, index) ? 'is-invalid' : ''
 					}`"
 				>
-					<span class="k-heading-structure__item__level"
-						>H{{ item.level }}</span
-					>
+					<span class="k-heading-structure__item__level">H{{ item.level }}</span>
 					<span class="k-heading-structure__item__text">{{ item.text }}</span>
 				</li>
 			</ol>
 		</k-box>
 		<k-box
+			v-if="incorrectOrder && !noH1"
 			class="k-heading-structure__notice"
 			theme="negative"
-			v-if="incorrectOrder && !noH1"
 		>
 			<k-icon type="alert" />
 			<k-text>{{
@@ -36,16 +34,16 @@
 			}}</k-text>
 		</k-box>
 		<k-box
+			v-if="multipleH1"
 			class="k-heading-structure__notice"
 			theme="negative"
-			v-if="multipleH1"
 		>
 			<k-icon type="alert" />
 			<k-text>{{
 				$t("seo.sections.headingStructure.errors.multipleH1")
 			}}</k-text>
 		</k-box>
-		<k-box class="k-heading-structure__notice" theme="negative" v-if="noH1">
+		<k-box v-if="noH1" class="k-heading-structure__notice" theme="negative">
 			<k-icon type="alert" />
 			<k-text>{{
 				$t("seo.sections.headingStructure.errors.missingH1")

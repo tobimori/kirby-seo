@@ -50,11 +50,11 @@ class Meta
 	{
 		// Remove encoding suffix if present (e.g., '.UTF-8')
 		$locale = Str::before($locale, '.');
-		
+
 		// Replace both underscores and hyphens with the desired separator
 		$locale = Str::replace($locale, '_', $separator);
 		$locale = Str::replace($locale, '-', $separator);
-		
+
 		return $locale;
 	}
 
@@ -95,29 +95,29 @@ class Meta
 			[
 				'title' => 'metaTitle',
 				'description' => 'metaDescription',
-				'date' => fn() => $this->page->modified($this->dateFormat()),
+				'date' => fn () => $this->page->modified($this->dateFormat()),
 				'og:title' => 'ogTitle',
 				'og:description' => 'ogDescription',
 				'og:site_name' => 'ogSiteName',
 				'og:image' => 'ogImage',
-				'og:image:width' => fn() => $this->ogImage() ? $this->get('ogImage')->toFile()?->width() : null,
-				'og:image:height' => fn() => $this->ogImage() ? $this->get('ogImage')->toFile()?->height() : null,
-				'og:image:alt' => fn() => $this->get('ogImage')->toFile()?->alt(),
+				'og:image:width' => fn () => $this->ogImage() ? $this->get('ogImage')->toFile()?->width() : null,
+				'og:image:height' => fn () => $this->ogImage() ? $this->get('ogImage')->toFile()?->height() : null,
+				'og:image:alt' => fn () => $this->get('ogImage')->toFile()?->alt(),
 				'og:type' => 'ogType',
 			];
 
 
 		// Robots
 		if ($robotsActive = Seo::option('robots.active')) {
-			$meta['robots'] = fn() => $this->robots();
+			$meta['robots'] = fn () => $this->robots();
 		}
 
 		// only add canonical and alternate tags if the page is indexable
 		// we have to resolve this lazily (using a callable) to avoid an infinite loop
-		$allowsIndexFn = fn() => !$robotsActive || !Str::contains($this->robots(), 'noindex');
+		$allowsIndexFn = fn () => !$robotsActive || !Str::contains($this->robots(), 'noindex');
 
 		// canonical
-		$canonicalFn = fn() => $allowsIndexFn() ? $this->canonicalUrl() : null;
+		$canonicalFn = fn () => $allowsIndexFn() ? $this->canonicalUrl() : null;
 		$meta['canonical'] = $canonicalFn;
 		$meta['og:url'] = $canonicalFn;
 
@@ -126,18 +126,19 @@ class Meta
 		$currentUrl = kirby()->request()->url()->toString();
 		$canonicalUrl = $this->canonicalUrl();
 		$isCanonical = $currentUrl === $canonicalUrl;
-		
+
 		// Multi-lang alternate tags
 		// Skip hreflang tags if URL is not canonical (has query params, Kirby params, etc.)
 		if (kirby()->languages()->count() > 1 && $this->lang !== null && $isCanonical) {
 			foreach (kirby()->languages() as $lang) {
 				// only if this language is translated for this page and exists
 				// note: can be checked now, does not cause infinite loop
-				if (!$this->page->translation($lang->code())->exists())
+				if (!$this->page->translation($lang->code())->exists()) {
 					continue;
+				}
 
 				// only add alternate tags if the page is indexable
-				$meta['alternate'][] = fn() => $allowsIndexFn()  ? [
+				$meta['alternate'][] = fn () => $allowsIndexFn() ? [
 
 					'hreflang' => Meta::toBCP47($lang),
 					'href' => $this->page->url($lang->code()),
@@ -145,12 +146,12 @@ class Meta
 				] : null;
 
 				if ($lang !== $this->lang) {
-					$meta['og:locale:alternate'][] = fn() => Meta::toOpenGraphLocale($lang);
+					$meta['og:locale:alternate'][] = fn () => Meta::toOpenGraphLocale($lang);
 				}
 			}
 
 			// only add alternate tags if the page is indexable
-			$meta['alternate'][] = fn() => $allowsIndexFn() ? [
+			$meta['alternate'][] = fn () => $allowsIndexFn() ? [
 				'hreflang' => 'x-default',
 				// use 'index' to get the x-default without language
 				// https://forum.getkirby.com/t/multilanguage-how-to-get-the-siteurl-without-the-language-slug/26376/2?u=leo_portatour
@@ -159,18 +160,18 @@ class Meta
 				'href' => $this->page->url('index'),
 				'rel' => 'alternate',
 			] : null;
-			$meta['og:locale'] = fn() => Meta::toOpenGraphLocale($this->lang);
+			$meta['og:locale'] = fn () => Meta::toOpenGraphLocale($this->lang);
 		} else {
 			// Single-language site: get locale from cascade (will fallback to 'locale' option)
-			$meta['og:locale'] = fn() => Meta::normalizeLocale($this->get('locale')->value(), '_');
+			$meta['og:locale'] = fn () => Meta::normalizeLocale($this->get('locale')->value(), '_');
 		}
-		
+
 		// If URL is not canonical, also skip og:locale:alternate tags
 		if (!$isCanonical) {
 			unset($meta['og:locale:alternate']);
 		}
 
-		$meta['me'] = fn() => (
+		$meta['me'] = fn () => (
 			($socialMedia = $this->site('socialMediaAccounts')?->toObject())
 			&& ($mastodon = $socialMedia->mastodon()->value())
 		) ? $mastodon : null;
@@ -480,7 +481,7 @@ class Meta
 				if ($val === null) {
 					// Remove the key from the consumed array, so it doesn't get filtered out
 					// (we can assume the entry is a custom meta tag that uses different attributes)
-					$this->consumed = array_filter($this->consumed, fn($item) => $item !== $key);
+					$this->consumed = array_filter($this->consumed, fn ($item) => $item !== $key);
 					return null;
 				}
 			}

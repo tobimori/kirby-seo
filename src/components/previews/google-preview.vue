@@ -7,7 +7,7 @@ const props = defineProps({
 	description: String
 })
 
-const origin = computed(() => new URL(props.url).origin)
+const origin = computed(() => new window.URL(props.url).origin)
 const breadcrumbs = computed(() => props.url.split("/").slice(3))
 </script>
 

@@ -13,7 +13,9 @@ class SitemapUrl
 	protected string $priority;
 	protected array $alternates = [];
 
-	public function __construct(protected string $loc) {}
+	public function __construct(protected string $loc)
+	{
+	}
 
 	public function loc(?string $url = null): SitemapUrl|string
 	{
