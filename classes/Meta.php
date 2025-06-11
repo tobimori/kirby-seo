@@ -49,10 +49,10 @@ class Meta
 	 */
 	public static function normalizeLocale(string $locale, string $separator = '-'): string
 	{
-		// Remove encoding suffix if present (e.g., '.UTF-8')
-		$locale = Str::before($locale, '.');
+		// encoding suffix if present (e.g., '.UTF-8')
+		$locale = Str::contains($locale, '.') ? Str::before($locale, '.') : $locale;
 
-		// Replace both underscores and hyphens with the desired separator
+		// target both underscores and hyphens
 		$locale = Str::replace($locale, '_', $separator);
 		$locale = Str::replace($locale, '-', $separator);
 
