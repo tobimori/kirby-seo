@@ -53,7 +53,7 @@ return [
 		'active' => true, // whether robots handling should be done by the plugin
 		'followPageStatus' => true, // should unlisted pages be noindex by default?
 		'pageSettings' => true, // whether to have robots settings on each page
-		'index' => true, //fn() => !option('debug'), // default site-wide robots setting
+		'index' => fn () => !option('debug'), // default site-wide robots setting
 		'sitemap' => null, // sets sitemap url, will be replaced by plugin sitemap in the future
 		'content' => [], // custom robots content
 		'types' => ['index', 'follow', 'archive', 'imageindex', 'snippet'] // available robots types
