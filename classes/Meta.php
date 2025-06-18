@@ -140,7 +140,6 @@ class Meta
 
 				// only add alternate tags if the page is indexable
 				$meta['alternate'][] = fn () => $allowsIndexFn() ? [
-
 					'hreflang' => Meta::toBCP47($lang),
 					'href' => $this->page->url($lang->code()),
 					'rel' => 'alternate',
@@ -154,11 +153,7 @@ class Meta
 			// only add alternate tags if the page is indexable
 			$meta['alternate'][] = fn () => $allowsIndexFn() ? [
 				'hreflang' => 'x-default',
-				// use 'index' to get the x-default without language
-				// https://forum.getkirby.com/t/multilanguage-how-to-get-the-siteurl-without-the-language-slug/26376/2?u=leo_portatour
-				// Google: "fallback page for unmatched languages, especially on language/country selectors or auto-redirecting home pages."
-				// https://developers.google.com/search/docs/specialty/international/localized-versions#all-method-guidelines
-				'href' => $this->page->url('index'),
+				'href' => $this->page->indexUrl(),
 				'rel' => 'alternate',
 			] : null;
 			$meta['og:locale'] = fn () => Meta::toOpenGraphLocale($this->lang);
@@ -462,10 +457,9 @@ class Meta
 			$val = $this->metaDefaults[$key];
 		}
 
-		/* If there is no programmatic value for the key,
-		 * try looking it up in the meta array
-		 * maybe it is a meta tag and not a field name?
-		 */
+		// If there is no programmatic value for the key,
+		// try looking it up in the meta array
+		// maybe it is a meta tag and not a field name?
 		if (!isset($val) && ($key = $this->findTagForField($key)) && array_key_exists($key, $this->metaDefaults)) {
 			$val = $this->metaDefaults[$key];
 		}

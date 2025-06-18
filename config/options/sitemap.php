@@ -34,21 +34,20 @@ return function (SitemapIndex $sitemap) {
 						 * Specification: "lists every alternate version of the page, including itself."
 						 * https://developers.google.com/search/docs/specialty/international/localized-versions#sitemap
 						 */
-						$alternates [] =
-						[
-							'hreflang' => Meta::toBCP47($language),
-							'href' => $page->url($language->code()),
-						];
+						$alternates[] =
+							[
+								'hreflang' => Meta::toBCP47($language),
+								'href' => $page->url($language->code()),
+							];
 					}
 				}
 
 				// add x-default
-				$alternates [] =
-				[
-					'hreflang' => 'x-default',
-					// see Meta->metaArray() for documentation why 'index'
-					'href' => $page->url('index'),
-				];
+				$alternates[] =
+					[
+						'hreflang' => 'x-default',
+						'href' => $page->indexUrl(),
+					];
 
 				$url->alternates($alternates);
 			}

@@ -20,15 +20,15 @@ return [
 		'ogType' => 'website',
 		'ogDescription' => fn (Page $page) => $page->metadata()->metaDescription(),
 		'cropOgImage' => true,
-		'locale' => fn (Page $page) => $page->kirby()->language()?->locale(LC_ALL) ?? $page->kirby()->option('tobimori.seo.locale', 'en_US'),
+		'locale' => fn (Page $page) => $page->kirby()->language()?->locale(LC_ALL) ?? Seo::option('locale', 'en_US'),
 		// default for robots: noIndex if global index configuration is set, otherwise fall back to page status
 		'robotsIndex' => function (Page $page) {
-			$index = Seo::option('tobimori.seo.robots.index');
+			$index = Seo::option('robots.index');
 			if (!$index) {
 				return false;
 			}
 
-			return $page->kirby()->option('tobimori.seo.robots.followPageStatus', true) ? $page->isListed() : true;
+			return Seo::option('robots.followPageStatus') ? $page->isListed() : true;
 		},
 		'robotsFollow' => fn (Page $page) => $page->kirby()->option('tobimori.seo.default.robotsIndex')($page),
 		'robotsArchive' => fn (Page $page) => $page->kirby()->option('tobimori.seo.default.robotsIndex')($page),
@@ -53,7 +53,7 @@ return [
 		'active' => true, // whether robots handling should be done by the plugin
 		'followPageStatus' => true, // should unlisted pages be noindex by default?
 		'pageSettings' => true, // whether to have robots settings on each page
-		'index' => fn () => !option('debug'), // default site-wide robots setting
+		'index' => true, //fn() => !option('debug'), // default site-wide robots setting
 		'sitemap' => null, // sets sitemap url, will be replaced by plugin sitemap in the future
 		'content' => [], // custom robots content
 		'types' => ['index', 'follow', 'archive', 'imageindex', 'snippet'] // available robots types

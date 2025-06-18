@@ -17,7 +17,7 @@ final class Seo
 	/**
 	 * Returns a plugin option
 	 */
-	public static function option(string $key, mixed $default = null, mixed $args = null): mixed
+	public static function option(string $key, mixed $default = null, mixed $args = []): mixed
 	{
 		$option = App::instance()->option("tobimori.seo.{$key}", $default);
 		if (is_callable($option)) {
