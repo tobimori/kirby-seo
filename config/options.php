@@ -1,6 +1,7 @@
 <?php
 
 use Kirby\Cms\Page;
+use tobimori\Seo\Seo;
 
 return [
 	'cascade' => [
@@ -22,11 +23,7 @@ return [
 		'locale' => fn (Page $page) => $page->kirby()->language()?->locale(LC_ALL) ?? $page->kirby()->option('tobimori.seo.locale', 'en_US'),
 		// default for robots: noIndex if global index configuration is set, otherwise fall back to page status
 		'robotsIndex' => function (Page $page) {
-			$index = $page->kirby()->option('tobimori.seo.robots.index');
-			if (is_callable($index)) {
-				$index = $index();
-			}
-
+			$index = Seo::option('tobimori.seo.robots.index');
 			if (!$index) {
 				return false;
 			}
