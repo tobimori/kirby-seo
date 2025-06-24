@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bb3e5328bf04129211d3c46f403de96a",
+    "content-hash": "17bc2da11b6c0a3ec8b8c3598ca0283b",
     "packages": [
         {
             "name": "getkirby/composer-installer",
@@ -567,16 +567,16 @@
         },
         {
             "name": "filp/whoops",
-            "version": "2.18.0",
+            "version": "2.18.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filp/whoops.git",
-                "reference": "a7de6c3c6c3c022f5cfc337f8ede6a14460cf77e"
+                "reference": "59a123a3d459c5a23055802237cb317f609867e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filp/whoops/zipball/a7de6c3c6c3c022f5cfc337f8ede6a14460cf77e",
-                "reference": "a7de6c3c6c3c022f5cfc337f8ede6a14460cf77e",
+                "url": "https://api.github.com/repos/filp/whoops/zipball/59a123a3d459c5a23055802237cb317f609867e5",
+                "reference": "59a123a3d459c5a23055802237cb317f609867e5",
                 "shasum": ""
             },
             "require": {
@@ -626,7 +626,7 @@
             ],
             "support": {
                 "issues": "https://github.com/filp/whoops/issues",
-                "source": "https://github.com/filp/whoops/tree/2.18.0"
+                "source": "https://github.com/filp/whoops/tree/2.18.3"
             },
             "funding": [
                 {
@@ -634,7 +634,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-03-15T12:00:00+00:00"
+            "time": "2025-06-16T00:02:10+00:00"
         },
         {
             "name": "friendsofphp/php-cs-fixer",
@@ -742,16 +742,16 @@
         },
         {
             "name": "getkirby/cms",
-            "version": "5.0.0-rc.3",
+            "version": "5.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/getkirby/kirby.git",
-                "reference": "6dac5cd0e1d579685509d4306b2561962e06f013"
+                "reference": "2ff182ba39ddea19fa1615bd3733f734b5e53842"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/getkirby/kirby/zipball/6dac5cd0e1d579685509d4306b2561962e06f013",
-                "reference": "6dac5cd0e1d579685509d4306b2561962e06f013",
+                "url": "https://api.github.com/repos/getkirby/kirby/zipball/2ff182ba39ddea19fa1615bd3733f734b5e53842",
+                "reference": "2ff182ba39ddea19fa1615bd3733f734b5e53842",
                 "shasum": ""
             },
             "require": {
@@ -769,7 +769,7 @@
                 "ext-mbstring": "*",
                 "ext-openssl": "*",
                 "ext-simplexml": "*",
-                "filp/whoops": "2.18.0",
+                "filp/whoops": "2.18.3",
                 "getkirby/composer-installer": "^1.2.1",
                 "laminas/laminas-escaper": "2.17.0",
                 "michelf/php-smartypants": "1.8.1",
@@ -842,7 +842,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2025-06-03T11:50:31+00:00"
+            "time": "2025-06-24T07:42:42+00:00"
         },
         {
             "name": "laminas/laminas-escaper",
