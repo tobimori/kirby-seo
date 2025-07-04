@@ -38,8 +38,8 @@ const host = computed(() => new window.URL(props.url).host)
 
 <style>
 .k-facebook-preview {
-	background: #f0f2f5;
-	border: 1px solid #ced0d4;
+	background: light-dark(#ffffff, #242526);
+	border: 1px solid light-dark(#dadde1, #3e4042);
 	overflow: hidden;
 	border-radius: var(--rounded);
 }
@@ -62,6 +62,7 @@ const host = computed(() => new window.URL(props.url).host)
 
 .k-facebook-preview__content {
 	padding: 0.75rem 1rem;
+	background: light-dark(#f0f2f5, #363638);
 }
 
 .k-facebook-preview__title,
@@ -74,7 +75,7 @@ const host = computed(() => new window.URL(props.url).host)
 }
 
 .k-facebook-preview__url {
-	color: #65676b;
+	color: light-dark(#65676b, #b0b3b8);
 	font-size: 0.75rem;
 	text-transform: uppercase;
 	line-height: 1.1;
@@ -85,13 +86,13 @@ const host = computed(() => new window.URL(props.url).host)
 	font-weight: 600;
 	line-height: 1.1765;
 	font-size: 1rem;
-	color: #050505;
+	color: light-dark(#050505, #e4e6eb);
 	margin: 0.3125rem 0;
 }
 
 .k-facebook-preview__description {
 	line-height: 1.3333;
-	color: #65676b;
+	color: light-dark(#65676b, #b0b3b8);
 	font-size: 0.875rem;
 }
 </style>

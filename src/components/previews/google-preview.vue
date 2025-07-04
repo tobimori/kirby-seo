@@ -21,7 +21,7 @@ const breadcrumbs = computed(() => {
 	if (parts.length === 1) return ` › ${parts[0]}`
 
 	// show last part with ellipsis for middle parts
-	return ` › ... › ${parts[parts.length - 1]}`
+	return ` › … › ${parts[parts.length - 1]}`
 })
 </script>
 
