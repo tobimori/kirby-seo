@@ -28,7 +28,7 @@
 	"site.meta.headline": "Paramètres SEO globaux",
 	"site.meta.headline.help": "Ces paramètres sont utilisés pour toutes les pages qui n'ont pas leurs propres métadonnées.\nVous pouvez les remplacer pour chaque page.",
 	"fields.metaTitleTemplate.label": "Modèle de titre",
-	"fields.metaTitleTemplate.help": "Un modèle à utiliser pour tous les titres de page.\n\"{{ title }}\" sera remplacé par le titre de la page.",
+	"fields.metaTitleTemplate.help": "Un modèle à utiliser pour tous les titres de page.\n\"\\{\\{ title \\}\\}\" sera remplacé par le titre de la page.",
 	"fields.metaDescription.label": "Description de la page",
 	"fields.metaDescription.help": "Longueur recommandée de 150 caractères maximum. Utilisée si aucune description de page n'est spécifiée.",
 	"site.og.headline": "Paramètres globaux Open Graph",

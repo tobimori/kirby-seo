@@ -28,7 +28,7 @@
 	"site.meta.headline": "Configurações Globais SEO",
 	"site.meta.headline.help": "Estas configurações são usadas para todas as páginas que não têm os seus próprios metadados.\nPode substituí-las em cada página.",
 	"fields.metaTitleTemplate.label": "Template de Título",
-	"fields.metaTitleTemplate.help": "Template para usar em todos os títulos de páginas.\n\"{{ title }}\" será substituído pelo título da página.",
+	"fields.metaTitleTemplate.help": "Template para usar em todos os títulos de páginas.\n\"\\{\\{ title \\}\\}\" será substituído pelo título da página.",
 	"fields.metaDescription.label": "Descrição de Página",
 	"fields.metaDescription.help": "Recomendado um tamanho de 150 caracteres no máximo. Usada se nenhuma descrição de página for especificada.",
 	"site.og.headline": "Configurações Globais Open Graph",

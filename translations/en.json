@@ -28,7 +28,7 @@
 	"site.meta.headline": "Global SEO Settings",
 	"site.meta.headline.help": "These settings are used for all pages that do not have their own metadata.\nYou can override them for each page.",
 	"fields.metaTitleTemplate.label": "Title Template",
-	"fields.metaTitleTemplate.help": "A template to use for all page titles.\n\"{{ title }}\" will be replaced with the page title.",
+	"fields.metaTitleTemplate.help": "A template to use for all page titles.\n\"\\{\\{ title \\}\\}\" will be replaced with the page title.",
 	"fields.metaDescription.label": "Page Description",
 	"fields.metaDescription.help": "Recommended length of 150 characters max. Used if no page description is specified.",
 	"site.og.headline": "Global Open Graph Settings",
