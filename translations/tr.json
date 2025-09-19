@@ -28,7 +28,7 @@
 	"site.meta.headline": "Genel SEO Ayarları",
 	"site.meta.headline.help": "Bu ayarlar, kendi meta verileri olmayan tüm sayfalar için kullanılır.\nHer sayfa için bunları geçersiz kılabilirsiniz.",
 	"fields.metaTitleTemplate.label": "Başlık Şablonu",
-	"fields.metaTitleTemplate.help": "Tüm sayfa başlıkları için kullanılacak bir şablon.\n\"{{ başlık }}\" sayfa başlığı ile değiştirilecektir.",
+	"fields.metaTitleTemplate.help": "Tüm sayfa başlıkları için kullanılacak bir şablon.\n\"\\{\\{ başlık \\}\\}\" sayfa başlığı ile değiştirilecektir.",
 	"fields.metaDescription.label": "Sayfa Açıklaması",
 	"fields.metaDescription.help": "Maksimum 150 karakter uzunluğunda önerilen bir sayfa açıklamasıdır. Sayfa açıklaması belirtilmemişse kullanılır.",
 	"site.og.headline": "Genel Açık Grafik (OG) Ayarları",

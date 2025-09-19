@@ -28,7 +28,7 @@
 	"site.meta.headline": "Globale SEO Instellingen",
 	"site.meta.headline.help": "Deze instellingen worden gebruikt voor alle pagina's die geen eigen metadata hebben.\nJe kunt ze voor elke pagina overschrijven.",
 	"fields.metaTitleTemplate.label": "Titel template",
-	"fields.metaTitleTemplate.help": "Een sjabloon om te gebruiken voor alle paginatitels.\n\"{{ title }}\" wordt vervangen door de paginatitel.",
+	"fields.metaTitleTemplate.help": "Een sjabloon om te gebruiken voor alle paginatitels.\n\"\\{\\{ title \\}\\}\" wordt vervangen door de paginatitel.",
 	"fields.metaDescription.label": "Paginabeschrijving",
 	"fields.metaDescription.help": "Aanbevolen lengte van maximaal 150 tekens. Gebruikt als er geen paginabeschrijving is opgegeven.",
 	"site.og.headline": "Globale Open Graph Instellingen",
