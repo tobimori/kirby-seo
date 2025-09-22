@@ -8,7 +8,7 @@ return function (App $kirby) {
 		'type' => 'files',
 		'multiple' => false,
 		'uploads' => [],
-		'query' => Str::contains($kirby->path(), '/site') && !Str::contains($kirby->path(), 'pages') ? 'site.images' : 'page.images' // small hack to get context for field using api path
+		'query' => 'model.images'
 	];
 
 	if ($parent = option('tobimori.seo.files.parent')) {
