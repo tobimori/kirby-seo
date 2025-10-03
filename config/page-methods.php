@@ -14,7 +14,7 @@ return [
 		// https://developers.google.com/search/docs/specialty/international/localized-versions#all-method-guidelines
 		$kirbyUrl = $this->kirby()->url('index');
 		$siteUrl = $this->site()->url();
-		$thisUrl = $this->url();
+		$thisUrl = $this->url($this->kirby()->defaultLanguage()?->code());
 
 		if (strpos($siteUrl, $kirbyUrl) === 0 && strlen($siteUrl) > strlen($kirbyUrl)) {
 			if (strpos($thisUrl, $siteUrl) === 0) {
