@@ -153,7 +153,7 @@ class Meta
 			// only add alternate tags if the page is indexable
 			$meta['alternate'][] = fn () => $allowsIndexFn() ? [
 				'hreflang' => 'x-default',
-				'href' => $this->page->indexUrl(),
+				'href' => $this->page->url(kirby()->defaultLanguage()->code()),
 				'rel' => 'alternate',
 			] : null;
 			$meta['og:locale'] = fn () => Meta::toOpenGraphLocale($this->lang);
