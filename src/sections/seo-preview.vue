@@ -21,9 +21,7 @@ const { load } = useSection()
 const meta = ref(null)
 const options = ref([])
 
-const type = ref(
-	window.localStorage.getItem("kSEOPreviewType") ?? options.value[0].id
-)
+const type = ref(window.localStorage.getItem("kSEOPreviewType") ?? "google")
 watch(type, (newType) => {
 	window.localStorage.setItem("kSEOPreviewType", newType)
 })
@@ -35,6 +33,13 @@ const handleLoad = () =>
 	}).then((response) => {
 		meta.value = response.meta
 		options.value = response.options
+		// set default type if not already set and options are available
+		if (
+			!window.localStorage.getItem("kSEOPreviewType") &&
+			response.options.length > 0
+		) {
+			type.value = response.options[0].value
+		}
 	})
 
 onMounted(() => {
