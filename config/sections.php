@@ -22,13 +22,17 @@ return [
 						$model = $model->clone(['content' => $changesVersion->content()->toArray()]);
 					}
 
-					// if it's a site, show the home page URL
-					$displayModel = $model instanceof Site ? $model->homePage() : $model;
-					$meta = $model->metadata();
+					// if it's a site, fall back to the home page for preview data
+					$model = $model instanceof Site ? $model->homePage() : $model;
+					if (!$model) {
+						return null;
+					}
 
+					$meta = $model->metadata();
 					return [
-						'page' => $displayModel ? $displayModel->slug() : '',
-						'url' => $displayModel ? $displayModel->url() : '',
+						'page' => $model->slug(),
+						'url' => $model->url(),
+						'pageTitle' => $model->title()->value(),
 						'title' => $meta->metaTitle()->value(),
 						'description' => $meta->metaDescription()->value(),
 						'ogSiteName' => $meta->ogSiteName()->value(),
@@ -36,6 +40,7 @@ return [
 						'ogDescription' => $meta->ogDescription()->value(),
 						'ogImage' => $meta->ogImage(),
 						'cropOgImage' => $meta->cropOgImage()->toBool(),
+						'panelUrl' => method_exists($model, 'panel') ? "{$model->panel()?->url()}?tab=seo" : null,
 					];
 				}
 

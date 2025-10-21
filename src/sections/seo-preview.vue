@@ -2,10 +2,12 @@
 import {
 	ref,
 	watch,
+	computed,
 	onMounted,
 	onUnmounted,
 	usePanel,
-	useSection
+	useSection,
+	useApp
 } from "kirbyuse"
 import { section } from "kirbyuse/props"
 
@@ -16,17 +18,32 @@ import SlackPreview from "../components/previews/slack-preview.vue"
 const props = defineProps(section)
 
 const panel = usePanel()
+const app = useApp()
 const { load } = useSection()
 
 const meta = ref(null)
 const options = ref([])
+const isSiteParent = computed(() => props.parent === "site")
+const baseLabel = computed(
+	() => props.label || panel?.t?.("seo.sections.preview.title") || "Preview"
+)
+const headerLabel = computed(() => {
+	const pageTitle = meta.value?.pageTitle
+
+	if (isSiteParent.value && pageTitle) {
+		const safeTitle = pageTitle.replaceAll('"', '\\"')
+		return `${baseLabel.value} (shows "${safeTitle}")`
+	}
+
+	return baseLabel.value
+})
 
 const type = ref(window.localStorage.getItem("kSEOPreviewType") ?? "google")
 watch(type, (newType) => {
 	window.localStorage.setItem("kSEOPreviewType", newType)
 })
 
-const handleLoad = () =>
+const handleLoad = () => {
 	load({
 		parent: props.parent,
 		name: props.name
@@ -41,6 +58,15 @@ const handleLoad = () =>
 			type.value = response.options[0].value
 		}
 	})
+}
+
+const openPanelTarget = () => {
+	if (!meta.value?.panelUrl) {
+		return
+	}
+
+	app.$go(meta.value.panelUrl)
+}
 
 onMounted(() => {
 	handleLoad()
@@ -59,8 +85,18 @@ onUnmounted(() => panel.events.off("content.save"))
 		<div class="k-field-header k-seo-preview__label k-label k-field-label">
 			<k-icon type="preview" />
 			<span class="k-label-text">
-				{{ props.label || $t("seo.sections.preview.title") }}
+				{{ headerLabel }}
 			</span>
+			<k-button
+				v-if="isSiteParent && meta?.panelUrl"
+				class="k-seo-preview__panel-button"
+				variant="filled"
+				size="xs"
+				icon="edit"
+				@click="openPanelTarget"
+			>
+				View page in panel
+			</k-button>
 		</div>
 		<k-select-field
 			v-model="type"
@@ -116,5 +152,9 @@ onUnmounted(() => panel.events.off("content.save"))
 	> .k-icon {
 		color: var(--theme-color-icon);
 	}
+}
+
+.k-seo-preview__panel-button {
+	margin-left: auto;
 }
 </style>
