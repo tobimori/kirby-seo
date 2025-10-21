@@ -22,6 +22,7 @@
 ## License
 
 Kirby SEO 2.0 is not free software. In order to run it on a public server, you'll have to purchase a valid Kirby license & a valid SEO license.
+The plugin is currently free to use while in pre-release state. Details on licensing cost will be published later.
 
 Copyright 2023-2025 © Tobias Möritz - Love & Kindness GmbH
 
