@@ -10,8 +10,8 @@ use Kirby\Filesystem\Dir;
 use Kirby\Filesystem\F;
 
 if (
-	version_compare(App::version() ?? '0.0.0', '5.0.0-rc.1', '<') === true ||
-	version_compare(App::version() ?? '0.0.0', '6.0.0', '>') === true
+	version_compare(App::version() ?? '0.0.0', '5.0.0', '<') === true ||
+	version_compare(App::version() ?? '0.0.0', '6.0.0', '>=') === true
 ) {
 	throw new Exception('Kirby SEO requires Kirby 5');
 }
@@ -45,6 +45,11 @@ App::plugin('tobimori/seo', [
 		),
 		'lang'
 	),
+	'fields' => [
+		'seo-writer' => [
+			'extends' => 'writer'
+		]
+	],
 	'snippets' => [
 		'seo/schemas' => __DIR__ . '/snippets/schemas.php',
 		'seo/head' => __DIR__ . '/snippets/head.php',
@@ -61,6 +66,7 @@ App::plugin('tobimori/seo', [
 		'seo/fields/og-image' => require __DIR__ . '/blueprints/fields/og-image.php',
 		'seo/fields/og-group' => __DIR__ . '/blueprints/fields/og-group.yml',
 		'seo/fields/meta-group' => __DIR__ . '/blueprints/fields/meta-group.yml',
+		'seo/fields/title-template' => __DIR__ . '/blueprints/fields/title-template.yml',
 		'seo/fields/robots' => require __DIR__ . '/blueprints/fields/robots.php',
 		'seo/fields/site-robots' => require __DIR__ . '/blueprints/fields/site-robots.php',
 		'seo/fields/social-media' => require __DIR__ . '/blueprints/fields/social-media.php',
