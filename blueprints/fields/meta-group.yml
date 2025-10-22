@@ -9,8 +9,8 @@ fields:
     type: text
     placeholder: "{{ page.title }}"
   metaTemplate:
+    extends: seo/fields/title-template
     label: seo.fields.metaTitleTemplate.label
-    type: text
     help: seo.fields.metaTitleTemplate.help
     width: 2/3
     placeholder: "{{ page.metadata.metaTemplate }}"
@@ -25,9 +25,11 @@ fields:
       - "{{ t('seo.fields.useTitleTemplate.yes') }}"
   metaDescription:
     label: seo.fields.metaDescription.label
-    type: textarea
+    type: seo-writer
+    inline: true
+    marks: false
+    nodes: false
     help: seo.fields.metaDescription.help
     placeholder: "{{ page.metadata.metaDescription }}"
-    buttons: false
   _seoLine1:
     type: line

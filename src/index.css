@@ -1,0 +1,17 @@
+.k-seo-template-variable {
+	color: light-dark(var(--theme-color-text), var(--theme-color-back));
+	background: color-mix(
+		in srgb,
+		var(--theme-color-back) 25%,
+		var(--input-color-back)
+	);
+	border-radius: var(--button-rounded);
+	display: inline-block;
+	font-weight: var(--font-semi);
+	height: var(--text-line-height) em;
+	line-height: var(--text-line-height) em;
+	padding-inline: 0.5rem;
+	white-space: nowrap;
+	user-select: none;
+	vertical-align: baseline;
+}

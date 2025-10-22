@@ -1,3 +1,8 @@
+import "./index.css"
+
+import SeoWriterField from "./fields/seo-writer.vue"
+import SeoWriterInput from "./fields/seo-writer-input.vue"
+import { createTemplateVariableNode } from "./nodes/template-variable.js"
 import HeadingStructure from "./sections/heading-structure.vue"
 import SeoPreview from "./sections/seo-preview.vue"
 
@@ -9,5 +14,27 @@ panel.plugin("tobimori/seo", {
 	sections: {
 		"heading-structure": HeadingStructure,
 		"seo-preview": SeoPreview
+	},
+	fields: {
+		"seo-writer": SeoWriterField
+	},
+	components: {
+		"k-seo-writer-input": SeoWriterInput
+	},
+	writerNodes: {
+		seoTemplateTitle: createTemplateVariableNode({
+			name: "seoTemplateTitle",
+			icon: "page",
+			variable: "title",
+			label: "seo.writerNodes.template.title",
+			theme: "blue"
+		}),
+		seoTemplateSiteTitle: createTemplateVariableNode({
+			name: "seoTemplateSiteTitle",
+			icon: "globe",
+			variable: "site.title",
+			label: "seo.writerNodes.template.siteTitle",
+			theme: "purple"
+		})
 	}
 })

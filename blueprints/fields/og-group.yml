@@ -6,8 +6,8 @@ fields:
     numbered: false
     help: seo.site.og.headline.help
   ogTemplate:
+    extends: seo/fields/title-template
     label: seo.fields.ogTitleTemplate.label
-    type: text
     width: 2/3
     help: seo.fields.metaTitleTemplate.help
     placeholder: "{{ page.metadata.ogTemplate }}"
@@ -22,8 +22,10 @@ fields:
       - "{{ t('seo.fields.useTitleTemplate.yes') }}"
   ogDescription:
     label: seo.fields.ogDescription.label
-    type: textarea
-    buttons: false
+    type: seo-writer
+    inline: true
+    marks: false
+    nodes: false
     placeholder: "{{ page.metadata.ogDescription }}"
   ogImage:
     label: seo.fields.ogImage.label

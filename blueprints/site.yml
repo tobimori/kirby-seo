@@ -10,14 +10,16 @@ columns:
         type: headline
         help: seo.site.meta.headline.help
       metaTemplate:
+        extends: seo/fields/title-template
         label: seo.fields.metaTitleTemplate.label
-        type: text
         help: seo.fields.metaTitleTemplate.help
       metaDescription:
         label: seo.fields.metaDescription.label
-        type: textarea
+        type: seo-writer
+        inline: true
+        marks: false
+        nodes: false
         help: seo.fields.metaDescription.help
-        buttons: false
       _seoLine1:
         type: line
       _ogHeadline:
@@ -26,15 +28,17 @@ columns:
         numbered: false
         help: seo.site.og.headline.help
       ogTemplate:
+        extends: seo/fields/title-template
         label: seo.fields.ogTitleTemplate.label
-        type: text
         default: "{{ title }}"
         help: seo.fields.metaTitleTemplate.help
         placeholder: "{{ site.metaTemplate }}"
       ogDescription:
         label: seo.fields.ogDescription.label
-        type: textarea
-        buttons: false
+        type: seo-writer
+        inline: true
+        marks: false
+        nodes: false
         placeholder: "{{ site.metaDescription }}"
       ogSiteName:
         label: seo.fields.ogSiteName.label
