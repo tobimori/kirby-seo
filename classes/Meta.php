@@ -369,6 +369,14 @@ class Meta
 
 		foreach (array_diff($cascade, $exclude) as $method) {
 			if ($field = $this->$method($key)) {
+				if (
+					is_string($value = $field->value())
+					&& Str::contains($value, 'data-seo-template-variable')
+				) {
+					$value = Str::replace(strip_tags($value), '&nbsp;', ' ');
+					return new Field($this->page, $key, $value);
+				}
+
 				return $field;
 			}
 		}
