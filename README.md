@@ -21,7 +21,7 @@
 
 If you're looking to use Kirby SEO with Kirby 5 or newer, please install the Alpha version of the plugin:
 
-```composer require tobimori/kirby-seo:^2.0.0-alpha.5```
+```composer require tobimori/kirby-seo:^2.0.0-alpha.6```
 
 ## License
 
