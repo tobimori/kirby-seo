@@ -19,6 +19,10 @@
 
 [Read the documentation](https://plugins.andkindness.com/seo/docs/get-started/feature-overview) to get started with Kirby SEO.
 
+If you're looking to use Kirby SEO with Kirby 5 or newer, please install the Alpha version of the plugin:
+
+```composer require tobimori/kirby-seo:^2.0.0-alpha.5```
+
 ## License
 
 Kirby SEO 2.0 is not free software. In order to run it on a public server, you'll have to purchase a valid Kirby license & a valid SEO license.
