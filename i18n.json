@@ -2,7 +2,7 @@
 	"version": 1.8,
 	"locale": {
 		"source": "en",
-		"targets": ["de", "en", "fr", "nl", "cs", "pt_PT", "sv_SE", "tr"]
+		"targets": ["de", "en", "fr", "nl", "cs", "pt_PT", "sv_SE", "tr", "ro"]
 	},
 	"buckets": {
 		"json": {
