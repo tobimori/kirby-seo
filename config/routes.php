@@ -6,91 +6,170 @@ use tobimori\Seo\Seo;
 use tobimori\Seo\Sitemap\SitemapIndex;
 
 return [
-	[
-		'pattern' => 'robots.txt',
-		'action' => function () {
-			if (Seo::option('robots.active')) {
-				$content = snippet('seo/robots.txt', [], true);
-				return new Response($content, 'text/plain', 200);
-			}
+    [
+        'pattern' => 'robots.txt',
+        'method'  => 'GET|HEAD',
+        'action'  => function () {
+            if (Seo::option('robots.active')) {
+                $content = snippet('seo/robots.txt', [], true);
+                return new Response($content, 'text/plain', 200);
+            }
 
-			$this->next();
-		}
-	],
-	[
-		'pattern' => 'sitemap',
-		'action' => function () {
-			if (!Seo::option('sitemap.redirect') || !Seo::option('sitemap.active')) {
-				$this->next();
-			}
+            $this->next();
+        }
+    ],
+    [
+        'pattern' => 'robots.txt',
+        'method'  => 'OPTIONS',
+        'action'  => function () {
+            return new Response('', 'text/plain', 204, ['Allow' => 'GET, HEAD']);
+        }
+    ],
+    [
+        'pattern' => 'robots.txt',
+        'method'  => 'ALL',
+        'action'  => function () {
+            return new Response('Method Not Allowed', 'text/plain', 405, ['Allow' => 'GET, HEAD']);
+        }
+    ],
 
-			go('/sitemap.xml');
-		}
-	],
-	[
-		'pattern' => 'sitemap.xsl',
-		'action' => function () {
-			if (!Seo::option('sitemap.active')) {
-				$this->next();
-			}
+    [
+        'pattern' => 'sitemap',
+        'method'  => 'GET|HEAD',
+        'action'  => function () {
+            if (!Seo::option('sitemap.redirect') || !Seo::option('sitemap.active')) {
+                $this->next();
+            }
 
-			kirby()->response()->type('text/xsl');
+            go('/sitemap.xml');
+        }
+    ],
+    [
+        'pattern' => 'sitemap',
+        'method'  => 'OPTIONS',
+        'action'  => function () {
+            return new Response('', 'text/plain', 204, ['Allow' => 'GET, HEAD']);
+        }
+    ],
+    [
+        'pattern' => 'sitemap',
+        'method'  => 'ALL',
+        'action'  => function () {
+            return new Response('Method Not Allowed', 'text/plain', 405, ['Allow' => 'GET, HEAD']);
+        }
+    ],
 
-			$lang = Seo::option('sitemap.locale', 'en');
-			kirby()->setCurrentTranslation($lang);
+    [
+        'pattern' => 'sitemap.xsl',
+        'method'  => 'GET',
+        'action'  => function () {
+            if (!Seo::option('sitemap.active')) {
+                $this->next();
+            }
 
-			return Page::factory([
-				'slug' => 'sitemap',
-				'template' => 'sitemap',
-				'model' => 'sitemap',
-				'content' => [
-					'title' => t('sitemap'),
-				],
-			])->render(contentType: 'xsl');
-		}
-	],
-	[
-		'pattern' => 'sitemap.xml',
-		'action' => function () {
-			if (!Seo::option('sitemap.active', true)) {
-				$this->next();
-			}
+            kirby()->response()->type('text/xsl');
 
-			SitemapIndex::instance()->generate();
-			kirby()->response()->type('text/xml');
-			return Page::factory([
-				'slug' => 'sitemap',
-				'template' => 'sitemap',
-				'model' => 'sitemap',
-				'content' => [
-					'title' => t('sitemap'),
-					'index' => null,
-				],
-			])->render(contentType: 'xml');
-		}
-	],
-	[
-		'pattern' => 'sitemap-(:any).xml',
-		'action' => function (string $index) {
-			if (!Seo::option('sitemap.active', true)) {
-				$this->next();
-			}
+            $lang = Seo::option('sitemap.locale', 'en');
+            kirby()->setCurrentTranslation($lang);
 
-			SitemapIndex::instance()->generate();
-			if (!SitemapIndex::instance()->isValidIndex($index)) {
-				$this->next();
-			}
+            return Page::factory([
+                'slug' => 'sitemap',
+                'template' => 'sitemap',
+                'model' => 'sitemap',
+                'content' => [
+                    'title' => t('sitemap'),
+                ],
+            ])->render(contentType: 'xsl');
+        }
+    ],
+    [
+        'pattern' => 'sitemap.xsl',
+        'method'  => 'OPTIONS',
+        'action'  => function () {
+            return new Response('', 'text/plain', 204, ['Allow' => 'GET']);
+        }
+    ],
+    [
+        'pattern' => 'sitemap.xsl',
+        'method'  => 'ALL',
+        'action'  => function () {
+            return new Response('Method Not Allowed', 'text/plain', 405, ['Allow' => 'GET']);
+        }
+    ],
 
-			kirby()->response()->type('text/xml');
-			return Page::factory([
-				'slug' => 'sitemap-' . $index,
-				'template' => 'sitemap',
-				'model' => 'sitemap',
-				'content' => [
-					'title' => t('sitemap'),
-					'index' => $index,
-				],
-			])->render(contentType: 'xml');
-		}
-	]
+    [
+        'pattern' => 'sitemap.xml',
+        'method'  => 'GET|HEAD',
+        'action'  => function () {
+            if (!Seo::option('sitemap.active', true)) {
+                $this->next();
+            }
+
+            SitemapIndex::instance()->generate();
+            kirby()->response()->type('text/xml');
+            return Page::factory([
+                'slug' => 'sitemap',
+                'template' => 'sitemap',
+                'model' => 'sitemap',
+                'content' => [
+                    'title' => t('sitemap'),
+                    'index' => null,
+                ],
+            ])->render(contentType: 'xml');
+        }
+    ],
+    [
+        'pattern' => 'sitemap.xml',
+        'method'  => 'OPTIONS',
+        'action'  => function () {
+            return new Response('', 'text/plain', 204, ['Allow' => 'GET, HEAD']);
+        }
+    ],
+    [
+        'pattern' => 'sitemap.xml',
+        'method'  => 'ALL',
+        'action'  => function () {
+            return new Response('Method Not Allowed', 'text/plain', 405, ['Allow' => 'GET, HEAD']);
+        }
+    ],
+
+    [
+        'pattern' => 'sitemap-(:any).xml',
+        'method'  => 'GET|HEAD',
+        'action'  => function (string $index) {
+            if (!Seo::option('sitemap.active', true)) {
+                $this->next();
+            }
+
+            SitemapIndex::instance()->generate();
+            if (!SitemapIndex::instance()->isValidIndex($index)) {
+                $this->next();
+            }
+
+            kirby()->response()->type('text/xml');
+            return Page::factory([
+                'slug' => 'sitemap-' . $index,
+                'template' => 'sitemap',
+                'model' => 'sitemap',
+                'content' => [
+                    'title' => t('sitemap'),
+                    'index' => $index,
+                ],
+            ])->render(contentType: 'xml');
+        }
+    ],
+    [
+        'pattern' => 'sitemap-(:any).xml',
+        'method'  => 'OPTIONS',
+        'action'  => function () {
+            return new Response('', 'text/plain', 204, ['Allow' => 'GET, HEAD']);
+        }
+    ],
+    [
+        'pattern' => 'sitemap-(:any).xml',
+        'method'  => 'ALL',
+        'action'  => function () {
+            return new Response('Method Not Allowed', 'text/plain', 405, ['Allow' => 'GET, HEAD']);
+        }
+    ],
 ];
