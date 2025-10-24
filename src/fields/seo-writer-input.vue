@@ -31,6 +31,7 @@ export default {
 	.k-writer-input .k-toolbar-button {
 		padding-inline: var(--spacing-5);
 		--button-width: auto;
+		flex-basis: max-content;
 
 		&::after {
 			content: attr(title);
