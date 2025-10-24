@@ -1,7 +1,9 @@
 ![Kirby SEO Banner](/.github/new-banner.png)
 
 <h1 align="center">Kirby SEO</h1>
-<p align="center">All-in-one toolkit that makes implementing SEO & Meta best practices a breeze</p>
+<p align="center">
+	The default choice for SEO on Kirby: Implement technical SEO & Meta best practices with ease and provide an easy-to-use editor experience
+</p>
 
 ---
 
@@ -23,6 +25,10 @@ If you're looking to use Kirby SEO with Kirby 5 or newer, please install the Alp
 
 ```composer require tobimori/kirby-seo:^2.0.0-alpha.6```
 
+## Contributing
+
+Kirby SEO is open to contributors: If you open a pull request that gets merged, such as fixing a bug or translating the plugin into a new language, you're eligible for a free SEO license of your choice. Please note that I might reject minor repeat contributions or simple fixes of typos for this. Please send an email to support after your contribution has been merged.
+
 ## License
 
 Kirby SEO 2.0 is not free software. In order to run it on a public server, you'll have to purchase a valid Kirby license & a valid SEO license.
@@ -32,4 +38,4 @@ Copyright 2023-2025 © Tobias Möritz - Love & Kindness GmbH
 
 ---
 
-Kirby SEO 1.0 is licensed under the MIT license.
+[Kirby SEO 1.0 is licensed under the MIT license.](./LICENSE.md)

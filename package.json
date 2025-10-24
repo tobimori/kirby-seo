@@ -11,18 +11,18 @@
 		"prepare": "husky"
 	},
 	"devDependencies": {
-		"@eslint/js": "^9.28.0",
-		"eslint": "^9.28.0",
-		"eslint-config-prettier": "^10.1.5",
-		"eslint-plugin-vue": "^10.2.0",
+		"@eslint/js": "^9.38.0",
+		"eslint": "^9.38.0",
+		"eslint-config-prettier": "^10.1.8",
+		"eslint-plugin-vue": "^10.5.1",
 		"husky": "^9.1.7",
-		"kirbyup": "^3.3.0",
-		"lint-staged": "^16.1.0",
-		"postcss": "^8.5.4",
-		"prettier": "^3.5.3"
+		"kirbyup": "^3.4.1",
+		"lint-staged": "^16.2.6",
+		"postcss": "^8.5.6",
+		"prettier": "^3.6.2"
 	},
 	"dependencies": {
-		"kirbyuse": "^0.12.1"
+		"kirbyuse": "^1.0.0"
 	},
 	"browserslist": [
 		"last 2 Android versions",
