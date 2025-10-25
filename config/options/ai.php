@@ -1,6 +1,6 @@
 <?php
 
-use tobimori\Seo\Ai\Providers\OpenAi;
+use tobimori\Seo\Ai\Drivers\OpenAi;
 
 return [
 	'enabled' => true,
@@ -13,7 +13,7 @@ return [
 
 	'providers' => [
 		'openai' => [
-			'class' => OpenAi::class,
+			'driver' => OpenAi::class,
 			'config' => [
 				'apiKey' => '', // needs to be defined
 				'model' => 'gpt-5-mini',
@@ -21,7 +21,7 @@ return [
 			],
 		],
 		'openrouter' => [
-			'class' => OpenAi::class,
+			'driver' => OpenAi::class,
 			'config' => [
 				'apiKey' => '', // needs to be defined
 				'model' => 'openai/gpt-5-mini',
@@ -36,15 +36,17 @@ return [
 	 * files and referenced by their key.
 	 */
 	'tasks' => [
-		'pageTitle' => [
-			'provider' => null, // e.g. => 'openai',
-			'prompt' => 'seo.ai.prompts.pageTitle',
-			'context' => [],
+		'title' => [
+			'prompt' => 'seo.ai.prompts.title',
+			'provider' => null, // optional override
+		],
+		'description' => [
+			'prompt' => 'seo.ai.prompts.description',
+			'provider' => null, // optional override
 		],
 		'imageAlt' => [
-			'provider' => null, // e.g. => 'openai',
 			'prompt' => 'seo.ai.prompts.imageAlt',
-			'context' => [],
+			'provider' => null, // optional override
 		],
 	],
 ];

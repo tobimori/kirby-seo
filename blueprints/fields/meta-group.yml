@@ -6,7 +6,8 @@ fields:
     numbered: false
   metaTitle:
     label: seo.fields.titleOverwrite.label
-    type: text
+    type: seo-writer
+    ai: title
     placeholder: "{{ page.title }}"
   metaTemplate:
     extends: seo/fields/title-template
@@ -26,9 +27,7 @@ fields:
   metaDescription:
     label: seo.fields.metaDescription.label
     type: seo-writer
-    inline: true
-    marks: false
-    nodes: false
+    ai: description
     help: seo.fields.metaDescription.help
     placeholder: "{{ page.metadata.metaDescription }}"
   _seoLine1:

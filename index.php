@@ -24,6 +24,7 @@ App::plugin('tobimori/seo', [
 	'pageMethods' => require __DIR__ . '/config/page-methods.php',
 	'hooks' => require __DIR__ . '/config/hooks.php',
 	'routes' => require __DIR__ . '/config/routes.php',
+	'fields' => require __DIR__ . '/config/fields.php',
 	'commands' => [
 		//	'seo:hello' => require __DIR__ . '/config/commands/hello.php',
 	],
@@ -45,11 +46,6 @@ App::plugin('tobimori/seo', [
 		),
 		'lang'
 	),
-	'fields' => [
-		'seo-writer' => [
-			'extends' => 'writer'
-		]
-	],
 	'snippets' => [
 		'seo/schemas' => __DIR__ . '/snippets/schemas.php',
 		'seo/head' => __DIR__ . '/snippets/head.php',
