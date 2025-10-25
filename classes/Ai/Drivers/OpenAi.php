@@ -3,9 +3,9 @@
 namespace tobimori\Seo\Ai\Drivers;
 
 use Generator;
-use Kirby\Exception\Exception as KirbyException;
 use tobimori\Seo\Ai\Chunk;
 use tobimori\Seo\Ai\Driver;
+use tobimori\Seo\Ai\SseStream;
 
 class OpenAi extends Driver
 {
@@ -36,10 +36,9 @@ class OpenAi extends Driver
 			'stream' => true,
 		];
 
-		// Responses API accepts strings, arrays of content blocks, or message lists.
-		if (isset($context['input']) === true) {
+		if (isset($context['input'])) {
 			$payload['input'] = $context['input'];
-		} elseif (isset($context['messages']) === true) {
+		} elseif (isset($context['messages'])) {
 			$payload['input'] = $context['messages'];
 		} else {
 			$payload['input'] = $input;
@@ -53,126 +52,47 @@ class OpenAi extends Driver
 			$payload['metadata'] = $context['metadata'];
 		}
 
-		$options = [
-			'http' => [
-				'method' => 'POST',
-				'header' => implode("\r\n", $headers),
-				'content' => json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
-				'ignore_errors' => true,
-				'protocol_version' => 1.1,
-			]
-		];
+		$stream = new SseStream($endpoint, $headers, $payload, (int)$this->config('timeout', 120));
+		yield from $stream->stream(function (array $event): Generator {
+			$type = $event['type'] ?? null;
 
-		$contextResource = stream_context_create($options);
-		$handle = @fopen($endpoint, 'rb', false, $contextResource);
-
-		if ($handle === false) {
-			throw new KirbyException('Failed to establish OpenAI stream.');
-		}
-
-		try {
-			$meta    = stream_get_meta_data($handle);
-			$headers = $meta['wrapper_data'] ?? [];
-			$status  = $this->extractStatusCode($headers);
-
-			if ($status !== null && $status >= 400) {
-				$body = stream_get_contents($handle) ?: '';
-				throw new KirbyException(sprintf(
-					'OpenAI request failed (%d): %s',
-					$status,
-					$this->summarizeBody($body)
-				));
+			if ($type === 'response.created') {
+				yield Chunk::streamStart($event);
+				return;
 			}
 
-			stream_set_blocking($handle, true);
-			stream_set_timeout($handle, 60);
-
-			while (!feof($handle)) {
-				$line = fgets($handle);
-
-				if ($line === false) {
-					$meta = stream_get_meta_data($handle);
-					if (($meta['timed_out'] ?? false) === true) {
-						throw new KirbyException('OpenAI stream timed out.');
-					}
-
-					break;
-				}
-
-				$line = trim($line);
-
-				// skip keep-alive newlines and unrelated prefixes
-				if ($line === '' || str_starts_with($line, ':')) {
-					continue;
-				}
-
-				if (str_starts_with($line, 'data:') === false) {
-					continue;
-				}
-
-				$payload = trim(substr($line, 5));
-
-				if ($payload === '' || $payload === '[DONE]') {
-					yield Chunk::done();
-					break;
-				}
-
-				$event = json_decode($payload, true);
-
-				if (json_last_error() !== JSON_ERROR_NONE || $event === null) {
-					continue;
-				}
-
-				$type = $event['type'] ?? null;
-
-				if ($type === 'response.error') {
-					$message = $event['error']['message'] ?? 'Unknown OpenAI streaming error.';
-					throw new KirbyException($message);
-				}
-
-				if ($type === 'response.output_text.delta') {
-					$delta = $event['delta'] ?? '';
-
-					if ($delta !== '') {
-						yield Chunk::textDelta($delta);
-					}
-
-					continue;
-				}
-
-				if ($type === 'response.completed') {
-					yield Chunk::done($event['response'] ?? null);
-					break;
-				}
+			if ($type === 'response.in_progress') {
+				yield Chunk::textStart($event);
+				return;
 			}
-		} finally {
-			fclose($handle);
-		}
-	}
 
-	private function extractStatusCode(array $headers): int|null
-	{
-		$statusLine = $headers[0] ?? null;
+			if ($type === 'response.output_text.delta') {
+				$delta = $event['delta'] ?? '';
+				if ($delta !== '') {
+					yield Chunk::textDelta($delta, $event);
+				}
+				return;
+			}
 
-		if ($statusLine === null) {
-			return null;
-		}
+			if ($type === 'response.output_text.done') {
+				yield Chunk::textComplete($event);
+				return;
+			}
 
-		if (preg_match('/HTTP\/\d(?:\.\d)?\s+(\d{3})/', $statusLine, $matches) === 1) {
-			return (int)$matches[1];
-		}
+			if ($type === 'response.completed') {
+				yield Chunk::streamEnd($event);
+				return;
+			}
 
-		return null;
-	}
+			if ($type === 'response.output_item.added' && ($event['item']['type'] ?? null) === 'reasoning') {
+				yield Chunk::thinkingStart($event);
+				return;
+			}
 
-	private function summarizeBody(string $body, int $limit = 200): string
-	{
-		$body = trim($body);
-
-		if (strlen($body) <= $limit) {
-			return $body;
-		}
-
-		return substr($body, 0, $limit - 3) . '...';
+			if ($type === 'response.error') {
+				$message = $event['error']['message'] ?? 'Unknown OpenAI streaming error.';
+				yield Chunk::error($message, $event);
+			}
+		});
 	}
 }
