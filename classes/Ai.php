@@ -3,6 +3,8 @@
 namespace tobimori\Seo;
 
 use Generator;
+use Kirby\Cms\App;
+use Kirby\Cms\Site;
 use Kirby\Exception\Exception as KirbyException;
 use tobimori\Seo\Ai\Driver;
 
@@ -48,19 +50,31 @@ final class Ai
 
 	public static function streamTask(string $taskId, array $variables = [], array $context = []): Generator
 	{
-		$task = Seo::option("ai.tasks.{$taskId}");
-		if (!is_array($task)) {
-			throw new KirbyException("AI task \"{$taskId}\" is not defined.");
-		}
-
-		$promptKey = $task['prompt'] ?? null;
-		if (!is_string($promptKey) || $promptKey === '') {
-			throw new KirbyException("AI task \"{$taskId}\" is missing a prompt key.");
-		}
-
-		$prompt = tt($promptKey, $variables);
+		$prompt = self::renderPrompt($taskId, $variables);
 		$providerId = $task['provider'] ?? null;
 
-		return self::provider($providerId)->stream($prompt, $context);
+		return self::provider($providerId)->stream($prompt);
+	}
+
+	private static function renderPrompt(string $taskId, $model, ?string $lang): string
+	{
+		$snippet = "seo/prompts/tasks/{$taskId}";
+
+		$page = $model instanceof Site ? $model->homePage() : $model;
+		App::instance()->site()->visit($page, $lang);
+		App::instance()->data = [
+			'page' => $page,
+			'site' => App::instance()->site(),
+			'kirby' => App::instance(),
+		];
+		$content = snippet($snippet, [], return: true);
+
+		$content = trim($content ?? '');
+
+		if ($content !== '') {
+			return $content;
+		}
+
+		throw new KirbyException("AI prompt snippet \"{$snippet}\" is missing or empty.");
 	}
 }

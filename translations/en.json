@@ -65,5 +65,9 @@
 	"sitemap.lastUpdated": "Last Updated",
 	"sitemap.priority": "Priority",
 	"sitemap.url": "URL",
-	"sitemap.noEntries": "No entries"
+	"sitemap.noEntries": "No entries",
+	"ai.action.generate": "Write with AI",
+	"ai.action.stop": "Stop generating",
+	"ai.error.request": "The AI request failed. Please try again.",
+	"ai.error.disabled": "AI features are disabled."
 }

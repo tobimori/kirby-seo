@@ -47,6 +47,12 @@ App::plugin('tobimori/seo', [
 		'lang'
 	),
 	'snippets' => [
+		'seo/prompts/system' => __DIR__ . '/snippets/prompts/system.php',
+		'seo/prompts/parts/content' => __DIR__ . '/snippets/prompts/parts/content.php',
+		'seo/prompts/tasks/title' => __DIR__ . '/snippets/prompts/tasks/title.php',
+		'seo/prompts/tasks/description' => __DIR__ . '/snippets/prompts/tasks/description.php',
+		'seo/prompts/tasks/og-title' => __DIR__ . '/snippets/prompts/tasks/og-title.php',
+		'seo/prompts/tasks/og-description' => __DIR__ . '/snippets/prompts/tasks/og-description.php',
 		'seo/schemas' => __DIR__ . '/snippets/schemas.php',
 		'seo/head' => __DIR__ . '/snippets/head.php',
 		'seo/robots.txt' => __DIR__ . '/snippets/robots.txt.php',

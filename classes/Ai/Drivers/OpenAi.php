@@ -15,12 +15,12 @@ class OpenAi extends Driver
 	/**
 	 * @inheritDoc
 	 */
-	public function stream(string $prompt, array $context = []): Generator
-	{
+	public function stream(
+		string $prompt,
+		string $instructions = '',
+		string|null $model = null,
+	): Generator {
 		$apiKey = $this->config('apiKey', required: true);
-		$model = $context['model'] ?? $this->config('model', static::DEFAULT_MODEL);
-		$endpoint = $this->config('endpoint', static::DEFAULT_ENDPOINT);
-		$input = $context['input'] ?? $prompt;
 		$headers = [
 			'Content-Type: application/json',
 			'Accept: text/event-stream',
@@ -32,27 +32,13 @@ class OpenAi extends Driver
 		}
 
 		$payload = [
-			'model'  => $model,
+			'model' => $model ?? $this->config('model', static::DEFAULT_MODEL),
+			'input' => $prompt,
+			'instructions' => $instructions,
 			'stream' => true,
 		];
 
-		if (isset($context['input'])) {
-			$payload['input'] = $context['input'];
-		} elseif (isset($context['messages'])) {
-			$payload['input'] = $context['messages'];
-		} else {
-			$payload['input'] = $input;
-		}
-
-		if (isset($context['instructions'])) {
-			$payload['instructions'] = $context['instructions'];
-		}
-
-		if (isset($context['metadata']) && is_array($context['metadata'])) {
-			$payload['metadata'] = $context['metadata'];
-		}
-
-		$stream = new SseStream($endpoint, $headers, $payload, (int)$this->config('timeout', 120));
+		$stream = new SseStream($this->config('endpoint', static::DEFAULT_ENDPOINT), $headers, $payload, (int)$this->config('timeout', 120));
 		yield from $stream->stream(function (array $event): Generator {
 			$type = $event['type'] ?? null;
 

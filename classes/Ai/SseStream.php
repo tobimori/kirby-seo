@@ -29,6 +29,8 @@ use const CURLM_CALL_MULTI_PERFORM;
 
 final class SseStream
 {
+	private const int ERROR_CONTEXT_LIMIT = 8192;
+
 	public function __construct(
 		private readonly string $endpoint,
 		private readonly array $headers,
@@ -44,6 +46,7 @@ final class SseStream
 	public function stream(callable $mapper): Generator
 	{
 		$buffer = '';
+		$response = '';
 		$handle = curl_init($this->endpoint);
 
 		curl_setopt_array($handle, [
@@ -55,8 +58,14 @@ final class SseStream
 			),
 			CURLOPT_RETURNTRANSFER => false,
 			CURLOPT_TIMEOUT => $this->timeout,
-			CURLOPT_WRITEFUNCTION => static function ($curl, $data) use (&$buffer) {
+			CURLOPT_WRITEFUNCTION => static function ($curl, $data) use (&$buffer, &$response) {
 				$buffer .= $data;
+				$currentLength = strlen($response);
+
+				if ($currentLength < self::ERROR_CONTEXT_LIMIT) {
+					$response .= substr($data, 0, self::ERROR_CONTEXT_LIMIT - $currentLength);
+				}
+
 				return strlen($data);
 			},
 		]);
@@ -89,7 +98,24 @@ final class SseStream
 
 			$code = curl_getinfo($handle, CURLINFO_HTTP_CODE);
 			if ($code !== null && $code >= 400) {
-				throw new KirbyException(sprintf('Streaming request failed (%d)', $code));
+				$message = sprintf('Streaming request failed (%d)', $code);
+				$body = trim($response);
+
+				if ($body !== '') {
+					$decoded = json_decode($body, true);
+
+					if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+						$body = $decoded['error']['message'] ?? $decoded['message'] ?? $body;
+					}
+
+					if (strlen($body) > 200) {
+						$body = substr($body, 0, 200) . '...';
+					}
+
+					$message .= ': ' . preg_replace('/\s+/', ' ', $body);
+				}
+
+				throw new KirbyException($message);
 			}
 		} finally {
 			curl_multi_remove_handle($multi, $handle);
