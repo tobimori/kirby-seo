@@ -65,5 +65,19 @@
 	"sitemap.lastUpdated": "Last Updated",
 	"sitemap.priority": "Priority",
 	"sitemap.url": "URL",
-	"sitemap.noEntries": "No entries"
+	"sitemap.noEntries": "No entries",
+	"ai.action.generate": "Generate with AI",
+	"ai.action.regenerate": "Regenerate",
+	"ai.action.edit": "Edit…",
+	"ai.action.customize": "Customize AI generation…",
+	"ai.action.stop": "Stop",
+	"ai.error.request": "The AI request failed. Please try again.",
+	"ai.error.disabled": "AI features are disabled.",
+	"ai.error.permission": "You do not have the permission to use AI features.",
+	"ai.dialog.instructions.label": "Instructions",
+	"ai.dialog.instructions.placeholder": "What changes do you want to make to the text?",
+	"ai.dialog.edit.submit": "Apply Changes",
+	"ai.dialog.custom.label": "Custom Instructions",
+	"ai.dialog.custom.placeholder": "What kind of content do you want to generate?",
+	"ai.dialog.custom.submit": "Generate"
 }

@@ -76,6 +76,7 @@ return [
 		'base' => null, // base url for canonical links
 		'trailingSlash' => false, // whether to add trailing slashes to canonical URLs (except for files)
 	],
+	'ai' => require __DIR__ . '/options/ai.php',
 	'generateSchema' => true, // whether to generate default schema.org data
 	'locale' => 'en_US', // default locale, used for single-language sites
 	'dateFormat' => null, // custom date format

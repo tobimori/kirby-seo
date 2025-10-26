@@ -1,3 +1,32 @@
+<template>
+	<div
+		ref="editor"
+		v-direction
+		:class="['k-writer', 'k-writer-input', $attrs.class]"
+		:data-disabled="disabled"
+		:data-empty="isEmpty"
+		:data-placeholder="placeholder"
+		:spellcheck="spellcheck"
+		:style="$attrs.style"
+	>
+		<k-writer-toolbar
+			v-if="editor && !disabled"
+			ref="toolbar"
+			v-bind="toolbarOptions"
+			@command="onCommand"
+		/>
+
+		<textarea
+			ref="output"
+			:name="name"
+			:required="required"
+			:value="value"
+			class="input-hidden"
+			tabindex="-1"
+		/>
+	</div>
+</template>
+
 <script>
 export default {
 	extends: "k-writer-input",

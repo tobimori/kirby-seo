@@ -65,5 +65,19 @@
 	"sitemap.lastUpdated": "Dernière mise à jour",
 	"sitemap.priority": "Priorité",
 	"sitemap.url": "URL",
-	"sitemap.noEntries": "Aucune entrée"
+	"sitemap.noEntries": "Aucune entrée",
+	"ai.action.generate": "Générer avec l'IA",
+	"ai.action.regenerate": "Régénérer",
+	"ai.action.edit": "Modifier...",
+	"ai.action.customize": "Personnaliser la génération IA...",
+	"ai.action.stop": "Arrêter",
+	"ai.error.request": "La requête IA a échoué. Veuillez réessayer.",
+	"ai.error.disabled": "Les fonctionnalités d'IA sont désactivées.",
+	"ai.error.permission": "Vous n'avez pas la permission d'utiliser les fonctionnalités d'IA.",
+	"ai.dialog.instructions.label": "Instructions",
+	"ai.dialog.instructions.placeholder": "Quelles modifications souhaitez-vous apporter au texte ?",
+	"ai.dialog.edit.submit": "Appliquer les modifications",
+	"ai.dialog.custom.label": "Instructions personnalisées",
+	"ai.dialog.custom.placeholder": "Quel type de contenu souhaitez-vous générer ?",
+	"ai.dialog.custom.submit": "Générer"
 }

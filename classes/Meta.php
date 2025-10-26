@@ -373,7 +373,7 @@ class Meta
 					is_string($value = $field->value())
 					&& Str::contains($value, 'data-seo-template-variable')
 				) {
-					$value = Str::replace(strip_tags($value), '&nbsp;', ' ');
+					$value = Str::unhtml($value);
 					return new Field($this->page, $key, $value);
 				}
 

@@ -23,9 +23,7 @@ fields:
   ogDescription:
     label: seo.fields.ogDescription.label
     type: seo-writer
-    inline: true
-    marks: false
-    nodes: false
+    ai: og-description
     placeholder: "{{ page.metadata.ogDescription }}"
   ogImage:
     label: seo.fields.ogImage.label
