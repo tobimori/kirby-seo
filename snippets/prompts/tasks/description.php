@@ -20,5 +20,5 @@ snippet('seo/prompts/introduction', [
 	You'll receive the content of the page as well as any meta tags that are already set below.
 </task>
 
-<?php snippet('seo/prompts/meta');
+<?php snippet('seo/prompts/meta', ['currentField' => 'metaDescription']);
 snippet('seo/prompts/content');

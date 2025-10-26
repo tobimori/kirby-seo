@@ -35,5 +35,5 @@ snippet('seo/prompts/introduction', [
 	If useful for the customers niche, include a keyword for the location. AVOID for global companies or niche subpages.
 </task>
 
-<?php snippet('seo/prompts/meta');
+<?php snippet('seo/prompts/meta', ['currentField' => 'metaTitle']);
 snippet('seo/prompts/content');

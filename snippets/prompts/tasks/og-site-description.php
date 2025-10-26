@@ -21,5 +21,5 @@ snippet('seo/prompts/introduction', [
 	You'll receive the content of the home page as well as any meta tags that are already set below.
 </task>
 
-<?php snippet('seo/prompts/site-meta');
+<?php snippet('seo/prompts/site-meta', ['currentField' => 'ogDescription']);
 snippet('seo/prompts/content'); ?>

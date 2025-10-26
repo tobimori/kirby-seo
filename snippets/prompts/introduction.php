@@ -31,7 +31,6 @@
 	- Preserve as much of the original as possible
 	- Keep the same style, tone, and structure
 	- Change ONLY the specific parts mentioned in the instructions below
-	- If no specific change is mentioned for something, leave it unchanged
 </primary-editing-task>
 <?php endif ?>
 
