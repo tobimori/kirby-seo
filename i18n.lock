@@ -30,7 +30,7 @@ checksums:
     site.meta.headline: d97df20cd05af70b8652a56e7fe91860
     site.meta.headline.help: 953faf8b7ad67cc6b88fc41f383617e9
     fields.metaTitleTemplate.label: c59eb2caa5e6d129c62d727a9958313f
-    fields.metaTitleTemplate.help: 217ed65346271444461993b4ff062f99
+    fields.metaTitleTemplate.help: efd84a7708779e3576753d898669423e
     fields.metaDescription.label: 9abaef743507f75ef39ca5e4be1ab1f0
     fields.metaDescription.help: 6ecf34ef28f35bbe5c0ce28da9e9c8d4
     site.og.headline: bc673f9769ba900434744f9667cb7c5a
@@ -54,6 +54,8 @@ checksums:
     fields.useTitleTemplate.no: a6733bf32d5c367b7cede853646883c4
     fields.useTitleTemplate.yes: 2263621fa2f7dd02db1414eff341e536
     fields.useTitleTemplate.help: 1ef0290ea57fee0d9a9df1882d49360f
+    writerNodes.template.title: fb9d47d10d953363f333014b1c54db7e
+    writerNodes.template.siteTitle: 967324dd2b3ce4028abd66f95ba0e675
     common.default: 18ccc38b19e6d34c2bf219c4a7d9e33b
     common.yes: ec580fd11a45779b039466f1e35eed2a
     common.no: 8c708225830b06df2d1141c536f2a0d6
@@ -66,3 +68,17 @@ checksums:
     sitemap.priority: 0b062687108df307445af848763e4ce5
     sitemap.url: ca97457614226960d41dd18c3c29c86b
     sitemap.noEntries: 17c4758dd5718f652fe0a2b338098300
+    ai.action.generate: 7c830f2f8bad82ca29e88884df7411ca
+    ai.action.regenerate: 79bc737effc16d0546c048c6aa2ec415
+    ai.action.edit: f0f657e0a3ff56761a5f693e26993db6
+    ai.action.customize: b3bee5d6b5868218feb53711d82a0269
+    ai.action.stop: 4c4b4d44708ba05fe8726cbc80122228
+    ai.error.request: ffe4cd88f70397452dfc990fa23540fd
+    ai.error.disabled: 5e23f31e667425da7c1c05fefa0ba424
+    ai.error.permission: 0679ad26b892c77801d1d2ca37efc501
+    ai.dialog.instructions.label: 047b6298686bcec6b2161f5045893002
+    ai.dialog.instructions.placeholder: 8e7eb8079b193c89f8c805509de65fe1
+    ai.dialog.edit.submit: ed3da8072dbd27dc0c959777cdcbebf3
+    ai.dialog.custom.label: 7220b8fec354382422615c94aae1758b
+    ai.dialog.custom.placeholder: 11fe0f4f440c45daab490bdb862bca1b
+    ai.dialog.custom.submit: 0345bf322c191e70d01fd6607ec5c2f8

@@ -65,5 +65,19 @@
 	"sitemap.lastUpdated": "Son Güncelleme",
 	"sitemap.priority": "Öncelik",
 	"sitemap.url": "URL",
-	"sitemap.noEntries": "Giriş yok"
+	"sitemap.noEntries": "Giriş yok",
+	"ai.action.generate": "Yapay zeka ile oluştur",
+	"ai.action.regenerate": "Yeniden oluştur",
+	"ai.action.edit": "Düzenle...",
+	"ai.action.customize": "Yapay zeka oluşturmayı özelleştir...",
+	"ai.action.stop": "Durdur",
+	"ai.error.request": "Yapay zeka isteği başarısız oldu. Lütfen tekrar dene.",
+	"ai.error.disabled": "Yapay zeka özellikleri devre dışı.",
+	"ai.error.permission": "Yapay zeka özelliklerini kullanma izniniz yok.",
+	"ai.dialog.instructions.label": "Talimatlar",
+	"ai.dialog.instructions.placeholder": "Metinde hangi değişiklikleri yapmak istiyorsun?",
+	"ai.dialog.edit.submit": "Değişiklikleri uygula",
+	"ai.dialog.custom.label": "Özel talimatlar",
+	"ai.dialog.custom.placeholder": "Ne tür bir içerik oluşturmak istiyorsun?",
+	"ai.dialog.custom.submit": "Oluştur"
 }

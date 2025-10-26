@@ -65,5 +65,19 @@
 	"sitemap.lastUpdated": "Senast uppdaterad",
 	"sitemap.priority": "Prioritet",
 	"sitemap.url": "URL",
-	"sitemap.noEntries": "Inga poster"
+	"sitemap.noEntries": "Inga poster",
+	"ai.action.generate": "Generera med AI",
+	"ai.action.regenerate": "Generera om",
+	"ai.action.edit": "Redigera…",
+	"ai.action.customize": "Anpassa AI-generering…",
+	"ai.action.stop": "Stoppa",
+	"ai.error.request": "AI-förfrågan misslyckades. Försök igen.",
+	"ai.error.disabled": "AI-funktioner är inaktiverade.",
+	"ai.error.permission": "Du har inte behörighet att använda AI-funktioner.",
+	"ai.dialog.instructions.label": "Instruktioner",
+	"ai.dialog.instructions.placeholder": "Vilka ändringar vill du göra i texten?",
+	"ai.dialog.edit.submit": "Tillämpa ändringar",
+	"ai.dialog.custom.label": "Anpassade instruktioner",
+	"ai.dialog.custom.placeholder": "Vilken typ av innehåll vill du generera?",
+	"ai.dialog.custom.submit": "Generera"
 }
