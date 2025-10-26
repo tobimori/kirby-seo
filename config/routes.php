@@ -8,8 +8,8 @@ use tobimori\Seo\Sitemap\SitemapIndex;
 return [
 	[
 		'pattern' => 'robots.txt',
-		'method'  => 'GET|HEAD',
-		'action'  => function () {
+		'method' => 'GET|HEAD',
+		'action' => function () {
 			if (Seo::option('robots.active')) {
 				$content = snippet('seo/robots.txt', [], true);
 				return new Response($content, 'text/plain', 200);
@@ -20,23 +20,31 @@ return [
 	],
 	[
 		'pattern' => 'robots.txt',
-		'method'  => 'OPTIONS',
-		'action'  => function () {
-			return new Response('', 'text/plain', 204, ['Allow' => 'GET, HEAD']);
+		'method' => 'OPTIONS',
+		'action' => function () {
+			if (Seo::option('robots.active')) {
+				return new Response('', 'text/plain', 204, ['Allow' => 'GET, HEAD']);
+			}
+
+			$this->next();
 		}
 	],
 	[
 		'pattern' => 'robots.txt',
-		'method'  => 'ALL',
-		'action'  => function () {
-			return new Response('Method Not Allowed', 'text/plain', 405, ['Allow' => 'GET, HEAD']);
+		'method' => 'ALL',
+		'action' => function () {
+			if (Seo::option('robots.active')) {
+				return new Response('Method Not Allowed', 'text/plain', 405, ['Allow' => 'GET, HEAD']);
+			}
+
+			$this->next();
 		}
 	],
 
 	[
 		'pattern' => 'sitemap',
-		'method'  => 'GET|HEAD',
-		'action'  => function () {
+		'method' => 'GET|HEAD',
+		'action' => function () {
 			if (!Seo::option('sitemap.redirect') || !Seo::option('sitemap.active')) {
 				$this->next();
 			}
@@ -46,23 +54,31 @@ return [
 	],
 	[
 		'pattern' => 'sitemap',
-		'method'  => 'OPTIONS',
-		'action'  => function () {
-			return new Response('', 'text/plain', 204, ['Allow' => 'GET, HEAD']);
+		'method' => 'OPTIONS',
+		'action' => function () {
+			if (Seo::option('sitemap.active')) {
+				return new Response('', 'text/plain', 204, ['Allow' => 'GET, HEAD']);
+			}
+
+			$this->next();
 		}
 	],
 	[
 		'pattern' => 'sitemap',
-		'method'  => 'ALL',
-		'action'  => function () {
-			return new Response('Method Not Allowed', 'text/plain', 405, ['Allow' => 'GET, HEAD']);
+		'method' => 'ALL',
+		'action' => function () {
+			if (Seo::option('sitemap.active')) {
+				return new Response('Method Not Allowed', 'text/plain', 405, ['Allow' => 'GET, HEAD']);
+			}
+
+			$this->next();
 		}
 	],
 
 	[
 		'pattern' => 'sitemap.xsl',
-		'method'  => 'GET',
-		'action'  => function () {
+		'method' => 'GET',
+		'action' => function () {
 			if (!Seo::option('sitemap.active')) {
 				$this->next();
 			}
@@ -84,23 +100,31 @@ return [
 	],
 	[
 		'pattern' => 'sitemap.xsl',
-		'method'  => 'OPTIONS',
-		'action'  => function () {
-			return new Response('', 'text/plain', 204, ['Allow' => 'GET']);
+		'method' => 'OPTIONS',
+		'action' => function () {
+			if (Seo::option('sitemap.active')) {
+				return new Response('', 'text/plain', 204, ['Allow' => 'GET']);
+			}
+
+			$this->next();
 		}
 	],
 	[
 		'pattern' => 'sitemap.xsl',
-		'method'  => 'ALL',
-		'action'  => function () {
-			return new Response('Method Not Allowed', 'text/plain', 405, ['Allow' => 'GET']);
+		'method' => 'ALL',
+		'action' => function () {
+			if (Seo::option('sitemap.active')) {
+				return new Response('Method Not Allowed', 'text/plain', 405, ['Allow' => 'GET']);
+			}
+
+			$this->next();
 		}
 	],
 
 	[
 		'pattern' => 'sitemap.xml',
-		'method'  => 'GET|HEAD',
-		'action'  => function () {
+		'method' => 'GET|HEAD',
+		'action' => function () {
 			if (!Seo::option('sitemap.active', true)) {
 				$this->next();
 			}
@@ -120,23 +144,31 @@ return [
 	],
 	[
 		'pattern' => 'sitemap.xml',
-		'method'  => 'OPTIONS',
-		'action'  => function () {
-			return new Response('', 'text/plain', 204, ['Allow' => 'GET, HEAD']);
+		'method' => 'OPTIONS',
+		'action' => function () {
+			if (Seo::option('sitemap.active', true)) {
+				return new Response('', 'text/plain', 204, ['Allow' => 'GET, HEAD']);
+			}
+
+			$this->next();
 		}
 	],
 	[
 		'pattern' => 'sitemap.xml',
-		'method'  => 'ALL',
-		'action'  => function () {
-			return new Response('Method Not Allowed', 'text/plain', 405, ['Allow' => 'GET, HEAD']);
+		'method' => 'ALL',
+		'action' => function () {
+			if (Seo::option('sitemap.active', true)) {
+				return new Response('Method Not Allowed', 'text/plain', 405, ['Allow' => 'GET, HEAD']);
+			}
+
+			$this->next();
 		}
 	],
 
 	[
 		'pattern' => 'sitemap-(:any).xml',
-		'method'  => 'GET|HEAD',
-		'action'  => function (string $index) {
+		'method' => 'GET|HEAD',
+		'action' => function (string $index) {
 			if (!Seo::option('sitemap.active', true)) {
 				$this->next();
 			}
@@ -148,7 +180,7 @@ return [
 
 			kirby()->response()->type('text/xml');
 			return Page::factory([
-				'slug' => 'sitemap-' . $index,
+				'slug' => "sitemap-{$index}",
 				'template' => 'sitemap',
 				'model' => 'sitemap',
 				'content' => [
@@ -160,16 +192,24 @@ return [
 	],
 	[
 		'pattern' => 'sitemap-(:any).xml',
-		'method'  => 'OPTIONS',
-		'action'  => function () {
-			return new Response('', 'text/plain', 204, ['Allow' => 'GET, HEAD']);
+		'method' => 'OPTIONS',
+		'action' => function () {
+			if (Seo::option('sitemap.active')) {
+				return new Response('', 'text/plain', 204, ['Allow' => 'GET, HEAD']);
+			}
+
+			$this->next();
 		}
 	],
 	[
 		'pattern' => 'sitemap-(:any).xml',
-		'method'  => 'ALL',
-		'action'  => function () {
-			return new Response('Method Not Allowed', 'text/plain', 405, ['Allow' => 'GET, HEAD']);
+		'method' => 'ALL',
+		'action' => function () {
+			if (Seo::option('sitemap.active')) {
+				return new Response('Method Not Allowed', 'text/plain', 405, ['Allow' => 'GET, HEAD']);
+			}
+
+			$this->next();
 		}
 	],
 ];
