@@ -1,9 +1,14 @@
 <?php
 
 /** @var \Kirby\Cms\Page $page
- ** @var \Kirby\Cms\Site $site */
+ ** @var \Kirby\Cms\Site $site
+ ** @var string|null $instructions
+ ** @var string|null $edit */
 
-snippet('seo/prompts/introduction'); ?>
+snippet('seo/prompts/introduction', [
+	'instructions' => $instructions ?? null,
+	'edit' => $edit ?? null
+]); ?>
 
 <task>
 	Create a useful GLOBAL open graph description for this site <site-title><?= $site->title()->value() ?>.</site-title>

@@ -1,11 +1,16 @@
 <?php
 
 /** @var \Kirby\Cms\Page $page
- ** @var \Kirby\Cms\Site $site */
+ ** @var \Kirby\Cms\Site $site
+ ** @var string|null $instructions
+ ** @var string|null $edit */
 
 $meta = $page->metadata();
 
-snippet('seo/prompts/introduction'); ?>
+snippet('seo/prompts/introduction', [
+	'instructions' => $instructions ?? null,
+	'edit' => $edit ?? null
+]); ?>
 
 <task>
 	Create a useful meta description for this page called <page-title><?= $page->title()->value() ?></page-title>. <?php if ($page->isHomePage()) : ?>This page is the homepage of the website.<?php endif ?>
