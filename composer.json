@@ -22,9 +22,13 @@
 		"getkirby/composer-installer": "^1.2.1"
 	},
 	"suggest": {
+		"tobimori/kirby-queues": "Enable background processing support",
+		"getkirby/cli": "Enable background processing support",
 		"spatie/schema-org": "Enable the Schema.org support"
 	},
 	"require-dev": {
+		"getkirby/cli": "^1.8.0",
+		"tobimori/kirby-queues": "^1.0.0-beta.1",
 		"friendsofphp/php-cs-fixer": "^3.48",
 		"spatie/schema-org": "^3.23",
 		"getkirby/cms": "^5.0.0"

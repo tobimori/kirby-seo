@@ -14,6 +14,7 @@ return array(
 	'tobimori\\Seo\\Ai' => $baseDir . '/classes/Ai.php',
 	'tobimori\\Seo\\Ai\\Chunk' => $baseDir . '/classes/Ai/Chunk.php',
 	'tobimori\\Seo\\Ai\\Driver' => $baseDir . '/classes/Ai/Driver.php',
+	'tobimori\\Seo\\Ai\\Drivers\\Anthropic' => $baseDir . '/classes/Ai/Drivers/Anthropic.php',
 	'tobimori\\Seo\\Ai\\Drivers\\OpenAi' => $baseDir . '/classes/Ai/Drivers/OpenAi.php',
 	'tobimori\\Seo\\Ai\\SseStream' => $baseDir . '/classes/Ai/SseStream.php',
 	'tobimori\\Seo\\Meta' => $baseDir . '/classes/Meta.php',

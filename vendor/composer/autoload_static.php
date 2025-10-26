@@ -37,6 +37,7 @@ class ComposerStaticInit3e4bc37d480117d497c8333636c62d44
 		'tobimori\\Seo\\Ai' => __DIR__ . '/../..' . '/classes/Ai.php',
 		'tobimori\\Seo\\Ai\\Chunk' => __DIR__ . '/../..' . '/classes/Ai/Chunk.php',
 		'tobimori\\Seo\\Ai\\Driver' => __DIR__ . '/../..' . '/classes/Ai/Driver.php',
+		'tobimori\\Seo\\Ai\\Drivers\\Anthropic' => __DIR__ . '/../..' . '/classes/Ai/Drivers/Anthropic.php',
 		'tobimori\\Seo\\Ai\\Drivers\\OpenAi' => __DIR__ . '/../..' . '/classes/Ai/Drivers/OpenAi.php',
 		'tobimori\\Seo\\Ai\\SseStream' => __DIR__ . '/../..' . '/classes/Ai/SseStream.php',
 		'tobimori\\Seo\\Meta' => __DIR__ . '/../..' . '/classes/Meta.php',
