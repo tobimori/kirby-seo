@@ -1,5 +1,6 @@
 <?php
 
+use tobimori\Seo\Ai\Drivers\Anthropic;
 use tobimori\Seo\Ai\Drivers\OpenAi;
 
 // TODO: custom provider per task
@@ -9,6 +10,12 @@ return [
 	'providers' => [
 		'openai' => [
 			'driver' => OpenAi::class,
+			'config' => [
+				'apiKey' => '', // needs to be defined
+			],
+		],
+		'anthropic' => [
+			'driver' => Anthropic::class,
 			'config' => [
 				'apiKey' => '', // needs to be defined
 			],
