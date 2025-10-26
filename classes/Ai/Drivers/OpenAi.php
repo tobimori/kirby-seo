@@ -17,7 +17,6 @@ class OpenAi extends Driver
 	 */
 	public function stream(
 		string $prompt,
-		string $instructions = '',
 		string|null $model = null,
 	): Generator {
 		$apiKey = $this->config('apiKey', required: true);
@@ -33,7 +32,7 @@ class OpenAi extends Driver
 		$payload = [
 			'model' => $model ?? $this->config('model', static::DEFAULT_MODEL),
 			'input' => $prompt,
-			'instructions' => $instructions,
+			// instructions does not work for e.g. openrouter so let's just put everything in user prompt
 			'stream' => true,
 		];
 

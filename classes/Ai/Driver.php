@@ -15,12 +15,11 @@ abstract class Driver
 	 * Streams a response for the given prompt and optional context data.
 	 *
 	 * @param string $prompt User prompt (e.g. Tasks).
-	 * @param string $instructions System prompt (e.g. guidance and instructions).
 	 * @param string|null $model Model to use.
 	 *
 	 * @return Generator<int, Chunk, mixed, void>
 	 */
-	abstract public function stream(string $prompt, string $instructions = '', string|null $model = null): Generator;
+	abstract public function stream(string $prompt, string|null $model = null): Generator;
 
 	/**
 	 * Returns a configuration value or throws when required.

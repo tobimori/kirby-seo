@@ -49,12 +49,11 @@ final class Ai
 	public static function streamTask(string $taskId, array $variables = []): Generator
 	{
 		$snippet = "seo/prompts/tasks/{$taskId}";
-		$instructions = trim(snippet("seo/prompts/system", $variables, return: true));
 		$prompt = trim(snippet($snippet, $variables, return: true));
-		if ($instructions === '' || $prompt === '') {
+		if ($prompt === '') {
 			throw new KirbyException("AI prompt snippet \"{$snippet}\" is missing or empty.");
 		}
 
-		return self::provider()->stream($prompt, $instructions, /* todo custom model here */);
+		return self::provider()->stream($prompt, /* todo custom model here */);
 	}
 }

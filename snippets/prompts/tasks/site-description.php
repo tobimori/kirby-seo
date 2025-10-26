@@ -1,7 +1,9 @@
 <?php
 
 /** @var \Kirby\Cms\Page $page
- ** @var \Kirby\Cms\Site $site */ ?>
+ ** @var \Kirby\Cms\Site $site */
+
+snippet('seo/prompts/introduction'); ?>
 
 <task>
 	Create a useful GLOBAL meta description for this site <site-title><?= $site->title()->value() ?>.</site-title>

@@ -10,9 +10,9 @@
 <rules>
 	- You MUST only output the answer without additional prose or introduction.
 	- You MUST mimic the site's tone and style. DO NOT shift register (informal stays informal).
-	- ALWAYS and ONLY provide one answer. DO NOT suggest multiple answers.
-	- NEVER output any formatting. No new lines, no HTML tags, no quotes.
+	- The output language MUST be <language><?= $site->lang() ?></language>. Translate the content into <?= $site->lang() ?>.
+	- ALWAYS and ONLY provide exactly one answer. DO NOT suggest multiple answers.
+	- NEVER output any formatting. No new lines, no HTML tags, no quotes, no markdown.
 	- NEVER output or introduce information that is not provided in the content.
-	- The output language MUST be the language of the content, which is <lang><?= $site->lang() ?></lang>.
 	- NEVER output duplicate content in the same answer.
 </rules>

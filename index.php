@@ -32,8 +32,8 @@ App::plugin(
 			'ai' => true,
 		],
 		'snippets' => [
-			'seo/prompts/system' => __DIR__ . '/snippets/prompts/system.php',
-			'seo/prompts/parts/content' => __DIR__ . '/snippets/prompts/parts/content.php',
+			'seo/prompts/introduction' => __DIR__ . '/snippets/prompts/introduction.php',
+			'seo/prompts/content' => __DIR__ . '/snippets/prompts/content.php',
 			'seo/prompts/tasks/title' => __DIR__ . '/snippets/prompts/tasks/title.php',
 			'seo/prompts/tasks/description' => __DIR__ . '/snippets/prompts/tasks/description.php',
 			'seo/prompts/tasks/og-description' => __DIR__ . '/snippets/prompts/tasks/og-description.php',
