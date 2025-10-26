@@ -1,5 +1,7 @@
 <?php
 
+use Kirby\Toolkit\Str;
+
 /** @var \Kirby\Cms\Page $page
  ** @var \Kirby\Cms\Site $site */
 
@@ -10,12 +12,16 @@ snippet('seo/prompts/introduction'); ?>
 <task>
 	Create a useful meta title for this page called <page-title><?= $page->title()->value() ?></page-title>. <?php if ($page->isHomePage()) : ?>This page is the homepage of the website. AVOID an overly generic title such as 'Home'.<?php endif ?>
 
-	<?php if ($page->useTitleTemplate()->isEmpty() ? true : $page->useTitleTemplate()->toBool()): ?>
+	<?php if ($page->useTitleTemplate()->isEmpty() ? true : $page->useTitleTemplate()->toBool()):
+		$template = $meta->get('metaTemplate');
+		$templatePreview = $page->toString($template, ['title' => '{{ title }}']);
+		$templateBaseLength = Str::length($page->toString($template, ['title' => '']));
+		?>
 		The final page title will be rendered as:
 
-		<template><?= $page->toString($meta->get('metaTemplate'), ['title' => '{{ title }}']) ?></template>
+		<template><?= $templatePreview ?></template>
 
-		Where {{ title }} is your page title. This template is xxx characters long. Your output title SHOULD BE between xxx-xxx characters long, so that the entire title is between 50-60 characters long.
+		Where {{ title }} is your page title. The entire title SHOULD be between <?= max(0, 50 - $templateBaseLength) ?>-<?= max(max(0, 50 - $templateBaseLength), 60 - $templateBaseLength) ?> characters long.
 		DO NOT output the Title Template. ONLY output what should be placed inside {{ title }}. DO NOT repeat ANYTHING that exists in the template. You MUST NOT repeat the name of the site.
 	<?php else: ?>
 		Your response will be set as title without any changes. The entire title SHOULD be between 50-60 characters long.
@@ -24,4 +30,5 @@ snippet('seo/prompts/introduction'); ?>
 	If useful for the customers niche, include a keyword for the location. AVOID for global companies or niche subpages.
 </task>
 
-<?php snippet('seo/prompts/content'); ?>
+<?php snippet('seo/prompts/meta');
+snippet('seo/prompts/content');

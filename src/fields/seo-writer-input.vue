@@ -36,32 +36,6 @@ export default {
 				// eslint-disable-next-line no-undef
 				Vue.component("k-writer-input").options.methods.createNodes.call(this)
 			return data.filter((ext) => ext.name !== "hardBreak")
-		},
-		async insertAiText(text) {
-			if (!text) {
-				return
-			}
-
-			const editor = this.editor
-			if (!editor) {
-				return
-			}
-
-			const value = String(text)
-
-			await this.$nextTick()
-
-			const { state, view } = editor
-			if (!state || !view) {
-				return
-			}
-
-			const { selection, tr } = state
-			const textNode = state.schema.text(value)
-			const transaction = tr.insert(selection.from, textNode)
-
-			view.dispatch(transaction)
-			editor.focus()
 		}
 	}
 }

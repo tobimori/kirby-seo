@@ -34,6 +34,8 @@ App::plugin(
 		'snippets' => [
 			'seo/prompts/introduction' => __DIR__ . '/snippets/prompts/introduction.php',
 			'seo/prompts/content' => __DIR__ . '/snippets/prompts/content.php',
+			'seo/prompts/meta' => __DIR__ . '/snippets/prompts/meta.php',
+			'seo/prompts/site-meta' => __DIR__ . '/snippets/prompts/site-meta.php',
 			'seo/prompts/tasks/title' => __DIR__ . '/snippets/prompts/tasks/title.php',
 			'seo/prompts/tasks/description' => __DIR__ . '/snippets/prompts/tasks/description.php',
 			'seo/prompts/tasks/og-description' => __DIR__ . '/snippets/prompts/tasks/og-description.php',

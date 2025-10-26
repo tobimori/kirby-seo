@@ -53,7 +53,7 @@ return [
 					}
 
 					$data = $kirby->request()->body()->data();
-					$lang = $data['lang'];
+					$lang = $kirby->api()->language();
 
 					// for site, use homepage
 					$model = $this->field()->model();
