@@ -68,7 +68,7 @@ export default {
 							? this.$t("seo.ai.action.generate")
 							: this.$t("seo.ai.action.regenerate"),
 					disabled: this.disabled || !this.aiEndpointUrl,
-					click: () => this.startAiStream({ clearContent: true })
+					click: () => this.startAiStream()
 				},
 				{
 					icon: "cog",
@@ -121,11 +121,9 @@ export default {
 				this.$refs.input.focus()
 			}
 
-			if (options.clearContent) {
-				const editor = this.getEditor()
-				if (editor) {
-					editor.clearContent()
-				}
+			const editor = this.getEditor()
+			if (editor) {
+				editor.clearContent()
 			}
 
 			const controller = new AbortController()
@@ -354,7 +352,6 @@ export default {
 					submit: (values) => {
 						this.$panel.dialog.close()
 						this.startAiStream({
-							clearContent: true,
 							instructions: values.instructions
 						})
 					}
