@@ -5,9 +5,7 @@ use tobimori\Seo\Ai\Drivers\OpenAi;
 // TODO: custom provider per task
 return [
 	'enabled' => true,
-
-	'defaultProvider' => 'openai',
-
+	'provider' => 'openai',
 	'providers' => [
 		'openai' => [
 			'driver' => OpenAi::class,

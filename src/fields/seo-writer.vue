@@ -49,15 +49,30 @@ export default {
 				return []
 			}
 
+			// if the content is empty, we want two buttons
+			// - Generate
+			// - Customize...
+
+			// if the content is filled, we want three buttons
+			// - Edit...
+			// - Regenerate
+			// - Customize...
+
 			return [
 				{
 					icon: this.aiStreaming ? "loader" : "seo-ai",
 					text: this.aiStreaming
 						? this.$t("seo.ai.action.stop")
 						: this.$t("seo.ai.action.generate"),
-					title: this.aiError || null,
 					disabled: this.disabled || !this.aiEndpointUrl,
+					theme: this.aiStreaming ? "red" : null,
 					click: () => this.toggleAiStream()
+				},
+				{
+					icon: "cog",
+					title: this.$t("seo.ai.action.generate"), // TOOD: figure out what 'title' and 'text' means
+					disabled: this.disabled || !this.aiEndpointUrl,
+					click: () => {} // TODO: open dropdown
 				}
 			]
 		},
@@ -253,20 +268,12 @@ export default {
 				input.insertAiText(text)
 			}
 		},
-		buildAiVariables() {
-			return {
-				content: this.value || "",
-				label: this.label || ""
-			}
-		},
-		aiRequestOptions(signal, task) {
+		aiRequestOptions(signal) {
 			return {
 				method: "POST",
 				headers: this.aiHeaders(),
 				body: JSON.stringify({
-					task,
-					variables: this.buildAiVariables(),
-					context: {}
+					lang: this.$panel?.language.code
 				}),
 				credentials: "same-origin",
 				signal

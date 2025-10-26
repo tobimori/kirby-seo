@@ -66,8 +66,9 @@
 	"sitemap.priority": "Priority",
 	"sitemap.url": "URL",
 	"sitemap.noEntries": "No entries",
-	"ai.action.generate": "Write with AI",
-	"ai.action.stop": "Stop generating",
+	"ai.action.generate": "Generate with AI",
+	"ai.action.stop": "Stop",
 	"ai.error.request": "The AI request failed. Please try again.",
-	"ai.error.disabled": "AI features are disabled."
+	"ai.error.disabled": "AI features are disabled.",
+	"ai.error.permission": "You do not have the permission to use AI features."
 }

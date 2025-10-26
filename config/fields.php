@@ -1,5 +1,7 @@
 <?php
 
+use Kirby\Cms\App;
+use Kirby\Cms\Page;
 use Kirby\Http\Response;
 use tobimori\Seo\Ai;
 
@@ -12,6 +14,11 @@ return [
 			 */
 			'ai' => function (string|bool $ai = false) {
 				if (!Ai::enabled()) {
+					return false;
+				}
+
+				// check ai permission @see index.php L31
+				if (App::instance()->user()->role()->permissions()->for('tobimori.seo', 'ai') === false) {
 					return false;
 				}
 
@@ -29,45 +36,41 @@ return [
 				'pattern' => 'ai/stream',
 				'method' => 'POST',
 				'action' => function () {
+					$kirby = $this->kirby();
+
 					if (!Ai::enabled()) {
 						return Response::json([
 							'status' => 'error',
-							'message' => t('seo.ai.error.disabled', 'AI features are disabled.')
+							'message' => t('seo.ai.error.disabled')
 						], 404);
 					}
 
-					$field = $this->field();
-					$model = $field->model();
-					$lang = $model?->kirby()->language()?->code();
-					$data = kirby()->request()->body()->data();
-					$taskId = $data['task'] ?? null;
-
-					if (!is_string($taskId) || trim($taskId) === '') {
+					if ($kirby->user()->role()->permissions()->for('tobimori.seo', 'ai') === false) {
 						return Response::json([
 							'status' => 'error',
-							'message' => 'Missing AI task identifier.'
-						], 400);
+							'message' => t('seo.ai.error.permission')
+						], 404);
 					}
 
-					$variables = $data['variables'] ?? [];
-					$context = $data['context'] ?? [];
+					$data = $kirby->request()->body()->data();
+					$lang = $data['lang'];
 
-					if (!is_array($variables)) {
-						$variables = [];
-					}
-
-					if (!is_array($context)) {
-						$context = [];
-					}
-
+					// for site, use homepage
+					$model = $this->field()->model();
+					$page = $model instanceof Page ? $model : $model->homePage();
+					$kirby->site()->visit($page, $lang);
 					if ($lang) {
-						kirby()->setCurrentLanguage($lang);
+						$kirby->setCurrentLanguage($lang);
 					}
 
-					if ($model) {
-						kirby()->site()->visit($model);
-					}
+					// inject data in snippets / rendering process
+					$kirby->data = [ // TODO: check if we want to access the draft / edited version for $page
+						'page' => $page,
+						'site' => $kirby->site(),
+						'kirby' => $kirby
+					];
 
+					// begin streaming thingy
 					ignore_user_abort(true);
 					@set_time_limit(0);
 
@@ -97,10 +100,9 @@ return [
 
 					try {
 						foreach (
-							Ai::streamTask($taskId, $variables, [
-								...$context,
-								'model' => $model,
-								'language' => $lang,
+							Ai::streamTask($this->field()->ai(), [
+								'instructions' => $data['instructions'] ?? null,
+								'edit' => $data['edit'] ?? null
 							]) as $chunk
 						) {
 							$send([
@@ -109,8 +111,6 @@ return [
 								'payload' => $chunk->payload,
 							]);
 						}
-
-						$send(['type' => 'stream_end']);
 					} catch (\Throwable $exception) {
 						$send([
 							'type' => 'error',

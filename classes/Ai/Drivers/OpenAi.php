@@ -26,7 +26,6 @@ class OpenAi extends Driver
 			'Accept: text/event-stream',
 			"Authorization: Bearer {$apiKey}",
 		];
-
 		if ($organization = $this->config('organization')) {
 			$headers[] = "OpenAI-Organization: {$organization}";
 		}

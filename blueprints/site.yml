@@ -16,9 +16,7 @@ columns:
       metaDescription:
         label: seo.fields.metaDescription.label
         type: seo-writer
-        inline: true
-        marks: false
-        nodes: false
+        ai: site-description
         help: seo.fields.metaDescription.help
       _seoLine1:
         type: line
@@ -36,9 +34,7 @@ columns:
       ogDescription:
         label: seo.fields.ogDescription.label
         type: seo-writer
-        inline: true
-        marks: false
-        nodes: false
+        ai: site-og-description
         placeholder: "{{ site.metaDescription }}"
       ogSiteName:
         label: seo.fields.ogSiteName.label

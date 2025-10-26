@@ -3,8 +3,6 @@
 namespace tobimori\Seo;
 
 use Generator;
-use Kirby\Cms\App;
-use Kirby\Cms\Site;
 use Kirby\Exception\Exception as KirbyException;
 use tobimori\Seo\Ai\Driver;
 
@@ -25,7 +23,7 @@ final class Ai
 	 */
 	public static function provider(string|null $providerId = null): Driver
 	{
-		$providerId ??= Seo::option('ai.defaultProvider');
+		$providerId ??= Seo::option('ai.provider');
 
 		if (isset(self::$providers[$providerId])) {
 			return self::$providers[$providerId];
@@ -48,33 +46,15 @@ final class Ai
 		return self::$providers[$providerId] = new $driver($config['config'] ?? []);
 	}
 
-	public static function streamTask(string $taskId, array $variables = [], array $context = []): Generator
-	{
-		$prompt = self::renderPrompt($taskId, $variables);
-		$providerId = $task['provider'] ?? null;
-
-		return self::provider($providerId)->stream($prompt);
-	}
-
-	private static function renderPrompt(string $taskId, $model, ?string $lang): string
+	public static function streamTask(string $taskId, array $variables = []): Generator
 	{
 		$snippet = "seo/prompts/tasks/{$taskId}";
-
-		$page = $model instanceof Site ? $model->homePage() : $model;
-		App::instance()->site()->visit($page, $lang);
-		App::instance()->data = [
-			'page' => $page,
-			'site' => App::instance()->site(),
-			'kirby' => App::instance(),
-		];
-		$content = snippet($snippet, [], return: true);
-
-		$content = trim($content ?? '');
-
-		if ($content !== '') {
-			return $content;
+		$instructions = trim(snippet("seo/prompts/system", $variables, return: true));
+		$prompt = trim(snippet($snippet, $variables, return: true));
+		if ($instructions === '' || $prompt === '') {
+			throw new KirbyException("AI prompt snippet \"{$snippet}\" is missing or empty.");
 		}
 
-		throw new KirbyException("AI prompt snippet \"{$snippet}\" is missing or empty.");
+		return self::provider()->stream($prompt, $instructions, /* todo custom model here */);
 	}
 }
