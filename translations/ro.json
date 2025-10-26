@@ -65,5 +65,19 @@
 	"sitemap.lastUpdated": "Ultima actualizare",
 	"sitemap.priority": "Prioritate",
 	"sitemap.url": "URL",
-	"sitemap.noEntries": "Nicio înregistrare"
+	"sitemap.noEntries": "Nicio înregistrare",
+	"ai.action.generate": "Generează cu AI",
+	"ai.action.regenerate": "Regenerare",
+	"ai.action.edit": "Editează…",
+	"ai.action.customize": "Personalizează generarea AI…",
+	"ai.action.stop": "Oprește",
+	"ai.error.request": "Solicitarea AI a eșuat. Te rugăm să încerci din nou.",
+	"ai.error.disabled": "Funcțiile AI sunt dezactivate.",
+	"ai.error.permission": "Nu ai permisiunea de a utiliza funcțiile AI.",
+	"ai.dialog.instructions.label": "Instrucțiuni",
+	"ai.dialog.instructions.placeholder": "Ce modificări dorești să faci textului?",
+	"ai.dialog.edit.submit": "Aplică modificările",
+	"ai.dialog.custom.label": "Instrucțiuni personalizate",
+	"ai.dialog.custom.placeholder": "Ce tip de conținut dorești să generezi?",
+	"ai.dialog.custom.submit": "Generează"
 }
