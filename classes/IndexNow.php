@@ -79,15 +79,10 @@ class IndexNow
 	 */
 	public static function send(array $urls): bool
 	{
-		if (!Seo::option('indexnow.enabled')) {
+		if (!Seo::option('indexnow.enabled') || empty($urls)) {
 			return false;
 		}
 
-		if (empty($urls)) {
-			return false;
-		}
-
-		$key = static::key();
 		$firstUrl = $urls[0];
 		$parsedUrl = parse_url($firstUrl);
 		$host = $parsedUrl['host'];
@@ -103,46 +98,48 @@ class IndexNow
 		$basePath = '';
 		if ($path && $path !== '/') {
 			// find the base path by comparing with site url
-			$siteUrl = site()->url();
+			$siteUrl = $this->page->site()->url();
 			$siteParsed = parse_url($siteUrl);
 			$basePath = $siteParsed['path'] ?? '';
 		}
 
 		$searchEngine = Seo::option('indexnow.searchEngine');
-
-		// ensure search engine URL is properly formatted
 		$searchEngine = rtrim($searchEngine, '/');
 		if (!str_contains($searchEngine, '/indexnow')) {
 			$searchEngine .= '/indexnow';
 		}
 
-		// filter urls to only include those from the same domain
-		$domainUrls = array_filter($urls, function ($url) use ($host) {
-			return parse_url($url, PHP_URL_HOST) === $host;
-		});
+		$domainUrls = array_filter($urls, fn ($url) => parse_url($url, PHP_URL_HOST) === $host);
 
-		// prepare request data
-		$data = [
-			'host' => $host,
-			'key' => $key,
-			'keyLocation' => "{$scheme}://{$host}{$basePath}/indexnow-{$key}.txt",
-			'urlList' => array_values(array_unique($domainUrls))
-		];
+		// split into batches of 10,000 (IndexNow limit)
+		$batches = array_chunk(array_values(array_unique($domainUrls)), 10000);
+		$allSuccessful = true;
+		$key = static::key();
 
-		try {
-			$response = Remote::post($searchEngine, [
-				'headers' => [
-					'Content-Type' => 'application/json; charset=utf-8',
-					'User-Agent' => Seo::userAgent()
-				],
-				'data' => json_encode($data)
-			]);
+		foreach ($batches as $batch) {
+			try {
+				$response = Remote::post($searchEngine, [
+					'headers' => [
+						'Content-Type' => 'application/json; charset=utf-8',
+						'User-Agent' => Seo::userAgent()
+					],
+					'data' => json_encode([
+						'host' => $host,
+						'key' => $key,
+						'keyLocation' => "{$scheme}://{$host}{$basePath}/indexnow-{$key}.txt",
+						'urlList' => $batch
+					])
+				]);
 
-			return $response->code() === 200 || $response->code() === 202;
-		} catch (\Exception $e) {
-			// log error if needed
-			return false;
+				if ($response->code() > 299) {
+					$allSuccessful = false;
+				}
+			} catch (\Exception $e) {
+				$allSuccessful = false;
+			}
 		}
+
+		return $allSuccessful;
 	}
 
 	/**
@@ -296,12 +293,12 @@ class IndexNow
 	{
 		$language = App::instance()->language();
 
-		foreach ($templates as $template) {
-			foreach (site()->index() as $page) {
-				if ($page->intendedTemplate()->name() === $template && $this->isIndexable($page)) {
-					$this->urls[] = $page->url($language?->code());
-				}
-			}
+		$pages = $this->page->site()->index()
+			->filterBy('intendedTemplate', 'in', $templates)
+			->filter(fn ($page) => $this->isIndexable($page));
+
+		foreach ($pages as $page) {
+			$this->urls[] = $page->url($language?->code());
 		}
 	}
 

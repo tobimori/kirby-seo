@@ -17,13 +17,19 @@
 - 🤖 Automatic Robots rule generation, based on page status
 - 📝 Sitemap generation with multi-lang support
 
+### New in Version 2
+- 🚀 Kirby 5 support
+- 💻 Even better and easier Panel UI
+- ✨ AI assist for writing meta tags
+- 🔘 IndexNow support
+
 ## Get started
 
 [Read the documentation](https://plugins.andkindness.com/seo/docs/get-started/feature-overview) to get started with Kirby SEO.
 
 If you're looking to use Kirby SEO with Kirby 5 or newer, please install the Alpha version of the plugin:
 
-```composer require tobimori/kirby-seo:^2.0.0-alpha.6```
+```composer require tobimori/kirby-seo:^2.0.0-alpha.7```
 
 ## Contributing
 
