@@ -16,6 +16,7 @@ return [
 		'indexnow' => IndexNow::class,
 		'schema' => SchemaSingleton::class,
 	],
+	'cache.indexnow' => true,
 	'cascade' => [
 		'fields',
 		'programmatic',
@@ -94,12 +95,7 @@ return [
 		'trailingSlash' => false, // whether to add trailing slashes to canonical URLs (except for files)
 	],
 	'ai' => require __DIR__ . '/options/ai.php',
-	'indexnow' => [
-		'enabled' => true,
-		'searchEngine' => 'https://api.indexnow.org' // one will propagate to all others. so this is fine @see https://www.indexnow.org/faq
-		// TODO: add batch job delay
-		// TODO: add propagation thing (i.e. do not only submit the current page but a 'team member' page will always affect the 'team' page)
-	],
+	'indexnow' => require __DIR__ . '/options/indexnow.php',
 	'generateSchema' => true, // whether to generate default schema.org data
 	'locale' => 'en_US', // default locale, used for single-language sites
 	'dateFormat' => null, // custom date format

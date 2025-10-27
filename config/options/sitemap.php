@@ -1,6 +1,5 @@
 <?php
 
-use Kirby\Toolkit\Obj;
 use tobimori\Seo\Sitemap\SitemapIndex;
 use tobimori\Seo\Meta;
 

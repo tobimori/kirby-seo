@@ -3,6 +3,7 @@
 use Kirby\Cms\Page;
 use Kirby\Toolkit\A;
 use Kirby\Toolkit\Str;
+use tobimori\Seo\Seo;
 
 return [
 	'page.update:after' => function (Page $newPage, Page $oldPage) {
@@ -22,7 +23,24 @@ return [
 
 		$newPage = $newPage->update($updates);
 
+		if (Seo::option('indexnow.enabled')) {
+			$indexNow = new (Seo::option('components.indexnow'))($newPage);
+			$indexNow->request();
+		}
+
 		return $newPage;
+	},
+	'page.changeStatus:after' => function (Page $newPage, Page $oldPage) {
+		if (Seo::option('indexnow.enabled')) {
+			$indexNow = new (Seo::option('components.indexnow'))($newPage);
+			$indexNow->request();
+		}
+	},
+	'page.changeSlug:after' => function (Page $newPage, Page $oldPage) {
+		if (Seo::option('indexnow.enabled')) {
+			$indexNow = new (Seo::option('components.indexnow'))($newPage);
+			$indexNow->request();
+		}
 	},
 	'page.render:before' => function (string $contentType, array $data, Page $page) {
 		if (!class_exists('Spatie\SchemaOrg\Schema')) {

@@ -7,6 +7,18 @@ use tobimori\Seo\Sitemap\SitemapIndex;
 
 return [
 	[
+		'pattern' => 'indexnow-(:any).txt',
+		'method' => 'GET',
+		'action' => function (string $key) {
+			if (Seo::option('indexnow.enabled') && Seo::option('components.indexnow')::verifyKey($key)) {
+				return new Response($key, 'text/plain', 200);
+			}
+
+			$this->next();
+		}
+	],
+
+	[
 		'pattern' => 'robots.txt',
 		'method' => 'GET|HEAD',
 		'action' => function () {
