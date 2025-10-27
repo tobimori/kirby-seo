@@ -17,6 +17,7 @@ return array(
 	'tobimori\\Seo\\Ai\\Drivers\\Anthropic' => $baseDir . '/classes/Ai/Drivers/Anthropic.php',
 	'tobimori\\Seo\\Ai\\Drivers\\OpenAi' => $baseDir . '/classes/Ai/Drivers/OpenAi.php',
 	'tobimori\\Seo\\Ai\\SseStream' => $baseDir . '/classes/Ai/SseStream.php',
+	'tobimori\\Seo\\IndexNow' => $baseDir . '/classes/IndexNow.php',
 	'tobimori\\Seo\\Meta' => $baseDir . '/classes/Meta.php',
 	'tobimori\\Seo\\RobotsViewButton' => $baseDir . '/classes/RobotsViewButton.php',
 	'tobimori\\Seo\\SchemaSingleton' => $baseDir . '/classes/SchemaSingleton.php',

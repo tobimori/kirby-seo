@@ -2,14 +2,12 @@
 
 use Kirby\Http\Url;
 use Kirby\Toolkit\Str;
-use tobimori\Seo\Meta;
-use tobimori\Seo\SchemaSingleton;
 use tobimori\Seo\Seo;
 
 return [
-	'schema' => fn ($type) => SchemaSingleton::getInstance($type),
-	'schemas' => fn () => SchemaSingleton::getInstances(),
-	'lang' => fn () => Meta::normalizeLocale(Seo::option('default.locale', args: [$this->homePage()]), '-'),
+	'schema' => fn ($type) => Seo::option('components.schema')::getInstance($type),
+	'schemas' => fn () => Seo::option('components.schema')::getInstances(),
+	'lang' => fn () => Seo::option('components.meta')::normalizeLocale(Seo::option('default.locale', args: [$this->homePage()]), '-'),
 	'canonicalFor' => function (string $url, bool $useRootUrl = false) {
 		// Determine the base URL
 		$base = Seo::option('canonical.base', Seo::option('canonicalBase'));

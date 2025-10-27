@@ -27,3 +27,6 @@ index.dev.mjs
 /vendor/**/php4/*
 /vendor/getkirby/composer-installer
 i18n.cache
+
+# happens because of installing the plugin as dev dependency
+site/plugins/kirby-queues

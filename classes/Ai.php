@@ -9,7 +9,7 @@ use tobimori\Seo\Ai\Driver;
 /**
  * Ai facade
  */
-final class Ai
+class Ai
 {
 	private static array $providers = [];
 

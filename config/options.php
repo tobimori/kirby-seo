@@ -1,9 +1,21 @@
 <?php
 
 use Kirby\Cms\Page;
+use tobimori\Seo\Meta;
 use tobimori\Seo\Seo;
+use tobimori\Seo\Ai;
+use tobimori\Seo\IndexNow;
+use tobimori\Seo\SchemaSingleton;
 
 return [
+	// if you want to extend some of the built-in classes, you can overwrite them using the components config option
+	// and page methods or similar stuff will adapt. full customizability!
+	'components' => [
+		'meta' => Meta::class,
+		'ai' => Ai::class,
+		'indexnow' => IndexNow::class,
+		'schema' => SchemaSingleton::class,
+	],
 	'cascade' => [
 		'fields',
 		'programmatic',
@@ -50,7 +62,10 @@ return [
 		'slack'
 	],
 	'robots' => [
-		'active' => true, // whether robots handling should be done by the plugin
+		'enabled' => true, // whether robots handling should be done by the plugin
+
+		// @deprecated - please use robots.enabled
+		'active' => fn () => Seo::option('sitemap.enabled'),
 		'followPageStatus' => true, // should unlisted pages be noindex by default?
 		'pageSettings' => true, // whether to have robots settings on each page
 		'index' => fn () => !option('debug'), // default site-wide robots setting
@@ -59,7 +74,9 @@ return [
 		'types' => ['index', 'follow', 'archive', 'imageindex', 'snippet'] // available robots types
 	],
 	'sitemap' => [
-		'active' => true,
+		'enabled' => true,
+		// @deprecated - please use sitemap.enabled
+		'active' => fn () => Seo::option('sitemap.enabled'),
 		'redirect' => true, // redirect /sitemap to /sitemap.xml
 		'locale' => 'en',
 		'generator' => require __DIR__ . '/options/sitemap.php',
@@ -77,6 +94,12 @@ return [
 		'trailingSlash' => false, // whether to add trailing slashes to canonical URLs (except for files)
 	],
 	'ai' => require __DIR__ . '/options/ai.php',
+	'indexnow' => [
+		'enabled' => true,
+		'searchEngine' => 'https://api.indexnow.org' // one will propagate to all others. so this is fine @see https://www.indexnow.org/faq
+		// TODO: add batch job delay
+		// TODO: add propagation thing (i.e. do not only submit the current page but a 'team member' page will always affect the 'team' page)
+	],
 	'generateSchema' => true, // whether to generate default schema.org data
 	'locale' => 'en_US', // default locale, used for single-language sites
 	'dateFormat' => null, // custom date format

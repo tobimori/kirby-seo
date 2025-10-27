@@ -4,6 +4,7 @@ use Kirby\Cms\App;
 use Kirby\Cms\Page;
 use Kirby\Http\Response;
 use tobimori\Seo\Ai;
+use tobimori\Seo\Seo;
 
 return [
 	'seo-writer' => [
@@ -13,7 +14,7 @@ return [
 			 * Enables/disables the character counter in the top right corner
 			 */
 			'ai' => function (string|bool $ai = false) {
-				if (!Ai::enabled()) {
+				if (!Seo::option('components.ai')::enabled()) {
 					return false;
 				}
 
@@ -37,8 +38,9 @@ return [
 				'method' => 'POST',
 				'action' => function () {
 					$kirby = $this->kirby();
+					$component = Seo::option('components.ai');
 
-					if (!Ai::enabled()) {
+					if (!$component::enabled()) {
 						return Response::json([
 							'status' => 'error',
 							'message' => t('seo.ai.error.disabled')
@@ -100,7 +102,7 @@ return [
 
 					try {
 						foreach (
-							Ai::streamTask($this->field()->ai(), [
+							$component::streamTask($this->field()->ai(), [
 								'instructions' => $data['instructions'] ?? null,
 								'edit' => $data['edit'] ?? null
 							]) as $chunk
