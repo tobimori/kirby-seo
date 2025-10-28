@@ -98,7 +98,7 @@ class IndexNow
 		$basePath = '';
 		if ($path && $path !== '/') {
 			// find the base path by comparing with site url
-			$siteUrl = $this->page->site()->url();
+			$siteUrl = App::instance()->site()->url();
 			$siteParsed = parse_url($siteUrl);
 			$basePath = $siteParsed['path'] ?? '';
 		}
