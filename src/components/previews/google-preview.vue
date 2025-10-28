@@ -31,7 +31,7 @@ const breadcrumbs = computed(() => {
 			<div class="k-google-search-preview__header">
 				<img
 					class="k-google-search-preview__favicon"
-					:src="`https://www.google.com/s2/favicons?domain=${domain.value}&sz=32`"
+					:src="`https://www.google.com/s2/favicons?domain=${domain}&sz=32`"
 					:alt="`${ogSiteName} favicon`"
 				/>
 				<div class="k-google-search-preview__site-info">
