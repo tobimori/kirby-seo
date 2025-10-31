@@ -31,6 +31,10 @@ If you're looking to use Kirby SEO with Kirby 5 or newer, please install the Alp
 
 ```composer require tobimori/kirby-seo:^2.0.0-alpha.8```
 
+### What does Alpha mean for Kirby SEO 2?
+
+The core features of Kirby SEO, such as the meta cascade, the panel setup, sitemap and robots are stable and can be used in production. New features of v2 might be unstable or can occur breaking changes until the final release.
+
 ## Contributing
 
 Kirby SEO is open to contributors: If you open a pull request that gets merged, such as fixing a bug or translating the plugin into a new language, you're eligible for a free SEO license of your choice. Please note that I might reject minor repeat contributions or simple fixes of typos for this. Please send an email to support after your contribution has been merged.
