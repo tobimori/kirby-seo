@@ -3,6 +3,7 @@
 use Kirby\Cms\Page;
 use Kirby\Cms\Site;
 use Kirby\Toolkit\A;
+use Kirby\Toolkit\Str;
 
 return [
 	'seo-preview' => [
@@ -32,12 +33,12 @@ return [
 					return [
 						'page' => $model->slug(),
 						'url' => $model->url(),
-						'pageTitle' => $model->title()->value(),
-						'title' => $meta->metaTitle()->value(),
-						'description' => $meta->metaDescription()->value(),
-						'ogSiteName' => $meta->ogSiteName()->value(),
-						'ogTitle' => $meta->ogTitle()->value(),
-						'ogDescription' => $meta->ogDescription()->value(),
+						'pageTitle' => Str::unhtml($model->title()->value()),
+						'title' => Str::unhtml($meta->metaTitle()->value()),
+						'description' => Str::unhtml($meta->metaDescription()->value()),
+						'ogSiteName' => Str::unhtml($meta->ogSiteName()->value()),
+						'ogTitle' => Str::unhtml($meta->ogTitle()->value()),
+						'ogDescription' => Str::unhtml($meta->ogDescription()->value()),
 						'ogImage' => $meta->ogImage(),
 						'cropOgImage' => $meta->cropOgImage()->toBool(),
 						'panelUrl' => method_exists($model, 'panel') ? "{$model->panel()?->url()}?tab=seo" : null,
