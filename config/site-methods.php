@@ -5,9 +5,9 @@ use Kirby\Toolkit\Str;
 use tobimori\Seo\Seo;
 
 return [
-	'schema' => fn ($type) => Seo::option('components.schema')::getInstance($type),
-	'schemas' => fn () => Seo::option('components.schema')::getInstances(),
-	'lang' => fn () => Seo::option('components.meta')::normalizeLocale(Seo::option('default.locale', args: [$this->homePage()]), '-'),
+	'schema' => fn($type) => Seo::option('components.schema')::getInstance($type),
+	'schemas' => fn() => Seo::option('components.schema')::getInstances(),
+	'lang' => fn() => Seo::option('components.meta')::normalizeLocale(Seo::option('default.locale', args: [$this->homePage()]), '-'),
 	'canonicalFor' => function (string $url, bool $useRootUrl = false) {
 		// Determine the base URL
 		$base = Seo::option('canonical.base', Seo::option('canonicalBase'));
@@ -30,8 +30,9 @@ return [
 		$trailingSlash = Seo::option('canonical.trailingSlash', false);
 		if ($trailingSlash) {
 			// check if URL has a file extension (like .xml, .jpg, .pdf, etc.)
-			$pathInfo = pathinfo(parse_url($canonicalUrl, PHP_URL_PATH));
-			$hasExtension = isset($pathInfo['extension']) && !empty($pathInfo['extension']);
+			$path = parse_url($canonicalUrl, PHP_URL_PATH) ?? '';
+			$pathInfo = pathinfo($path);
+			$hasExtension = !empty($pathInfo['extension'] ?? null);
 
 			// Only add trailing slash if:
 			// - URL doesn't already have one
