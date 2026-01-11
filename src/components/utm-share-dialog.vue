@@ -117,10 +117,11 @@ onUnmounted(() => {
 		</template>
 
 		<div class="k-seo-utm-share-dialog__url-wrapper">
-			<k-label>{{ $t("seo.utmShare.button") }}</k-label>
+			<k-label class="k-seo-utm-share-dialog__section-label">{{ $t("seo.utmShare.button") }}</k-label>
 			<div class="k-input k-seo-utm-share-dialog__url">
 				<span class="k-input-element">
 					<input
+						id="generated-url"
 						ref="urlInput"
 						type="text"
 						:value="generatedUrl"
@@ -140,7 +141,7 @@ onUnmounted(() => {
 			</div>
 		</div>
 
-		<k-label class="k-seo-utm-share-dialog__params-label">{{
+		<k-label class="k-seo-utm-share-dialog__section-label">{{
 			$t("seo.utmShare.parameters")
 		}}</k-label>
 		<div class="k-seo-utm-share-dialog__params">
@@ -177,6 +178,10 @@ onUnmounted(() => {
 	margin-bottom: var(--spacing-6);
 }
 
+.k-seo-utm-share-dialog__section-label {
+	margin-bottom: var(--spacing-2);
+}
+
 .k-seo-utm-share-dialog__url {
 	padding-right: var(--spacing-1);
 }
@@ -185,10 +190,6 @@ onUnmounted(() => {
 	--button-height: calc(var(--input-height) - var(--spacing-2));
 	--button-rounded: var(--rounded-sm);
 	flex-shrink: 0;
-}
-
-.k-seo-utm-share-dialog__params-label {
-	margin-bottom: var(--spacing-2);
 }
 
 .k-seo-utm-share-dialog__params {
