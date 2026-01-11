@@ -117,7 +117,9 @@ onUnmounted(() => {
 		</template>
 
 		<div class="k-seo-utm-share-dialog__url-wrapper">
-			<k-label class="k-seo-utm-share-dialog__section-label">{{ $t("seo.utmShare.button") }}</k-label>
+			<k-label class="k-seo-utm-share-dialog__section-label">{{
+				$t("seo.utmShare.button")
+			}}</k-label>
 			<div class="k-input k-seo-utm-share-dialog__url">
 				<span class="k-input-element">
 					<input

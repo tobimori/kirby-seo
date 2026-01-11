@@ -68,6 +68,20 @@ checksums:
     sitemap.priority: 0b062687108df307445af848763e4ce5
     sitemap.url: ca97457614226960d41dd18c3c29c86b
     sitemap.noEntries: 17c4758dd5718f652fe0a2b338098300
+    utmShare.button: ab625547ab428626747e57f01d8abb06
+    utmShare.parameters: 0c8e406234b2fe24b5f8ce3be8bced96
+    utmShare.source.label: 6e87903ef260da661b2bf6d858ba68ca
+    utmShare.source.placeholder: 0cfa7930ff13b556709b22841b6da4d2
+    utmShare.medium.label: 43983f2178fb28aacaef6c5f41282c4a
+    utmShare.medium.placeholder: 0247554f5f5c18b4a6aa49ddb1abfa6f
+    utmShare.campaign.label: ea4b22f7e1b1dad1db460e6d49cf5aff
+    utmShare.campaign.placeholder: e876b1f50ef554999e3030479067f81b
+    utmShare.content.label: 669b337031ef165af577f04f2b7fd54f
+    utmShare.content.placeholder: 7f263cfe2976f1190afe8ec860e72e03
+    utmShare.term.label: 9355986a8c38dffa741cc79d1093029c
+    utmShare.term.placeholder: ad8d0e4d13a84b43f334e1a4563b48ae
+    utmShare.ref.label: 50abcc6a28705c8242351511f92ad449
+    utmShare.ref.placeholder: 22310337e96043e2df600f7a019cc1a5
     ai.action.generate: 7c830f2f8bad82ca29e88884df7411ca
     ai.action.regenerate: 79bc737effc16d0546c048c6aa2ec415
     ai.action.edit: f0f657e0a3ff56761a5f693e26993db6
