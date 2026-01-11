@@ -34,7 +34,7 @@ columns:
       ogDescription:
         label: seo.fields.ogDescription.label
         type: seo-writer
-        ai: site-og-description
+        ai: og-site-description
         placeholder: "{{ site.metaDescription }}"
       ogSiteName:
         label: seo.fields.ogSiteName.label

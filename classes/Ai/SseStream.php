@@ -17,6 +17,9 @@ use function curl_multi_init;
 use function curl_multi_remove_handle;
 use function curl_multi_select;
 use function curl_setopt_array;
+use function strlen;
+use function sprintf;
+use function is_array;
 
 use const CURLOPT_HTTPHEADER;
 use const CURLOPT_POST;

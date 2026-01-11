@@ -6,6 +6,9 @@ use Generator;
 use Kirby\Exception\Exception as KirbyException;
 use tobimori\Seo\Ai\Driver;
 
+use function is_string;
+use function is_array;
+
 /**
  * Ai facade
  */

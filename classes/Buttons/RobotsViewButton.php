@@ -1,17 +1,18 @@
 <?php
 
-namespace tobimori\Seo;
+namespace tobimori\Seo\Buttons;
 
 use Kirby\Cms\Page;
 use Kirby\Panel\Ui\Buttons\ViewButton;
 use Kirby\Toolkit\I18n;
 use Kirby\Toolkit\Str;
+use tobimori\Seo\Seo;
 
 class RobotsViewButton extends ViewButton
 {
 	public function __construct(Page $model)
 	{
-		if ($model->kirby()->option('tobimori.seo.robots.active', true) !== true) {
+		if (Seo::option('tobimori.seo.robots.active') !== true) {
 			parent::__construct(
 				model: $model,
 				disabled: true,

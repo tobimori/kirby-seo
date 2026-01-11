@@ -11,6 +11,12 @@ use Kirby\Toolkit\A;
 use Kirby\Toolkit\Str;
 use Kirby\Cms\Language;
 
+use function is_array;
+use function is_string;
+use function count;
+use function array_key_exists;
+use function in_array;
+
 /**
  * The Meta class is responsible for handling the meta data & cascading
  */
@@ -110,7 +116,7 @@ class Meta
 
 		// Robots
 		if ($robotsActive = Seo::option('robots.active')) {
-			$meta['robots'] = fn () => $this->robots();
+			$meta['robots'] = $this->robots(...);
 		}
 
 		// only add canonical and alternate tags if the page is indexable
@@ -252,7 +258,7 @@ class Meta
 			}
 
 			// if the value is empty, we don't want to output it
-			if ((is_a($value, 'Kirby\Content\Field') && $value->isEmpty()) || !$value) {
+			if ((is_a($value, Field::class) && $value->isEmpty()) || !$value) {
 				continue;
 			}
 
@@ -536,7 +542,7 @@ class Meta
 	protected function options(string $key): Field|null
 	{
 		if ($option = Seo::option("default.{$key}", args: [$this->page])) {
-			if (is_a($option, 'Kirby\Content\Field')) {
+			if (is_a($option, Field::class)) {
 				return $option;
 			}
 

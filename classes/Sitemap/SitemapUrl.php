@@ -6,6 +6,8 @@ use DOMDocument;
 use DOMNode;
 use Kirby\Exception\Exception;
 
+use function array_key_exists;
+
 class SitemapUrl
 {
 	protected string $lastmod;

@@ -2,6 +2,7 @@ import "./index.css"
 
 import SeoWriterField from "./fields/seo-writer.vue"
 import SeoWriterInput from "./fields/seo-writer-input.vue"
+import UtmShareDialog from "./components/utm-share-dialog.vue"
 import { createTemplateVariableNode } from "./nodes/template-variable.js"
 import HeadingStructure from "./sections/heading-structure.vue"
 import SeoPreview from "./sections/seo-preview.vue"
@@ -20,7 +21,8 @@ panel.plugin("tobimori/seo", {
 		"seo-writer": SeoWriterField
 	},
 	components: {
-		"k-seo-writer-input": SeoWriterInput
+		"k-seo-writer-input": SeoWriterInput,
+		"k-seo-utm-share-dialog": UtmShareDialog
 	},
 	writerNodes: {
 		seoTemplateTitle: createTemplateVariableNode({
