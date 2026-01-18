@@ -46,7 +46,7 @@ class Ai
 			throw new KirbyException("AI provider driver \"{$driver}\" must extend " . Driver::class . '.');
 		}
 
-		return self::$providers[$providerId] = new $driver($config['config'] ?? []);
+		return self::$providers[$providerId] = new $driver($providerId);
 	}
 
 	public static function streamTask(string $taskId, array $variables = []): Generator

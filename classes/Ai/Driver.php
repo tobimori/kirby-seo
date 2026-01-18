@@ -4,10 +4,11 @@ namespace tobimori\Seo\Ai;
 
 use Generator;
 use Kirby\Exception\InvalidArgumentException;
+use tobimori\Seo\Seo;
 
 abstract class Driver
 {
-	public function __construct(protected array $config = [])
+	public function __construct(protected string $providerId)
 	{
 	}
 
@@ -26,7 +27,7 @@ abstract class Driver
 	 */
 	protected function config(string $key, mixed $default = null, bool $required = false): mixed
 	{
-		$value = $this->config[$key] ?? $default;
+		$value = Seo::option("ai.providers.{$this->providerId}.config.{$key}", $default);
 
 		if ($required === true && ($value === null || $value === '')) {
 			throw new InvalidArgumentException(
