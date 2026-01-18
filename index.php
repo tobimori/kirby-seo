@@ -51,8 +51,9 @@ App::plugin(
 			'sitemap.xsl' => __DIR__ . '/templates/sitemap.xsl.php',
 		],
 		'blueprints' => [
-			'seo/site' => __DIR__ . '/blueprints/site.yml',
-			'seo/page' => __DIR__ . '/blueprints/page.yml',
+			'seo' => require __DIR__ . '/blueprints/seo.php',
+			'seo/site' => require __DIR__ . '/blueprints/seo.php',
+			'seo/page' => require __DIR__ . '/blueprints/seo.php',
 			'seo/fields/og-image' => require __DIR__ . '/blueprints/fields/og-image.php',
 			'seo/fields/og-group' => __DIR__ . '/blueprints/fields/og-group.yml',
 			'seo/fields/meta-group' => __DIR__ . '/blueprints/fields/meta-group.yml',
