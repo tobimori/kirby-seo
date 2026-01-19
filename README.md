@@ -18,6 +18,7 @@
 - 📝 Sitemap generation with multi-lang support
 
 ### New in Version 2
+
 - 🚀 Kirby 5 support
 - 💻 Even better and easier Panel UI
 - ✨ AI assist for writing meta tags
@@ -29,7 +30,7 @@
 
 If you're looking to use Kirby SEO with Kirby 5 or newer, please install the Alpha version of the plugin:
 
-```composer require tobimori/kirby-seo:^2.0.0-alpha.8```
+`composer require tobimori/kirby-seo:^2.0.0-alpha.8`
 
 ### What does Alpha mean for Kirby SEO 2?
 

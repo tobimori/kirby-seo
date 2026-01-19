@@ -3,9 +3,11 @@ import "./index.css"
 import SeoWriterField from "./fields/seo-writer.vue"
 import SeoWriterInput from "./fields/seo-writer-input.vue"
 import UtmShareDialog from "./components/utm-share-dialog.vue"
+import GscDrawer from "./components/gsc-drawer.vue"
 import { createTemplateVariableNode } from "./nodes/template-variable.js"
 import HeadingStructure from "./sections/heading-structure.vue"
 import SeoPreview from "./sections/seo-preview.vue"
+import SearchConsole from "./sections/search-console.vue"
 
 panel.plugin("tobimori/seo", {
 	icons: {
@@ -15,14 +17,16 @@ panel.plugin("tobimori/seo", {
 	},
 	sections: {
 		"heading-structure": HeadingStructure,
-		"seo-preview": SeoPreview
+		"seo-preview": SeoPreview,
+		"seo-search-console": SearchConsole
 	},
 	fields: {
 		"seo-writer": SeoWriterField
 	},
 	components: {
 		"k-seo-writer-input": SeoWriterInput,
-		"k-seo-utm-share-dialog": UtmShareDialog
+		"k-seo-utm-share-dialog": UtmShareDialog,
+		"k-gsc-drawer": GscDrawer
 	},
 	writerNodes: {
 		seoTemplateTitle: createTemplateVariableNode({

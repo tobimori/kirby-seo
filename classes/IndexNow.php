@@ -7,6 +7,8 @@ use Kirby\Cms\Page;
 use Kirby\Http\Remote;
 use Kirby\Toolkit\Str;
 
+use function is_bool;
+
 class IndexNow
 {
 	protected static string|null $key = null;
@@ -190,7 +192,7 @@ class IndexNow
 			$pattern
 		);
 
-		return preg_match('#^' . $pattern . '$#', parse_url($url, PHP_URL_PATH));
+		return preg_match("#^{$pattern}$#", parse_url($url, PHP_URL_PATH));
 	}
 
 	/**
@@ -295,7 +297,7 @@ class IndexNow
 
 		$pages = $this->page->site()->index()
 			->filterBy('intendedTemplate', 'in', $templates)
-			->filter(fn ($page) => $this->isIndexable($page));
+			->filter($this->isIndexable(...));
 
 		foreach ($pages as $page) {
 			$this->urls[] = $page->url($language?->code());

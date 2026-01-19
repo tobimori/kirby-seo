@@ -24,15 +24,12 @@ const { load } = useSection()
 const meta = ref(null)
 const options = ref([])
 const isSiteParent = computed(() => props.parent === "site")
-const baseLabel = computed(
-	() => props.label || panel?.t?.("seo.sections.preview.title") || "Preview"
-)
+const baseLabel = computed(() => props.label || panel.t("seo.sections.preview.title"))
 const headerLabel = computed(() => {
 	const pageTitle = meta.value?.pageTitle
 
 	if (isSiteParent.value && pageTitle) {
-		const safeTitle = pageTitle.replaceAll('"', '\\"')
-		return `${baseLabel.value} (shows "${safeTitle}")`
+		return panel.t("seo.sections.preview.titleWithPage", { title: pageTitle })
 	}
 
 	return baseLabel.value
@@ -51,10 +48,7 @@ const handleLoad = () => {
 		meta.value = response.meta
 		options.value = response.options
 		// set default type if not already set and options are available
-		if (
-			!window.localStorage.getItem("kSEOPreviewType") &&
-			response.options.length > 0
-		) {
+		if (!window.localStorage.getItem("kSEOPreviewType") && response.options.length > 0) {
 			type.value = response.options[0].value
 		}
 	})
@@ -81,21 +75,21 @@ onUnmounted(() => panel.events.off("content.save"))
 </script>
 
 <template>
-	<div class="k-section k-seo-preview">
+	<k-section v-if="meta" class="k-seo-preview">
 		<div class="k-field-header k-seo-preview__label k-label k-field-label">
 			<k-icon type="preview" />
 			<span class="k-label-text">
 				{{ headerLabel }}
 			</span>
 			<k-button
-				v-if="isSiteParent && meta?.panelUrl"
+				v-if="isSiteParent && meta.panelUrl"
 				class="k-seo-preview__panel-button"
 				variant="filled"
 				size="xs"
 				icon="edit"
 				@click="openPanelTarget"
 			>
-				View page in panel
+				{{ $t("seo.sections.preview.viewPage") }}
 			</k-button>
 		</div>
 		<k-select-field
@@ -107,29 +101,25 @@ onUnmounted(() => panel.events.off("content.save"))
 			:required="true"
 			:empty="false"
 		/>
-		<div v-if="meta" class="k-seo-preview__inner">
+		<div class="k-seo-preview__inner">
 			<google-preview v-if="type === 'google'" v-bind="meta" />
 			<facebook-preview v-if="type === 'facebook'" v-bind="meta" />
 			<slack-preview v-if="type === 'slack'" v-bind="meta" />
 		</div>
-	</div>
+	</k-section>
 </template>
 
 <style>
-.k-field-name-seo-preview-type .k-field-header {
-	display: none;
-}
-
 .k-seo-preview__inner {
 	margin-top: var(--spacing-2);
 }
 
 .k-seo-preview__debugger {
-	margin-top: 1rem;
+	margin-top: var(--spacing-4);
 	display: flex;
 	font-size: var(--text-sm);
 	color: var(--color-text-dimmed);
-	line-height: 1.25rem;
+	line-height: var(--spacing-5);
 	width: max-content;
 	margin-left: auto;
 

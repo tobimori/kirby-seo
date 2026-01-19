@@ -1,6 +1,6 @@
-import js from "@eslint/js";
-import prettier from "eslint-config-prettier";
-import vue from "eslint-plugin-vue";
+import js from "@eslint/js"
+import prettier from "eslint-config-prettier"
+import vue from "eslint-plugin-vue"
 
 export default [
 	js.configs.recommended,
@@ -14,13 +14,13 @@ export default [
 				"error",
 				{
 					singleline: "never",
-					multiline: "always",
-				},
+					multiline: "always"
+				}
 			],
 			"vue/multi-word-component-names": "off",
 			"vue/require-default-prop": "off",
 			"vue/require-prop-types": "error",
-			"no-unused-vars": ["error", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^props$" }],
+			"no-unused-vars": ["error", { argsIgnorePattern: "^_", varsIgnorePattern: "^props$" }]
 		},
 		languageOptions: {
 			ecmaVersion: 2022,
@@ -33,6 +33,6 @@ export default [
 				navigator: "readonly",
 				setTimeout: "readonly"
 			}
-		},
-	},
-];
+		}
+	}
+]

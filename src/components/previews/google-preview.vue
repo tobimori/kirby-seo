@@ -26,39 +26,23 @@ const breadcrumbs = computed(() => {
 </script>
 
 <template>
-	<div>
-		<div class="k-google-search-preview">
-			<div class="k-google-search-preview__header">
-				<img
-					class="k-google-search-preview__favicon"
-					:src="`https://www.google.com/s2/favicons?domain=${domain}&sz=32`"
-					:alt="`${ogSiteName} favicon`"
-				/>
-				<div class="k-google-search-preview__site-info">
-					<span class="k-google-search-preview__site-title">{{
-						ogSiteName
-					}}</span>
-					<span class="k-google-search-preview__url">
-						{{ origin }}{{ breadcrumbs }}
-					</span>
-				</div>
+	<div class="k-google-search-preview">
+		<div class="k-google-search-preview__header">
+			<img
+				class="k-google-search-preview__favicon"
+				:src="`https://www.google.com/s2/favicons?domain=${domain}&sz=32`"
+				:alt="`${ogSiteName} favicon`"
+			/>
+			<div class="k-google-search-preview__site-info">
+				<span class="k-google-search-preview__site-title">{{ ogSiteName }}</span>
+				<span class="k-google-search-preview__url"> {{ origin }}{{ breadcrumbs }} </span>
 			</div>
-
-			<h3 class="k-google-search-preview__title">{{ title }}</h3>
-			<p v-if="description" class="k-google-search-preview__description">
-				{{ description }}
-			</p>
 		</div>
-		<a
-			class="k-seo-preview__debugger"
-			href="https://search.google.com/search-console"
-			aria-label="Google Search Console"
-			target="_blank"
-			rel="noopener noreferrer"
-		>
-			{{ $t("seo.sections.preview.openSearchConsole") }}
-			<k-icon type="open" />
-		</a>
+
+		<h3 class="k-google-search-preview__title">{{ title }}</h3>
+		<p v-if="description" class="k-google-search-preview__description">
+			{{ description }}
+		</p>
 	</div>
 </template>
 

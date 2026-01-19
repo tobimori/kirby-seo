@@ -100,10 +100,7 @@ export default {
 				return null
 			}
 
-			return `${apiBase}/${fieldEndpoint}/ai/stream`.replace(
-				/([^:]\/)\/+/g,
-				"$1"
-			)
+			return `${apiBase}/${fieldEndpoint}/ai/stream`.replace(/([^:]\/)\/+/g, "$1")
 		}
 	},
 	beforeDestroy() {
@@ -167,10 +164,7 @@ export default {
 				}
 
 				console.error(error)
-				const message =
-					error && error.message
-						? error.message
-						: this.$t("seo.ai.error.request")
+				const message = error && error.message ? error.message : this.$t("seo.ai.error.request")
 				this.$panel.notification.error(message)
 			} finally {
 				this.aiAbortController = null

@@ -1,11 +1,14 @@
 <?php
 
+use Kirby\Cms\App;
 use Kirby\Cms\Page;
+use Kirby\Data\Json;
 use tobimori\Seo\Meta;
 use tobimori\Seo\Seo;
 use tobimori\Seo\Ai;
 use tobimori\Seo\IndexNow;
 use tobimori\Seo\SchemaSingleton;
+use tobimori\Seo\GoogleSearchConsole;
 
 return [
 	// if you want to extend some of the built-in classes, you can overwrite them using the components config option
@@ -15,7 +18,9 @@ return [
 		'ai' => Ai::class,
 		'indexnow' => IndexNow::class,
 		'schema' => SchemaSingleton::class,
+		'gsc' => GoogleSearchConsole::class,
 	],
+	'cache.searchConsole' => true,
 	'cache.indexnow' => true,
 	'cascade' => [
 		'fields',
@@ -69,7 +74,7 @@ return [
 		'active' => fn () => Seo::option('sitemap.enabled'),
 		'followPageStatus' => true, // should unlisted pages be noindex by default?
 		'pageSettings' => true, // whether to have robots settings on each page
-		'index' => fn () => !option('debug'), // default site-wide robots setting
+		'index' => fn () => !App::instance()->option('debug'), // default site-wide robots setting
 		'sitemap' => null, // sets sitemap url, will be replaced by plugin sitemap in the future
 		'content' => [], // custom robots content
 		'types' => ['index', 'follow', 'archive', 'imageindex', 'snippet'] // available robots types
@@ -84,7 +89,7 @@ return [
 		'changefreq' => 'weekly',
 		'groupByTemplate' => false,
 		'excludeTemplates' => ['error'],
-		'priority' => fn (Page $p) => number_format(($p->isHomePage()) ? 1 : max(1 - 0.2 * $p->depth(), 0.2), 1),
+		'priority' => fn (Page $page) => number_format(($page->isHomePage()) ? 1 : max(1 - 0.2 * $page->depth(), 0.2), 1),
 	],
 	'files' => [
 		'parent' => null,
@@ -96,6 +101,11 @@ return [
 	],
 	'ai' => require __DIR__ . '/options/ai.php',
 	'indexnow' => require __DIR__ . '/options/indexnow.php',
+	'searchConsole' => [
+		'enabled' => true,
+		'credentials' => null,
+		'tokenPath' => fn () => App::instance()->root('config') . '/.gsc-tokens.json'
+	],
 	'generateSchema' => true, // whether to generate default schema.org data
 	'locale' => 'en_US', // default locale, used for single-language sites
 	'dateFormat' => null, // custom date format

@@ -43,6 +43,7 @@ class ComposerStaticInit3e4bc37d480117d497c8333636c62d44
 		'tobimori\\Seo\\Buttons\\RobotsViewButton' => __DIR__ . '/../..' . '/classes/Buttons/RobotsViewButton.php',
 		'tobimori\\Seo\\Buttons\\UtmShareViewButton' => __DIR__ . '/../..' . '/classes/Buttons/UtmShareViewButton.php',
 		'tobimori\\Seo\\Dialogs\\UtmShareDialog' => __DIR__ . '/../..' . '/classes/Dialogs/UtmShareDialog.php',
+		'tobimori\\Seo\\GoogleSearchConsole' => __DIR__ . '/../..' . '/classes/GoogleSearchConsole.php',
 		'tobimori\\Seo\\IndexNow' => __DIR__ . '/../..' . '/classes/IndexNow.php',
 		'tobimori\\Seo\\Meta' => __DIR__ . '/../..' . '/classes/Meta.php',
 		'tobimori\\Seo\\SchemaSingleton' => __DIR__ . '/../..' . '/classes/SchemaSingleton.php',

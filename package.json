@@ -4,12 +4,15 @@
 	"license": "UNLICENSED",
 	"type": "module",
 	"scripts": {
-		"dev": "kirbyup serve src/index.js",
 		"build": "kirbyup src/index.js",
+		"dev": "kirbyup serve src/index.js",
+		"format": "oxfmt",
 		"lint": "eslint \"src/**/*.{js,vue}\"",
 		"lint:fix": "npm run lint -- --fix",
-		"format": "prettier --write \"src/**/*.{js,vue}\"",
 		"prepare": "husky"
+	},
+	"dependencies": {
+		"kirbyuse": "^1.2.4"
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.39.2",
@@ -19,11 +22,18 @@
 		"husky": "^9.1.7",
 		"kirbyup": "^3.4.1",
 		"lint-staged": "^16.2.7",
-		"postcss": "^8.5.6",
-		"prettier": "^3.7.4"
+		"oxfmt": "^0.24.0",
+		"oxlint": "^1.39.0",
+		"postcss": "^8.5.6"
 	},
-	"dependencies": {
-		"kirbyuse": "^1.2.4"
+	"lint-staged": {
+		"src/*.{js,vue}": [
+			"eslint --fix",
+			"oxfmt --no-error-on-unmatched-pattern"
+		],
+		"*.php": [
+			".husky/php-cs-fixer-lint-staged"
+		]
 	},
 	"browserslist": [
 		"last 2 Android versions",
@@ -40,14 +50,5 @@
 		"last 2 OperaMobile versions",
 		"last 2 UCAndroid versions"
 	],
-	"lint-staged": {
-		"src/*.{js,vue}": [
-			"eslint --fix",
-			"prettier --write"
-		],
-		"*.php": [
-			".husky/php-cs-fixer-lint-staged"
-		]
-	},
 	"packageManager": "pnpm@10.28.0"
 }

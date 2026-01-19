@@ -96,3 +96,21 @@ checksums:
     ai.dialog.custom.label: 7220b8fec354382422615c94aae1758b
     ai.dialog.custom.placeholder: 11fe0f4f440c45daab490bdb862bca1b
     ai.dialog.custom.submit: 0345bf322c191e70d01fd6607ec5c2f8
+    sections.searchConsole.title: d6b500e7373a6d178259aace89b4c2d9
+    sections.searchConsole.noCredentials: 24009cd2ec18dc7ffc462396788c4649
+    sections.searchConsole.notConnected: e3b2faf9c3870da0d58093cc47b68d09
+    sections.searchConsole.selectProperty: d411f4839e0f7089cc32984de7e7386d
+    sections.searchConsole.selectPropertyButton: a9a6cb13bfcbb80c90178e4abe6a7bc6
+    sections.searchConsole.selectPropertyLabel: 03474498d4e0a8c71d35aaec87c22836
+    sections.searchConsole.scDomain: 9ea7e558d336ebc2ac711f5063117c81
+    sections.searchConsole.docs: 55fea190a0c0fb32acd3dc986cd3cc91
+    sections.searchConsole.connect: 8778ee245078a8be4a2ce855c8c56edc
+    sections.searchConsole.reconnect: 8992a0f250278c116cb26be448b68ba2
+    sections.searchConsole.noData: 68f87731a84f1c1c8d9b2b67e1cfc037
+    sections.searchConsole.showMore: f3dcf49ee44a8454d820ffef3f2b0e9f
+    sections.searchConsole.sortBy: 8adf3dbc5668379558957662f0c43563
+    sections.searchConsole.query: 95c46c00abc531875f79b152a0b59284
+    sections.searchConsole.clicks: f9e154545f87d8ede27b529e5fdf2015
+    sections.searchConsole.impressions: 7fe38d42d68a64d3fd8436a063751584
+    sections.searchConsole.ctr: b778c9d0b299b6ac116d0d5c7b70d5f1
+    sections.searchConsole.position: 8ba464c700080c55106d9e680b4b37e5

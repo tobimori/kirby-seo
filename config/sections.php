@@ -4,6 +4,7 @@ use Kirby\Cms\Page;
 use Kirby\Cms\Site;
 use Kirby\Toolkit\A;
 use Kirby\Toolkit\Str;
+use tobimori\Seo\Seo;
 
 return [
 	'seo-preview' => [
@@ -83,6 +84,50 @@ return [
 				}
 
 				return $data;
+			}
+		]
+	],
+	'seo-search-console' => [
+		'mixins' => ['headline'],
+		'computed' => [
+			'status' => function () {
+				if (!Seo::option('components.gsc')::hasCredentials()) {
+					return 'NO_CREDENTIALS';
+				}
+
+				if (!Seo::option('components.gsc')::isConnected()) {
+					return 'NOT_CONNECTED';
+				}
+
+				if (!Seo::option('components.gsc')::property()) {
+					return 'SELECT_PROPERTY';
+				}
+
+				return 'CONNECTED';
+			},
+			'property' => fn () => Seo::option('components.gsc')::property(),
+			'pageUrl' => function () {
+				$model = $this->model();
+				if ($model instanceof Page) {
+					return '/' . $model->uri();
+				}
+				return null;
+			},
+			'data' => function () {
+				$gsc = Seo::option('components.gsc');
+				if (!$gsc::hasCredentials() || !$gsc::isConnected() || !$gsc::property()) {
+					return [];
+				}
+
+				$metric = kirby()->request()->get('metric', 'clicks');
+				$limit = (int) kirby()->request()->get('limit', 10);
+				$asc = in_array($metric, ['position', 'query']);
+
+				try {
+					return $gsc::queryForModel($this->model(), $metric, $limit, $asc);
+				} catch (\Exception $e) {
+					return [];
+				}
 			}
 		]
 	]

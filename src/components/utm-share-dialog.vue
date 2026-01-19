@@ -1,12 +1,5 @@
 <script setup>
-import {
-	ref,
-	computed,
-	watch,
-	nextTick,
-	onMounted,
-	onUnmounted
-} from "kirbyuse"
+import { ref, computed, watch, nextTick, onMounted, onUnmounted } from "kirbyuse"
 
 const props = defineProps({
 	pageUrl: {
@@ -80,11 +73,7 @@ watch(generatedUrl, () => {
 
 const handleKeydown = (e) => {
 	if (!props.visible) return
-	if (
-		(e.ctrlKey || e.metaKey) &&
-		e.key === "c" &&
-		!window.getSelection()?.toString()
-	) {
+	if ((e.ctrlKey || e.metaKey) && e.key === "c" && !window.getSelection()?.toString()) {
 		e.preventDefault()
 		copyToClipboard()
 	}
@@ -109,11 +98,7 @@ onUnmounted(() => {
 		@cancel="emit('cancel')"
 	>
 		<template #header>
-			<k-button
-				class="k-seo-utm-share-dialog__close"
-				icon="cancel"
-				@click="emit('cancel')"
-			/>
+			<k-button class="k-seo-utm-share-dialog__close" icon="cancel" @click="emit('cancel')" />
 		</template>
 
 		<div class="k-seo-utm-share-dialog__url-wrapper">
@@ -147,11 +132,7 @@ onUnmounted(() => {
 			$t("seo.utmShare.parameters")
 		}}</k-label>
 		<div class="k-seo-utm-share-dialog__params">
-			<div
-				v-for="field in fields"
-				:key="field.key"
-				class="k-seo-utm-share-dialog__row"
-			>
+			<div v-for="field in fields" :key="field.key" class="k-seo-utm-share-dialog__row">
 				<label class="k-seo-utm-share-dialog__label" :for="field.key">
 					<k-icon :type="field.icon" />
 					{{ $t(`seo.utmShare.${field.name}.label`) }}

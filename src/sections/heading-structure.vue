@@ -1,68 +1,5 @@
-<template>
-	<div v-if="data" class="k-section k-heading-structure">
-		<div
-			class="k-field-header k-heading-structure__label k-label k-field-label"
-		>
-			<k-icon type="headline" />
-			<span class="k-label-text">{{
-				props.label || $t("seo.sections.headingStructure.title")
-			}}</span>
-		</div>
-		<k-box theme="white">
-			<ol class="k-heading-structure__list">
-				<li
-					v-for="(item, index) in data"
-					:key="index"
-					:style="`z-index: ${data.length - index}`"
-					:class="`k-heading-structure__item level-${item.level} ${
-						itemInvalid(item, index) ? 'is-invalid' : ''
-					}`"
-				>
-					<span class="k-heading-structure__item__level">
-						H{{ item.level }}
-					</span>
-					<span class="k-heading-structure__item__text">{{ item.text }}</span>
-				</li>
-			</ol>
-		</k-box>
-		<k-box
-			v-if="incorrectOrder && !noH1"
-			class="k-heading-structure__notice"
-			theme="negative"
-		>
-			<k-icon type="alert" />
-			<k-text>{{
-				$t("seo.sections.headingStructure.errors.incorrectOrder")
-			}}</k-text>
-		</k-box>
-		<k-box
-			v-if="multipleH1"
-			class="k-heading-structure__notice"
-			theme="negative"
-		>
-			<k-icon type="alert" />
-			<k-text>{{
-				$t("seo.sections.headingStructure.errors.multipleH1")
-			}}</k-text>
-		</k-box>
-		<k-box v-if="noH1" class="k-heading-structure__notice" theme="negative">
-			<k-icon type="alert" />
-			<k-text>{{
-				$t("seo.sections.headingStructure.errors.missingH1")
-			}}</k-text>
-		</k-box>
-	</div>
-</template>
-
 <script setup>
-import {
-	ref,
-	computed,
-	onMounted,
-	onUnmounted,
-	usePanel,
-	useSection
-} from "kirbyuse"
+import { ref, computed, onMounted, onUnmounted, usePanel, useSection } from "kirbyuse"
 import { section } from "kirbyuse/props"
 
 const props = defineProps(section)
@@ -74,18 +11,12 @@ const { load } = useSection()
 const data = ref(null)
 
 const incorrectOrder = computed(() =>
-	data.value?.some(
-		(item, index) => item.level > (data.value[index - 1]?.level ?? 0) + 1
-	)
+	data.value?.some((item, index) => item.level > (data.value[index - 1]?.level ?? 0) + 1)
 )
 
-const multipleH1 = computed(
-	() => data.value?.filter((item) => item.level === 1).length > 1
-)
+const multipleH1 = computed(() => data.value?.filter((item) => item.level === 1).length > 1)
 
-const noH1 = computed(
-	() => data.value?.filter((item) => item.level === 1).length === 0
-)
+const noH1 = computed(() => data.value?.filter((item) => item.level === 1).length === 0)
 
 // Methods
 const handleLoad = () =>
@@ -99,11 +30,7 @@ const handleLoad = () =>
 const itemInvalid = (item, index) => {
 	if (item.level > (data.value[index - 1]?.level ?? 0) + 1) return true // wrong order
 	if (item.level === 1 && data.value[index - 1]) return true // wrong order
-	if (
-		item.level === 1 &&
-		data.value.filter((item) => item.level === 1).length > 1
-	)
-		return true // multiple h1
+	if (item.level === 1 && data.value.filter((item) => item.level === 1).length > 1) return true // multiple h1
 
 	return false
 }
@@ -120,6 +47,44 @@ onMounted(() => {
 
 onUnmounted(() => panel.events.off("content.save"))
 </script>
+
+<template>
+	<div v-if="data" class="k-section k-heading-structure">
+		<div class="k-field-header k-heading-structure__label k-label k-field-label">
+			<k-icon type="headline" />
+			<span class="k-label-text">{{
+				props.label || $t("seo.sections.headingStructure.title")
+			}}</span>
+		</div>
+		<k-box theme="white">
+			<ol class="k-heading-structure__list">
+				<li
+					v-for="(item, index) in data"
+					:key="index"
+					:style="`z-index: ${data.length - index}`"
+					:class="`k-heading-structure__item level-${item.level} ${
+						itemInvalid(item, index) ? 'is-invalid' : ''
+					}`"
+				>
+					<span class="k-heading-structure__item__level"> H{{ item.level }} </span>
+					<span class="k-heading-structure__item__text">{{ item.text }}</span>
+				</li>
+			</ol>
+		</k-box>
+		<k-box v-if="incorrectOrder && !noH1" class="k-heading-structure__notice" theme="negative">
+			<k-icon type="alert" />
+			<k-text>{{ $t("seo.sections.headingStructure.errors.incorrectOrder") }}</k-text>
+		</k-box>
+		<k-box v-if="multipleH1" class="k-heading-structure__notice" theme="negative">
+			<k-icon type="alert" />
+			<k-text>{{ $t("seo.sections.headingStructure.errors.multipleH1") }}</k-text>
+		</k-box>
+		<k-box v-if="noH1" class="k-heading-structure__notice" theme="negative">
+			<k-icon type="alert" />
+			<k-text>{{ $t("seo.sections.headingStructure.errors.missingH1") }}</k-text>
+		</k-box>
+	</div>
+</template>
 
 <style>
 .k-heading-structure__label {

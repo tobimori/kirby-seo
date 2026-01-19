@@ -1,5 +1,7 @@
 <?php
 
+use tobimori\Seo\Seo;
+
 return [
 	'label' => 'seo.tabs.seo',
 	'icon' => 'search',
@@ -81,7 +83,12 @@ return [
 			'sections' => [
 				'seoPreview' => [
 					'type' => 'seo-preview'
-				]
+				],
+				...(Seo::option('searchConsole.enabled') ? [
+					'seoSearchConsole' => [
+						'type' => 'seo-search-console'
+					]
+				] : [])
 			]
 		]
 	]

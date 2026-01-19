@@ -20,6 +20,7 @@ return array(
 	'tobimori\\Seo\\Buttons\\RobotsViewButton' => $baseDir . '/classes/Buttons/RobotsViewButton.php',
 	'tobimori\\Seo\\Buttons\\UtmShareViewButton' => $baseDir . '/classes/Buttons/UtmShareViewButton.php',
 	'tobimori\\Seo\\Dialogs\\UtmShareDialog' => $baseDir . '/classes/Dialogs/UtmShareDialog.php',
+	'tobimori\\Seo\\GoogleSearchConsole' => $baseDir . '/classes/GoogleSearchConsole.php',
 	'tobimori\\Seo\\IndexNow' => $baseDir . '/classes/IndexNow.php',
 	'tobimori\\Seo\\Meta' => $baseDir . '/classes/Meta.php',
 	'tobimori\\Seo\\SchemaSingleton' => $baseDir . '/classes/SchemaSingleton.php',
