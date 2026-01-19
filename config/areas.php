@@ -8,7 +8,6 @@ use Kirby\Toolkit\I18n;
 use tobimori\Seo\Buttons\RobotsViewButton;
 use tobimori\Seo\Buttons\UtmShareViewButton;
 use tobimori\Seo\Dialogs\UtmShareDialog;
-use tobimori\Seo\GoogleSearchConsole;
 use tobimori\Seo\Seo;
 
 return [
@@ -35,7 +34,8 @@ return [
 						return ['component' => 'k-error-drawer', 'props' => ['message' => 'Model not found']];
 					}
 
-					if (!GoogleSearchConsole::hasCredentials() || !GoogleSearchConsole::isConnected() || !GoogleSearchConsole::property()) {
+					$gsc = Seo::option('components.gsc');
+					if (!$gsc::hasCredentials() || !$gsc::isConnected() || !$gsc::property()) {
 						return ['component' => 'k-error-drawer', 'props' => ['message' => 'GSC not connected']];
 					}
 
@@ -44,7 +44,7 @@ return [
 						$title .= ' · ' . $model->title()->value();
 					}
 
-					$data = GoogleSearchConsole::queryForModel($model, $metric, 25000, $asc);
+					$data = $gsc::queryForModel($model, $metric, 25000, $asc);
 					$total = count($data);
 					$pageData = array_slice($data, ($page - 1) * $limit, $limit);
 
@@ -99,9 +99,9 @@ return [
 				'pattern' => 'seo/gsc/select-property',
 				'load' => function () {
 					$siteUrl = App::instance()->site()->url();
-					$siteHost = parse_url($siteUrl, PHP_URL_HOST);
+					$gsc = Seo::option('components.gsc');
 
-					$properties = Seo::option('components.gsc')::listProperties();
+					$properties = $gsc::listProperties();
 					$options = array_map(fn ($p) => [
 						'value' => $p['siteUrl'],
 						'text' => str_starts_with($p['siteUrl'], 'sc-domain:')
@@ -109,9 +109,8 @@ return [
 							: $p['siteUrl']
 					], $properties);
 
-					// use current property if set, otherwise find matching property
-					$currentProperty = Seo::option('components.gsc')::property();
-					$defaultProperty = $currentProperty ?? GoogleSearchConsole::findMatchingProperty($properties);
+					$currentProperty = $gsc::property();
+					$defaultProperty = $currentProperty ?? $gsc::findMatchingProperty($siteUrl);
 
 					return [
 						'component' => 'k-form-dialog',
