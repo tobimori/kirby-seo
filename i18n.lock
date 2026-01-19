@@ -6,9 +6,10 @@ checksums:
     sections.headingStructure.errors.missingH1: 2f674f75bc1784c09e829fb7af318e33
     sections.headingStructure.errors.multipleH1: 01dabd0dd03bf94ac1be1645bf1ba9d5
     sections.preview.title: 3173ee1f0f1d4e50665ca4a84c38e15d
+    sections.preview.titleWithPage: 0e3251871b8f414ea6d1b9cbadc64dea
+    sections.preview.viewPage: fabb5b77bb43611a045c25d6b124d3f4
     sections.preview.showFor: 24a4a32c49afe851439a6f7806b6b8ac
     sections.preview.openDebugger: 1e3d34baacfd77a5a0113b395067651d
-    sections.preview.openSearchConsole: a661fb173f3989d298ae4e19c970329e
     sections.preview.google: 6cc462fb53d90d404f48d5a6695c1de1
     sections.preview.facebook: ac8afe226a7424849c247e6a9d566f64
     sections.preview.slack: 7b7b808a136ce10b6199c504e81fb902
@@ -114,3 +115,4 @@ checksums:
     sections.searchConsole.impressions: 7fe38d42d68a64d3fd8436a063751584
     sections.searchConsole.ctr: b778c9d0b299b6ac116d0d5c7b70d5f1
     sections.searchConsole.position: 8ba464c700080c55106d9e680b4b37e5
+    sections.searchConsole.openInGsc: 6303f05c7acde3a17c02d66967bac419
