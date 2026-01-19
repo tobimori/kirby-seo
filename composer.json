@@ -2,7 +2,7 @@
 	"name": "tobimori/kirby-seo",
 	"description": "The default choice for SEO on Kirby: Implement technical SEO & Meta best practices with ease and provide an easy-to-use editor experience",
 	"type": "kirby-plugin",
-	"version": "2.0.0-alpha.9",
+	"version": "2.0.0-alpha.10",
 	"license": "proprietary",
 	"homepage": "https://github.com/tobimori/kirby-seo#readme",
 	"authors": [

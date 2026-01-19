@@ -1,12 +1,18 @@
-# Git
-.gitattributes export-ignore
+# Do not publish the following files via composer:
 .github/ export-ignore
+.husky/ export-ignore
+.zed/ export-ignore
+src/ export-ignore
+.gitattributes export-ignore
 .gitignore export-ignore
-
-# Development files
-.editorconfig export-ignore
+.nvmrc export-ignore
+.oxfmtrc.json export-ignore
+.php-cs-fixer.dist.php export-ignore
 composer.lock export-ignore
+eslint.config.mjs export-ignore
+i18n.json export-ignore
+i18n.lock export-ignore
+jsconfig.json export-ignore
+package.json export-ignore
 pnpm-lock.yaml export-ignore
-
-# Docs
-docs/ export-ignore
+pnpm-workspace.yaml export-ignore
