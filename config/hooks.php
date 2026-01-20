@@ -7,21 +7,26 @@ use tobimori\Seo\Seo;
 
 return [
 	'page.update:after' => function (Page $newPage, Page $oldPage) {
-		$updates = A::reduce(
-			$newPage->kirby()->option('tobimori.seo.robots.types'),
-			function ($carry, $robots) use ($newPage) {
-				$upper = Str::ucfirst($robots);
+		// only inject blueprint defaults if the seo tab is present
+		if ($newPage->blueprint()->tab('seo')) {
+			$updates = A::reduce(
+				$newPage->kirby()->option('tobimori.seo.robots.types'),
+				function ($carry, $robots) use ($newPage) {
+					$upper = Str::ucfirst($robots);
 
-				if ($newPage->content()->get("robots{$upper}")->value() === '') {
-					$carry["robots{$upper}"] = 'default';
-				}
+					if ($newPage->content()->get("robots{$upper}")->value() === '') {
+						$carry["robots{$upper}"] = 'default';
+					}
 
-				return $carry;
-			},
-			[]
-		);
+					return $carry;
+				},
+				[]
+			);
 
-		$newPage = $newPage->update($updates);
+			if (A::count($updates)) {
+				$newPage = $newPage->update($updates, $newPage->kirby()->languageCode());
+			}
+		}
 
 		if (Seo::option('indexnow.enabled')) {
 			$indexNow = new (Seo::option('components.indexnow'))($newPage);
