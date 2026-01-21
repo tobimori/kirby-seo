@@ -156,7 +156,9 @@ class Meta
 				}
 			}
 
-			// only add alternate tags if the page is indexable
+			// x-default: language-neutral URL for users whose language doesn't match any translation
+			// indexUrl() strips the language prefix so the server can handle language detection
+			// see config/page-methods.php for details and customization
 			$meta['alternate'][] = fn () => $allowsIndexFn() ? [
 				'hreflang' => 'x-default',
 				'href' => $this->page->indexUrl(),
