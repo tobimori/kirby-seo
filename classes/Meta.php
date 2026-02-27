@@ -221,6 +221,24 @@ class Meta
 	];
 
 	/**
+	 * Decode HTML entities from a value to prevent double-encoding
+	 * when the value is later passed through Html::tag() which applies htmlspecialchars().
+	 * This is necessary because Writer fields store content as HTML (e.g. & as &amp;).
+	 */
+	protected static function decodeEntities(mixed $value): mixed
+	{
+		if (is_a($value, Field::class)) {
+			return new Field($value->model(), $value->key(), html_entity_decode($value->value(), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+		}
+
+		if (is_string($value)) {
+			return html_entity_decode($value, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+		}
+
+		return $value;
+	}
+
+	/**
 	 * Normalize the meta array and remaining meta defaults to be used in the snippet,
 	 * also resolve the content, if necessary
 	 */
@@ -280,11 +298,12 @@ class Meta
 				}
 
 				// array is associative, so it's an array of attributes
-				// we resolve the values, if they are callable
+				// we resolve the values, if they are callable, and decode entities
 				array_walk($value, function (&$item) {
 					if (is_callable($item)) {
 						$item = $item($this->page);
 					}
+					$item = self::decodeEntities($item);
 				});
 
 				// add the tag to the array
@@ -296,6 +315,9 @@ class Meta
 				];
 				continue;
 			}
+
+			// Decode HTML entities to prevent double-encoding by Html::tag()
+			$value = self::decodeEntities($value);
 
 			// if the value is a string, we use the TAG_TYPE_MAP
 			// to correctly map the attributes
