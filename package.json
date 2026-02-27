@@ -12,18 +12,18 @@
 		"prepare": "husky"
 	},
 	"dependencies": {
-		"kirbyuse": "^1.2.4"
+		"kirbyuse": "^1.3.0"
 	},
 	"devDependencies": {
-		"@eslint/js": "^9.39.2",
-		"eslint": "^9.39.2",
+		"@eslint/js": "^10.0.1",
+		"eslint": "^10.0.2",
 		"eslint-config-prettier": "^10.1.8",
-		"eslint-plugin-vue": "^10.6.2",
+		"eslint-plugin-vue": "^10.8.0",
 		"husky": "^9.1.7",
 		"kirbyup": "^3.4.1",
 		"lint-staged": "^16.2.7",
-		"oxfmt": "^0.24.0",
-		"oxlint": "^1.39.0",
+		"oxfmt": "^0.35.0",
+		"oxlint": "^1.50.0",
 		"postcss": "^8.5.6"
 	},
 	"lint-staged": {
