@@ -229,8 +229,7 @@ export default {
 			}
 		},
 		handleAiEvent(payload) {
-			let data = null
-
+			let data
 			try {
 				data = JSON.parse(payload)
 			} catch (error) {
