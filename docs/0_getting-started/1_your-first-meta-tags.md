@@ -5,7 +5,7 @@ intro: Learn how Kirby SEO decides which meta data to show and how to control it
 
 In the Quickstart, you installed Kirby SEO and saw meta tags appear in your source code. Now let's look at how to control what shows up, and where.
 
-## Start with a side-wide default
+## Start with a site-wide default
 
 Open the Panel, and click on "Metadata & SEO". You'll see something like this:
 
@@ -49,7 +49,7 @@ Delete the description you just entered on the page and save. Reload — the pag
 
 What you just experienced is the **Meta Cascade**. Kirby SEO looks for values in multiple places and uses the most specific one it finds:
 
-1. **Page fields**: the Metadata & SEO tab tab on a specific page
+1. **Page fields**: the Metadata & SEO tab on a specific page
 2. **Programmatic content**: values set in a Page Model via `metaDefaults()`
 3. **Parent page**: inherited from the parent page (if enabled)
 4. **Site globals**: the Metadata & SEO tab on the Site
@@ -69,7 +69,7 @@ Open a page's Metadata & SEO tab and use the Inherit settings field. Select whic
 
 When someone shares a link to your site on Facebook, Mastodon, Slack or WhatsApp, these platforms look for Open Graph tags in your HTML to build a preview card. The [Open Graph Protocol](https://ogp.me/) is a standard originally created by Facebook that defines how a page's title, description and image appear when shared.
 
-Kirby SEO generates these tags automatically. The SEO tab has separate fields for Open Graph titles, descriptions and images,but you usually don't need to fill them in. If you don't set an OG title, the plugin uses your meta title. If you don't set an OG image, it uses the default from your site settings.
+Kirby SEO generates these tags automatically. The SEO tab has separate fields for Open Graph titles, descriptions and images, but you usually don't need to fill them in. If you don't set an OG title, the plugin uses your meta title. If you don't set an OG image, it uses the default from your site settings.
 
 Set a default OG image in the Site SEO tab so every shared link has a preview image, even if you don't set one per page.
 
