@@ -27,6 +27,10 @@ checksums:
     fields.robots.imageindex.help: 25e6149a368dfd54bfaa5b6fe5b9a742
     fields.robots.snippet.label: 212557d85735ea42d0a7eebd9fd4b4a8
     fields.robots.snippet.help: d0628db04b212d12b2d448a5dcc08e3c
+    fields.robots.ai.label: 1dd2c225010be68a0efc20c6aa98e081
+    fields.robots.ai.help: b258b7d6456cc64bbdca8884c3cf21c8
+    fields.robots.imageai.label: 46f75af324a52184c8340e2fd1ced626
+    fields.robots.imageai.help: 1db9382a636c6023a348ba2d9bc2110d
     tabs.seo: 409943763eadfd4953bdaf3ac25ce5a0
     site.meta.headline: d97df20cd05af70b8652a56e7fe91860
     site.meta.headline.help: 953faf8b7ad67cc6b88fc41f383617e9
