@@ -51,11 +51,9 @@ Kirby SEO adds this tag to every page automatically.
 
 The plugin follows page status in Kirby:
 
-| Page status | Robots behavior |
-|---|---|
-| **Listed** | Visible to search engines |
-| **Unlisted** | Hidden from search engines |
-| **Draft** | Not publicly accessible |
+- **Listed** pages are visible to search engines
+- **Unlisted** pages are hidden from search engines
+- **Draft** pages are not publicly accessible
 
 In debug mode, **all** pages are hidden from search engines regardless of their status.
 
