@@ -5,7 +5,7 @@ intro: Set default SEO values from page models
 
 Sometimes you want SEO fields to default to values from other fields, or generate them from code. A common example is using a plugin like [kirby-paparazzi](https://github.com/tobimori/kirby-paparazzi) to generate OG images for every page.
 
-Add a `metaDefaults` method to a [page model](https://getkirby.com/docs/guide/templates/page-models). It returns an array of meta tag names mapped to their values. These defaults apply through the [Meta Cascade](getting-started/your-first-meta-tags) when no editor override exists.
+Add a `metaDefaults` method to a [page model](https://getkirby.com/docs/guide/templates/page-models). It returns an array of meta tag names mapped to their values. These defaults apply through the [Meta Cascade](0_getting-started/1_your-first-meta-tags) when no editor override exists.
 
 ```php
 <?php

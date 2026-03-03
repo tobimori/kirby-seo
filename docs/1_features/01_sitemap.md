@@ -5,11 +5,11 @@ intro: A sitemap for search engines, generated from your pages
 
 Kirby SEO generates an XML sitemap at `https://example.com/sitemap.xml`. Search engines like Google use it to discover all the pages on your site. You don't need to create or update it manually: it updates whenever your content changes.
 
-What you see here are the defaults. The sitemap generator and all its options can be changed or replaced entirely. See [customization/sitemap](Customizing the sitemap) for details.
+What you see here are the defaults. The sitemap generator and all its options can be changed or replaced entirely. See [Customizing the sitemap](2_customization/05_sitemap) for details.
 
 ## What's in the sitemap
 
-The sitemap only includes pages that are [visible to search engines](features/robots-indexing). Unlisted pages, drafts, and pages excluded by robots settings are left out. The `error` template is also excluded by default.
+The sitemap only includes pages that are [visible to search engines](1_features/00_robots-indexing). Unlisted pages, drafts, and pages excluded by robots settings are left out. The `error` template is also excluded by default.
 
 Each page in the sitemap includes:
 
@@ -20,7 +20,7 @@ Each page in the sitemap includes:
 
 Priority is calculated from page depth: the homepage gets `1.0`, and each level deeper subtracts `0.2`, down to a minimum of `0.2`.
 
-A `Sitemap:` line is also added to your [robots.txt](features/robots-indexing) automatically, so crawlers know where to find it.
+A `Sitemap:` line is also added to your [robots.txt](1_features/00_robots-indexing) automatically, so crawlers know where to find it.
 
 ## Multilingual sites
 

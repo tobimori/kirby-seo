@@ -34,9 +34,9 @@ Both are equivalent, but you cannot use dot syntax inside a nested array. `'robo
 | --- | --- | --- |
 | `locale` | `'en_US'` | Default locale for single-language sites |
 | `dateFormat` | `null` | Custom date format for dates in meta tags |
-| `generateSchema` | `true` | Generate a default `WebSite` schema for every page. Requires [spatie/schema-org](customization/schema-org) |
+| `generateSchema` | `true` | Generate a default `WebSite` schema for every page. Requires [spatie/schema-org](2_customization/08_schema-org) |
 | `previews` | `['google', 'facebook', 'slack']` | Which preview types to show in the Panel |
-| `cascade` | `['fields', 'programmatic', 'parent', 'site', 'options']` | The [meta cascade](customization/meta-cascade) order |
+| `cascade` | `['fields', 'programmatic', 'parent', 'site', 'options']` | The [meta cascade](2_customization/01_meta-cascade) order |
 | `canonical.base` | `null` | Base URL for canonical links. Uses the site URL if not set |
 | `canonical.trailingSlash` | `false` | Add trailing slashes to canonical URLs |
 | `files.parent` | `null` | Default parent page for file uploads in SEO fields |
@@ -46,7 +46,7 @@ The `socialMedia` option defines which fields appear in the site blueprint. Defa
 
 ## Meta defaults
 
-These are the fallback values for the last level of the [meta cascade](customization/meta-cascade). They apply when no other level provides a value. Each option can be a static value or a callable that receives the `Page` object.
+These are the fallback values for the last level of the [meta cascade](2_customization/01_meta-cascade). They apply when no other level provides a value. Each option can be a static value or a callable that receives the `Page` object.
 
 | Option | Default | Description |
 | --- | --- | --- |
@@ -72,8 +72,8 @@ These are the fallback values for the last level of the [meta cascade](customiza
 | `robots.index` | `true` (unless debug mode) | Site-wide indexing default. Set to `false` to noindex the entire site |
 | `robots.followPageStatus` | `true` | Unlisted pages are noindex by default |
 | `robots.pageSettings` | `true` | Show robots settings on each page in the Panel |
-| `robots.types` | `['index', 'follow', 'archive', 'imageindex', 'snippet']` | Available robot directive types. Add `'ai'` and `'imageai'` for [AI training controls](customization/robots-noai) |
-| `robots.content` | `[]` | Custom [robots.txt rules](customization/robots-txt) per user agent |
+| `robots.types` | `['index', 'follow', 'archive', 'imageindex', 'snippet']` | Available robot directive types. Add `'ai'` and `'imageai'` for [AI training controls](2_customization/03_robots-noai) |
+| `robots.content` | `[]` | Custom [robots.txt rules](2_customization/02_robots-txt) per user agent |
 | `robots.sitemap` | `null` | Custom sitemap URL for robots.txt. Auto-detected when the sitemap module is active |
 
 ## Sitemap
@@ -83,7 +83,7 @@ These are the fallback values for the last level of the [meta cascade](customiza
 | `sitemap.enabled` | `true` | Whether to generate a sitemap |
 | `sitemap.redirect` | `true` | Redirect `/sitemap` to `/sitemap.xml` |
 | `sitemap.locale` | `'en'` | Locale for the sitemap XSL stylesheet |
-| `sitemap.generator` | Built-in generator | A callable that receives a `SitemapIndex` instance. See [customizing the sitemap](customization/sitemap) |
+| `sitemap.generator` | Built-in generator | A callable that receives a `SitemapIndex` instance. See [customizing the sitemap](2_customization/05_sitemap) |
 | `sitemap.changefreq` | `'weekly'` | Default change frequency. Static value or callable |
 | `sitemap.priority` | Calculated from depth | Homepage gets `1.0`, each level deeper subtracts `0.2`, minimum `0.2` |
 | `sitemap.groupByTemplate` | `false` | Split the sitemap into separate files per template |
@@ -105,7 +105,7 @@ Each provider has a `driver` class and a `config` array. The config options depe
 | `anthropic` | `Anthropic` | `claude-4-5-haiku` | `https://api.anthropic.com/v1/messages` |
 | `openrouter` | `OpenAi` | `openai/gpt-5-nano` | `https://openrouter.ai/api/v1/responses` |
 
-All providers default to a timeout of 120 seconds. See [customizing AI Assist](customization/ai-assist) for adding your own provider.
+All providers default to a timeout of 120 seconds. See [customizing AI Assist](2_customization/06_ai-assist) for adding your own provider.
 
 ## IndexNow
 
@@ -139,7 +139,7 @@ Rules map a match pattern to invalidation targets. Match patterns can be a URL g
 | Option | Default | Description |
 | --- | --- | --- |
 | `searchConsole.enabled` | `true` | Whether the Search Console integration is active |
-| `searchConsole.credentials` | `null` | Google OAuth credentials array. See [GSC setup](customization/gsc-setup) |
+| `searchConsole.credentials` | `null` | Google OAuth credentials array. See [GSC setup](2_customization/07_gsc-setup) |
 | `searchConsole.tokenPath` | `site/config/.gsc-tokens.json` | Where OAuth tokens are stored |
 
 ## Components
@@ -152,4 +152,4 @@ Rules map a match pattern to invalidation targets. Match patterns can be a URL g
 | `components.schema` | `tobimori\Seo\SchemaSingleton` | Schema.org store class |
 | `components.gsc` | `tobimori\Seo\GoogleSearchConsole` | Search Console class |
 
-See [extending the plugin](customization/plugin-extensions) for details on replacing components.
+See [extending the plugin](2_customization/11_plugin-extensions) for details on replacing components.

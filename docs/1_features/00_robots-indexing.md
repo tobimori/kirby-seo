@@ -24,7 +24,7 @@ Sitemap: https://example.com/sitemap.xml
 - `User-agent: *` applies the rules to all crawlers.
 - `Allow: /` permits crawling the entire site.
 - `Disallow: /panel` blocks the Kirby Panel from being crawled.
-- `Sitemap:` points crawlers to your sitemap (only shown when the [sitemap feature](features/sitemap) is active).
+- `Sitemap:` points crawlers to your sitemap (only shown when the [sitemap feature](1_features/01_sitemap) is active).
 
 The `robots.txt` does **not** list individual pages. It only sets broad rules. To control indexing for a specific page, you need meta tags (see below).
 
@@ -39,7 +39,7 @@ Disallow: /
 
 This way your development or staging site doesn't end up in search results.
 
-If you need to customize the `robots.txt`, see [customization/robots](Customizing robots.txt).
+If you need to customize the `robots.txt`, see [Customizing robots.txt](2_customization/02_robots-txt).
 
 ## Robots meta tags
 
@@ -59,7 +59,7 @@ In debug mode, **all** pages are hidden from search engines regardless of their 
 
 ### Overriding robots settings
 
-Robots meta tags follow the same [Meta Cascade](getting-started/your-first-meta-tags) as all other fields. The defaults above kick in when nothing else is set, so you can override them:
+Robots meta tags follow the same [Meta Cascade](0_getting-started/1_your-first-meta-tags) as all other fields. The defaults above kick in when nothing else is set, so you can override them:
 
 - Set a page's robots fields in its **Metadata & SEO** tab to override just that page.
 - Set the robots fields on the **Site** to override all pages at once.
@@ -111,7 +111,7 @@ return [
 
 This hides the robots fields on both page and site level. The defaults (based on page status and debug mode) still apply.
 
-For more ways to customize robots behavior, see [customization/robots](Customizing robots).
+For more ways to customize robots behavior, see [Customizing robots.txt](2_customization/02_robots-txt).
 
 <details>
 <summary>Tags suppressed by noindex</summary>

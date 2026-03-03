@@ -63,4 +63,4 @@ You can combine rules for all crawlers with rules for specific bots:
 ],
 ```
 
-The `Sitemap:` line is added automatically if the [sitemap module](features/sitemap) is active. You can override it with the `robots.sitemap` option.
+The `Sitemap:` line is added automatically if the [sitemap module](1_features/01_sitemap) is active. You can override it with the `robots.sitemap` option.

@@ -9,7 +9,7 @@ The default cascade, in order of priority:
 
 1. **Page fields** (`fields`) -- Values the editor enters in the page's SEO blueprint fields. This is the highest priority: if an editor sets a meta description, it always wins.
 
-2. **Programmatic** (`programmatic`) -- Values returned by `metaDefaults()` in [page models](customization/programmatic-content). Use this for computed defaults like generated OG images or descriptions derived from other fields.
+2. **Programmatic** (`programmatic`) -- Values returned by `metaDefaults()` in [page models](2_customization/00_programmatic-content). Use this for computed defaults like generated OG images or descriptions derived from other fields.
 
 3. **Parent** (`parent`) -- Inherited values from the parent page. If a parent page has "inherit settings" enabled for a field, its children pick up those values. Useful for giving all blog posts the same title template, for example.
 

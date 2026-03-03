@@ -46,7 +46,7 @@ For generating meta titles and descriptions, you don't need the most powerful mo
 
 You can change the model for any provider via the `model` key in the config, as shown in the example above.
 
-For config options for all providers, see [customization/ai-assist](Customizing AI Assist) for details.
+For config options for all providers, see [Customizing AI Assist](2_customization/06_ai-assist) for details.
 
 ## Using AI Assist in the Panel
 
@@ -62,4 +62,4 @@ The result appears word by word. You can stop it early if you want.
 
 ## Custom providers and prompts
 
-You can add your own providers or override the built-in prompts. See [customization/ai-assist](Customizing AI Assist) for details.
+You can add your own providers or override the built-in prompts. See [Customizing AI Assist](2_customization/06_ai-assist) for details.

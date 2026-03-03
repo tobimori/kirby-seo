@@ -22,9 +22,8 @@ composer require tobimori/kirby-seo
 
 Some features require additional packages. Install them when you need them:
 
-// TODO: replace with proper links
-- [features/schema-org](Schema.org)
-- [features/background-queuing](Background Queuing)
+- [Schema.org](2_customization/08_schema-org) requires `spatie/schema-org`
+- Background Processing (coming soon)
 
 <details>
 <summary>Manual Installation</summary>
@@ -69,7 +68,7 @@ tabs:
 ```
 
 This gives you global defaults for meta titles, descriptions and social images. Any page without its own SEO settings will use these.
-Learn more about how defaults work in [getting-started/your-first-meta-tags](Your first Meta Tags).
+Learn more about how defaults work in [Your first Meta Tags](0_getting-started/1_your-first-meta-tags).
 
 And now add the SEO tab to any page blueprint where editors should be able to override the defaults:
 
@@ -88,7 +87,7 @@ Try it: enter a custom meta title, save, and reload the page in your browser. Vi
 
 Now delete the title you just entered and reload again. The plugin falls back to your page's regular title.
 
-This is the **Meta Cascade**, the plugin always finds the best available value, so you only need to fill in fields when you want to override the default. [getting-started/your-first-meta-tags](Learn more about the Meta Cascade).
+This is the **Meta Cascade**, the plugin always finds the best available value, so you only need to fill in fields when you want to override the default. [Learn more about the Meta Cascade](0_getting-started/1_your-first-meta-tags).
 
 ## Set your canonical URL
 
@@ -141,5 +140,3 @@ It is not required to activate your license locally.
 
 ## Where to go from here
 
-// TODO: Add proper links
-->
