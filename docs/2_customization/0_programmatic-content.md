@@ -1,4 +1,0 @@
----
-title: Programmatic Content
-intro: 
----
