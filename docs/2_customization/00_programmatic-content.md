@@ -27,17 +27,7 @@ class ArticlePage extends Page
 }
 ```
 
-Kirby SEO picks the correct tag syntax from the name:
-
-| Key | Output |
-| --- | --- |
-| `'title'` | `<title>...</title>` |
-| `'description'` | `<meta name="description" content="...">` |
-| `'og:title'` | `<meta property="og:title" content="...">` |
-| `'canonical'` | `<link rel="canonical" href="...">` |
-| `'alternate'` | `<link rel="alternate" href="...">` |
-
-Open Graph keys (starting with `og:`) use `property` and `content` attributes. Link keys like `canonical` and `alternate` use `rel` and `href`. Everything else uses `name` and `content`.
+Kirby SEO picks the correct tag syntax from the name. Open Graph keys (starting with `og:`) get `property` and `content` attributes, link keys like `canonical` get `rel` and `href`, and everything else gets `name` and `content`.
 
 ## Custom tag attributes
 
