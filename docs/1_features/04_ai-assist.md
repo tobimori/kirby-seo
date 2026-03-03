@@ -9,15 +9,17 @@ AI Assist works for these fields:
 
 - Meta title
 - Meta description
-- OG description
+- Open Graph description
 - Site-level meta description
-- Site-level OG description
+- Site-level Open Graph description
 
 The generated text matches the language of your page and respects your title template length, so titles don't get cut off in search results.
 
 ## Setting up a provider
 
-AI Assist needs an API key from an AI provider. Kirby SEO supports [OpenAI](https://platform.openai.com/), [Anthropic](https://console.anthropic.com/), and [OpenRouter](https://openrouter.ai/) out of the box. OpenRouter is a good starting point because it gives you access to many models through a single API, including models with free tiers.
+AI Assist needs an API key from an AI provider. Sign up with one of the supported providers and create an API key in their dashboard. Kirby SEO supports [OpenAI](https://platform.openai.com/), [Anthropic](https://console.anthropic.com/), and [OpenRouter](https://openrouter.ai/) out of the box. OpenRouter is a good starting point because it gives you access to many models through a single API, including models with free tiers.
+
+AI providers charge based on usage. These costs are separate from your Kirby SEO license. For generating short texts like meta titles and descriptions, costs are typically very low.
 
 Here's an example using OpenRouter:
 
@@ -48,13 +50,15 @@ For config options for all providers, see [customization/ai-assist](Customizing 
 
 ## Using AI Assist in the Panel
 
-Once a provider is configured, you'll see new buttons next to the meta title and description fields in the SEO tab.
+The provider config is a one-time setup by the developer. Once it's in place, editors just use the buttons in the Panel.
+
+You'll see new buttons next to the meta title and description fields in the SEO tab.
 
 The **Generate** button drafts a new value from scratch based on the page content. If the field already has a value, it changes to **Regenerate**. If you want more control, click **Customize** to add your own instructions before generating, like "keep it under 50 characters" or "focus on the pricing".
 
 Already have a value but want to tweak it? The **Edit** button lets you revise the current text with instructions like "make it shorter" or "add the brand name".
 
-The result streams in live. You can stop it early if you want.
+The result appears word by word. You can stop it early if you want.
 
 ## Custom providers and prompts
 
