@@ -3,7 +3,7 @@ title: Panel Previews
 intro: See how your pages look in search results and social shares
 ---
 
-The SEO tab in the Panel has a live preview sidebar that shows how the current page will appear when shared or found in search results. It updates as you type, so you can see the effect of your changes before saving.
+Meta titles and descriptions can look different in context than they do in a text field. The SEO tab in the Panel has a live preview sidebar that shows how the current page will appear when shared or found in search results. It updates as you type, so you can catch issues like truncated titles or missing images before you publish.
 
 There are three preview types:
 
