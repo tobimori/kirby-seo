@@ -14,8 +14,6 @@ Composer is required for full feature support (e.g. schema.org support, backgrou
 
 ## Installing Kirby SEO
 
-### Recommended: With Composer
-
 In a terminal window, navigate to the folder of your Kirby installation. Then run the following command:
 
 ```bash
@@ -28,9 +26,12 @@ Some features require additional packages. Install them when you need them:
 - [features/schema-org](Schema.org)
 - [features/background-queuing](Background Queuing)
 
-### Manual Installation
+<details>
+<summary>Manual Installation</summary>
 
 If you prefer not to use Composer, you can manually install Kirby SEO. Go to the [GitHub releases page](https://github.com/tobimori/kirby-seo/releases) and find the latest release. Click on "Assets" to expand it and select "Source code (zip)". Extract the contents of the zip file into the `site/plugins/kirby-seo` folder of your Kirby installation.
+
+</details>
 
 ## Add meta tags to your site
 
