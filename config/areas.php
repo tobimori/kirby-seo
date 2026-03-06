@@ -14,7 +14,7 @@ return [
 	'seo' => fn () =>
 	[
 		'buttons' => [
-			'page.robots' => fn (Page $page) => new RobotsViewButton($page),
+			'page.robots' => fn(Page $page) => Seo::option('robots.enabled') ? new RobotsViewButton($page) : null,
 			'utm-share' => fn (ModelWithContent $model) => new UtmShareViewButton($model)
 		],
 		'drawers' => [
