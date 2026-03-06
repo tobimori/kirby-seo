@@ -6,21 +6,11 @@ use Kirby\Cms\Page;
 use Kirby\Panel\Ui\Buttons\ViewButton;
 use Kirby\Toolkit\I18n;
 use Kirby\Toolkit\Str;
-use tobimori\Seo\Seo;
 
 class RobotsViewButton extends ViewButton
 {
 	public function __construct(Page $model)
 	{
-		if (Seo::option('tobimori.seo.robots.active') !== true) {
-			parent::__construct(
-				model: $model,
-				disabled: true,
-				style: 'display: none'
-			);
-			return;
-		}
-
 		$robots = $model->robots();
 
 		$theme = 'positive-icon';
