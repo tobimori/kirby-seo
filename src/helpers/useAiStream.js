@@ -15,7 +15,7 @@ import { consumeSSEStream } from "./sse.js"
 export function useAiStream({ endpoint, disabled, onEvent, onBeforeStream }) {
 	const panel = usePanel()
 	const streaming = ref(false)
-	const controller = ref(null)
+	let controller = null
 
 	/**
 	 * @param {object} body
@@ -26,7 +26,7 @@ export function useAiStream({ endpoint, disabled, onEvent, onBeforeStream }) {
 
 		onBeforeStream?.()
 
-		controller.value = new AbortController()
+		controller = new AbortController()
 		streaming.value = true
 
 		try {
@@ -40,7 +40,7 @@ export function useAiStream({ endpoint, disabled, onEvent, onBeforeStream }) {
 				},
 				body: JSON.stringify(body),
 				credentials: "same-origin",
-				signal: controller.value.signal
+				signal: controller.signal
 			})
 
 			if (!response.ok) {
@@ -58,22 +58,28 @@ export function useAiStream({ endpoint, disabled, onEvent, onBeforeStream }) {
 				throw new Error(panel.t("seo.ai.error.request"))
 			}
 
-			await consumeSSEStream(response.body.getReader(), onEvent)
+			await consumeSSEStream(response.body.getReader(), (data) => {
+				if (data.type === "error") {
+					throw new Error(data.payload?.message || panel.t("seo.ai.error.request"))
+				}
+
+				onEvent(data)
+			})
 		} catch (error) {
 			if (error?.name === "AbortError") return
 
 			console.error(error)
 			panel.notification.error(error?.message || panel.t("seo.ai.error.request"))
 		} finally {
-			controller.value = null
+			controller = null
 			streaming.value = false
 		}
 	}
 
 	function abort() {
-		if (controller.value) {
-			controller.value.abort()
-			controller.value = null
+		if (controller) {
+			controller.abort()
+			controller = null
 		}
 		streaming.value = false
 	}

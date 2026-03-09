@@ -132,31 +132,8 @@ export default {
 	},
 	methods: {
 		handleAiEvent(data) {
-			if (data.type === "text-start") {
-				return
-			}
-
 			if (data.type === "text-delta") {
 				this.applyAiDelta(data.text || "")
-				return
-			}
-
-			if (data.type === "thinking-delta") {
-				return
-			}
-
-			if (data.type === "tool-call" || data.type === "tool-result") {
-				return
-			}
-
-			if (data.type === "stream-end") {
-				return
-			}
-
-			if (data.type === "error") {
-				throw new Error(
-					data.payload?.message || this.$t("seo.ai.error.request")
-				)
 			}
 		},
 		applyAiDelta(text) {

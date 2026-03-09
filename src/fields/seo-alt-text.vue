@@ -53,11 +53,6 @@ const { streaming, start, abort, openCustomizeDialog } = useAiStream({
 		if (data.type === "text-delta") {
 			streamedText += data.text || ""
 			emit({ text: streamedText, source: "reviewed" })
-			return
-		}
-
-		if (data.type === "error") {
-			throw new Error(data.payload?.message || panel.t("seo.ai.error.request"))
 		}
 	}
 })
