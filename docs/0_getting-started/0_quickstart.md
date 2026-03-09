@@ -64,7 +64,7 @@ tabs:
   content:
     fields:
       # move your existing fields here
-  seo: seo  # <--- add this
+  seo: seo # <--- add this
 ```
 
 This gives you global defaults for meta titles, descriptions and social images. Any page without its own SEO settings will use these.
@@ -139,4 +139,3 @@ Once you publish your website, you need to purchase a Kirby SEO license. We will
 It is not required to activate your license locally.
 
 ## Where to go from here
-

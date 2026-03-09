@@ -13,7 +13,7 @@ There are three preview types:
 
 The preview picks up all values through the [Meta Cascade](0_getting-started/1_your-first-meta-tags). If you haven't set an OG title, the preview shows the meta title instead, just like a real crawler would see it.
 
-Keep in mind that Google sometimes decides to show a different title or description than what you set, if it thinks something else on the page is more relevant to the search query. The preview shows what you *tell* Google to display, but the actual search result may look different. This is normal and not something we can control.
+Keep in mind that Google sometimes decides to show a different title or description than what you set, if it thinks something else on the page is more relevant to the search query. The preview shows what you _tell_ Google to display, but the actual search result may look different. This is normal and not something we can control.
 
 On the Site SEO tab, the preview shows data for the homepage since the site itself doesn't have a URL.
 

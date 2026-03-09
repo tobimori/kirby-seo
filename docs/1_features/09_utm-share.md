@@ -34,7 +34,7 @@ To add the button to your page blueprints:
 buttons:
   - open
   - preview
-  - '-'
+  - "-"
   - settings
   - languages
   - status

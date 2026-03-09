@@ -7,8 +7,8 @@ Kirby SEO registers permissions that you can restrict per [user role](https://ge
 
 ## Available permissions
 
-| Permission | Controls |
-| --- | --- |
+| Permission        | Controls                                                                         |
+| ----------------- | -------------------------------------------------------------------------------- |
 | `tobimori.seo.ai` | Access to all AI Assist features: generating, editing, and customizing meta text |
 
 More permissions will be added in future releases.

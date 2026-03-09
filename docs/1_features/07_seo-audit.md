@@ -1,6 +1,6 @@
 ---
 title: SEO Audit
-intro: 
+intro:
 ---
 
 Coming soon

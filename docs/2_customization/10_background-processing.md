@@ -1,6 +1,6 @@
 ---
 title: Setup Background Processing
-intro: 
+intro:
 ---
 
 Coming soon

@@ -27,4 +27,3 @@ The Google Search Console section needs access to your Google account. To keep s
 The section starts showing data once the property is selected.
 
 If you'd rather not use the proxy, you can connect with your own Google OAuth credentials instead. See [Setting up your own GSC credentials](2_customization/07_gsc-setup) for details.
-

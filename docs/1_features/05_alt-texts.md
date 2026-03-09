@@ -1,6 +1,6 @@
 ---
 title: Alt Text Field
-intro: 
+intro:
 ---
 
 Coming soon

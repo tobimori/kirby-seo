@@ -1,4 +1,5 @@
 <script setup>
+/* global Event */
 import {
 	ref,
 	computed,
@@ -179,8 +180,8 @@ onBeforeUnmount(() => {
 				</k-button>
 
 				<textarea
-					ref="input"
 					:id="id"
+					ref="input"
 					:value="text"
 					:disabled="disabled || isDecorative"
 					:placeholder="isDecorative ? '' : placeholder"

@@ -3,7 +3,7 @@ title: Robots & Indexing
 intro: How your pages appear (or don't) in search results
 ---
 
-Search engines and AI providers use programs called crawlers to discover and index pages on the web. You can tell these crawlers which pages they're allowed to index and which ones they should skip. These are not hard blocks: crawlers don't *have* to follow them. But all major search engines do respect them.
+Search engines and AI providers use programs called crawlers to discover and index pages on the web. You can tell these crawlers which pages they're allowed to index and which ones they should skip. These are not hard blocks: crawlers don't _have_ to follow them. But all major search engines do respect them.
 
 Kirby SEO does this in two ways: a global `robots.txt` file and per-page `<meta name="robots">` tags. Both are generated automatically. Most of the indexing control happens through meta tags, while `robots.txt` acts as a global safety net.
 
@@ -75,7 +75,7 @@ Kirby SEO has a page view button that shows the current robots status at a glanc
 buttons:
   - open
   - preview
-  - '-'
+  - "-"
   - settings
   - languages
   - status

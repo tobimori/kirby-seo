@@ -7,13 +7,13 @@ Kirby SEO uses a component system similar to [Kirby's own](https://getkirby.com/
 
 The built-in components are:
 
-| Key | Default class | Handles |
-| --- | --- | --- |
-| `meta` | `tobimori\Seo\Meta` | Meta tag generation and cascading |
-| `ai` | `tobimori\Seo\Ai` | AI Assist provider management |
-| `indexnow` | `tobimori\Seo\IndexNow` | IndexNow ping requests |
-| `schema` | `tobimori\Seo\SchemaSingleton` | Schema.org structured data store |
-| `gsc` | `tobimori\Seo\GoogleSearchConsole` | Google Search Console integration |
+| Key        | Default class                      | Handles                           |
+| ---------- | ---------------------------------- | --------------------------------- |
+| `meta`     | `tobimori\Seo\Meta`                | Meta tag generation and cascading |
+| `ai`       | `tobimori\Seo\Ai`                  | AI Assist provider management     |
+| `indexnow` | `tobimori\Seo\IndexNow`            | IndexNow ping requests            |
+| `schema`   | `tobimori\Seo\SchemaSingleton`     | Schema.org structured data store  |
+| `gsc`      | `tobimori\Seo\GoogleSearchConsole` | Google Search Console integration |
 
 To replace a component, create a class that extends the original. For example, to customize meta tag output, extend the `Meta` class:
 

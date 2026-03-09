@@ -55,26 +55,26 @@ Each block appends its question to the `mainEntity` array. The final output comb
 
 ```json
 {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "How does it work?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "It works like this."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Can it handle multiple blocks?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes, it can."
-      }
-    }
-  ]
+	"@context": "https://schema.org",
+	"@type": "FAQPage",
+	"mainEntity": [
+		{
+			"@type": "Question",
+			"name": "How does it work?",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "It works like this."
+			}
+		},
+		{
+			"@type": "Question",
+			"name": "Can it handle multiple blocks?",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Yes, it can."
+			}
+		}
+	]
 }
 ```
 

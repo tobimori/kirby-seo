@@ -1,6 +1,6 @@
 ---
 title: SEO Overview
-intro: 
+intro:
 ---
 
 Coming soon
