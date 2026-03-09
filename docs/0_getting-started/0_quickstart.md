@@ -119,7 +119,7 @@ return [
     'canonical' => [
       'base' => 'https://www.example.com',
     ],
-    'lang' => 'en_US',
+    'locale' => 'en_US',
   ],
 ];
 ```
