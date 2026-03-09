@@ -4,6 +4,7 @@ use Kirby\Cms\App;
 use Kirby\Cms\Page;
 use Kirby\Http\Response;
 use tobimori\Seo\Ai;
+use tobimori\Seo\Field\AltTextField;
 use tobimori\Seo\Seo;
 
 return [
@@ -126,5 +127,6 @@ return [
 				}
 			]
 		]
-	]
+	],
+	'seo-alt-text' => AltTextField::class,
 ];

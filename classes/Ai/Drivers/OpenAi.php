@@ -4,6 +4,7 @@ namespace tobimori\Seo\Ai\Drivers;
 
 use Generator;
 use tobimori\Seo\Ai\Chunk;
+use tobimori\Seo\Ai\Content;
 use tobimori\Seo\Ai\Driver;
 use tobimori\Seo\Ai\SseStream;
 
@@ -16,7 +17,7 @@ class OpenAi extends Driver
 	 * @inheritDoc
 	 */
 	public function stream(
-		string $prompt,
+		array $content,
 		string|null $model = null,
 	): Generator {
 		$apiKey = $this->config('apiKey', required: true);
@@ -31,7 +32,7 @@ class OpenAi extends Driver
 
 		$payload = [
 			'model' => $model ?? $this->config('model', static::DEFAULT_MODEL),
-			'input' => $prompt,
+			'input' => $this->buildInput($content),
 			// instructions does not work for e.g. openrouter so let's just put everything in user prompt
 			'stream' => true,
 		];
@@ -78,5 +79,40 @@ class OpenAi extends Driver
 				yield Chunk::error($message, $event);
 			}
 		});
+	}
+
+	/**
+	 * Translates an array of Content messages into the OpenAI Responses API input format.
+	 *
+	 * @param array<Content> $content
+	 */
+	private function buildInput(array $content): array
+	{
+		$input = [];
+
+		foreach ($content as $message) {
+			$blocks = [];
+
+			foreach ($message->blocks() as $block) {
+				if ($block['type'] === 'image') {
+					$blocks[] = [
+						'type' => 'input_image',
+						'image_url' => "data:{$block['mediaType']};base64,{$block['data']}",
+					];
+				} elseif ($block['type'] === 'text') {
+					$blocks[] = [
+						'type' => 'input_text',
+						'text' => $block['text'],
+					];
+				}
+			}
+
+			$input[] = [
+				'role' => $message->role(),
+				'content' => $blocks,
+			];
+		}
+
+		return $input;
 	}
 }

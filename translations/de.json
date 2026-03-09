@@ -117,5 +117,7 @@
   "sections.searchConsole.impressions": "Impressionen",
   "sections.searchConsole.ctr": "CTR",
   "sections.searchConsole.position": "Position",
-  "sections.searchConsole.openInGsc": "In Search Console öffnen"
+  "sections.searchConsole.openInGsc": "In Search Console öffnen",
+  "altText.decorative.on": "Keine Beschreibung nötig (rein dekorativ)",
+  "altText.decorative.off": "Beschreibung erforderlich"
 }

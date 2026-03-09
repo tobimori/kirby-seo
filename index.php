@@ -8,6 +8,7 @@ use Spatie\SchemaOrg\Schema;
 use Kirby\Toolkit\A;
 use Kirby\Filesystem\Dir;
 use Kirby\Filesystem\F;
+use tobimori\Seo\AltText;
 
 if (
 	version_compare(App::version() ?? '0.0.0', '5.0.0', '<') === true ||
@@ -28,6 +29,9 @@ App::plugin(
 		'hooks' => require __DIR__ . '/config/hooks.php',
 		'routes' => require __DIR__ . '/config/routes.php',
 		'fields' => require __DIR__ . '/config/fields.php',
+		'fieldMethods' => [
+			'toAltText' => fn ($field) => AltText::fromField($field),
+		],
 		'permissions' => [
 			'ai' => true,
 		],
@@ -41,6 +45,7 @@ App::plugin(
 			'seo/prompts/tasks/og-description' => __DIR__ . '/snippets/prompts/tasks/og-description.php',
 			'seo/prompts/tasks/site-description' => __DIR__ . '/snippets/prompts/tasks/site-description.php',
 			'seo/prompts/tasks/og-site-description' => __DIR__ . '/snippets/prompts/tasks/og-site-description.php',
+			'seo/prompts/tasks/alt-text' => __DIR__ . '/snippets/prompts/tasks/alt-text.php',
 			'seo/schemas' => __DIR__ . '/snippets/schemas.php',
 			'seo/head' => __DIR__ . '/snippets/head.php',
 			'seo/robots.txt' => __DIR__ . '/snippets/robots.txt.php',

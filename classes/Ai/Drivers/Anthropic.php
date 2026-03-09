@@ -4,6 +4,7 @@ namespace tobimori\Seo\Ai\Drivers;
 
 use Generator;
 use tobimori\Seo\Ai\Chunk;
+use tobimori\Seo\Ai\Content;
 use tobimori\Seo\Ai\Driver;
 use tobimori\Seo\Ai\SseStream;
 
@@ -16,7 +17,7 @@ class Anthropic extends Driver
 	 * @inheritDoc
 	 */
 	public function stream(
-		string $prompt,
+		array $content,
 		string|null $model = null,
 	): Generator {
 		$apiKey = $this->config('apiKey', required: true);
@@ -29,9 +30,7 @@ class Anthropic extends Driver
 
 		$payload = [
 			'model' => $model ?? $this->config('model', static::DEFAULT_MODEL),
-			'messages' => [
-				['role' => 'user', 'content' => $prompt]
-			],
+			'messages' => $this->buildMessages($content),
 			'max_tokens' => 4096,
 			'stream' => true,
 		];
@@ -99,5 +98,43 @@ class Anthropic extends Driver
 				return;
 			}
 		});
+	}
+
+	/**
+	 * Translates an array of Content messages into the Anthropic messages format.
+	 *
+	 * @param array<Content> $content
+	 */
+	private function buildMessages(array $content): array
+	{
+		$messages = [];
+
+		foreach ($content as $message) {
+			$blocks = [];
+			foreach ($message->blocks() as $block) {
+				if ($block['type'] === 'image') {
+					$blocks[] = [
+						'type' => 'image',
+						'source' => [
+							'type' => 'base64',
+							'media_type' => $block['mediaType'],
+							'data' => $block['data'],
+						],
+					];
+				} elseif ($block['type'] === 'text') {
+					$blocks[] = [
+						'type' => 'text',
+						'text' => $block['text'],
+					];
+				}
+			}
+
+			$messages[] = [
+				'role' => $message->role(),
+				'content' => $blocks,
+			];
+		}
+
+		return $messages;
 	}
 }

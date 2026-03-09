@@ -5,7 +5,6 @@ namespace tobimori\Seo\Ai;
 use Generator;
 use Kirby\Exception\Exception as KirbyException;
 
-use function curl_close;
 use function curl_errno;
 use function curl_error;
 use function curl_getinfo;
@@ -123,7 +122,6 @@ final class SseStream
 		} finally {
 			curl_multi_remove_handle($multi, $handle);
 			curl_multi_close($multi);
-			curl_close($handle);
 		}
 	}
 

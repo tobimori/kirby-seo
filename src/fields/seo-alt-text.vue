@@ -1,0 +1,244 @@
+<script setup>
+import {
+	ref,
+	computed,
+	watch,
+	nextTick,
+	onMounted,
+	onBeforeUnmount,
+	usePanel,
+	useLibrary
+} from "kirbyuse"
+import { useAiStream, getAiEndpointUrl } from "../helpers/useAiStream.js"
+
+const props = defineProps({
+	ai: Boolean,
+	autogenerate: Boolean,
+	disabled: Boolean,
+	endpoints: Object,
+	id: String,
+	label: String,
+	help: String,
+	name: String,
+	placeholder: String,
+	required: Boolean,
+	value: {
+		type: Object,
+		default: () => ({ text: "", decorative: false, source: "manual" })
+	}
+})
+
+const $emit = defineEmits(["input"])
+
+const panel = usePanel()
+const library = useLibrary()
+const input = ref(null)
+let streamedText = ""
+
+// computed
+const text = computed(() => props.value?.text ?? "")
+const isDecorative = computed(() => props.value?.decorative ?? false)
+const source = computed(() => props.value?.source ?? "manual")
+const aiEndpointUrl = computed(() => getAiEndpointUrl(props.endpoints))
+
+// ai streaming
+const { streaming, start, abort, openCustomizeDialog } = useAiStream({
+	endpoint: () => aiEndpointUrl.value,
+	disabled: () => props.disabled,
+	onBeforeStream: () => {
+		streamedText = ""
+		emit({ text: "", source: "reviewed" })
+	},
+	onEvent: (data) => {
+		if (data.type === "text-delta") {
+			streamedText += data.text || ""
+			emit({ text: streamedText, source: "reviewed" })
+			return
+		}
+
+		if (data.type === "error") {
+			throw new Error(data.payload?.message || panel.t("seo.ai.error.request"))
+		}
+	}
+})
+
+const buttons = computed(() => {
+	if (streaming.value) {
+		return [
+			{
+				icon: "loader",
+				text: panel.t("seo.ai.action.stop"),
+				theme: "red",
+				click: () => abort()
+			}
+		]
+	}
+
+	const btns = [
+		{
+			icon: text.value === "" ? "seo-ai" : "refresh",
+			text:
+				text.value === "" ? panel.t("seo.ai.action.generate") : panel.t("seo.ai.action.regenerate"),
+			disabled: props.disabled || isDecorative.value || !aiEndpointUrl.value,
+			click: () => start({ instructions: undefined })
+		}
+	]
+
+	if (text.value !== "") {
+		btns.push({
+			icon: "cog",
+			title: panel.t("seo.ai.action.customize"),
+			disabled: props.disabled || isDecorative.value || !aiEndpointUrl.value,
+			click: () =>
+				openCustomizeDialog((values) => {
+					start({ instructions: values.instructions })
+				})
+		})
+	}
+
+	return btns
+})
+
+// emit helper
+function emit(changes) {
+	$emit("input", {
+		text: text.value,
+		decorative: isDecorative.value,
+		source: source.value,
+		...changes
+	})
+}
+
+// input handlers
+function onTextInput(value) {
+	const s = source.value === "ai" || source.value === "reviewed" ? "reviewed" : "manual"
+	emit({ text: value, source: s })
+}
+
+function onBeforeInput(event) {
+	if (event.inputType === "insertLineBreak" || event.inputType === "insertParagraph") {
+		event.preventDefault()
+		return
+	}
+
+	const data = event.data ?? event.dataTransfer?.getData("text/plain")
+	if (data && /\n/.test(data)) {
+		event.preventDefault()
+		const textarea = event.target
+		const clean = data.replace(/[\r\n]+/g, " ")
+		const start = textarea.selectionStart
+		const end = textarea.selectionEnd
+		textarea.setRangeText(clean, start, end, "end")
+		textarea.dispatchEvent(new Event("input", { bubbles: true }))
+	}
+}
+
+// autosize
+watch(text, () => {
+	if (streaming.value) return
+	nextTick(() => library.autosize.update(input.value))
+})
+
+onMounted(() => {
+	nextTick(() => library.autosize(input.value))
+})
+
+onBeforeUnmount(() => {
+	library.autosize.destroy(input.value)
+	abort()
+})
+</script>
+
+<template>
+	<k-field
+		v-bind="$props"
+		:class="['k-seo-alt-text-field', { 'is-decorative': isDecorative }]"
+		:input="id"
+	>
+		<template v-if="ai && !disabled" #options>
+			<k-button-group
+				:buttons="buttons"
+				layout="collapsed"
+				size="xs"
+				variant="filled"
+				class="k-field-options"
+			/>
+		</template>
+
+		<k-input :icon="false" :disabled="disabled">
+			<div class="k-seo-alt-text-header">
+				<k-button
+					class="k-seo-alt-text-toggle"
+					:disabled="disabled"
+					:icon="isDecorative ? 'toggle-off' : 'toggle-on'"
+					:theme="isDecorative ? null : 'positive-icon'"
+					:title="
+						panel.t(isDecorative ? 'seo.altText.decorative.on' : 'seo.altText.decorative.off')
+					"
+					variant="filled"
+					@click="emit({ decorative: !isDecorative })"
+				>
+					<template v-if="isDecorative">
+						{{ panel.t("seo.altText.decorative.on") }}
+					</template>
+				</k-button>
+
+				<textarea
+					ref="input"
+					:id="id"
+					:value="text"
+					:disabled="disabled || isDecorative"
+					:placeholder="isDecorative ? '' : placeholder"
+					class="k-textarea-input-native"
+					rows="1"
+					@input="onTextInput($event.target.value)"
+					@beforeinput="onBeforeInput"
+				/>
+			</div>
+		</k-input>
+	</k-field>
+</template>
+
+<style>
+.k-seo-alt-text-field {
+	& .k-input {
+		min-height: var(--input-height);
+	}
+
+	& .k-textarea-input-native {
+		min-width: 0;
+		padding: var(--input-padding);
+		resize: none;
+		margin-block: -1.5px;
+	}
+
+	&.is-decorative {
+		& .k-seo-alt-text-header {
+			grid-template-columns: 1fr;
+		}
+
+		& .k-seo-alt-text-toggle.k-button {
+			--button-align: flex-start;
+			margin-inline: 0.25rem;
+		}
+
+		& .k-textarea-input-native {
+			display: none;
+		}
+	}
+}
+
+.k-seo-alt-text-header {
+	display: grid;
+	grid-template-columns: max-content minmax(0, 1fr);
+	align-items: center;
+	min-height: inherit;
+}
+
+.k-seo-alt-text-toggle.k-button {
+	--button-height: var(--height-sm);
+	--button-rounded: var(--rounded-sm);
+	--button-color-back: var(--panel-color-back);
+	margin-inline-start: 0.25rem;
+}
+</style>

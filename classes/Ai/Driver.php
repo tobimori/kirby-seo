@@ -13,14 +13,14 @@ abstract class Driver
 	}
 
 	/**
-	 * Streams a response for the given prompt and optional context data.
+	 * Streams a response for the given content.
 	 *
-	 * @param string $prompt User prompt (e.g. Tasks).
-	 * @param string|null $model Model to use.
+	 * @param array<Content> $content Array of Content messages forming a conversation.
+	 * @param string|null $model Model override.
 	 *
 	 * @return Generator<int, Chunk, mixed, void>
 	 */
-	abstract public function stream(string $prompt, string|null $model = null): Generator;
+	abstract public function stream(array $content, string|null $model = null): Generator;
 
 	/**
 	 * Returns a configuration value or throws when required.

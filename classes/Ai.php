@@ -4,6 +4,7 @@ namespace tobimori\Seo;
 
 use Generator;
 use Kirby\Exception\Exception as KirbyException;
+use tobimori\Seo\Ai\Content;
 use tobimori\Seo\Ai\Driver;
 
 use function is_string;
@@ -57,6 +58,8 @@ class Ai
 			throw new KirbyException("AI prompt snippet \"{$snippet}\" is missing or empty.");
 		}
 
-		return self::provider()->stream($prompt, /* todo custom model here */);
+		$content = [Content::user()->text($prompt)];
+
+		return self::provider()->stream($content);
 	}
 }

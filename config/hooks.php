@@ -1,11 +1,33 @@
 <?php
 
+use Kirby\Cms\File;
 use Kirby\Cms\Page;
 use Kirby\Toolkit\A;
 use Kirby\Toolkit\Str;
+use tobimori\Seo\Field\AltTextField;
 use tobimori\Seo\Seo;
 
 return [
+	'system.loadPlugins:after' => function () {
+		if (class_exists('tobimori\Queues\Queues')) {
+			\tobimori\Queues\Queues::register(\tobimori\Seo\Jobs\GenerateAltTextJob::class);
+		}
+	},
+	'file.create:after' => function (File $file) {
+		if ($file->type() !== 'image') {
+			return;
+		}
+
+		if (class_exists('tobimori\Queues\Queues')) {
+			\tobimori\Queues\Queues::push('seo:generate-alt-text', [
+				'fileId' => $file->id(),
+			]);
+
+			return $file;
+		}
+
+		return AltTextField::generateForFile($file);
+	},
 	'page.update:after' => function (Page $newPage, Page $oldPage) {
 		// only inject blueprint defaults if the seo tab is present
 		if ($newPage->blueprint()->tab('seo')) {
