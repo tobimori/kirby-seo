@@ -98,15 +98,16 @@ These are the fallback values for the last level of the [meta cascade](2_customi
 | `ai.provider`  | `'openai'` | The active provider ID            |
 | `ai.providers` | See below  | Provider configurations           |
 
-Each provider has a `driver` class and a `config` array. The config options depend on the driver. Both built-in drivers share `apiKey` (required), `model`, `endpoint`, and `timeout`. The OpenAI driver also accepts `organization`.
+Each provider has a `driver` class and a `config` array. The config options depend on the driver. All built-in drivers share `apiKey` (required), `model`, `endpoint`, and `timeout`. The OpenAI driver also accepts `organization`.
 
-| Provider     | Driver      | Default model           | Default endpoint                         |
-| ------------ | ----------- | ----------------------- | ---------------------------------------- |
-| `openai`     | `OpenAi`    | `gpt-5-mini-2025-08-07` | `https://api.openai.com/v1/responses`    |
-| `anthropic`  | `Anthropic` | `claude-4-5-haiku`      | `https://api.anthropic.com/v1/messages`  |
-| `openrouter` | `OpenAi`    | `openai/gpt-5-nano`     | `https://openrouter.ai/api/v1/responses` |
+| Provider     | Driver      | Default model                    | Default endpoint                                          |
+| ------------ | ----------- | -------------------------------- | --------------------------------------------------------- |
+| `openai`     | `OpenAi`    | `gpt-5-mini-2025-08-07`         | `https://api.openai.com/v1/responses`                     |
+| `anthropic`  | `Anthropic` | `claude-4-5-haiku`               | `https://api.anthropic.com/v1/messages`                   |
+| `gemini`     | `Gemini`    | `gemini-3.1-flash-lite-preview`  | `https://generativelanguage.googleapis.com/v1beta`        |
+| `openrouter` | `OpenAi`    | `openai/gpt-5-nano`             | `https://openrouter.ai/api/v1/responses`                  |
 
-All providers default to a timeout of 120 seconds. See [customizing AI Assist](2_customization/06_ai-assist) for adding your own provider.
+The Gemini driver authenticates via API key as a query parameter (not a header). All providers default to a timeout of 120 seconds. See [customizing AI Assist](2_customization/06_ai-assist) for adding your own provider.
 
 ## IndexNow
 

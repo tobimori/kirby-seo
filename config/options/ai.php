@@ -1,6 +1,7 @@
 <?php
 
 use tobimori\Seo\Ai\Drivers\Anthropic;
+use tobimori\Seo\Ai\Drivers\Gemini;
 use tobimori\Seo\Ai\Drivers\OpenAi;
 
 // TODO: custom provider per task
@@ -16,6 +17,12 @@ return [
 		],
 		'anthropic' => [
 			'driver' => Anthropic::class,
+			'config' => [
+				'apiKey' => '', // needs to be defined
+			],
+		],
+		'gemini' => [
+			'driver' => Gemini::class,
 			'config' => [
 				'apiKey' => '', // needs to be defined
 			],

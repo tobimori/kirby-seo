@@ -17,7 +17,7 @@ The generated text matches the language of your page and respects your title tem
 
 ## Setting up a provider
 
-AI Assist needs an API key from an AI provider. Sign up with one of the supported providers and create an API key in their dashboard. Kirby SEO supports [OpenAI](https://platform.openai.com/), [Anthropic](https://console.anthropic.com/), and [OpenRouter](https://openrouter.ai/) out of the box. OpenRouter is a good starting point because it gives you access to many models through a single API, including models with free tiers.
+AI Assist needs an API key from an AI provider. Sign up with one of the supported providers and create an API key in their dashboard. Kirby SEO supports [OpenAI](https://platform.openai.com/), [Anthropic](https://console.anthropic.com/), [Google Gemini](https://ai.google.dev/), and [OpenRouter](https://openrouter.ai/) out of the box. OpenRouter is a good starting point because it gives you access to many models through a single API, including models with free tiers.
 
 AI providers charge based on usage. These costs are separate from your Kirby SEO license. For generating short texts like meta titles and descriptions, costs are typically very low.
 
@@ -42,7 +42,7 @@ return [
 ];
 ```
 
-For generating meta titles and descriptions, you don't need the most powerful model. Small, fast models work well and keep costs low. Our recommendation is **Google Gemini 3 Flash Preview** (Google Provider is coming soon): it's fast, capable, and has a generous free tier.
+For generating meta titles and descriptions, you don't need the most powerful model. Small, fast models work well and keep costs low. Our recommendation is **Google Gemini 3 Flash** via the built-in Gemini provider: it's fast, capable, and has a generous free tier.
 
 You can change the model for any provider via the `model` key in the config, as shown in the example above.
 
