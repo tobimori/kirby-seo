@@ -148,7 +148,7 @@ onBeforeUnmount(() => {
 <template>
 	<k-field
 		v-bind="$props"
-		:class="['k-seo-alt-text-field', { 'is-decorative': isDecorative }]"
+		:class="['k-alt-text-field', { 'is-decorative': isDecorative }]"
 		:input="id"
 	>
 		<template v-if="ai && !disabled" #options>
@@ -162,9 +162,9 @@ onBeforeUnmount(() => {
 		</template>
 
 		<k-input :icon="false" :disabled="disabled">
-			<div class="k-seo-alt-text-header">
+			<div class="k-alt-text-header">
 				<k-button
-					class="k-seo-alt-text-toggle"
+					class="k-alt-text-toggle"
 					:disabled="disabled"
 					:icon="isDecorative ? 'toggle-off' : 'toggle-on'"
 					:theme="isDecorative ? null : 'positive-icon'"
@@ -196,7 +196,7 @@ onBeforeUnmount(() => {
 </template>
 
 <style>
-.k-seo-alt-text-field {
+.k-alt-text-field {
 	& .k-input {
 		min-height: var(--input-height);
 	}
@@ -209,11 +209,11 @@ onBeforeUnmount(() => {
 	}
 
 	&.is-decorative {
-		& .k-seo-alt-text-header {
+		& .k-alt-text-header {
 			grid-template-columns: 1fr;
 		}
 
-		& .k-seo-alt-text-toggle.k-button {
+		& .k-alt-text-toggle.k-button {
 			--button-align: flex-start;
 			margin-inline: 0.25rem;
 		}
@@ -224,14 +224,14 @@ onBeforeUnmount(() => {
 	}
 }
 
-.k-seo-alt-text-header {
+.k-alt-text-header {
 	display: grid;
 	grid-template-columns: max-content minmax(0, 1fr);
 	align-items: center;
 	min-height: inherit;
 }
 
-.k-seo-alt-text-toggle.k-button {
+.k-alt-text-toggle.k-button {
 	--button-height: var(--height-sm);
 	--button-rounded: var(--rounded-sm);
 	--button-color-back: var(--panel-color-back);

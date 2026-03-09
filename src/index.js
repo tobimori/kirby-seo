@@ -1,6 +1,6 @@
 import "./index.css"
 
-import SeoAltTextField from "./fields/seo-alt-text.vue"
+import AltTextField from "./fields/alt-text.vue"
 import SeoWriterField from "./fields/seo-writer.vue"
 import SeoWriterInput from "./fields/seo-writer-input.vue"
 import UtmShareDialog from "./components/utm-share-dialog.vue"
@@ -22,7 +22,7 @@ panel.plugin("tobimori/seo", {
 		"seo-search-console": SearchConsole
 	},
 	fields: {
-		"seo-alt-text": SeoAltTextField,
+		"alt-text": AltTextField,
 		"seo-writer": SeoWriterField
 	},
 	components: {

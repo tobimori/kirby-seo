@@ -26,7 +26,7 @@ class AltTextField extends FieldClass
 
 	public function type(): string
 	{
-		return 'seo-alt-text';
+		return 'alt-text';
 	}
 
 	protected function setAi(bool $ai = true): void

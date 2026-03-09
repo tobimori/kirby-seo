@@ -128,5 +128,5 @@ return [
 			]
 		]
 	],
-	'seo-alt-text' => AltTextField::class,
+	'alt-text' => AltTextField::class,
 ];
