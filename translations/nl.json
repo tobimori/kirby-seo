@@ -117,5 +117,7 @@
   "sections.searchConsole.impressions": "Vertoningen",
   "sections.searchConsole.ctr": "CTR",
   "sections.searchConsole.position": "Positie",
-  "sections.searchConsole.openInGsc": "Openen in Search Console"
+  "sections.searchConsole.openInGsc": "Openen in Search Console",
+  "altText.decorative.on": "Geen beschrijving nodig (alleen decoratief)",
+  "altText.decorative.off": "Beschrijving vereist"
 }

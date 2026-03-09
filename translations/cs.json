@@ -117,5 +117,7 @@
   "sections.searchConsole.impressions": "Zobrazení",
   "sections.searchConsole.ctr": "CTR",
   "sections.searchConsole.position": "Pozice",
-  "sections.searchConsole.openInGsc": "Otevřít v Search Console"
+  "sections.searchConsole.openInGsc": "Otevřít v Search Console",
+  "altText.decorative.on": "Není potřeba popisek (pouze vizuální prvek)",
+  "altText.decorative.off": "Vyžaduje popisek"
 }

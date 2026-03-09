@@ -120,3 +120,5 @@ checksums:
     sections.searchConsole.ctr: b778c9d0b299b6ac116d0d5c7b70d5f1
     sections.searchConsole.position: 8ba464c700080c55106d9e680b4b37e5
     sections.searchConsole.openInGsc: 6303f05c7acde3a17c02d66967bac419
+    altText.decorative.on: 445cfff0c01787f353881a6af2189a0f
+    altText.decorative.off: c92631da3094ac3b9827fe7fa280fa70

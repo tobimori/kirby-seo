@@ -117,5 +117,7 @@
   "sections.searchConsole.impressions": "Visningar",
   "sections.searchConsole.ctr": "CTR",
   "sections.searchConsole.position": "Position",
-  "sections.searchConsole.openInGsc": "Öppna i Search Console"
+  "sections.searchConsole.openInGsc": "Öppna i Search Console",
+  "altText.decorative.on": "Ingen beskrivning behövs (endast dekorativt)",
+  "altText.decorative.off": "Behöver beskrivning"
 }

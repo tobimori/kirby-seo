@@ -117,5 +117,7 @@
   "sections.searchConsole.impressions": "Gösterimler",
   "sections.searchConsole.ctr": "TO",
   "sections.searchConsole.position": "Konum",
-  "sections.searchConsole.openInGsc": "Search Console'da aç"
+  "sections.searchConsole.openInGsc": "Search Console'da aç",
+  "altText.decorative.on": "Açıklama gerekmez (sadece görsel amaçlı)",
+  "altText.decorative.off": "Açıklama gerekli"
 }
