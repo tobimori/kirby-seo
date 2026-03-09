@@ -22,6 +22,7 @@
 		"getkirby/composer-installer": "^1.2.1"
 	},
 	"suggest": {
+		"ext-imagick": "Rasterize non-resizable images (SVG, etc.) for AI alt text generation",
 		"tobimori/kirby-queues": "Enable background processing support",
 		"getkirby/cli": "Enable background processing support",
 		"spatie/schema-org": "Enable the Schema.org support"

@@ -3,8 +3,8 @@
 return array(
 	'root' => array(
 		'name' => 'tobimori/kirby-seo',
-		'pretty_version' => '2.0.0-alpha.14',
-		'version' => '2.0.0.0-alpha14',
+		'pretty_version' => '2.0.0-beta.1',
+		'version' => '2.0.0.0-beta1',
 		'reference' => null,
 		'type' => 'kirby-plugin',
 		'install_path' => __DIR__ . '/../../',
@@ -22,8 +22,8 @@ return array(
 			'dev_requirement' => false,
 		),
 		'tobimori/kirby-seo' => array(
-			'pretty_version' => '2.0.0-alpha.14',
-			'version' => '2.0.0.0-alpha14',
+			'pretty_version' => '2.0.0-beta.1',
+			'version' => '2.0.0.0-beta1',
 			'reference' => null,
 			'type' => 'kirby-plugin',
 			'install_path' => __DIR__ . '/../../',
