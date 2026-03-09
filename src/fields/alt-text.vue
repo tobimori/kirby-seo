@@ -1,5 +1,5 @@
 <script setup>
-/* global Event */
+/* global AbortController, Event */
 import {
 	ref,
 	computed,
@@ -10,7 +10,7 @@ import {
 	usePanel,
 	useLibrary
 } from "kirbyuse"
-import { useAiStream, getAiEndpointUrl } from "../helpers/useAiStream.js"
+import { fetchSseStream, openAiCustomizeDialog, getAiEndpointUrl } from "../helpers/ai-stream.js"
 
 const props = defineProps({
 	ai: Boolean,
@@ -34,6 +34,8 @@ const $emit = defineEmits(["input"])
 const panel = usePanel()
 const library = useLibrary()
 const input = ref(null)
+const streaming = ref(false)
+let controller = null
 let streamedText = ""
 
 // computed
@@ -42,21 +44,52 @@ const isDecorative = computed(() => props.value?.decorative ?? false)
 const source = computed(() => props.value?.source ?? "manual")
 const aiEndpointUrl = computed(() => getAiEndpointUrl(props.endpoints))
 
-// ai streaming
-const { streaming, start, abort, openCustomizeDialog } = useAiStream({
-	endpoint: () => aiEndpointUrl.value,
-	disabled: () => props.disabled,
-	onBeforeStream: () => {
-		streamedText = ""
-		emit({ text: "", source: "reviewed" })
-	},
-	onEvent: (data) => {
-		if (data.type === "text-delta") {
-			streamedText += data.text || ""
-			emit({ text: streamedText, source: "reviewed" })
-		}
+async function startAiStream(body = {}) {
+	const endpoint = aiEndpointUrl.value
+
+	if (!endpoint || props.disabled || streaming.value) {
+		return
 	}
-})
+
+	streamedText = ""
+	emit({ text: "", source: "reviewed" })
+
+	controller = new AbortController()
+	streaming.value = true
+
+	try {
+		await fetchSseStream({
+			url: endpoint,
+			body,
+			signal: controller.signal,
+			onEvent: (data) => {
+				if (data.type === "text-delta") {
+					streamedText += data.text || ""
+					emit({ text: streamedText, source: "reviewed" })
+				}
+			}
+		})
+	} catch (error) {
+		if (error?.name === "AbortError") {
+			return
+		}
+
+		console.error(error)
+		panel.notification.error(error?.message || panel.t("seo.ai.error.request"))
+	} finally {
+		controller = null
+		streaming.value = false
+	}
+}
+
+function abortAiStream() {
+	if (controller) {
+		controller.abort()
+		controller = null
+	}
+
+	streaming.value = false
+}
 
 const buttons = computed(() => {
 	if (streaming.value) {
@@ -65,7 +98,7 @@ const buttons = computed(() => {
 				icon: "loader",
 				text: panel.t("seo.ai.action.stop"),
 				theme: "red",
-				click: () => abort()
+				click: () => abortAiStream()
 			}
 		]
 	}
@@ -76,7 +109,7 @@ const buttons = computed(() => {
 			text:
 				text.value === "" ? panel.t("seo.ai.action.generate") : panel.t("seo.ai.action.regenerate"),
 			disabled: props.disabled || isDecorative.value || !aiEndpointUrl.value,
-			click: () => start({ instructions: undefined })
+			click: () => startAiStream()
 		}
 	]
 
@@ -86,8 +119,8 @@ const buttons = computed(() => {
 			title: panel.t("seo.ai.action.customize"),
 			disabled: props.disabled || isDecorative.value || !aiEndpointUrl.value,
 			click: () =>
-				openCustomizeDialog((values) => {
-					start({ instructions: values.instructions })
+				openAiCustomizeDialog((values) => {
+					startAiStream({ instructions: values.instructions })
 				})
 		})
 	}
@@ -141,7 +174,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
 	library.autosize.destroy(input.value)
-	abort()
+	abortAiStream()
 })
 </script>
 

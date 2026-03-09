@@ -30,41 +30,18 @@
 </template>
 
 <script>
-import { computed } from "kirbyuse"
-import { useAiStream, getAiEndpointUrl } from "../helpers/useAiStream.js"
+/* global AbortController */
+import { fetchSseStream, openAiCustomizeDialog, getAiEndpointUrl } from "../helpers/ai-stream.js"
 
 export default {
 	extends: "k-writer-field",
 	props: {
-		ai: [String, Boolean],
-		disabled: Boolean,
-		endpoints: Object
+		ai: [String, Boolean]
 	},
-	setup(props) {
-		const aiEndpointUrl = computed(() => getAiEndpointUrl(props.endpoints))
-
-		let onBeforeStream = () => {}
-		let onEvent = () => {}
-
-		const { streaming, start, abort, openCustomizeDialog } = useAiStream({
-			endpoint: () => aiEndpointUrl.value,
-			disabled: () => props.disabled,
-			onBeforeStream: () => onBeforeStream(),
-			onEvent: (data) => onEvent(data)
-		})
-
-		function connectStreamHandlers(handlers) {
-			onBeforeStream = handlers.onBeforeStream
-			onEvent = handlers.onEvent
-		}
-
+	data() {
 		return {
-			aiStreaming: streaming,
-			aiEndpointUrl,
-			startAiStream: start,
-			abortAiStream: abort,
-			_openAiCustomizeDialog: openCustomizeDialog,
-			_connectStreamHandlers: connectStreamHandlers
+			aiStreaming: false,
+			aiAbortController: null
 		}
 	},
 	computed: {
@@ -116,24 +93,56 @@ export default {
 			}
 
 			return buttons
+		},
+		aiEndpointUrl() {
+			return getAiEndpointUrl(this.endpoints)
 		}
-	},
-	created() {
-		this._connectStreamHandlers({
-			onBeforeStream: () => {
-				this.$refs.input?.focus?.()
-				this.getEditor()?.clearContent()
-			},
-			onEvent: (data) => this.handleAiEvent(data)
-		})
 	},
 	beforeDestroy() {
 		this.abortAiStream()
 	},
 	methods: {
-		handleAiEvent(data) {
-			if (data.type === "text-delta") {
-				this.applyAiDelta(data.text || "")
+		async startAiStream(options = {}) {
+			const endpoint = this.aiEndpointUrl
+
+			if (!endpoint || this.disabled || this.aiStreaming) {
+				return
+			}
+
+			if (this.$refs.input?.focus) {
+				this.$refs.input.focus()
+			}
+
+			const editor = this.getEditor()
+			if (editor) {
+				editor.clearContent()
+			}
+
+			const controller = new AbortController()
+			this.aiAbortController = controller
+			this.aiStreaming = true
+
+			try {
+				await fetchSseStream({
+					url: endpoint,
+					body: { instructions: options.instructions, edit: options.edit },
+					signal: controller.signal,
+					onEvent: (data) => {
+						if (data.type === "text-delta") {
+							this.applyAiDelta(data.text || "")
+						}
+					}
+				})
+			} catch (error) {
+				if (error?.name === "AbortError") {
+					return
+				}
+
+				console.error(error)
+				this.$panel.notification.error(error?.message || this.$t("seo.ai.error.request"))
+			} finally {
+				this.aiAbortController = null
+				this.aiStreaming = false
 			}
 		},
 		applyAiDelta(text) {
@@ -153,6 +162,14 @@ export default {
 		getEditor() {
 			const input = this.$refs.input?.$refs?.input
 			return input?.editor || null
+		},
+		abortAiStream() {
+			if (this.aiAbortController) {
+				this.aiAbortController.abort()
+				this.aiAbortController = null
+			}
+
+			this.aiStreaming = false
 		},
 		openEditDialog() {
 			this.$panel.dialog.open({
@@ -181,7 +198,7 @@ export default {
 			})
 		},
 		openCustomizeDialog() {
-			this._openAiCustomizeDialog((values) => {
+			openAiCustomizeDialog((values) => {
 				this.startAiStream({
 					instructions: values.instructions
 				})

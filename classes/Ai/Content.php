@@ -55,6 +55,7 @@ class Content
 
 			$data = base64_encode($thumb->read());
 		} else {
+			// TODO: better handling without ext-imagick
 			$imagick = new Imagick();
 			$imagick->readImage($file->root());
 			$imagick->setImageFormat('webp');
