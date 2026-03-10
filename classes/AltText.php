@@ -95,15 +95,11 @@ class AltText
 	}
 
 	/**
-	 * Returns HTML attributes for the alt text (alt, and role for decorative images).
+	 * Returns HTML attributes for the alt text.
 	 */
 	public function toAttr(): array
 	{
-		if ($this->decorative) {
-			return ['alt' => '', 'role' => 'presentation'];
-		}
-
-		return ['alt' => $this->text];
+		return ['alt' => $this->decorative ? '' : $this->text];
 	}
 
 	public function toYaml(): string

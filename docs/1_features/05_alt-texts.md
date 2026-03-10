@@ -3,7 +3,7 @@ title: Alt Text Field
 intro: Structured alt text for images, with AI generation and a decorative toggle
 ---
 
-Every image on the web needs an `alt` attribute. Images that convey meaning need descriptive text. Decorative images need an empty `alt` with `role="presentation"`. Getting this wrong hurts accessibility.
+Every image on the web needs an `alt` attribute. Images that convey meaning need descriptive text. Decorative images need an empty `alt=""`, which tells screen readers to skip them entirely. Getting this wrong hurts accessibility.
 
 Kirby SEO provides a dedicated `alt-text` field that handles both cases. It stores structured data instead of a plain string, so your templates always render the correct HTML attributes.
 
@@ -41,17 +41,7 @@ By default, this runs synchronously during the upload. For better performance, y
 
 ## Using alt text in templates
 
-The plugin registers a `toAltText()` field method that returns an `AltText` object. Use its `toAttr()` method to get the correct HTML attributes:
-
-```php
-$file->alt()->toAltText()->toAttr();
-// ['alt' => 'A dog playing fetch']
-
-// decorative image:
-// ['alt' => '', 'role' => 'presentation']
-```
-
-Spread the result into your image helper:
+The plugin registers a `toAltText()` field method that returns an `AltText` object. Use its `toAttr()` method to get the correct HTML attributes, then spread them into your image helper:
 
 ```php
 <?= Html::img($file->url(), [
@@ -59,6 +49,9 @@ Spread the result into your image helper:
   'height' => $file->height(),
   ...$file->alt()->toAltText()->toAttr(),
 ]) ?>
-```
+// <img alt="A dog playing fetch" src="..." width="..." height="...">
+
+// decorative image:
+// <img alt="" src="..." width="..." height="...">
 
 The field also works with plain string values from existing `alt` fields. If you migrate from a regular text field, `toAltText()` treats the old value as manual alt text.
