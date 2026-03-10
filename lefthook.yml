@@ -1,0 +1,21 @@
+pre-commit:
+  piped: true
+  commands:
+    build:
+      priority: 1
+      run: pnpm run build && git add index.css index.js
+    eslint:
+      priority: 2
+      glob: "src/*.{js,vue}"
+      run: pnpm exec eslint --fix {staged_files}
+      stage_fixed: true
+    format:
+      priority: 2
+      glob: "src/*.{js,vue}"
+      run: pnpm exec oxfmt --no-error-on-unmatched-pattern {staged_files}
+      stage_fixed: true
+    php-cs-fixer:
+      priority: 2
+      glob: "*.php"
+      run: PHP_CS_FIXER_IGNORE_ENV=1 php-cs-fixer fix --config=.php-cs-fixer.dist.php {staged_files}
+      stage_fixed: true
