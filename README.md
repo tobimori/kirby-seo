@@ -28,11 +28,11 @@
 
 [Read the documentation](https://plugins.andkindness.com/seo/docs/get-started/feature-overview) to get started with Kirby SEO.
 
-If you're looking to use Kirby SEO with Kirby 5 or newer, please install the Alpha version of the plugin:
+If you're looking to use Kirby SEO with Kirby 5 or newer, please install the Beta version of the plugin:
 
-`composer require tobimori/kirby-seo:^2.0.0-alpha.12`
+`composer require tobimori/kirby-seo:^2.0.0-beta.2`
 
-### What does Alpha mean for Kirby SEO 2?
+### What does Beta mean for Kirby SEO 2?
 
 The core features of Kirby SEO, such as the meta cascade, the panel setup, sitemap and robots are stable and can be used in production. New features of v2 might be unstable or can occur breaking changes until the final release.
 
