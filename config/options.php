@@ -25,8 +25,8 @@ return [
 	'cascade' => [
 		'fields',
 		'programmatic',
-		// 'fallbackFields', // fallback to meta fields for open graph fields
 		'parent',
+		'fallbackFields',
 		'site',
 		'options'
 	],

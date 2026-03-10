@@ -52,10 +52,11 @@ What you just experienced is the **Meta Cascade**. Kirby SEO looks for values in
 1. **Page fields**: the Metadata & SEO tab on a specific page
 2. **Programmatic content**: values set in a Page Model via `metaDefaults()`
 3. **Parent page**: inherited from the parent page (if enabled)
-4. **Site globals**: the Metadata & SEO tab on the Site
-5. **Plugin defaults**
+4. **Fallback fields**: Open Graph tags fall back to their Meta counterparts
+5. **Site globals**: the Metadata & SEO tab on the Site
+6. **Plugin defaults**
 
-The idea is simple: you set sensible defaults once at the site level, and only override where you need something different. Most pages will never need their own Metadata & SEO tab filled in at all.
+The idea is simple: you set sensible defaults once at the site level, and only override where you need something different. Most pages will never need more than a description in their Metadata & SEO tab.
 
 ## Inheriting settings
 

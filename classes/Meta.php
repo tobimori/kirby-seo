@@ -437,9 +437,7 @@ class Meta
 	 * cascade method
 	 */
 	public const FALLBACK_MAP = [
-		'ogTitle' => 'metaTitle',
 		'ogDescription' => 'metaDescription',
-		'ogTemplate' => 'metaTemplate',
 	];
 
 	/**
@@ -452,7 +450,6 @@ class Meta
 		'fields',
 		'programmatic',
 		'parent',
-		'site'
 	];
 
 	/**

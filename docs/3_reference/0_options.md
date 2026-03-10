@@ -36,7 +36,7 @@ Both are equivalent, but you cannot use dot syntax inside a nested array. `'robo
 | `dateFormat`              | `null`                                                    | Custom date format for dates in meta tags                                                                       |
 | `generateSchema`          | `true`                                                    | Generate a default `WebSite` schema for every page. Requires [spatie/schema-org](2_customization/08_schema-org) |
 | `previews`                | `['google', 'facebook', 'slack']`                         | Which preview types to show in the Panel                                                                        |
-| `cascade`                 | `['fields', 'programmatic', 'parent', 'site', 'options']` | The [meta cascade](2_customization/01_meta-cascade) order                                                       |
+| `cascade`                 | `['fields', 'programmatic', 'parent', 'fallbackFields', 'site', 'options']` | The [meta cascade](2_customization/01_meta-cascade) order                                                       |
 | `canonical.base`          | `null`                                                    | Base URL for canonical links. Uses the site URL if not set                                                      |
 | `canonical.trailingSlash` | `false`                                                   | Add trailing slashes to canonical URLs                                                                          |
 | `files.parent`            | `null`                                                    | Default parent page for file uploads in SEO fields                                                              |
