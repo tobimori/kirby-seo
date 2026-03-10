@@ -3,6 +3,7 @@
 use Kirby\Cms\App;
 use Kirby\Cms\Page;
 use Kirby\Http\Response;
+use Kirby\Toolkit\Str;
 use tobimori\Seo\Ai;
 use tobimori\Seo\Field\AltTextField;
 use tobimori\Seo\Seo;
@@ -10,6 +11,25 @@ use tobimori\Seo\Seo;
 return [
 	'seo-writer' => [
 		'extends' => 'writer',
+		'computed' => [
+			'placeholder' => function () {
+				if ($this->placeholder === null) {
+					return null;
+				}
+
+				$value = $this->model()->toString($this->placeholder);
+
+				if (Str::contains($value, 'data-seo-template-variable')) {
+					$value = Str::unhtml($value);
+				}
+
+				return str_replace(
+					['{{ title }}', '{{ site.title }}'],
+					[t('seo.writerNodes.template.title'), t('seo.writerNodes.template.siteTitle')],
+					$value
+				);
+			}
+		],
 		'props' => [
 			/**
 			 * Enables/disables the character counter in the top right corner
