@@ -30,4 +30,6 @@ Only languages where a translation actually exists are included. There is no sep
 
 ## Browser view
 
-If you open `https://example.com/sitemap.xml` in a browser, you'll see a styled table instead of raw XML. This is powered by an XSL stylesheet that Kirby SEO serves at `/sitemap.xsl`. The styled view only shows the basic URL list. Multilingual `hreflang` links are still in the XML source, but they're not shown in the browser view.
+If you open `https://example.com/sitemap.xml` in a browser, you'll see a styled table instead of raw XML. This is powered by an XSL stylesheet that Kirby SEO serves at `/sitemap.xsl`. On multilingual sites, each URL shows language badges linking to its alternate translations.
+
+To see the raw XML, use `view-source:https://example.com/sitemap.xml` in your browser's address bar.

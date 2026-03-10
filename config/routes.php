@@ -107,7 +107,7 @@ return [
 				'template' => 'sitemap',
 				'model' => 'sitemap',
 				'content' => [
-					'title' => t('sitemap'),
+					'title' => t('seo.sitemap.title'),
 				],
 			])->render(contentType: 'xsl');
 		}
@@ -150,7 +150,7 @@ return [
 				'template' => 'sitemap',
 				'model' => 'sitemap',
 				'content' => [
-					'title' => t('sitemap'),
+					'title' => t('seo.sitemap.title'),
 					'index' => null,
 				],
 			])->render(contentType: 'xml');
@@ -198,7 +198,7 @@ return [
 				'template' => 'sitemap',
 				'model' => 'sitemap',
 				'content' => [
-					'title' => t('sitemap'),
+					'title' => t('seo.sitemap.title'),
 					'index' => $index,
 				],
 			])->render(contentType: 'xml');
