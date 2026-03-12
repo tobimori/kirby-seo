@@ -122,3 +122,5 @@ checksums:
     sections.searchConsole.openInGsc: 6303f05c7acde3a17c02d66967bac419
     altText.decorative.on: 445cfff0c01787f353881a6af2189a0f
     altText.decorative.off: c92631da3094ac3b9827fe7fa280fa70
+    job.generateAltText: 4d925110ac66301d755ce34b3b2f5dd3
+    job.indexNow: 040e3eb47bf80e82b8cf2ca1eb43c1f5
