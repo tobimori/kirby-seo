@@ -2,6 +2,7 @@
 
 return [
 	'enabled' => true,
+	'delay' => 30, // batch window in seconds when kirby-queues is available
 	'searchEngine' => 'https://api.indexnow.org', // one will propagate to all others. so this is fine @see https://www.indexnow.org/faq
 	'rules' => [
 		// by default, only the current page is requested to be indexed (if indexable: robots allow + listed status)

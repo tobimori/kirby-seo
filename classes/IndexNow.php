@@ -65,6 +65,28 @@ class IndexNow
 	}
 
 	/**
+	 * Dispatch collected URLs — via batch job if available, otherwise synchronously
+	 */
+	public function dispatch(): bool
+	{
+		$urls = $this->urls();
+
+		if (empty($urls)) {
+			return false;
+		}
+
+		if (class_exists('tobimori\Queues\Queues')) {
+			\tobimori\Queues\Queues::push('seo:indexnow', [
+				'urls' => $urls,
+			]);
+
+			return true;
+		}
+
+		return static::send($urls);
+	}
+
+	/**
 	 * Send the collected urls
 	 */
 	public function request(): bool

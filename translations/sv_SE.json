@@ -120,5 +120,6 @@
   "sections.searchConsole.openInGsc": "Öppna i Search Console",
   "altText.decorative.on": "Ingen beskrivning behövs (endast dekorativt)",
   "altText.decorative.off": "Behöver beskrivning",
-  "job.generateAltText": "Generera alternativtext"
+  "job.generateAltText": "Generera alternativtext",
+  "job.indexNow": "IndexNow"
 }

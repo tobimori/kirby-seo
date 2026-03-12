@@ -27,6 +27,7 @@ return array(
 	'tobimori\\Seo\\GoogleSearchConsole' => $baseDir . '/classes/GoogleSearchConsole.php',
 	'tobimori\\Seo\\IndexNow' => $baseDir . '/classes/IndexNow.php',
 	'tobimori\\Seo\\Jobs\\GenerateAltTextJob' => $baseDir . '/classes/Jobs/GenerateAltTextJob.php',
+	'tobimori\\Seo\\Jobs\\IndexNowBatchJob' => $baseDir . '/classes/Jobs/IndexNowBatchJob.php',
 	'tobimori\\Seo\\Meta' => $baseDir . '/classes/Meta.php',
 	'tobimori\\Seo\\SchemaSingleton' => $baseDir . '/classes/SchemaSingleton.php',
 	'tobimori\\Seo\\Seo' => $baseDir . '/classes/Seo.php',

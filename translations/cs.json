@@ -120,5 +120,6 @@
   "sections.searchConsole.openInGsc": "Otevřít v Search Console",
   "altText.decorative.on": "Není potřeba popisek (pouze vizuální prvek)",
   "altText.decorative.off": "Vyžaduje popisek",
-  "job.generateAltText": "Vygenerovat alternativní text"
+  "job.generateAltText": "Vygenerovat alternativní text",
+  "job.indexNow": "IndexNow"
 }

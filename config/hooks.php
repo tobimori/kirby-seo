@@ -10,7 +10,10 @@ use tobimori\Seo\Seo;
 return [
 	'system.loadPlugins:after' => function () {
 		if (class_exists('tobimori\Queues\Queues')) {
-			\tobimori\Queues\Queues::register(\tobimori\Seo\Jobs\GenerateAltTextJob::class);
+			\tobimori\Queues\Queues::register([
+				\tobimori\Seo\Jobs\GenerateAltTextJob::class,
+				\tobimori\Seo\Jobs\IndexNowBatchJob::class,
+			]);
 		}
 	},
 	'file.create:after' => function (File $file) {
@@ -52,7 +55,7 @@ return [
 
 		if (Seo::option('indexnow.enabled')) {
 			$indexNow = new (Seo::option('components.indexnow'))($newPage);
-			$indexNow->request();
+			$indexNow->dispatch();
 		}
 
 		return $newPage;
@@ -60,13 +63,13 @@ return [
 	'page.changeStatus:after' => function (Page $newPage, Page $oldPage) {
 		if (Seo::option('indexnow.enabled')) {
 			$indexNow = new (Seo::option('components.indexnow'))($newPage);
-			$indexNow->request();
+			$indexNow->dispatch();
 		}
 	},
 	'page.changeSlug:after' => function (Page $newPage, Page $oldPage) {
 		if (Seo::option('indexnow.enabled')) {
 			$indexNow = new (Seo::option('components.indexnow'))($newPage);
-			$indexNow->request();
+			$indexNow->dispatch();
 		}
 	},
 	'page.render:before' => function (string $contentType, array $data, Page $page) {

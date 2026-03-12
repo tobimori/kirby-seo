@@ -50,6 +50,7 @@ class ComposerStaticInit3e4bc37d480117d497c8333636c62d44
 		'tobimori\\Seo\\GoogleSearchConsole' => __DIR__ . '/../..' . '/classes/GoogleSearchConsole.php',
 		'tobimori\\Seo\\IndexNow' => __DIR__ . '/../..' . '/classes/IndexNow.php',
 		'tobimori\\Seo\\Jobs\\GenerateAltTextJob' => __DIR__ . '/../..' . '/classes/Jobs/GenerateAltTextJob.php',
+		'tobimori\\Seo\\Jobs\\IndexNowBatchJob' => __DIR__ . '/../..' . '/classes/Jobs/IndexNowBatchJob.php',
 		'tobimori\\Seo\\Meta' => __DIR__ . '/../..' . '/classes/Meta.php',
 		'tobimori\\Seo\\SchemaSingleton' => __DIR__ . '/../..' . '/classes/SchemaSingleton.php',
 		'tobimori\\Seo\\Seo' => __DIR__ . '/../..' . '/classes/Seo.php',

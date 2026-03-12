@@ -120,5 +120,6 @@
   "sections.searchConsole.openInGsc": "Open in Search Console",
   "altText.decorative.on": "No description needed (purely visual)",
   "altText.decorative.off": "Needs description",
-  "job.generateAltText": "Generate Alt Text"
+  "job.generateAltText": "Generate Alt Text",
+  "job.indexNow": "IndexNow"
 }
