@@ -119,5 +119,6 @@
   "sections.searchConsole.position": "Konum",
   "sections.searchConsole.openInGsc": "Search Console'da aç",
   "altText.decorative.on": "Açıklama gerekmez (sadece görsel amaçlı)",
-  "altText.decorative.off": "Açıklama gerekli"
+  "altText.decorative.off": "Açıklama gerekli",
+  "job.generateAltText": "Alt metin oluştur"
 }

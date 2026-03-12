@@ -18,7 +18,7 @@ class GenerateAltTextJob extends Job
 
 	public function name(): string
 	{
-		return 'Generate Alt Text';
+		return t('seo.job.generateAltText');
 	}
 
 	public function handle(): void

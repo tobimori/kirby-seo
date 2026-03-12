@@ -119,5 +119,6 @@
   "sections.searchConsole.position": "Poziție",
   "sections.searchConsole.openInGsc": "Deschide în Search Console",
   "altText.decorative.on": "Nu este necesară nicio descriere (doar element vizual)",
-  "altText.decorative.off": "Are nevoie de descriere"
+  "altText.decorative.off": "Are nevoie de descriere",
+  "job.generateAltText": "Generează text alternativ"
 }
