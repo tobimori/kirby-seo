@@ -33,7 +33,7 @@ return [
 					$meta = $model->metadata();
 					return [
 						'page' => $model->slug(),
-						'url' => $model->url(),
+						'url' => $meta->canonicalUrl(),
 						'pageTitle' => Str::unhtml($model->title()->value()),
 						'title' => Str::unhtml($meta->metaTitle()->value()),
 						'description' => Str::unhtml($meta->metaDescription()->value()),
