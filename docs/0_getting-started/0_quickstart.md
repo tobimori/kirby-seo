@@ -17,7 +17,7 @@ Composer is required for full feature support (e.g. schema.org support, backgrou
 In a terminal window, navigate to the folder of your Kirby installation. Then run the following command:
 
 ```bash
-composer require tobimori/kirby-seo
+composer require tobimori/kirby-seo@^2.0.0-beta
 ```
 
 Some features require additional packages. Install them when you need them:
