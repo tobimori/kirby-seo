@@ -17,6 +17,7 @@
 		/>
 
 		<textarea
+			:id="$props.id"
 			ref="output"
 			:name="name"
 			:required="required"
