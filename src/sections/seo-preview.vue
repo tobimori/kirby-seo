@@ -96,6 +96,7 @@ onUnmounted(() => panel.events.off("content.save"))
 			v-model="type"
 			type="select"
 			name="seo-preview-type"
+			:aria-label="headerLabel"
 			:before="$t('seo.sections.preview.showFor')"
 			:options="options"
 			:required="true"
