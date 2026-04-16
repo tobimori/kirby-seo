@@ -6,66 +6,67 @@ namespace Composer\Autoload;
 
 class ComposerStaticInit3e4bc37d480117d497c8333636c62d44
 {
-	public static $prefixLengthsPsr4 = array(
-		't' =>
-		array(
-			'tobimori\\Seo\\' => 13,
-		),
-		'K' =>
-		array(
-			'Kirby\\' => 6,
-		),
-	);
+    public static $prefixLengthsPsr4 = array (
+        't' =>
+        array (
+            'tobimori\\Seo\\' => 13,
+        ),
+        'K' =>
+        array (
+            'Kirby\\' => 6,
+        ),
+    );
 
-	public static $prefixDirsPsr4 = array(
-		'tobimori\\Seo\\' =>
-		array(
-			0 => __DIR__ . '/../..' . '/classes',
-		),
-		'Kirby\\' =>
-		array(
-			0 => __DIR__ . '/..' . '/getkirby/composer-installer/src',
-		),
-	);
+    public static $prefixDirsPsr4 = array (
+        'tobimori\\Seo\\' =>
+        array (
+            0 => __DIR__ . '/../..' . '/classes',
+        ),
+        'Kirby\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/getkirby/composer-installer/src',
+        ),
+    );
 
-	public static $classMap = array(
-		'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
-		'Kirby\\ComposerInstaller\\CmsInstaller' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/CmsInstaller.php',
-		'Kirby\\ComposerInstaller\\Installer' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/Installer.php',
-		'Kirby\\ComposerInstaller\\Plugin' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/Plugin.php',
-		'Kirby\\ComposerInstaller\\PluginInstaller' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/PluginInstaller.php',
-		'tobimori\\Seo\\Ai' => __DIR__ . '/../..' . '/classes/Ai.php',
-		'tobimori\\Seo\\Ai\\Chunk' => __DIR__ . '/../..' . '/classes/Ai/Chunk.php',
-		'tobimori\\Seo\\Ai\\Content' => __DIR__ . '/../..' . '/classes/Ai/Content.php',
-		'tobimori\\Seo\\Ai\\Driver' => __DIR__ . '/../..' . '/classes/Ai/Driver.php',
-		'tobimori\\Seo\\Ai\\Drivers\\Anthropic' => __DIR__ . '/../..' . '/classes/Ai/Drivers/Anthropic.php',
-		'tobimori\\Seo\\Ai\\Drivers\\Gemini' => __DIR__ . '/../..' . '/classes/Ai/Drivers/Gemini.php',
-		'tobimori\\Seo\\Ai\\Drivers\\OpenAi' => __DIR__ . '/../..' . '/classes/Ai/Drivers/OpenAi.php',
-		'tobimori\\Seo\\Ai\\SseStream' => __DIR__ . '/../..' . '/classes/Ai/SseStream.php',
-		'tobimori\\Seo\\AltText' => __DIR__ . '/../..' . '/classes/AltText.php',
-		'tobimori\\Seo\\Buttons\\RobotsViewButton' => __DIR__ . '/../..' . '/classes/Buttons/RobotsViewButton.php',
-		'tobimori\\Seo\\Buttons\\UtmShareViewButton' => __DIR__ . '/../..' . '/classes/Buttons/UtmShareViewButton.php',
-		'tobimori\\Seo\\Dialogs\\UtmShareDialog' => __DIR__ . '/../..' . '/classes/Dialogs/UtmShareDialog.php',
-		'tobimori\\Seo\\Field\\AltTextField' => __DIR__ . '/../..' . '/classes/Field/AltTextField.php',
-		'tobimori\\Seo\\GoogleSearchConsole' => __DIR__ . '/../..' . '/classes/GoogleSearchConsole.php',
-		'tobimori\\Seo\\IndexNow' => __DIR__ . '/../..' . '/classes/IndexNow.php',
-		'tobimori\\Seo\\Jobs\\GenerateAltTextJob' => __DIR__ . '/../..' . '/classes/Jobs/GenerateAltTextJob.php',
-		'tobimori\\Seo\\Jobs\\IndexNowBatchJob' => __DIR__ . '/../..' . '/classes/Jobs/IndexNowBatchJob.php',
-		'tobimori\\Seo\\Meta' => __DIR__ . '/../..' . '/classes/Meta.php',
-		'tobimori\\Seo\\SchemaSingleton' => __DIR__ . '/../..' . '/classes/SchemaSingleton.php',
-		'tobimori\\Seo\\Seo' => __DIR__ . '/../..' . '/classes/Seo.php',
-		'tobimori\\Seo\\Sitemap\\Sitemap' => __DIR__ . '/../..' . '/classes/Sitemap/Sitemap.php',
-		'tobimori\\Seo\\Sitemap\\SitemapIndex' => __DIR__ . '/../..' . '/classes/Sitemap/SitemapIndex.php',
-		'tobimori\\Seo\\Sitemap\\SitemapUrl' => __DIR__ . '/../..' . '/classes/Sitemap/SitemapUrl.php',
-	);
+    public static $classMap = array (
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'Kirby\\ComposerInstaller\\CmsInstaller' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/CmsInstaller.php',
+        'Kirby\\ComposerInstaller\\Installer' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/Installer.php',
+        'Kirby\\ComposerInstaller\\Plugin' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/Plugin.php',
+        'Kirby\\ComposerInstaller\\PluginInstaller' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/PluginInstaller.php',
+        'tobimori\\Seo\\Ai' => __DIR__ . '/../..' . '/classes/Ai.php',
+        'tobimori\\Seo\\Ai\\Chunk' => __DIR__ . '/../..' . '/classes/Ai/Chunk.php',
+        'tobimori\\Seo\\Ai\\Content' => __DIR__ . '/../..' . '/classes/Ai/Content.php',
+        'tobimori\\Seo\\Ai\\Driver' => __DIR__ . '/../..' . '/classes/Ai/Driver.php',
+        'tobimori\\Seo\\Ai\\Drivers\\Anthropic' => __DIR__ . '/../..' . '/classes/Ai/Drivers/Anthropic.php',
+        'tobimori\\Seo\\Ai\\Drivers\\Gemini' => __DIR__ . '/../..' . '/classes/Ai/Drivers/Gemini.php',
+        'tobimori\\Seo\\Ai\\Drivers\\OpenAi' => __DIR__ . '/../..' . '/classes/Ai/Drivers/OpenAi.php',
+        'tobimori\\Seo\\Ai\\Drivers\\OpenAiCompletions' => __DIR__ . '/../..' . '/classes/Ai/Drivers/OpenAiCompletions.php',
+        'tobimori\\Seo\\Ai\\SseStream' => __DIR__ . '/../..' . '/classes/Ai/SseStream.php',
+        'tobimori\\Seo\\AltText' => __DIR__ . '/../..' . '/classes/AltText.php',
+        'tobimori\\Seo\\Buttons\\RobotsViewButton' => __DIR__ . '/../..' . '/classes/Buttons/RobotsViewButton.php',
+        'tobimori\\Seo\\Buttons\\UtmShareViewButton' => __DIR__ . '/../..' . '/classes/Buttons/UtmShareViewButton.php',
+        'tobimori\\Seo\\Dialogs\\UtmShareDialog' => __DIR__ . '/../..' . '/classes/Dialogs/UtmShareDialog.php',
+        'tobimori\\Seo\\Field\\AltTextField' => __DIR__ . '/../..' . '/classes/Field/AltTextField.php',
+        'tobimori\\Seo\\GoogleSearchConsole' => __DIR__ . '/../..' . '/classes/GoogleSearchConsole.php',
+        'tobimori\\Seo\\IndexNow' => __DIR__ . '/../..' . '/classes/IndexNow.php',
+        'tobimori\\Seo\\Jobs\\GenerateAltTextJob' => __DIR__ . '/../..' . '/classes/Jobs/GenerateAltTextJob.php',
+        'tobimori\\Seo\\Jobs\\IndexNowBatchJob' => __DIR__ . '/../..' . '/classes/Jobs/IndexNowBatchJob.php',
+        'tobimori\\Seo\\Meta' => __DIR__ . '/../..' . '/classes/Meta.php',
+        'tobimori\\Seo\\SchemaSingleton' => __DIR__ . '/../..' . '/classes/SchemaSingleton.php',
+        'tobimori\\Seo\\Seo' => __DIR__ . '/../..' . '/classes/Seo.php',
+        'tobimori\\Seo\\Sitemap\\Sitemap' => __DIR__ . '/../..' . '/classes/Sitemap/Sitemap.php',
+        'tobimori\\Seo\\Sitemap\\SitemapIndex' => __DIR__ . '/../..' . '/classes/Sitemap/SitemapIndex.php',
+        'tobimori\\Seo\\Sitemap\\SitemapUrl' => __DIR__ . '/../..' . '/classes/Sitemap/SitemapUrl.php',
+    );
 
-	public static function getInitializer(ClassLoader $loader)
-	{
-		return \Closure::bind(function () use ($loader) {
-			$loader->prefixLengthsPsr4 = ComposerStaticInit3e4bc37d480117d497c8333636c62d44::$prefixLengthsPsr4;
-			$loader->prefixDirsPsr4 = ComposerStaticInit3e4bc37d480117d497c8333636c62d44::$prefixDirsPsr4;
-			$loader->classMap = ComposerStaticInit3e4bc37d480117d497c8333636c62d44::$classMap;
+    public static function getInitializer(ClassLoader $loader)
+    {
+        return \Closure::bind(function () use ($loader) {
+            $loader->prefixLengthsPsr4 = ComposerStaticInit3e4bc37d480117d497c8333636c62d44::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit3e4bc37d480117d497c8333636c62d44::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit3e4bc37d480117d497c8333636c62d44::$classMap;
 
-		}, null, ClassLoader::class);
-	}
+        }, null, ClassLoader::class);
+    }
 }
