@@ -2,7 +2,6 @@
 
 use Kirby\Cms\App;
 use Kirby\Cms\Page;
-use Kirby\Data\Json;
 use tobimori\Seo\Meta;
 use tobimori\Seo\Seo;
 use tobimori\Seo\Ai;
