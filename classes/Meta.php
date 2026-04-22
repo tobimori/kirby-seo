@@ -132,7 +132,7 @@ class Meta
 		// Compare the current request URL with the canonical URL
 		$currentUrl = kirby()->request()->url()->toString();
 		$canonicalUrl = $this->canonicalUrl();
-		$isCanonical = $currentUrl === $canonicalUrl;
+		$isCanonical = $currentUrl === rtrim($canonicalUrl, '/');
 
 		// Multi-lang alternate tags
 		// Skip hreflang tags if URL is not canonical (has query params, Kirby params, etc.)
