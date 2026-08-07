@@ -25,6 +25,8 @@ return function (App $kirby) {
 		];
 
 		$blueprint['query'] = "{$blueprint['query']}.filterBy('template', '{$template}')";
+	} else {
+		$blueprint['query'] = "{$blueprint['query']}.filterBy('isResizable', true)";
 	}
 
 	return $blueprint;

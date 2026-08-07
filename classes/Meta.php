@@ -3,10 +3,12 @@
 namespace tobimori\Seo;
 
 use Kirby\Cms\App;
+use Kirby\Cms\File;
 use Kirby\Cms\FileVersion;
 use Kirby\Cms\Page;
 use Kirby\Content\Field;
 use Kirby\Exception\InvalidArgumentException;
+use Kirby\Filesystem\Asset;
 use Kirby\Toolkit\A;
 use Kirby\Toolkit\Str;
 use Kirby\Cms\Language;
@@ -692,7 +694,7 @@ class Meta
 	/**
 	 * Get the og:image thumb object
 	 */
-	public function ogImageThumb(): FileVersion|null
+	public function ogImageThumb(): FileVersion|File|Asset|null
 	{
 		$field = $this->get('ogImage');
 
