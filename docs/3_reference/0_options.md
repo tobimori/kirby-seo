@@ -30,18 +30,18 @@ Both are equivalent, but you cannot use dot syntax inside a nested array. `'robo
 
 ## General
 
-| Option                    | Default                                                   | Description                                                                                                     |
-| ------------------------- | --------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| `locale`                  | `'en_US'`                                                 | Default locale for single-language sites                                                                        |
-| `dateFormat`              | `null`                                                    | Custom date format for dates in meta tags                                                                       |
-| `generateSchema`          | `true`                                                    | Generate a default `WebSite` schema for every page. Requires [spatie/schema-org](2_customization/08_schema-org) |
-| `previews`                | `['google', 'facebook', 'slack']`                         | Which preview types to show in the Panel                                                                        |
+| Option                    | Default                                                                     | Description                                                                                                     |
+| ------------------------- | --------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `locale`                  | `'en_US'`                                                                   | Default locale for single-language sites                                                                        |
+| `dateFormat`              | `null`                                                                      | Custom date format for dates in meta tags                                                                       |
+| `generateSchema`          | `true`                                                                      | Generate a default `WebSite` schema for every page. Requires [spatie/schema-org](2_customization/08_schema-org) |
+| `previews`                | `['google', 'facebook', 'slack']`                                           | Which preview types to show in the Panel                                                                        |
 | `cascade`                 | `['fields', 'programmatic', 'parent', 'fallbackFields', 'site', 'options']` | The [meta cascade](2_customization/01_meta-cascade) order                                                       |
-| `canonical.base`          | `null`                                                    | Base URL for canonical links. Uses the site URL if not set                                                      |
-| `canonical.trailingSlash` | `false`                                                   | Add trailing slashes to canonical URLs                                                                          |
-| `files.parent`            | `null`                                                    | Default parent page for file uploads in SEO fields                                                              |
-| `files.template`          | `null`                                                    | Default file template for SEO file uploads                                                                      |
-| `socialMedia`             | See below                                                 | Social media account fields shown in the site blueprint                                                         |
+| `canonical.base`          | `null`                                                                      | Base URL for canonical links. Uses the site URL if not set                                                      |
+| `canonical.trailingSlash` | `false`                                                                     | Add trailing slashes to canonical URLs                                                                          |
+| `files.parent`            | `null`                                                                      | Default parent page for file uploads in SEO fields                                                              |
+| `files.template`          | `null`                                                                      | Default file template for SEO file uploads                                                                      |
+| `socialMedia`             | See below                                                                   | Social media account fields shown in the site blueprint                                                         |
 
 The `socialMedia` option defines which fields appear in the site blueprint. Default fields: `twitter`, `facebook`, `instagram`, `youtube`, `linkedin`, `bluesky`, `mastodon`. Each key maps to a placeholder URL. Override the array to add or remove fields.
 
@@ -100,12 +100,12 @@ These are the fallback values for the last level of the [meta cascade](2_customi
 
 Each provider has a `driver` class and a `config` array. The config options depend on the driver. All built-in drivers share `apiKey` (required), `model`, `endpoint`, and `timeout`. The OpenAI driver also accepts `organization`.
 
-| Provider     | Driver      | Default model                    | Default endpoint                                          |
-| ------------ | ----------- | -------------------------------- | --------------------------------------------------------- |
-| `openai`     | `OpenAi`    | `gpt-5-mini-2025-08-07`         | `https://api.openai.com/v1/responses`                     |
-| `anthropic`  | `Anthropic` | `claude-4-5-haiku`               | `https://api.anthropic.com/v1/messages`                   |
-| `gemini`     | `Gemini`    | `gemini-3.1-flash-lite-preview`  | `https://generativelanguage.googleapis.com/v1beta`        |
-| `openrouter` | `OpenAi`    | `openai/gpt-5-nano`             | `https://openrouter.ai/api/v1/responses`                  |
+| Provider     | Driver      | Default model                   | Default endpoint                                   |
+| ------------ | ----------- | ------------------------------- | -------------------------------------------------- |
+| `openai`     | `OpenAi`    | `gpt-5-mini-2025-08-07`         | `https://api.openai.com/v1/responses`              |
+| `anthropic`  | `Anthropic` | `claude-4-5-haiku`              | `https://api.anthropic.com/v1/messages`            |
+| `gemini`     | `Gemini`    | `gemini-3.1-flash-lite-preview` | `https://generativelanguage.googleapis.com/v1beta` |
+| `openrouter` | `OpenAi`    | `openai/gpt-5-nano`             | `https://openrouter.ai/api/v1/responses`           |
 
 The Gemini driver authenticates via API key as a query parameter (not a header). All providers default to a timeout of 120 seconds. See [customizing AI Assist](2_customization/06_ai-assist) for adding your own provider.
 

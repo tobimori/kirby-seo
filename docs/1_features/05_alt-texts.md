@@ -55,3 +55,4 @@ The plugin registers a `toAltText()` field method that returns an `AltText` obje
 // <img alt="" src="..." width="..." height="...">
 
 The field also works with plain string values from existing `alt` fields. If you migrate from a regular text field, `toAltText()` treats the old value as manual alt text.
+```
