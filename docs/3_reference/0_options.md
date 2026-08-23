@@ -65,6 +65,19 @@ These are the fallback values for the last level of the [meta cascade](2_customi
 | `default.robotsImageindex` | Same as `robotsIndex`              | Whether image indexing is allowed                          |
 | `default.robotsSnippet`    | Same as `robotsIndex`              | Whether snippets are allowed                               |
 
+## LLM-friendly content
+
+| Option                         | Default                                        | Description                                                      |
+| ------------------------------ | ---------------------------------------------- | ---------------------------------------------------------------- |
+| `agentic.enabled`              | `true`                                         | Enable all LLM-friendly content features                         |
+| `agentic.markdown.enabled`     | `true`                                         | Enable Markdown URLs and `Accept: text/markdown` negotiation     |
+| `agentic.markdown.auto`        | `false`                                        | Convert selected HTML when no explicit `.md.php` template exists |
+| `agentic.markdown.selectors`   | `[data-agentic-content]`, `main`, and `article` | Content selectors, in priority order                             |
+| `agentic.markdown.converter`   | `null`                                         | Custom conversion callable, object, or class                     |
+| `agentic.llmsTxt.enabled`      | `true`                                         | Enable the language-aware `/llms.txt` route                       |
+| `agentic.llmsTxt.pages`        | `null`                                         | Callable that selects the initial page collection                |
+| `components.agentic`           | `tobimori\Seo\LlmContent`                    | LLM-friendly content component class                             |
+
 ## Robots
 
 | Option                    | Default                                                   | Description                                                                                                            |

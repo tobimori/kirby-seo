@@ -130,6 +130,18 @@ class Meta
 		$meta['canonical'] = $canonicalFn;
 		$meta['og:url'] = $canonicalFn;
 
+		// LLM-friendly content discovery
+		$llmContent = new (Seo::option('components.agentic'))($this->page);
+		$meta['alternate'][] = fn () => $llmContent->available() ? [
+			'href' => $llmContent->markdownUrl(),
+			'rel' => 'alternate',
+			'type' => $llmContent::MARKDOWN_TYPE,
+		] : null;
+		$meta['alternate'][] = fn () => $llmContent->available() && $llmContent->llmsTxtEnabled() ? [
+			'href' => $llmContent->llmsTxtUrl(),
+			'rel' => 'describedby',
+		] : null;
+
 		// Check if the current URL is canonical
 		// Compare the current request URL with the canonical URL
 		$currentUrl = kirby()->request()->url()->toString();

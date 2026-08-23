@@ -14,6 +14,7 @@ The built-in components are:
 | `indexnow` | `tobimori\Seo\IndexNow`            | IndexNow ping requests            |
 | `schema`   | `tobimori\Seo\SchemaSingleton`     | Schema.org structured data store  |
 | `gsc`      | `tobimori\Seo\GoogleSearchConsole` | Google Search Console integration |
+| `agentic`  | `tobimori\Seo\LlmContent`          | LLM-friendly content              |
 
 To replace a component, create a class that extends the original. For example, to customize meta tag output, extend the `Meta` class:
 

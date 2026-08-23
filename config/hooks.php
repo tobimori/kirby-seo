@@ -86,4 +86,52 @@ return [
 				->headline($page->metadata()->title());
 		}
 	},
+	'route:after' => function (string $path, string $method, mixed $result, bool $final) {
+		if ($final === false || !in_array($method, ['GET', 'HEAD'], true)) {
+			return $result;
+		}
+
+		$isMarkdownPath = Str::endsWith(Str::lower($path), '.md');
+		if ($isMarkdownPath) {
+			$markdownPath = Str::substr($path, 0, -3);
+			$resolved = kirby()->resolve($markdownPath === '' ? null : $markdownPath, kirby()->languageCode());
+			if ($resolved instanceof Page) {
+				$result = $resolved;
+			}
+		}
+
+		if (!$result instanceof Page && $result !== null && $result !== false) {
+			return $result;
+		}
+
+		$page = $result instanceof Page ? $result : kirby()->site()->errorPage();
+		if ($page === null) {
+			return $result;
+		}
+
+		$class = Seo::option('components.agentic');
+		$llmContent = new $class($page);
+		if ($llmContent->enabled() === false) {
+			return $result;
+		}
+
+		$wantsMarkdown = $isMarkdownPath
+			|| $llmContent->prefersMarkdown(kirby()->request()->header('Accept'));
+
+		if ($result instanceof Page) {
+			if ($wantsMarkdown) {
+				return $llmContent->markdownResponse(kirby()->language(), $method) ?? $result;
+			}
+
+			if ($llmContent->available()) {
+				$llmContent->addDiscoveryHeaders();
+			}
+
+			return $result;
+		}
+
+		return $wantsMarkdown
+			? $llmContent->notFoundResponse(kirby()->language(), $method)
+			: $result;
+	},
 ];

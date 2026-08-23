@@ -1,9 +1,8 @@
 <?php
 
 /**
- * @var \Kirby\Cms\Pages $pages
+ * @var array $entries
  * @var \Kirby\Cms\Site $site
- * @var \tobimori\Seo\LlmContent $llmContent
  */
 
 $clean = fn (string $value) => preg_replace('/\s+/', ' ', strip_tags($value));
@@ -19,12 +18,12 @@ if ($description = $site->description()->value()) {
 
 $lines[] = '## Pages';
 
-foreach ($pages as $item) {
-	$title = str_replace(['[', ']'], ['\\[', '\\]'], $item->title()->value());
-	$line = '- [' . $title . '](' . $llmContent->markdownUrl($item) . ')';
+foreach ($entries as $entry) {
+	$title = str_replace(['[', ']'], ['\\[', '\\]'], $entry['title']);
+	$line = '- [' . $title . '](' . $entry['url'] . ')';
 
-	if ($description = $item->metadata()->metaDescription()->value()) {
-		$line .= ': ' . $clean($description);
+	if ($entry['description'] !== '') {
+		$line .= ': ' . $clean($entry['description']);
 	}
 
 	$lines[] = '';

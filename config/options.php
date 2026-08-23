@@ -8,6 +8,7 @@ use tobimori\Seo\Ai;
 use tobimori\Seo\IndexNow;
 use tobimori\Seo\SchemaSingleton;
 use tobimori\Seo\GoogleSearchConsole;
+use tobimori\Seo\LlmContent;
 
 return [
 	// if you want to extend some of the built-in classes, you can overwrite them using the components config option
@@ -18,6 +19,24 @@ return [
 		'indexnow' => IndexNow::class,
 		'schema' => SchemaSingleton::class,
 		'gsc' => GoogleSearchConsole::class,
+		'agentic' => LlmContent::class,
+	],
+	'agentic' => [
+		'enabled' => true,
+		'markdown' => [
+			'enabled' => true,
+			'auto' => false,
+			'selectors' => [
+				'[data-agentic-content]',
+				'main',
+				'article',
+			],
+			'converter' => null,
+		],
+		'llmsTxt' => [
+			'enabled' => true,
+			'pages' => null,
+		],
 	],
 	'cache.searchConsole' => true,
 	'cache.indexnow' => true,

@@ -51,6 +51,8 @@ App::plugin(
 			'seo/robots.txt' => __DIR__ . '/snippets/robots.txt.php',
 		],
 		'templates' => [
+			'error.md' => __DIR__ . '/templates/error.md.php',
+			'llms.txt' => __DIR__ . '/templates/llms.txt.php',
 			'sitemap' => __DIR__ . '/templates/sitemap.php',
 			'sitemap.xml' => __DIR__ . '/templates/sitemap.xml.php',
 			'sitemap.xsl' => __DIR__ . '/templates/sitemap.xsl.php',
