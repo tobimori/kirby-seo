@@ -23,6 +23,7 @@
 	},
 	"suggest": {
 		"ext-imagick": "Rasterize non-resizable images (SVG, etc.) for AI alt text generation",
+		"league/html-to-markdown": "Enable automatic conversion for LLM-friendly Markdown responses",
 		"tobimori/kirby-queues": "Enable background processing support",
 		"getkirby/cli": "Enable background processing support",
 		"spatie/schema-org": "Enable the Schema.org support"

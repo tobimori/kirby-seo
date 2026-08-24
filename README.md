@@ -23,6 +23,7 @@
 - 💻 Even better and easier Panel UI
 - ✨ AI assist for writing meta tags
 - 🔘 IndexNow support
+- 🧭 LLM-friendly content with `llms.txt` and Markdown page versions
 
 ## Get started
 
