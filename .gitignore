@@ -29,11 +29,5 @@ index.dev.mjs
 /vendor/getkirby/composer-installer
 i18n.cache
 
-# playground runtime data
-/playground/media/
-/playground/site/accounts/
-/playground/site/cache/
-/playground/site/sessions/
-
 # happens because of installing the plugin as dev dependency
 site/plugins/kirby-queues
