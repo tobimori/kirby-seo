@@ -760,6 +760,11 @@ class Meta
 	{
 		$path = App::instance()->request()->url()->toString();
 		$matches = Str::match($path, "/pages\/([a-zA-Z0-9-_+]+)\/?/m");
+
+		if (!isset($matches[1])) {
+			return null;
+		}
+
 		$segments = Str::split($matches[1], '+');
 
 		$page = App::instance()->site();
