@@ -5,6 +5,7 @@ use Kirby\Cms\Find;
 use Kirby\Cms\ModelWithContent;
 use Kirby\Cms\Page;
 use Kirby\Cms\Site;
+use Kirby\Panel\Panel;
 use Kirby\Toolkit\I18n;
 use tobimori\Seo\Buttons\OverviewLanguagesButton;
 use tobimori\Seo\Buttons\RobotsViewButton;
@@ -21,10 +22,18 @@ return [
 		'link' => 'seo',
 		'menu' => fn () => OverviewView::canAccess(),
 		'views' => [
-			'seo.overview' => [
+			'seo' => [
 				'pattern' => 'seo',
+				'action' => fn () => Panel::go('seo/pages')
+			],
+			'seo.pages' => [
+				'pattern' => 'seo/pages',
 				'action' => fn () => (new OverviewView())->load()
-			]
+			],
+			'seo.tab' => [
+				'pattern' => 'seo/(images|links)',
+				'action' => fn (string $tab) => (new OverviewView())->tab($tab)
+			],
 		],
 		'buttons' => [
 			'page.robots' => fn (Page $page) => Seo::option('robots.enabled') ? new RobotsViewButton($page) : null,

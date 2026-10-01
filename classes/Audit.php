@@ -28,6 +28,23 @@ class Audit
 	];
 
 	/**
+	 * Severity of the issue types: `negative` needs fixing, `notice` is acceptable
+	 */
+	public const SEVERITY = [
+		'descriptionMissing' => 'negative',
+		'descriptionDuplicate' => 'negative',
+		'titleDuplicate' => 'negative',
+		'descriptionFallback' => 'notice',
+		'titleLength' => 'notice',
+		'descriptionLength' => 'notice',
+	];
+
+	/**
+	 * Issue types are prefixed with the kind of value they're about
+	 */
+	public const KINDS = ['title', 'description'];
+
+	/**
 	 * Cascade methods that provide a page-specific value,
 	 * anything else (parent, site, defaults) is a fallback shared with other pages
 	 */
@@ -72,11 +89,56 @@ class Audit
 	}
 
 	/**
-	 * Whether the page has an issue of the given type
+	 * Whether the page has an issue of the given type, or of the given kind (any title/description issue)
 	 */
 	public function has(Page $page, string $type): bool
 	{
-		return in_array($type, array_column($this->page($page)['issues'] ?? [], 'type'), true);
+		foreach (array_column($this->page($page)['issues'] ?? [], 'type') as $issue) {
+			if ($issue === $type || (in_array($type, self::KINDS, true) && str_starts_with($issue, $type))) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Number of checked pages & their distribution per kind (title/description):
+	 * pages count once, by their most severe issue of that kind
+	 *
+	 * @return array{checked: int, skipped: int, title: array{ok: int, notice: int, negative: int}, description: array{ok: int, notice: int, negative: int}}
+	 */
+	public function stats(): array
+	{
+		$distribution = ['ok' => 0, 'notice' => 0, 'negative' => 0];
+		$stats = ['checked' => 0, 'skipped' => 0];
+
+		foreach (self::KINDS as $kind) {
+			$stats[$kind] = $distribution;
+		}
+
+		foreach ($this->result()['pages'] as $page) {
+			if (!isset($page['issues'])) {
+				$stats['skipped']++;
+				continue;
+			}
+
+			$stats['checked']++;
+
+			foreach (self::KINDS as $kind) {
+				$severity = 'ok';
+
+				foreach ($page['issues'] as $issue) {
+					if (str_starts_with($issue['type'], $kind)) {
+						$severity = self::SEVERITY[$issue['type']] === 'negative' ? 'negative' : ($severity === 'negative' ? 'negative' : 'notice');
+					}
+				}
+
+				$stats[$kind][$severity]++;
+			}
+		}
+
+		return $stats;
 	}
 
 	public function result(): array

@@ -17,5 +17,15 @@ return [
 			'method' => 'POST',
 			'action' => fn () => (new OverviewView())->save((array)App::instance()->request()->get('changes', []))
 		],
+		[
+			'pattern' => 'seo/overview/publish',
+			'method' => 'POST',
+			'action' => fn () => (new OverviewView())->publish((array)App::instance()->request()->get('ids', []))
+		],
+		[
+			'pattern' => 'seo/overview/discard',
+			'method' => 'POST',
+			'action' => fn () => (new OverviewView())->discard((array)App::instance()->request()->get('ids', []))
+		],
 	]
 ];

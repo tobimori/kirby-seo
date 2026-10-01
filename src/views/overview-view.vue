@@ -1,6 +1,8 @@
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref, watch, usePanel, useHelpers } from "kirbyuse"
 
+import { SEVERITY, SEVERITY_ICONS } from "../utils/checks.js"
+
 const props = defineProps({
 	buttons: {
 		type: Array,
@@ -21,6 +23,10 @@ const props = defineProps({
 		type: Object,
 		default: () => ({})
 	},
+	/** Health of titles, descriptions & alt texts, shown above the tabs */
+	stats: Object,
+	tab: String,
+	tabs: Array,
 	/** Active issue filter */
 	issue: String,
 	/** Active filter for pages sharing a title/description: `{ hash, kind, text, count }` */
@@ -51,8 +57,6 @@ const selected = ref([])
 // the query is merged with the current one, so empty strings are used to reset values
 const reload = (query) => panel.view.reload({ query })
 
-// api path of a row's model, e.g. `pages/blog+post`
-const apiPath = (link) => link.replace(/^\//, "")
 const toText = (html) => new window.DOMParser().parseFromString(html, "text/html").body.textContent
 
 /**
@@ -75,6 +79,7 @@ const parseKey = (key) => {
 const updates = ref({})
 const serverChanges = ref(props.changes)
 const serverSummary = ref(props.summary)
+const serverStats = ref(props.stats)
 
 watch(
 	() => props.rows,
@@ -88,10 +93,17 @@ watch(
 	() => props.summary,
 	(value) => (serverSummary.value = value)
 )
+watch(
+	() => props.stats,
+	(value) => (serverStats.value = value)
+)
 
 const serverRow = (row) => updates.value[row.id] ?? row
 
-const applyResponse = ({ rows = {}, changes, summary } = {}, language = currentLanguage()) => {
+const applyResponse = (
+	{ rows = {}, changes, summary, stats } = {},
+	language = currentLanguage()
+) => {
 	// the response of a request made before switching languages
 	if (language !== currentLanguage()) {
 		return
@@ -105,6 +117,11 @@ const applyResponse = ({ rows = {}, changes, summary } = {}, language = currentL
 
 	if (summary) {
 		serverSummary.value = summary
+	}
+
+	// only the stats of the pages, the alt texts are updated when loading the view
+	if (stats) {
+		serverStats.value = { ...serverStats.value, ...stats }
 	}
 }
 
@@ -308,34 +325,32 @@ const targets = computed(() =>
 const isProcessing = ref(false)
 
 const runOnChanges = async (action, pages) => {
-	const errors = []
 	isProcessing.value = true
 
-	// a few requests at a time, so many changes don't flood the server
-	for (let i = 0; i < pages.length; i += 5) {
-		const results = await Promise.allSettled(
-			pages.slice(i, i + 5).map((page) => panel.api.post(`${apiPath(page.link)}/changes/${action}`))
-		)
-		errors.push(
-			...results.filter((result) => result.status === "rejected").map((result) => result.reason)
-		)
+	try {
+		const response = await panel.api.post(`seo/overview/${action}`, {
+			ids: pages.map((page) => page.id)
+		})
+		applyResponse(response)
+
+		const errors = Object.values(response.errors ?? {})
+
+		if (errors.some(isLockError)) {
+			panel.content.lockDialog(errors.find(isLockError).details)
+		} else if (errors.length) {
+			panel.notification.error(errors[0].message)
+		} else {
+			panel.notification.success(
+				panel.t(`seo.overview.changes.${action === "publish" ? "published" : "discarded"}`, {
+					count: pages.length
+				})
+			)
+		}
+	} catch (error) {
+		panel.notification.error(error)
+	} finally {
+		isProcessing.value = false
 	}
-
-	isProcessing.value = false
-
-	if (errors.some(isLockError)) {
-		panel.content.lockDialog(errors.find(isLockError).details)
-	} else if (errors.length) {
-		panel.notification.error(errors[0])
-	} else {
-		panel.notification.success(
-			panel.t(`seo.overview.changes.${action === "publish" ? "published" : "discarded"}`, {
-				count: pages.length
-			})
-		)
-	}
-
-	await refreshRows()
 }
 
 // writes pending edits first, as they might add pages to the list of changes
@@ -354,8 +369,8 @@ const confirm = ({ component, text, submitButton }) =>
 			props: { size: "medium", text, submitButton },
 			on: {
 				submit: () => {
-					panel.dialog.close()
 					resolve(true)
+					panel.dialog.close()
 				},
 				cancel: () => resolve(false),
 				close: () => resolve(false)
@@ -373,21 +388,6 @@ const onSave = async (event) => {
 	const pages = await prepare()
 
 	if (pages.length === 0) {
-		return
-	}
-
-	// publishing also includes changes to other fields, so pages that haven't been
-	// edited in this view (e.g. earlier in their page view) need a confirmation
-	if (
-		pages.some((page) => !touched.has(touchedKey(page.link))) &&
-		!(await confirm({
-			component: "k-text-dialog",
-			text: panel.t(`seo.overview.changes.publish.confirm.${scope.value}`, {
-				count: pages.length
-			}),
-			submitButton: { theme: "notice", icon: "check", text: panel.t("save") }
-		}))
-	) {
 		return
 	}
 
@@ -533,15 +533,6 @@ const onPaginate = ({ page }) => reload({ page: String(page) })
 /**
  * Checks: the filter dropdown shows the number of pages per issue type & filters the table by them
  */
-const SEVERITY = {
-	descriptionMissing: "negative",
-	descriptionDuplicate: "negative",
-	titleDuplicate: "negative",
-	descriptionFallback: "notice",
-	titleLength: "notice",
-	descriptionLength: "notice"
-}
-
 const checksDropdown = ref(null)
 
 // all checks with the number of affected pages, for the checks dropdown
@@ -586,24 +577,25 @@ function filterGroup(group) {
 </script>
 
 <template>
-	<k-panel-inside class="k-seo-overview-view">
-		<k-header>
-			{{ $t("seo.overview.title") }}
+	<k-seo-view
+		:buttons="buttons"
+		:stats="serverStats"
+		:tab="tab"
+		:tabs="tabs"
+		class="k-seo-overview-view"
+		@filter="setFilter"
+	>
+		<template #buttons>
+			<k-seo-changes-controls
+				:changes="targets"
+				:is-processing="isProcessing || isSaving"
+				@discard="onDiscard"
+				@submit="onSave"
+			/>
+		</template>
 
-			<template #buttons>
-				<k-view-buttons :buttons="buttons" />
-				<k-seo-changes-controls
-					:changes="targets"
-					:is-processing="isProcessing || isSaving"
-					@discard="onDiscard"
-					@submit="onSave"
-				/>
-			</template>
-		</k-header>
-
-		<!-- same as the header of Kirby's pages sections -->
-		<header class="k-seo-overview-bar">
-			<k-button-group v-if="selected.length" layout="collapsed" class="k-seo-overview-selection">
+		<template #toolbar>
+			<k-button-group v-if="selected.length" layout="collapsed">
 				<k-button
 					:text="$t('seo.overview.selection.count', { count: selected.length })"
 					size="xs"
@@ -619,47 +611,45 @@ function filterGroup(group) {
 			</k-button-group>
 
 			<!-- separate buttons, like in the header of Kirby's sections -->
-			<k-button-group class="k-seo-overview-buttons">
+			<k-button
+				:text="$t('filter')"
+				:current="isSearching"
+				icon="filter"
+				size="xs"
+				variant="filled"
+				responsive
+				@click="toggleSearch"
+			/>
+			<!-- the active filter & its reset belong together -->
+			<k-button-group layout="collapsed">
 				<k-button
-					:text="$t('filter')"
-					:current="isSearching"
-					icon="filter"
+					:text="checksLabel"
+					:title="group ? group.text : null"
+					:theme="issue || group ? 'info' : null"
+					:dropdown="true"
+					icon="checklist"
 					size="xs"
 					variant="filled"
-					responsive
-					@click="toggleSearch"
+					class="k-seo-overview-checks-button"
+					@click="checksDropdown.toggle()"
 				/>
-				<!-- the active filter & its reset belong together -->
-				<k-button-group layout="collapsed">
-					<k-button
-						:text="checksLabel"
-						:title="group ? group.text : null"
-						:theme="issue || group ? 'info' : null"
-						:dropdown="true"
-						icon="checklist"
-						size="xs"
-						variant="filled"
-						class="k-seo-overview-checks-button"
-						@click="checksDropdown.toggle()"
-					/>
-					<k-button
-						v-if="issue || group"
-						:title="$t('seo.overview.checks.filter.clear')"
-						icon="cancel-small"
-						size="xs"
-						variant="filled"
-						theme="info"
-						@click="setFilter()"
-					/>
-				</k-button-group>
 				<k-button
-					:title="$t('seo.overview.columns.toggle')"
-					icon="layout-columns"
+					v-if="issue || group"
+					:title="$t('seo.overview.checks.filter.clear')"
+					icon="cancel-small"
 					size="xs"
 					variant="filled"
-					@click="columnsDropdown.toggle()"
+					theme="info"
+					@click="setFilter()"
 				/>
 			</k-button-group>
+			<k-button
+				:title="$t('seo.overview.columns.toggle')"
+				icon="layout-columns"
+				size="xs"
+				variant="filled"
+				@click="columnsDropdown.toggle()"
+			/>
 
 			<k-dropdown-content ref="checksDropdown" align-x="end">
 				<k-dropdown-item :current="!issue && !group" icon="page" @click="setFilter()">
@@ -672,7 +662,7 @@ function filterGroup(group) {
 					:current="issue === type"
 					:disabled="count === 0 && issue !== type"
 					:theme="`${severity}-icon`"
-					icon="alert"
+					:icon="SEVERITY_ICONS[severity]"
 					class="k-seo-overview-checks-item"
 					@click="setFilter(type)"
 				>
@@ -687,7 +677,7 @@ function filterGroup(group) {
 				:search="false"
 				@input="onColumns"
 			/>
-		</header>
+		</template>
 
 		<k-input
 			v-if="isSearching"
@@ -718,22 +708,10 @@ function filterGroup(group) {
 			@sort="onSort"
 			@paginate="onPaginate"
 		/>
-	</k-panel-inside>
+	</k-seo-view>
 </template>
 
 <style>
-.k-seo-overview-bar {
-	display: flex;
-	justify-content: flex-end;
-	align-items: center;
-	gap: var(--spacing-3);
-	margin-bottom: var(--spacing-2);
-}
-
-.k-seo-overview-selection {
-	margin-inline-end: auto;
-}
-
 /* pages without a translation in the current language show the content of the default language */
 .k-seo-overview-view tbody tr:has(.k-seo-page-cell[data-translated="false"]) {
 	.k-seo-page-cell-title,

@@ -18,6 +18,8 @@ import SeoTablePageCell from "./components/table/page-cell.vue"
 import SeoTableRobotsCell from "./components/table/robots-cell.vue"
 import SeoTableSelectCell from "./components/table/select-cell.vue"
 import OverviewView from "./views/overview-view.vue"
+import SeoView from "./components/seo-view.vue"
+import TabView from "./views/tab-view.vue"
 
 panel.plugin("tobimori/seo", {
 	icons: {
@@ -40,6 +42,8 @@ panel.plugin("tobimori/seo", {
 		"k-gsc-drawer": GscDrawer,
 		"k-seo-changes-controls": ChangesControls,
 		"k-seo-overview-view": OverviewView,
+		"k-seo-tab-view": TabView,
+		"k-seo-view": SeoView,
 		"k-seo-table": SeoTable,
 		// cell types for k-table, used via `type: seo-*` in column definitions
 		"k-table-seo-checks-cell": SeoTableChecksCell,

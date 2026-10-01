@@ -6,6 +6,8 @@ let active = null
 <script setup>
 import { computed, nextTick, onBeforeUnmount, ref, usePanel } from "kirbyuse"
 
+import { SEVERITY, SEVERITY_ICONS } from "../../utils/checks.js"
+
 const props = defineProps({
 	column: Object,
 	row: Object,
@@ -15,15 +17,6 @@ const props = defineProps({
 
 const panel = usePanel()
 const id = `k-seo-checks-${props.row.id.replace(/[^a-z0-9_-]/gi, "-")}`
-
-const SEVERITY = {
-	descriptionMissing: "negative",
-	descriptionDuplicate: "negative",
-	titleDuplicate: "negative",
-	descriptionFallback: "notice",
-	titleLength: "notice",
-	descriptionLength: "notice"
-}
 
 const label = (issue) =>
 	panel.t(
@@ -250,7 +243,7 @@ onBeforeUnmount(close)
 			class="k-button"
 			@click="onClick"
 		>
-			<span class="k-button-icon"><k-icon type="alert" /></span>
+			<span class="k-button-icon"><k-icon :type="SEVERITY_ICONS[severity]" /></span>
 		</button>
 		<div
 			:id="id"
@@ -265,7 +258,7 @@ onBeforeUnmount(close)
 				v-for="issue in issues"
 				:key="issue.type"
 				:theme="`${issue.severity}-icon`"
-				icon="alert"
+				:icon="SEVERITY_ICONS[issue.severity]"
 				class="k-seo-checks-popover-item"
 				@click="onFilter(issue)"
 			>

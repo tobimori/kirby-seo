@@ -2,13 +2,17 @@
 
 namespace tobimori\Seo\Views;
 
+use Closure;
 use Collator;
 use Kirby\Api\Controller\Changes as ChangesController;
 use Kirby\Cms\App;
+use Kirby\Cms\File;
 use Kirby\Cms\Find;
 use Kirby\Cms\Page;
 use Kirby\Cms\Pages;
+use Kirby\Cms\Language;
 use Kirby\Content\Changes;
+use Kirby\Content\LockedContentException;
 use Kirby\Content\VersionId;
 use Kirby\Exception\Exception;
 use Kirby\Exception\NotFoundException;
@@ -19,6 +23,7 @@ use Kirby\Toolkit\I18n;
 use Kirby\Toolkit\Pagination;
 use Kirby\Toolkit\Str;
 use Kirby\Toolkit\V;
+use tobimori\Seo\AltText;
 use tobimori\Seo\Audit;
 use tobimori\Seo\Meta;
 use tobimori\Seo\Seo;
@@ -37,6 +42,8 @@ class OverviewView
 	// cheap values first, so searching can skip resolving the meta cascade for many pages
 	public const SEARCHABLE = ['id', 'title', 'template', 'metaTitle', 'metaDescription', 'ogDescription'];
 	public const LIMIT = 50;
+	// tabs & their icons
+	public const TABS = ['pages' => 'page', 'images' => 'image', 'links' => 'url'];
 
 	protected App $kirby;
 
@@ -62,9 +69,9 @@ class OverviewView
 	}
 
 	/**
-	 * Unsaved changes across all pages (not only the current table page)
-	 * that can be published by the current user, like the save/discard buttons of a page view.
-	 * Uses Kirby's tracked changes (same as the Panel's changes dialog) instead of checking every page
+	 * Pages with unsaved changes of their meta fields (not only on the current table page)
+	 * that can be published by the current user. Uses Kirby's tracked changes
+	 * (same as the Panel's changes dialog) instead of checking every page
 	 */
 	public function changes(): array
 	{
@@ -81,7 +88,7 @@ class OverviewView
 
 			if (
 				$this->isListed($page)
-				&& $version->exists('current')
+				&& $this->metaChanges($page) !== []
 				&& !$version->isLocked('*')
 				&& $page->permissions()->can('update')
 			) {
@@ -120,6 +127,7 @@ class OverviewView
 				'changes' => $this->changes(),
 				// edits might fix (or cause) issues of other pages, e.g. duplicates
 				'summary' => $this->audit()->summary(),
+				'stats' => $this->audit()->stats(),
 			];
 		});
 	}
@@ -184,6 +192,127 @@ class OverviewView
 		];
 	}
 
+	/**
+	 * Publishes the unsaved meta fields of the given pages,
+	 * other unsaved fields stay in their changes versions
+	 */
+	public function publish(array $ids): array
+	{
+		return $this->apply($ids, function (Page $page) {
+			if ($values = $this->metaChanges($page)) {
+				$page = $page->update(input: $values, languageCode: Language::ensure('current')->code(), validate: true);
+				$this->resetMeta($page);
+			}
+		});
+	}
+
+	/**
+	 * Discards the unsaved meta fields of the given pages,
+	 * other unsaved fields stay in their changes versions
+	 */
+	public function discard(array $ids): array
+	{
+		return $this->apply($ids, function (Page $page) {
+			if (!$page->permissions()->can('update')) {
+				throw new PermissionException(key: 'version.discard.permission');
+			}
+
+			$this->resetMeta($page);
+		});
+	}
+
+	protected function apply(array $ids, Closure $action): array
+	{
+		if (!static::canAccess()) {
+			throw new PermissionException(key: 'access.view');
+		}
+
+		$ids = array_values(array_filter($ids, 'is_string'));
+		$errors = [];
+
+		foreach ($ids as $id) {
+			try {
+				$page = Find::page($id);
+
+				if (!$this->isListed($page)) {
+					throw new NotFoundException(key: 'page.notFound', data: ['slug' => $id]);
+				}
+
+				$lock = $page->version('changes')->lock('*');
+
+				if ($lock->isLocked()) {
+					throw new LockedContentException(lock: $lock, key: 'content.lock.update');
+				}
+
+				$action($page);
+			} catch (Exception $e) {
+				$errors[$id] = [
+					'key' => $e->getKey(),
+					'message' => $e->getMessage(),
+					'details' => $e->getDetails(),
+				];
+			}
+		}
+
+		return [
+			...$this->rows($ids),
+			'errors' => $errors,
+		];
+	}
+
+	/**
+	 * Unsaved values of the meta fields that differ from the published ones
+	 */
+	protected function metaChanges(Page $page): array
+	{
+		$language = Language::ensure('current');
+		$changes = $page->version('changes');
+
+		if (!$changes->exists($language)) {
+			return [];
+		}
+
+		$unsaved = $changes->read($language) ?? [];
+		$latest = $page->version('latest')->read($language) ?? [];
+		$values = [];
+
+		foreach (self::EDITABLE as $field) {
+			$key = strtolower($field);
+
+			if (array_key_exists($key, $unsaved) && (string)$unsaved[$key] !== (string)($latest[$key] ?? '')) {
+				$values[$key] = $unsaved[$key];
+			}
+		}
+
+		return $values;
+	}
+
+	/**
+	 * Sets the meta fields of the changes version back to the published values
+	 * and removes the changes version if nothing else has changed
+	 */
+	protected function resetMeta(Page $page): void
+	{
+		$language = Language::ensure('current');
+		$changes = $page->version('changes');
+
+		if (!$changes->exists($language)) {
+			return;
+		}
+
+		$latest = $page->version('latest')->read($language) ?? [];
+		$keys = array_map('strtolower', self::EDITABLE);
+
+		$changes->update(
+			array_combine($keys, array_map(fn ($key) => $latest[$key] ?? null, $keys)),
+			$language
+		);
+
+		if ($changes->isIdentical('latest', $language)) {
+			$changes->delete($language);
+		}
+	}
+
 	public function load(): array
 	{
 		if (!static::canAccess()) {
@@ -195,8 +324,9 @@ class OverviewView
 			$search = trim($request->get('search', ''));
 			$sort = in_array($request->get('sort'), self::SORTABLE, true) ? $request->get('sort') : null;
 			$dir = $request->get('dir') === 'desc' ? 'desc' : 'asc';
-			// show only pages with the given issue type, or sharing the same title/description
-			$issue = in_array($request->get('issue'), Audit::TYPES, true) ? $request->get('issue') : null;
+			// show only pages with the given issue type (or any title/description issue),
+			// or sharing the same title/description
+			$issue = in_array($request->get('issue'), [...Audit::TYPES, ...Audit::KINDS], true) ? $request->get('issue') : null;
 			$group = $this->audit()->group($hash = (string)$request->get('group')) ? $hash : null;
 
 			$pages = $this->pages()->values();
@@ -234,17 +364,7 @@ class OverviewView
 				'component' => 'k-seo-overview-view',
 				'title' => I18n::translate('seo.overview.title'),
 				'props' => [
-					// `panel.content` expects the content props of a model view, e.g. the languages dropdown
-					// (and plugins building on it) unlocks the content via `{api}/changes/unlock` before
-					// switching. The view buttons are bound to the site, so is this; the overview itself
-					// has no content: edits are saved per page & their locks are released by the view
-					'api' => 'site',
-					'lock' => ['isLocked' => false],
-					'versions' => ['latest' => [], 'changes' => []],
-					// configurable via `panel.viewButtons.seo.overview`, like the views of Kirby itself
-					'buttons' => fn () => ViewButtons::view('seo.overview', model: $this->kirby->site())
-						->defaults('languages')
-						->render(),
+					...$this->layout('pages'),
 					'columns' => $this->columns(),
 					// only the visible rows resolve all of their values
 					'rows' => array_map(
@@ -271,6 +391,94 @@ class OverviewView
 				]
 			];
 		});
+	}
+
+	/**
+	 * Tabs that don't have their own view yet
+	 */
+	public function tab(string $tab): array
+	{
+		if (!static::canAccess()) {
+			throw new PermissionException(key: 'access.view');
+		}
+
+		return VersionId::render('changes', fn () => [
+			'component' => 'k-seo-tab-view',
+			'title' => I18n::translate('seo.overview.title'),
+			'props' => $this->layout($tab),
+		]);
+	}
+
+	/**
+	 * Props shared by all tabs: header buttons, stats & tabs
+	 */
+	protected function layout(string $tab): array
+	{
+		return [
+			// `panel.content` expects the content props of a model view, e.g. the languages dropdown
+			// (and plugins building on it) unlocks the content via `{api}/changes/unlock` before
+			// switching. The view buttons are bound to the site, so is this; the overview itself
+			// has no content: edits are saved per page & their locks are released by the view
+			'api' => 'site',
+			'lock' => ['isLocked' => false],
+			'versions' => ['latest' => [], 'changes' => []],
+			// configurable via `panel.viewButtons.seo.overview`, like the views of Kirby itself
+			'buttons' => fn () => ViewButtons::view('seo.overview', model: $this->kirby->site())
+				->defaults('languages')
+				->render(),
+			'stats' => [
+				...$this->audit()->stats(),
+				'images' => $this->imageStats(),
+			],
+			'tab' => $tab,
+			'tabs' => array_map(fn ($name, $icon) => [
+				'name' => $name,
+				'label' => I18n::translate("seo.overview.tabs.{$name}"),
+				'icon' => $icon,
+				'link' => "seo/{$name}",
+			], array_keys(self::TABS), self::TABS),
+		];
+	}
+
+	/**
+	 * Alt texts of all images of published pages & the site: `alt-text` fields,
+	 * or plain `alt` fields for blueprints without one (supported by `toAltText()` as well)
+	 */
+	protected function imageStats(): array
+	{
+		$stats = ['total' => 0, 'missing' => 0, 'ai' => 0];
+		$fields = [];
+		$files = $this->kirby->site()->files()->add($this->kirby->site()->index()->files());
+
+		foreach ($files as $file) {
+			if ($file->type() !== 'image') {
+				continue;
+			}
+
+			$template = $file->template() ?? 'default';
+			$fields[$template] ??= $this->altFields($file);
+
+			foreach ($fields[$template] as $name) {
+				$alt = AltText::parse($file->content()->get($name)->value());
+				$stats['total']++;
+
+				if ($alt->isMissing()) {
+					$stats['missing']++;
+				} elseif ($alt->isAiGenerated()) {
+					$stats['ai']++;
+				}
+			}
+		}
+
+		return $stats;
+	}
+
+	protected function altFields(File $file): array
+	{
+		$fields = $file->blueprint()->fields();
+		$alt = array_keys(array_filter($fields, fn ($field) => ($field['type'] ?? null) === 'alt-text'));
+
+		return $alt ?: (isset($fields['alt']) ? ['alt'] : []);
 	}
 
 	/**
@@ -472,6 +680,7 @@ class OverviewView
 	{
 		$version = $page->version('changes');
 		$hasChanges = $version->exists('current');
+		$hasMetaChanges = $this->metaChanges($page) !== [];
 
 		// someone else is editing the page right now
 		$lock = $version->lock('*');
@@ -482,7 +691,7 @@ class OverviewView
 
 		return [
 			...(new PageItem(page: $page))->props(),
-			'changes' => $hasChanges,
+			'changes' => $hasMetaChanges,
 			'editable' => $editable,
 			'lock' => $lock,
 			'selectable' => $lock === null,
@@ -491,7 +700,7 @@ class OverviewView
 				'href' => $page->panel()->url(true),
 				'path' => '/' . $page->uri(),
 				// the lock already tells that someone else is editing
-				'changes' => $hasChanges && $lock === null,
+				'changes' => $hasMetaChanges && $lock === null,
 				// pages without a translation in the current language show the content
 				// of the default language (like everywhere in Kirby), until someone edits them
 				'translated' => $hasChanges || $page->version('latest')->exists('current'),
