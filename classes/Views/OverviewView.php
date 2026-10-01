@@ -54,6 +54,7 @@ class OverviewView
 	protected array $resolved = [];
 	protected Audit|null $audit = null;
 	protected Pages|null $pages = null;
+	protected bool|null $ai = null;
 
 	public function __construct()
 	{
@@ -377,8 +378,10 @@ class OverviewView
 						'limit' => $pagination->limit(),
 						'total' => $pagination->total(),
 					],
+					'ids' => array_map(fn (Page $page) => $page->id(), $pages),
 					'summary' => $this->audit()->summary(),
 					'issue' => $issue,
+					'ai' => $this->canUseAi(),
 					'group' => $group ? [
 						'hash' => $group,
 						'kind' => $this->audit()->group($group)['kind'],
@@ -732,7 +735,14 @@ class OverviewView
 			'placeholder' => Str::unhtml((string)$fallback['field']->value()),
 			'placeholderSource' => $fallback['source'],
 			'editable' => $editable && $page->blueprint()->field($key) !== null,
+			'ai' => $editable && $this->canUseAi() && !empty($page->blueprint()->field($key)['ai'] ?? false),
 		];
+	}
+
+	protected function canUseAi(): bool
+	{
+		return $this->ai ??= Seo::option('components.ai')::enabled()
+			&& $this->kirby->user()?->role()->permissions()->for('tobimori.seo', 'ai') !== false;
 	}
 
 	protected function ogImage(Page $page): array|null

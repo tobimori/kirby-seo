@@ -8,9 +8,9 @@ const props = defineProps({
 })
 
 const input = ref(null)
-const sourceTag = ref(null)
+const aiButton = ref(null)
+const display = ref(null)
 const draft = ref("")
-const indent = ref(null)
 // prevents saving twice, e.g. on Enter and the following focusout
 const committed = ref(false)
 
@@ -23,43 +23,33 @@ const rangeEdge = computed(() => props.column.rangeEdge?.(props.row) ?? null)
 // value typed into the range editor, shown live in all selected cells
 const rangeText = computed(() => (inRange.value ? props.column.rangeText() : null))
 
-// while the field is empty, the pill stays in place and the placeholder is indented like
-// the inherited text before, so nothing moves when switching between display & editing
-const placeholderSource = computed(() =>
-	!draft.value && props.value.placeholderSource && props.value.placeholderSource !== "fields"
-		? props.value.placeholderSource
-		: null
-)
-
-// width of the pill including its margin, as it is when flowing inline with the text
-const measureIndent = () => {
-	const el = sourceTag.value?.$el
-	indent.value =
-		placeholderSource.value && el
-			? `${el.getBoundingClientRect().width + parseFloat(window.getComputedStyle(el).marginInlineEnd)}px`
-			: null
-}
-
-watch(placeholderSource, async () => {
-	await nextTick()
-	measureIndent()
-})
-
 watch(
 	editing,
-	async (value) => {
+	async (value, previous) => {
 		if (!value) {
+			if (previous) {
+				await nextTick()
+
+				if (window.document.activeElement === window.document.body) {
+					display.value?.focus()
+				}
+			}
+
 			return
 		}
 
 		draft.value = props.value.value ?? ""
 		committed.value = false
 		await nextTick()
-		measureIndent()
 		input.value?.focus()
 	},
 	{ immediate: true }
 )
+
+const generate = () => {
+	commit()
+	props.column.generate(props.row)
+}
 
 const commit = (direction = null) => {
 	if (committed.value) {
@@ -83,7 +73,23 @@ const onSelectAll = (event) => {
 }
 
 const onKeydown = (event) => {
-	if (event.key === "a" && (event.metaKey || event.ctrlKey)) {
+	const onAiButton = aiButton.value?.$el?.contains(event.target) ?? false
+
+	if (onAiButton && (event.key === "Enter" || event.key === " ")) {
+		return
+	}
+
+	if (event.key === "Tab" && onAiButton && event.shiftKey) {
+		event.preventDefault()
+		return input.value?.focus()
+	}
+
+	if (event.key === "Tab" && !onAiButton && !event.shiftKey && aiButton.value) {
+		event.preventDefault()
+		return aiButton.value.$el.focus()
+	}
+
+	if (event.key === "a" && (event.metaKey || event.ctrlKey) && !onAiButton) {
 		return onSelectAll(event)
 	}
 
@@ -143,33 +149,33 @@ const onFocusout = (event) => {
 		@keydown.capture="onKeydown"
 		@focusout="onFocusout"
 	>
-		<div :style="{ '--source-indent': indent }" class="k-seo-meta-cell-editor">
-			<!-- a line of text, so the pill aligns to the baseline exactly like in the display state -->
-			<span v-if="placeholderSource" class="k-seo-meta-cell-source-line">
-				<k-tag
-					ref="sourceTag"
-					:text="$t(`seo.overview.sourceLabel.${placeholderSource}`)"
-					element="span"
-					theme="light"
-					class="k-seo-meta-cell-source"
-				/>&#8203;
-			</span>
-			<k-seo-writer-input
-				ref="input"
-				:value="draft"
-				:placeholder="value.placeholder"
-				:inline="true"
-				:marks="false"
-				:nodes="false"
-				class="k-seo-meta-cell-input"
-				@input="onInput"
-			/>
-		</div>
+		<k-seo-writer-input
+			ref="input"
+			:value="draft"
+			:placeholder="value.placeholder"
+			:inline="true"
+			:marks="false"
+			:nodes="false"
+			class="k-seo-meta-cell-input"
+			@input="onInput"
+		/>
+		<k-button
+			v-if="value.ai && column.generate"
+			ref="aiButton"
+			:title="$t('seo.ai.action.generate')"
+			icon="seo-ai"
+			size="xs"
+			variant="filled"
+			class="k-seo-meta-cell-ai"
+			@mousedown.native.prevent
+			@click="generate"
+		/>
 	</div>
 
 	<component
 		:is="editable ? 'button' : 'div'"
 		v-else
+		ref="display"
 		:data-inherited="inherited && rangeText === null"
 		:data-in-range="inRange"
 		:data-range-start="rangeEdge?.start"
@@ -255,38 +261,21 @@ button.k-seo-meta-cell {
 	outline-offset: -2px;
 }
 
-.k-seo-meta-cell-editor {
-	/* stacks the pill line & the input, so both count towards the height like in the display state */
-	display: grid;
-	width: 100%;
-
-	> * {
-		grid-area: 1 / 1;
-		align-self: start;
-	}
-
-	/* sits where the inline pill was before */
-	.k-seo-meta-cell-source-line {
-		line-height: var(--leading-normal);
-		pointer-events: none;
-	}
+.k-seo-meta-cell-ai {
+	flex-shrink: 0;
+	margin-inline-start: var(--spacing-2);
 }
 
 .k-seo-meta-cell-input {
 	/* same text position & line height as in the display state */
 	--input-padding-multiline: 0;
 	--text-line-height: var(--leading-normal);
-	width: 100%;
+	flex-grow: 1;
+	min-width: 0;
 	line-height: var(--leading-normal);
 
 	.ProseMirror {
 		outline: none;
-	}
-
-	/* indents the first line (also of the placeholder) behind the pill */
-	&,
-	& * {
-		text-indent: var(--source-indent, 0);
 	}
 
 	/* same as in the seo-writer field */
@@ -306,6 +295,8 @@ button.k-seo-meta-cell {
 }
 
 .k-seo-meta-cell-text {
+	flex-grow: 1;
+	min-width: 0;
 	display: -webkit-box;
 	-webkit-box-orient: vertical;
 	-webkit-line-clamp: 2;
@@ -319,7 +310,6 @@ button.k-seo-meta-cell {
 	color: var(--color-text-dimmed);
 }
 
-/* flows inline with the text, so it doesn't take up a column of its own */
 .k-seo-meta-cell-source.k-tag {
 	--tag-height: 1.375rem;
 	--tag-text-size: var(--text-xs);
@@ -327,9 +317,8 @@ button.k-seo-meta-cell {
 	--tag-color-text: var(--color-text);
 	display: inline-flex;
 	vertical-align: baseline;
-	margin-inline-end: var(--spacing-1);
-	/* the pill is taller than a line, without this it would stretch the first line
-	   and the text would shift when switching to the input */
+	width: auto;
+	margin-inline-end: var(--spacing-2);
 	margin-block: -0.125rem;
 	user-select: none;
 

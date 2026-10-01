@@ -8,6 +8,7 @@ import { SEVERITY_ICONS } from "../utils/checks.js"
  * with buttons for the current tab next to the tabs
  */
 const props = defineProps({
+	busy: Boolean,
 	/** Header buttons, e.g. the languages dropdown */
 	buttons: {
 		type: Array,
@@ -89,13 +90,13 @@ const cards = computed(() => {
 			{{ $t("seo.overview.title") }}
 
 			<template #buttons>
-				<k-view-buttons :buttons="buttons" />
+				<k-view-buttons :buttons="buttons" :inert="busy" />
 				<slot name="buttons" />
 			</template>
 		</k-header>
 
 		<!-- Kirby's stat cards, with the distribution as bar & legend -->
-		<dl v-if="cards.length" class="k-stats k-seo-view-stats" data-size="large">
+		<dl v-if="cards.length" :inert="busy" class="k-stats k-seo-view-stats" data-size="large">
 			<component
 				:is="card.click ? 'button' : 'div'"
 				v-for="card in cards"
@@ -137,7 +138,7 @@ const cards = computed(() => {
 		</dl>
 
 		<div class="k-seo-view-tabs">
-			<k-tabs :tab="tab" :tabs="tabs" />
+			<k-tabs :tab="tab" :tabs="tabs" :inert="busy" />
 			<k-button-group>
 				<slot name="toolbar" />
 			</k-button-group>

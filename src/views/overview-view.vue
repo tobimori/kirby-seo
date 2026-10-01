@@ -1,6 +1,7 @@
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref, watch, usePanel, useHelpers } from "kirbyuse"
 
+import { fetchSseStream } from "../helpers/ai-stream.js"
 import { SEVERITY, SEVERITY_ICONS } from "../utils/checks.js"
 
 const props = defineProps({
@@ -29,6 +30,13 @@ const props = defineProps({
 	tabs: Array,
 	/** Active issue filter */
 	issue: String,
+	/** Whether the current user may use AI features */
+	ai: Boolean,
+	/** Ids of all pages matching the current search & filters */
+	ids: {
+		type: Array,
+		default: () => []
+	},
 	/** Active filter for pages sharing a title/description: `{ hash, kind, text, count }` */
 	group: Object,
 	// only read by `panel.content` (e.g. when switching languages), declared so they don't end up as attributes
@@ -53,6 +61,12 @@ const toggleSearch = () => {
 	}
 }
 const selected = ref([])
+
+const isAllSelected = computed(() => {
+	const ids = new Set(selected.value)
+	return props.ids.every((id) => ids.has(id))
+})
+const selectAll = () => (selected.value = [...new Set([...selected.value, ...props.ids])])
 
 // the query is merged with the current one, so empty strings are used to reset values
 const reload = (query) => panel.view.reload({ query })
@@ -381,7 +395,7 @@ const confirm = ({ component, text, submitButton }) =>
 const onSave = async (event) => {
 	event?.preventDefault?.()
 
-	if (isProcessing.value || targets.value.length === 0) {
+	if (isProcessing.value || isGenerating.value || targets.value.length === 0) {
 		return
 	}
 
@@ -444,7 +458,7 @@ watch(currentLanguage, async (language) => {
 })
 
 const onBeforeUnload = (event) => {
-	if (request || queue.size > 0) {
+	if (request || queue.size > 0 || isGenerating.value) {
 		event.preventDefault()
 		event.returnValue = ""
 	}
@@ -474,6 +488,7 @@ onBeforeUnmount(() => {
 	panel.events.off("beforeunload", onBeforeUnload)
 	window.removeEventListener("focus", refreshLocks)
 	window.clearInterval(interval)
+	cancelGeneration()
 	// write the last changes first, otherwise they would lock the pages again
 	settled().then(unlock)
 })
@@ -503,10 +518,17 @@ const visibleColumns = computed(() =>
 		Object.entries(props.columns)
 			.filter(([key]) => isVisible(key))
 			// cells receive the column config, issues filter the table
-			.map(([key, column]) => [
-				key,
-				column.type === "seo-checks" ? { ...column, filterGroup, filterIssue: setFilter } : column
-			])
+			.map(([key, column]) => {
+				if (column.type === "seo-checks") {
+					return [key, { ...column, filterGroup, filterIssue: setFilter }]
+				}
+
+				if (column.editable && props.ai) {
+					return [key, { ...column, generate: (row) => runGeneration([row], key) }]
+				}
+
+				return [key, column]
+			})
 	)
 )
 
@@ -574,6 +596,128 @@ const setFilter = (issue = "") =>
 function filterGroup(group) {
 	reload({ group, issue: "", page: "1" })
 }
+
+const AI_CONCURRENCY = 2
+
+const generation = ref(null)
+const isGenerating = computed(() => generation.value !== null)
+const generateDropdown = ref(null)
+
+const editableColumns = computed(() =>
+	Object.entries(props.columns)
+		.filter(([, column]) => column.editable)
+		.map(([key, column]) => ({ key, label: column.label }))
+)
+
+const aiUrl = (row, column) =>
+	`${panel.urls.api}/pages/${row.id.replaceAll("/", "+")}/fields/${column.toLowerCase()}/ai/stream`
+
+const generateCell = async (row, column, signal) => {
+	const original = serverRow(row)[column]?.value ?? ""
+	let text = ""
+
+	try {
+		await fetchSseStream({
+			url: aiUrl(row, column),
+			body: {},
+			signal,
+			onEvent: (data) => {
+				if (data.type === "text-delta") {
+					text += data.text ?? ""
+					onInput([{ row, column, value: text }])
+				}
+			}
+		})
+	} catch (error) {
+		onInput([{ row, column, value: original }])
+		throw error
+	}
+}
+
+const runGeneration = async (rows, column) => {
+	if (generation.value) {
+		return
+	}
+
+	const controller = new window.AbortController()
+	const queue = [...rows]
+	const errors = []
+	let generated = 0
+
+	generation.value = { done: 0, total: rows.length, controller }
+
+	const worker = async () => {
+		while (queue.length && !controller.signal.aborted) {
+			const row = queue.shift()
+
+			try {
+				await generateCell(row, column, controller.signal)
+				generated++
+			} catch (error) {
+				if (error?.name !== "AbortError") {
+					errors.push(error)
+				}
+			}
+
+			generation.value.done++
+		}
+	}
+
+	await Promise.all(Array.from({ length: Math.min(AI_CONCURRENCY, rows.length) }, worker))
+	onCommit()
+	generation.value = null
+
+	if (errors.length) {
+		panel.notification.error(errors[0]?.message ?? panel.t("seo.ai.error.request"))
+	} else if (rows.length > 1) {
+		panel.notification.success(panel.t("seo.overview.ai.done", { count: generated }))
+	}
+}
+
+const cancelGeneration = () => generation.value?.controller.abort()
+
+const onGenerate = async (column) => {
+	const { rows = {} } = await panel.api.post(
+		"seo/overview/rows",
+		{ ids: selected.value },
+		{ silent: true }
+	)
+	const candidates = Object.values(rows).filter((row) => row[column]?.ai)
+
+	panel.dialog.open({
+		component: "k-form-dialog",
+		props: {
+			fields: {
+				info: {
+					type: "info",
+					text: panel.t("seo.overview.ai.confirm", {
+						count: candidates.length,
+						field: props.columns[column].label
+					})
+				},
+				onlyEmpty: {
+					type: "toggle",
+					label: panel.t("seo.overview.ai.onlyEmpty")
+				}
+			},
+			value: { onlyEmpty: true },
+			submitButton: { icon: "seo-ai", text: panel.t("seo.ai.dialog.custom.submit") }
+		},
+		on: {
+			submit: ({ onlyEmpty }) => {
+				panel.dialog.close()
+
+				const targets = candidates.filter((row) => !onlyEmpty || !row[column].value)
+
+				if (targets.length === 0) {
+					return panel.notification.info(panel.t("seo.overview.ai.none"))
+				}
+
+				runGeneration(targets, column)
+			}
+		}
+	})
+}
 </script>
 
 <template>
@@ -582,11 +726,13 @@ function filterGroup(group) {
 		:stats="serverStats"
 		:tab="tab"
 		:tabs="tabs"
+		:busy="isGenerating"
 		class="k-seo-overview-view"
 		@filter="setFilter"
 	>
 		<template #buttons>
 			<k-seo-changes-controls
+				:inert="isGenerating"
 				:changes="targets"
 				:is-processing="isProcessing || isSaving"
 				@discard="onDiscard"
@@ -595,119 +741,165 @@ function filterGroup(group) {
 		</template>
 
 		<template #toolbar>
-			<k-button-group v-if="selected.length" layout="collapsed">
+			<k-button-group v-if="generation" layout="collapsed">
 				<k-button
-					:text="$t('seo.overview.selection.count', { count: selected.length })"
+					:text="$t('seo.overview.ai.progress', generation)"
+					icon="loader"
 					size="xs"
 					variant="filled"
 				/>
 				<k-button
-					:title="$t('seo.overview.selection.clear')"
+					:title="$t('seo.ai.action.stop')"
 					icon="cancel-small"
 					size="xs"
 					variant="filled"
-					@click="selected = []"
+					@click="cancelGeneration"
 				/>
 			</k-button-group>
-
-			<!-- separate buttons, like in the header of Kirby's sections -->
-			<k-button
-				:text="$t('filter')"
-				:current="isSearching"
-				icon="filter"
-				size="xs"
-				variant="filled"
-				responsive
-				@click="toggleSearch"
-			/>
-			<!-- the active filter & its reset belong together -->
-			<k-button-group layout="collapsed">
+			<template v-else-if="ai && selected.length">
 				<k-button
-					:text="checksLabel"
-					:title="group ? group.text : null"
-					:theme="issue || group ? 'info' : null"
+					:text="$t('seo.overview.ai.generate')"
 					:dropdown="true"
-					icon="checklist"
+					icon="seo-ai"
 					size="xs"
 					variant="filled"
-					class="k-seo-overview-checks-button"
-					@click="checksDropdown.toggle()"
+					@click="generateDropdown.toggle()"
 				/>
-				<k-button
-					v-if="issue || group"
-					:title="$t('seo.overview.checks.filter.clear')"
-					icon="cancel-small"
-					size="xs"
-					variant="filled"
-					theme="info"
-					@click="setFilter()"
-				/>
-			</k-button-group>
-			<k-button
-				:title="$t('seo.overview.columns.toggle')"
-				icon="layout-columns"
-				size="xs"
-				variant="filled"
-				@click="columnsDropdown.toggle()"
-			/>
+				<k-dropdown-content ref="generateDropdown" align-x="end">
+					<k-dropdown-item
+						v-for="column in editableColumns"
+						:key="column.key"
+						icon="seo-ai"
+						@click="onGenerate(column.key)"
+					>
+						{{ column.label }}
+					</k-dropdown-item>
+				</k-dropdown-content>
+			</template>
+			<template v-if="!generation">
+				<k-button-group v-if="selected.length" layout="collapsed">
+					<k-button
+						:text="$t('seo.overview.selection.count', { count: selected.length })"
+						size="xs"
+						variant="filled"
+					/>
+					<k-button
+						v-if="!isAllSelected"
+						:text="$t('seo.overview.selection.all', { count: ids.length })"
+						size="xs"
+						variant="filled"
+						@click="selectAll"
+					/>
+					<k-button
+						:title="$t('seo.overview.selection.clear')"
+						icon="cancel-small"
+						size="xs"
+						variant="filled"
+						@click="selected = []"
+					/>
+				</k-button-group>
 
-			<k-dropdown-content ref="checksDropdown" align-x="end">
-				<k-dropdown-item :current="!issue && !group" icon="page" @click="setFilter()">
-					{{ $t("seo.overview.checks.filter.all") }}
-				</k-dropdown-item>
-				<hr />
-				<k-dropdown-item
-					v-for="{ type, count, severity } in filters"
-					:key="type"
-					:current="issue === type"
-					:disabled="count === 0 && issue !== type"
-					:theme="`${severity}-icon`"
-					:icon="SEVERITY_ICONS[severity]"
-					class="k-seo-overview-checks-item"
-					@click="setFilter(type)"
-				>
-					{{ $t(`seo.overview.checks.${type}`) }}
-					<span class="k-seo-overview-checks-count">{{ count }}</span>
-				</k-dropdown-item>
-			</k-dropdown-content>
-			<k-picklist-dropdown
-				ref="columnsDropdown"
-				:options="columnOptions"
-				:value="columnOptions.filter(({ value }) => isVisible(value)).map(({ value }) => value)"
-				:search="false"
-				@input="onColumns"
-			/>
+				<!-- separate buttons, like in the header of Kirby's sections -->
+				<k-button
+					:text="$t('filter')"
+					:current="isSearching"
+					icon="filter"
+					size="xs"
+					variant="filled"
+					responsive
+					@click="toggleSearch"
+				/>
+				<!-- the active filter & its reset belong together -->
+				<k-button-group layout="collapsed">
+					<k-button
+						:text="checksLabel"
+						:title="group ? group.text : null"
+						:theme="issue || group ? 'info' : null"
+						:dropdown="true"
+						icon="checklist"
+						size="xs"
+						variant="filled"
+						class="k-seo-overview-checks-button"
+						@click="checksDropdown.toggle()"
+					/>
+					<k-button
+						v-if="issue || group"
+						:title="$t('seo.overview.checks.filter.clear')"
+						icon="cancel-small"
+						size="xs"
+						variant="filled"
+						theme="info"
+						@click="setFilter()"
+					/>
+				</k-button-group>
+				<k-button
+					:title="$t('seo.overview.columns.toggle')"
+					icon="layout-columns"
+					size="xs"
+					variant="filled"
+					@click="columnsDropdown.toggle()"
+				/>
+
+				<k-dropdown-content ref="checksDropdown" align-x="end">
+					<k-dropdown-item :current="!issue && !group" icon="page" @click="setFilter()">
+						{{ $t("seo.overview.checks.filter.all") }}
+					</k-dropdown-item>
+					<hr />
+					<k-dropdown-item
+						v-for="{ type, count, severity } in filters"
+						:key="type"
+						:current="issue === type"
+						:disabled="count === 0 && issue !== type"
+						:theme="`${severity}-icon`"
+						:icon="SEVERITY_ICONS[severity]"
+						class="k-seo-overview-checks-item"
+						@click="setFilter(type)"
+					>
+						{{ $t(`seo.overview.checks.${type}`) }}
+						<span class="k-seo-overview-checks-count">{{ count }}</span>
+					</k-dropdown-item>
+				</k-dropdown-content>
+				<k-picklist-dropdown
+					ref="columnsDropdown"
+					:options="columnOptions"
+					:value="columnOptions.filter(({ value }) => isVisible(value)).map(({ value }) => value)"
+					:search="false"
+					@input="onColumns"
+				/>
+			</template>
 		</template>
 
-		<k-input
-			v-if="isSearching"
-			:autofocus="true"
-			:value="searchterm"
-			:placeholder="$t('filter') + ' …'"
-			icon="search"
-			type="text"
-			class="k-seo-overview-search"
-			@input="searchterm = $event"
-			@keydown.native.esc="toggleSearch"
-		/>
+		<div :inert="isGenerating">
+			<k-input
+				v-if="isSearching"
+				:autofocus="true"
+				:value="searchterm"
+				:placeholder="$t('filter') + ' …'"
+				icon="search"
+				type="text"
+				class="k-seo-overview-search"
+				@input="searchterm = $event"
+				@keydown.native.esc="toggleSearch"
+			/>
 
-		<k-seo-table
-			:columns="visibleColumns"
-			:rows="items"
-			:pagination="pagination"
-			:sort="sort"
-			:dir="dir"
-			:selected.sync="selected"
-			:widths.sync="settings.widths"
-			:empty="$t('seo.overview.empty')"
-			resizable
-			selectable
-			@input="onInput"
-			@commit="onCommit"
-			@lock="onLock"
-			@sort="onSort"
-			@paginate="onPaginate"
-		/>
+			<k-seo-table
+				:columns="visibleColumns"
+				:rows="items"
+				:pagination="pagination"
+				:sort="sort"
+				:dir="dir"
+				:selected.sync="selected"
+				:widths.sync="settings.widths"
+				:empty="$t('seo.overview.empty')"
+				resizable
+				selectable
+				@input="onInput"
+				@commit="onCommit"
+				@lock="onLock"
+				@sort="onSort"
+				@paginate="onPaginate"
+			/>
+		</div>
 	</k-seo-view>
 </template>
 
