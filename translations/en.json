@@ -188,6 +188,8 @@
   "overview.selection.count": "{count} selected",
   "overview.selection.all": "Select all ({count})",
   "overview.selection.clear": "Clear selection",
+  "overview.options.open": "Open page",
+  "overview.options.panel": "Open in Panel",
   "overview.ai.generate": "Generate",
   "overview.ai.progress": "Generating {done}/{total}",
   "overview.ai.confirm": "Generate the {field} of the selected pages ({count}) with AI? The results are saved as unsaved changes, so you can review them before publishing.",

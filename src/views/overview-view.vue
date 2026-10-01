@@ -32,6 +32,8 @@ const props = defineProps({
 	issue: String,
 	/** Whether the current user may use AI features */
 	ai: Boolean,
+	/** Whether Google Search Console is connected */
+	gsc: Boolean,
 	/** Ids of all pages matching the current search & filters */
 	ids: {
 		type: Array,
@@ -272,19 +274,57 @@ const withPending = (row) => {
 	return item
 }
 
+const copyUrl = async (url) => {
+	await window.navigator.clipboard.writeText(url)
+	panel.notification.success(panel.t("copy.success"))
+}
+
 const items = computed(() =>
 	props.rows.map((row) => {
 		const item = withPending(row)
 
 		return {
 			...item,
-			// same status flag & options dropdown as in Kirby's pages sections
+			// same status flag as in Kirby's pages sections
 			flag: {
 				...helpers.page.status(item.status, item.permissions.changeStatus === false),
 				class: "k-page-status-icon-option",
 				dialog: item.link + "/changeStatus"
 			},
-			options: panel.dropdown.openAsync(item.link, { query: { view: "list" } })
+			options: [
+				{
+					icon: "open",
+					text: panel.t("seo.overview.options.open"),
+					link: item.previewUrl,
+					target: "_blank",
+					disabled: !item.previewUrl
+				},
+				{
+					icon: "copy",
+					text: panel.t("copy.url"),
+					click: () => copyUrl(item.url)
+				},
+				"-",
+				...(props.gsc
+					? [
+							{
+								icon: "google",
+								text: panel.t("seo.sections.searchConsole.title"),
+								click: () => panel.drawer.open(`seo/gsc/data/${item.link.replace(/^\//, "")}`)
+							}
+						]
+					: []),
+				{
+					icon: "search",
+					text: panel.t("seo.overview.checks.open"),
+					link: `${item.link}?tab=seo`
+				},
+				{
+					icon: "page",
+					text: panel.t("seo.overview.options.panel"),
+					link: item.link
+				}
+			]
 		}
 	})
 )

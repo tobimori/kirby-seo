@@ -382,6 +382,7 @@ class OverviewView
 					'summary' => $this->audit()->summary(),
 					'issue' => $issue,
 					'ai' => $this->canUseAi(),
+					'gsc' => $this->hasSearchConsole(),
 					'group' => $group ? [
 						'hash' => $group,
 						'kind' => $this->audit()->group($group)['kind'],
@@ -695,6 +696,7 @@ class OverviewView
 		return [
 			...(new PageItem(page: $page))->props(),
 			'changes' => $hasMetaChanges,
+			'previewUrl' => $page->previewUrl(),
 			'editable' => $editable,
 			'lock' => $lock,
 			'selectable' => $lock === null,
@@ -737,6 +739,13 @@ class OverviewView
 			'editable' => $editable && $page->blueprint()->field($key) !== null,
 			'ai' => $editable && $this->canUseAi() && !empty($page->blueprint()->field($key)['ai'] ?? false),
 		];
+	}
+
+	protected function hasSearchConsole(): bool
+	{
+		$gsc = Seo::option('components.gsc');
+
+		return $gsc::hasCredentials() && $gsc::isConnected() && $gsc::property() !== null;
 	}
 
 	protected function canUseAi(): bool
