@@ -2,6 +2,7 @@
 
 use Kirby\Cms\App;
 use Kirby\Cms\Page;
+use Kirby\Content\VersionId;
 use Kirby\Http\Response;
 use Kirby\Toolkit\Str;
 use tobimori\Seo\Ai;
@@ -87,7 +88,7 @@ return [
 					}
 
 					// inject data in snippets / rendering process
-					$kirby->data = [ // TODO: check if we want to access the draft / edited version for $page
+					$kirby->data = [
 						'page' => $page,
 						'site' => $kirby->site(),
 						'kirby' => $kirby
@@ -122,18 +123,22 @@ return [
 					};
 
 					try {
-						foreach (
-							$component::streamTask($this->field()->ai(), [
-								'instructions' => $data['instructions'] ?? null,
-								'edit' => $data['edit'] ?? null
-							]) as $chunk
-						) {
-							$send([
-								'type' => $chunk->type,
-								'text' => $chunk->text,
-								'payload' => $chunk->payload,
-							]);
-						}
+						// use the unsaved Panel changes (if any) for rendering & reading content,
+						// falls back to the latest version if no changes exist
+						VersionId::render('changes', function () use ($component, $data, $send) {
+							foreach (
+								$component::streamTask($this->field()->ai(), [
+									'instructions' => $data['instructions'] ?? null,
+									'edit' => $data['edit'] ?? null
+								]) as $chunk
+							) {
+								$send([
+									'type' => $chunk->type,
+									'text' => $chunk->text,
+									'payload' => $chunk->payload,
+								]);
+							}
+						});
 					} catch (\Throwable $exception) {
 						$send([
 							'type' => 'error',
