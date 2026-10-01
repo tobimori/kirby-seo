@@ -41,6 +41,15 @@ class Content
 	}
 
 	/**
+	 * Whether the file can be converted into an image block.
+	 * Non-resizable formats (SVG, etc.) require ext-imagick.
+	 */
+	public static function supportsImage(File $file): bool
+	{
+		return $file->isResizable() || class_exists(Imagick::class);
+	}
+
+	/**
 	 * Adds an image block from a Kirby File, converted to WebP for smaller payloads.
 	 * Non-resizable formats (SVG, etc.) are rasterized via Imagick.
 	 */
@@ -55,7 +64,6 @@ class Content
 
 			$data = base64_encode($thumb->read());
 		} else {
-			// TODO: better handling without ext-imagick
 			$imagick = new Imagick();
 			$imagick->readImage($file->root());
 			$imagick->setImageFormat('webp');

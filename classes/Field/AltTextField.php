@@ -39,6 +39,10 @@ class AltTextField extends FieldClass
 			$ai = false;
 		}
 
+		if ($ai && $this->model() instanceof File && !Content::supportsImage($this->model())) {
+			$ai = false;
+		}
+
 		$this->ai = $ai;
 	}
 
@@ -131,6 +135,13 @@ class AltTextField extends FieldClass
 						], 400);
 					}
 
+					if (!Content::supportsImage($model)) {
+						return Response::json([
+							'status' => 'error',
+							'message' => 'This image format requires ext-imagick.'
+						], 400);
+					}
+
 					$data = $kirby->request()->body()->data();
 					$lang = $kirby->api()->language();
 
@@ -212,7 +223,7 @@ class AltTextField extends FieldClass
 	 */
 	public static function generateForFile(File $file): File
 	{
-		if ($file->type() !== 'image') {
+		if ($file->type() !== 'image' || !Content::supportsImage($file)) {
 			return $file;
 		}
 
