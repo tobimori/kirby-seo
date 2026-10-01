@@ -24,6 +24,7 @@ App::plugin(
 		'options' => require __DIR__ . '/config/options.php',
 		'sections' => require __DIR__ . '/config/sections.php',
 		'areas' => require __DIR__ . '/config/areas.php',
+		'api' => require __DIR__ . '/config/api.php',
 		'siteMethods' => require __DIR__ . '/config/site-methods.php',
 		'pageMethods' => require __DIR__ . '/config/page-methods.php',
 		'hooks' => require __DIR__ . '/config/hooks.php',
@@ -34,6 +35,7 @@ App::plugin(
 		],
 		'permissions' => [
 			'ai' => true,
+			'overview' => true,
 		],
 		'snippets' => [
 			'seo/prompts/introduction' => __DIR__ . '/snippets/prompts/introduction.php',

@@ -4,18 +4,32 @@ use Kirby\Cms\App;
 use Kirby\Cms\Find;
 use Kirby\Cms\ModelWithContent;
 use Kirby\Cms\Page;
+use Kirby\Cms\Site;
 use Kirby\Toolkit\I18n;
+use tobimori\Seo\Buttons\OverviewLanguagesButton;
 use tobimori\Seo\Buttons\RobotsViewButton;
 use tobimori\Seo\Buttons\UtmShareViewButton;
 use tobimori\Seo\Dialogs\UtmShareDialog;
 use tobimori\Seo\Seo;
+use tobimori\Seo\Views\OverviewView;
 
 return [
 	'seo' => fn () =>
 	[
+		'label' => I18n::translate('seo.overview.title'),
+		'icon' => 'search',
+		'link' => 'seo',
+		'menu' => fn () => OverviewView::canAccess(),
+		'views' => [
+			'seo.overview' => [
+				'pattern' => 'seo',
+				'action' => fn () => (new OverviewView())->load()
+			]
+		],
 		'buttons' => [
 			'page.robots' => fn (Page $page) => Seo::option('robots.enabled') ? new RobotsViewButton($page) : null,
-			'utm-share' => fn (ModelWithContent $model) => new UtmShareViewButton($model)
+			'utm-share' => fn (ModelWithContent $model) => new UtmShareViewButton($model),
+			'seo.overview.languages' => fn (Site $site) => new OverviewLanguagesButton($site)
 		],
 		'drawers' => [
 			'gsc-data' => [

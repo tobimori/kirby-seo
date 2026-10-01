@@ -9,6 +9,15 @@ import { createTemplateVariableNode } from "./nodes/template-variable.js"
 import HeadingStructure from "./sections/heading-structure.vue"
 import SeoPreview from "./sections/seo-preview.vue"
 import SearchConsole from "./sections/search-console.vue"
+import ChangesControls from "./components/changes-controls.vue"
+import SeoTable from "./components/table/seo-table.vue"
+import SeoTableChecksCell from "./components/table/checks-cell.vue"
+import SeoTableImageCell from "./components/table/image-cell.vue"
+import SeoTableMetaCell from "./components/table/meta-cell.vue"
+import SeoTablePageCell from "./components/table/page-cell.vue"
+import SeoTableRobotsCell from "./components/table/robots-cell.vue"
+import SeoTableSelectCell from "./components/table/select-cell.vue"
+import OverviewView from "./views/overview-view.vue"
 
 panel.plugin("tobimori/seo", {
 	icons: {
@@ -28,7 +37,17 @@ panel.plugin("tobimori/seo", {
 	components: {
 		"k-seo-writer-input": SeoWriterInput,
 		"k-seo-utm-share-dialog": UtmShareDialog,
-		"k-gsc-drawer": GscDrawer
+		"k-gsc-drawer": GscDrawer,
+		"k-seo-changes-controls": ChangesControls,
+		"k-seo-overview-view": OverviewView,
+		"k-seo-table": SeoTable,
+		// cell types for k-table, used via `type: seo-*` in column definitions
+		"k-table-seo-checks-cell": SeoTableChecksCell,
+		"k-table-seo-image-cell": SeoTableImageCell,
+		"k-table-seo-meta-cell": SeoTableMetaCell,
+		"k-table-seo-page-cell": SeoTablePageCell,
+		"k-table-seo-robots-cell": SeoTableRobotsCell,
+		"k-table-seo-select-cell": SeoTableSelectCell
 	},
 	writerNodes: {
 		seoTemplateTitle: createTemplateVariableNode({

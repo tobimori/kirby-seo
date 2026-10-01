@@ -40,6 +40,15 @@ return [
 	],
 	'cache.searchConsole' => true,
 	'cache.indexnow' => true,
+	'cache.overview' => true,
+	'overview' => [
+		// recommended lengths (in characters) for the checks in the SEO overview, as [min, max].
+		// search engines don't have hard limits, they truncate snippets to fit the screen
+		'lengths' => [
+			'title' => [30, 60], // the full title, including the title template
+			'description' => [70, 160],
+		],
+	],
 	'cascade' => [
 		'fields',
 		'programmatic',
