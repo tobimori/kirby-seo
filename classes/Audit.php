@@ -6,6 +6,7 @@ use Closure;
 use Kirby\Cms\App;
 use Kirby\Cms\Page;
 use Kirby\Cms\Pages;
+use Kirby\Cms\Site;
 use Kirby\Toolkit\Str;
 
 /**
@@ -51,6 +52,7 @@ class Audit
 	public const OWN_SOURCES = ['fields', 'programmatic'];
 
 	protected array|null $result = null;
+	protected array $fingerprints = [];
 
 	/**
 	 * @param \Closure(\Kirby\Cms\Page): \tobimori\Seo\Meta $meta
@@ -143,61 +145,84 @@ class Audit
 
 	public function result(): array
 	{
-		return $this->result ??= App::instance()->cache('tobimori.seo.overview')->getOrSet(
-			$this->cacheKey(),
-			$this->run(...),
-			60 * 24
-		);
+		return $this->result ??= $this->evaluate($this->entries());
 	}
 
-	/**
-	 * Changes whenever any of the pages (or the site, which provides fallbacks) changes,
-	 * including unsaved changes, as the checks reflect what editors see in the Panel
-	 */
-	protected function cacheKey(): string
+	protected function entries(): array
 	{
 		$kirby = App::instance();
-		$modified = fn ($model) => [
-			$model->version('latest')->modified('current'),
-			$model->version('changes')->modified('current'),
-		];
+		$cache = $kirby->cache('tobimori.seo.overview');
 
-		$fingerprint = [
-			$kirby->language()?->code(),
-			Seo::option('overview.lengths'),
-			$modified($kirby->site()),
-		];
-
-		foreach ($this->pages as $page) {
-			$fingerprint[] = [$page->id(), $page->status(), $page->intendedTemplate()->name(), ...$modified($page)];
-		}
-
-		// bump the version when the format of the results changes
-		return 'audit-v3-' . md5(json_encode($fingerprint));
-	}
-
-	protected function run(): array
-	{
-		$pages = [];
+		$key = 'audit-v4-' . md5(json_encode([$kirby->language()?->code(), $this->modified($kirby->site())]));
+		$cached = $cache->get($key) ?? [];
 		$entries = [];
+		$changed = false;
 
 		foreach ($this->pages as $page) {
-			if ($reason = $this->skipped($page)) {
-				$pages[$page->id()] = ['skipped' => $reason];
+			$fingerprint = $this->fingerprint($page);
+
+			if (($cached[$page->id()]['fingerprint'] ?? null) === $fingerprint) {
+				$entries[$page->id()] = $cached[$page->id()];
 				continue;
 			}
 
-			/** @var \tobimori\Seo\Meta $meta */
-			$meta = ($this->meta)($page);
-			$description = $meta->resolve('metaDescription');
+			$entries[$page->id()] = ['fingerprint' => $fingerprint, ...$this->entry($page)];
+			$changed = true;
+		}
 
-			$entries[$page->id()] = [
-				'home' => $page->isHomePage(),
-				// the full title, as rendered with the title template
-				'title' => static::text($meta->metaTitle()->value()),
-				'description' => static::text($description['field']->value()),
-				'source' => $description['source'],
-			];
+		if ($changed) {
+			$cache->set($key, [...$cached, ...$entries], 60 * 24);
+		}
+
+		return $entries;
+	}
+
+	protected function fingerprint(Page $page): string
+	{
+		return $this->fingerprints[$page->id()] ??= md5(json_encode([
+			$page->status(),
+			$page->intendedTemplate()->name(),
+			$this->modified($page),
+			$page->parent() ? $this->fingerprint($page->parent()) : null,
+		]));
+	}
+
+	protected function modified(Page|Site $model): array
+	{
+		return [
+			$model->version('latest')->modified('current'),
+			$model->version('changes')->modified('current'),
+		];
+	}
+
+	protected function entry(Page $page): array
+	{
+		if ($reason = $this->skipped($page)) {
+			return ['skipped' => $reason];
+		}
+
+		/** @var \tobimori\Seo\Meta $meta */
+		$meta = ($this->meta)($page);
+		$description = $meta->resolve('metaDescription');
+
+		return [
+			'home' => $page->isHomePage(),
+			// the full title, as rendered with the title template
+			'title' => static::text($meta->metaTitle()->value()),
+			'description' => static::text($description['field']->value()),
+			'source' => $description['source'],
+		];
+	}
+
+	protected function evaluate(array $entries): array
+	{
+		$pages = [];
+
+		foreach ($entries as $id => $entry) {
+			if (isset($entry['skipped'])) {
+				$pages[$id] = ['skipped' => $entry['skipped']];
+				unset($entries[$id]);
+			}
 		}
 
 		$groups = $this->groups($entries);
