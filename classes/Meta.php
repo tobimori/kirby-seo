@@ -396,11 +396,6 @@ class Meta
 	 */
 	public function get(string $key, array $exclude = []): Field
 	{
-		$cascade = Seo::option('cascade');
-		if (count(array_intersect(get_class_methods($this), $cascade)) !== count($cascade)) {
-			throw new InvalidArgumentException('[Kirby SEO] Invalid cascade method in config. Please check your options for `tobimori.seo.cascade`.');
-		}
-
 		// Track consumed keys, so we don't output legacy field values
 		$toBeConsumed = $key;
 		if (
@@ -411,21 +406,37 @@ class Meta
 			$this->consumed[] = $toBeConsumed;
 		}
 
+		return $this->resolve($key, $exclude)['field'];
+	}
+
+	/**
+	 * Walks the cascade and returns both the meta value for a given key and the name
+	 * of the cascade method that provided it, e.g. `fields` if the value is set on the page
+	 * itself, or `site` if it's inherited from the site (`null` if none did)
+	 *
+	 * @return array{field: Field, source: string|null}
+	 */
+	public function resolve(string $key, array $exclude = []): array
+	{
+		$cascade = Seo::option('cascade');
+		if (count(array_intersect(get_class_methods($this), $cascade)) !== count($cascade)) {
+			throw new InvalidArgumentException('[Kirby SEO] Invalid cascade method in config. Please check your options for `tobimori.seo.cascade`.');
+		}
+
 		foreach (array_diff($cascade, $exclude) as $method) {
 			if ($field = $this->$method($key)) {
 				if (
 					is_string($value = $field->value())
 					&& Str::contains($value, 'data-seo-template-variable')
 				) {
-					$value = Str::unhtml($value);
-					return new Field($this->page, $key, $value);
+					$field = new Field($this->page, $key, Str::unhtml($value));
 				}
 
-				return $field;
+				return ['field' => $field, 'source' => $method];
 			}
 		}
 
-		return new Field($this->page, $key, '');
+		return ['field' => new Field($this->page, $key, ''), 'source' => null];
 	}
 
 	/**
