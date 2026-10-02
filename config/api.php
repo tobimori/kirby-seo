@@ -6,26 +6,20 @@ use tobimori\Seo\Views\OverviewView;
 return [
 	'routes' => [
 		[
-			// current state of the given rows (locks, values) without reloading the whole table
-			'pattern' => 'seo/overview/rows',
+			// - rows: current state of the given rows (locks, values) without reloading the whole table
+			// - save: saves multiple rows to the changes versions of their models in a single request
+			// - publish/discard: the unsaved changes of the given rows
+			'pattern' => 'seo/overview/(pages)/(rows|save|publish|discard)',
 			'method' => 'POST',
-			'action' => fn () => (new OverviewView())->rows((array)App::instance()->request()->get('ids', []))
-		],
-		[
-			// saves multiple pages to their changes versions in a single request
-			'pattern' => 'seo/overview/save',
-			'method' => 'POST',
-			'action' => fn () => (new OverviewView())->save((array)App::instance()->request()->get('changes', []))
-		],
-		[
-			'pattern' => 'seo/overview/publish',
-			'method' => 'POST',
-			'action' => fn () => (new OverviewView())->publish((array)App::instance()->request()->get('ids', []))
-		],
-		[
-			'pattern' => 'seo/overview/discard',
-			'method' => 'POST',
-			'action' => fn () => (new OverviewView())->discard((array)App::instance()->request()->get('ids', []))
+			'action' => function (string $tab, string $action) {
+				$request = App::instance()->request();
+				$view = OverviewView::for($tab);
+
+				return match ($action) {
+					'save' => $view->save((array)$request->get('changes', [])),
+					default => $view->$action((array)$request->get('ids', [])),
+				};
+			}
 		],
 	]
 ];

@@ -13,6 +13,7 @@ use tobimori\Seo\Buttons\UtmShareViewButton;
 use tobimori\Seo\Dialogs\UtmShareDialog;
 use tobimori\Seo\Seo;
 use tobimori\Seo\Views\OverviewView;
+use tobimori\Seo\Views\PagesView;
 
 return [
 	'seo' => fn () =>
@@ -28,11 +29,11 @@ return [
 			],
 			'seo.pages' => [
 				'pattern' => 'seo/pages',
-				'action' => fn () => (new OverviewView())->load()
+				'action' => fn () => (new PagesView())->load()
 			],
 			'seo.tab' => [
 				'pattern' => 'seo/(images|links)',
-				'action' => fn (string $tab) => (new OverviewView())->tab($tab)
+				'action' => fn (string $tab) => (new PagesView())->tab($tab)
 			],
 		],
 		'buttons' => [

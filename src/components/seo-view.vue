@@ -23,6 +23,10 @@ const props = defineProps({
 	}
 })
 
+/**
+ * `filter` is emitted with the issue & the tab it belongs to,
+ * e.g. `("title", "pages")` when clicking the stats of titles
+ */
 const emit = defineEmits(["filter"])
 
 const panel = usePanel()
@@ -64,14 +68,14 @@ const cards = computed(() => {
 			icon: "title",
 			distribution: props.stats.title,
 			legend: "pages",
-			click: () => emit("filter", "title")
+			click: () => emit("filter", "title", "pages")
 		}),
 		toCard({
 			key: "description",
 			icon: "text",
 			distribution: props.stats.description,
 			legend: "pages",
-			click: () => emit("filter", "description")
+			click: () => emit("filter", "description", "pages")
 		}),
 		toCard({
 			key: "images",

@@ -17,8 +17,8 @@ defineProps({
 
 const panel = usePanel()
 
-// the stats filter the pages
-const onFilter = (issue) => panel.view.open("seo/pages", { query: { issue } })
+// the stats filter the other tabs
+const onFilter = (issue, tab) => panel.view.open(`seo/${tab}`, { query: { issue } })
 </script>
 
 <template>
