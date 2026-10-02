@@ -32,7 +32,8 @@ defineProps({
 				<k-icon type="edit-line" />
 			</span>
 		</span>
-		<span class="k-seo-page-cell-path">{{ value.path }}</span>
+		<span v-if="value.info !== undefined" class="k-seo-page-cell-info">{{ value.info }}</span>
+		<span v-else class="k-seo-page-cell-path">{{ value.path }}</span>
 	</div>
 </template>
 
@@ -88,6 +89,14 @@ defineProps({
 	&:focus-visible {
 		outline: var(--outline);
 	}
+}
+
+.k-seo-page-cell-info {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	font-size: var(--text-xs);
+	color: var(--color-text-dimmed);
 }
 
 .k-seo-page-cell-path {

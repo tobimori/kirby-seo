@@ -11,12 +11,15 @@ import SeoPreview from "./sections/seo-preview.vue"
 import SearchConsole from "./sections/search-console.vue"
 import ChangesControls from "./components/changes-controls.vue"
 import SeoTable from "./components/table/seo-table.vue"
+import SeoTableAltStatusCell from "./components/table/alt-status-cell.vue"
 import SeoTableChecksCell from "./components/table/checks-cell.vue"
+import SeoTableDecorativeCell from "./components/table/decorative-cell.vue"
 import SeoTableImageCell from "./components/table/image-cell.vue"
 import SeoTableMetaCell from "./components/table/meta-cell.vue"
 import SeoTablePageCell from "./components/table/page-cell.vue"
 import SeoTableRobotsCell from "./components/table/robots-cell.vue"
 import SeoTableSelectCell from "./components/table/select-cell.vue"
+import ImagesView from "./views/images-view.vue"
 import OverviewView from "./views/overview-view.vue"
 import SeoView from "./components/seo-view.vue"
 import TabView from "./views/tab-view.vue"
@@ -42,11 +45,14 @@ panel.plugin("tobimori/seo", {
 		"k-gsc-drawer": GscDrawer,
 		"k-seo-changes-controls": ChangesControls,
 		"k-seo-overview-view": OverviewView,
+		"k-seo-images-view": ImagesView,
 		"k-seo-tab-view": TabView,
 		"k-seo-view": SeoView,
 		"k-seo-table": SeoTable,
 		// cell types for k-table, used via `type: seo-*` in column definitions
+		"k-table-seo-alt-status-cell": SeoTableAltStatusCell,
 		"k-table-seo-checks-cell": SeoTableChecksCell,
+		"k-table-seo-decorative-cell": SeoTableDecorativeCell,
 		"k-table-seo-image-cell": SeoTableImageCell,
 		"k-table-seo-meta-cell": SeoTableMetaCell,
 		"k-table-seo-page-cell": SeoTablePageCell,

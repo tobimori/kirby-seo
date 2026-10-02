@@ -61,6 +61,7 @@ abstract class OverviewView
 	{
 		return match ($tab) {
 			'pages' => new PagesView(),
+			'images' => new ImagesView(),
 			default => throw new NotFoundException(key: 'view.notFound'),
 		};
 	}
@@ -444,10 +445,11 @@ abstract class OverviewView
 	}
 
 	/**
-	 * Alt texts of the images of the site & the pages of the overview, one entry per alt text field:
-	 * `alt-text` fields, or plain `alt` fields for blueprints without one (supported by `toAltText()` as well)
+	 * Alt texts of the images of the site & all pages the user can see, one entry per `alt-text` field.
+	 * Not limited to the pages of the overview, as images are often stored on pages without SEO fields
+	 * (e.g. a media library page) & used elsewhere
 	 *
-	 * @return array<string, array{id: string, model: \Kirby\Cms\File, fields: array<string>, field: string, type: string}>
+	 * @return array<string, array{id: string, model: \Kirby\Cms\File, fields: array<string>, field: string}>
 	 */
 	protected function images(): array
 	{
@@ -458,7 +460,9 @@ abstract class OverviewView
 		$this->images = [];
 		$fields = [];
 
-		foreach ([$this->kirby->site(), ...$this->pages()] as $parent) {
+		$pages = $this->kirby->site()->index(true)->filter(fn (Page $page) => $page->isListable());
+
+		foreach ([$this->kirby->site(), ...$pages] as $parent) {
 			foreach ($parent->files() as $file) {
 				if ($file->type() !== 'image' || !$file->isListable()) {
 					continue;
@@ -466,14 +470,13 @@ abstract class OverviewView
 
 				$fields[$file->template() ?? 'default'] ??= $this->altFields($file);
 
-				foreach ($fields[$file->template() ?? 'default'] as $name => $type) {
+				foreach ($fields[$file->template() ?? 'default'] as $name) {
 					$id = static::imageId($file, $name);
 					$this->images[$id] = [
 						'id' => $id,
 						'model' => $file,
 						'fields' => [$name],
 						'field' => $name,
-						'type' => $type,
 					];
 				}
 			}
@@ -491,20 +494,16 @@ abstract class OverviewView
 	}
 
 	/**
-	 * Alt text fields of the file's blueprint & their types
+	 * Names of the `alt-text` fields of the file's blueprint
 	 *
-	 * @return array<string, string>
+	 * @return array<string>
 	 */
 	protected function altFields(File $file): array
 	{
-		$fields = $file->blueprint()->fields();
-		$alt = array_filter($fields, fn ($field) => ($field['type'] ?? null) === 'alt-text');
-
-		if ($alt !== []) {
-			return array_map(fn () => 'alt-text', $alt);
-		}
-
-		return isset($fields['alt']) ? ['alt' => $fields['alt']['type'] ?? 'text'] : [];
+		return array_keys(array_filter(
+			$file->blueprint()->fields(),
+			fn ($field) => ($field['type'] ?? null) === 'alt-text'
+		));
 	}
 
 	protected function altText(array $entry): AltText

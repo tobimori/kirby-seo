@@ -82,7 +82,9 @@ const cards = computed(() => {
 			icon: "image",
 			distribution: { ok: total - missing - ai, notice: ai, negative: missing },
 			legend: "images",
-			highlight: ["negative"]
+			highlight: ["negative"],
+			// missing & AI-generated alt texts
+			click: () => emit("filter", "issues", "images")
 		})
 	]
 })

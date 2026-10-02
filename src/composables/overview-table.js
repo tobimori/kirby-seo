@@ -22,9 +22,10 @@ const isLockError = (error) => error?.key?.startsWith("error.content.lock")
  * @param {string} options.storageKey Key for the column settings in the local storage
  * @param {(cell: object, pending: { value: string, source?: string }) => object} options.applyPending
  *   Shows a value that hasn't been confirmed by the server yet in its cell
- * @param {(row: object, column: string) => string} [options.aiField] Name of the field generating the column's value
+ * @param {(row: object, column: string) => { url: string, body: object }} [options.aiRequest]
+ *   Endpoint streaming the generated value of a cell, defaults to the AI route of the field with the column's name
  */
-export function useOverviewTable(props, { endpoint, storageKey, applyPending, aiField }) {
+export function useOverviewTable(props, { endpoint, storageKey, applyPending, aiRequest }) {
 	const panel = usePanel()
 	const helpers = useHelpers()
 
@@ -464,8 +465,10 @@ export function useOverviewTable(props, { endpoint, storageKey, applyPending, ai
 	const generation = ref(null)
 	const isGenerating = computed(() => generation.value !== null)
 
-	const aiUrl = (row, column) =>
-		`${panel.urls.api}${row.link}/fields/${aiField?.(row, column) ?? column.toLowerCase()}/ai/stream`
+	const fieldAiRequest = (row, column) => ({
+		url: `${panel.urls.api}${row.link}/fields/${column.toLowerCase()}/ai/stream`,
+		body: {}
+	})
 
 	const generateCell = async (row, column, signal, source) => {
 		const original = serverRow(row)[column]?.value ?? ""
@@ -473,8 +476,7 @@ export function useOverviewTable(props, { endpoint, storageKey, applyPending, ai
 
 		try {
 			await fetchSseStream({
-				url: aiUrl(row, column),
-				body: {},
+				...(aiRequest ?? fieldAiRequest)(row, column),
 				signal,
 				onEvent: (data) => {
 					if (data.type === "text-delta") {

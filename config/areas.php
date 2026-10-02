@@ -12,6 +12,7 @@ use tobimori\Seo\Buttons\RobotsViewButton;
 use tobimori\Seo\Buttons\UtmShareViewButton;
 use tobimori\Seo\Dialogs\UtmShareDialog;
 use tobimori\Seo\Seo;
+use tobimori\Seo\Views\ImagesView;
 use tobimori\Seo\Views\OverviewView;
 use tobimori\Seo\Views\PagesView;
 
@@ -31,8 +32,12 @@ return [
 				'pattern' => 'seo/pages',
 				'action' => fn () => (new PagesView())->load()
 			],
+			'seo.images' => [
+				'pattern' => 'seo/images',
+				'action' => fn () => (new ImagesView())->load()
+			],
 			'seo.tab' => [
-				'pattern' => 'seo/(images|links)',
+				'pattern' => 'seo/(links)',
 				'action' => fn (string $tab) => (new PagesView())->tab($tab)
 			],
 		],

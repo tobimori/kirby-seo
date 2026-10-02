@@ -211,11 +211,14 @@ const setDraft = (row, key, value) => {
 	)
 }
 
-const rangeText = computed(() =>
-	rangeDraft.value === null
-		? null
-		: new window.DOMParser().parseFromString(rangeDraft.value, "text/html").body.textContent
-)
+const rangeText = computed(() => {
+	if (rangeDraft.value === null || props.columns[range.value?.column]?.plain) {
+		return rangeDraft.value
+	}
+
+	// writer values are HTML
+	return new window.DOMParser().parseFromString(rangeDraft.value, "text/html").body.textContent
+})
 
 // moves to the next editable cell: `next`/`prev` within the row (wrapping to the next/previous row), `down`/`up` within the column
 const moveEdit = (row, key, direction) => {

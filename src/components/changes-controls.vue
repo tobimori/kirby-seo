@@ -2,14 +2,19 @@
 import { computed, ref, usePanel } from "kirbyuse"
 
 /**
- * Save & discard buttons for unsaved changes of multiple pages,
+ * Save & discard buttons for unsaved changes of multiple models,
  * modelled after Kirby's `k-form-controls` of page views
  */
 const props = defineProps({
-	/** Pages with unsaved changes: `{ id, link, text }` */
+	/** Models with unsaved changes: `{ id, link, text }` */
 	changes: {
 		type: Array,
 		default: () => []
+	},
+	/** Icon of the models in the list of changes */
+	icon: {
+		type: String,
+		default: "page"
 	},
 	isProcessing: Boolean
 })
@@ -67,8 +72,8 @@ const buttons = computed(() => {
 		<k-dropdown-content ref="dropdown" align-x="end" class="k-form-controls-dropdown">
 			<p>{{ $t("form.unsaved") }}</p>
 			<hr />
-			<k-dropdown-item v-for="page in changes" :key="page.id" :link="page.link" icon="page">
-				{{ page.text }}
+			<k-dropdown-item v-for="item in changes" :key="item.id" :link="item.link" :icon="icon">
+				{{ item.text }}
 			</k-dropdown-item>
 		</k-dropdown-content>
 	</div>

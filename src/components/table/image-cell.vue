@@ -15,9 +15,9 @@ const inherited = computed(() => props.value.source && props.value.source !== "f
 		<k-image-frame
 			:src="value.src"
 			:title="inherited ? $t(`seo.overview.source.${value.source}`) : null"
-			back="pattern"
-			ratio="1200/630"
-			cover
+			:back="column.back ?? 'pattern'"
+			:ratio="column.ratio ?? '1200/630'"
+			:cover="column.cover ?? true"
 		/>
 	</div>
 </template>

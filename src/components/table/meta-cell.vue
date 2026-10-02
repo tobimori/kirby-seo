@@ -1,11 +1,19 @@
 <script setup>
-import { computed, nextTick, ref, watch } from "kirbyuse"
+import { computed, nextTick, onBeforeUnmount, ref, watch, useLibrary, usePanel } from "kirbyuse"
 
+/**
+ * Editable text cell: writer values (HTML) by default, plain text with `plain: true` in the column.
+ * Values can set a `tag` (`{ text, title }`) shown in front of the text & `dimmed: true`;
+ * a `source` other than `fields` tells that the value is inherited
+ */
 const props = defineProps({
 	column: Object,
 	row: Object,
 	value: Object
 })
+
+const panel = usePanel()
+const library = useLibrary()
 
 const input = ref(null)
 const aiButton = ref(null)
@@ -16,12 +24,29 @@ const committed = ref(false)
 
 // anything but `fields` means the value is not set on the page itself
 const inherited = computed(() => props.value.source && props.value.source !== "fields")
+const tag = computed(() => {
+	if (props.value.tag) {
+		return props.value.tag
+	}
+
+	if (inherited.value) {
+		return {
+			text: panel.t(`seo.overview.sourceLabel.${props.value.source}`),
+			title: panel.t(`seo.overview.source.${props.value.source}`)
+		}
+	}
+
+	return null
+})
 const editable = computed(() => props.column.isEditable?.(props.row) ?? false)
 const editing = computed(() => props.column.isEditing?.(props.row) ?? false)
 const inRange = computed(() => props.column.inRange?.(props.row) ?? false)
 const rangeEdge = computed(() => props.column.rangeEdge?.(props.row) ?? null)
 // value typed into the range editor, shown live in all selected cells
 const rangeText = computed(() => (inRange.value ? props.column.rangeText() : null))
+const dimmed = computed(
+	() => (inherited.value || props.value.dimmed === true) && rangeText.value === null
+)
 
 watch(
 	editing,
@@ -41,10 +66,23 @@ watch(
 		draft.value = props.value.value ?? ""
 		committed.value = false
 		await nextTick()
+
+		if (props.column.plain && input.value) {
+			library.autosize(input.value)
+			// cursor at the end, like in the writer
+			input.value.setSelectionRange(draft.value.length, draft.value.length)
+		}
+
 		input.value?.focus()
 	},
 	{ immediate: true }
 )
+
+onBeforeUnmount(() => {
+	if (props.column.plain && input.value) {
+		library.autosize.destroy(input.value)
+	}
+})
 
 const generate = () => {
 	commit()
@@ -63,8 +101,16 @@ const commit = (direction = null) => {
 // like in spreadsheets: the first mod+a selects the text of the cell,
 // the second one (or the first one in an empty cell) selects the whole column
 const onSelectAll = (event) => {
-	const text = event.currentTarget.querySelector(".ProseMirror")?.textContent ?? ""
-	const selected = window.getSelection()?.toString() ?? ""
+	let text
+	let selected
+
+	if (props.column.plain) {
+		text = input.value.value
+		selected = text.slice(input.value.selectionStart, input.value.selectionEnd)
+	} else {
+		text = event.currentTarget.querySelector(".ProseMirror")?.textContent ?? ""
+		selected = window.getSelection()?.toString() ?? ""
+	}
 
 	if (text === "" || selected === text) {
 		event.preventDefault()
@@ -112,6 +158,12 @@ const onKeydown = (event) => {
 }
 
 const onInput = (value) => {
+	// plain values are single-line, e.g. when pasting
+	if (props.column.plain) {
+		value = value.replace(/[\r\n]+/g, " ")
+		library.autosize.update(input.value)
+	}
+
 	draft.value = value
 	props.column.setDraft?.(props.row, value)
 }
@@ -149,7 +201,17 @@ const onFocusout = (event) => {
 		@keydown.capture="onKeydown"
 		@focusout="onFocusout"
 	>
+		<textarea
+			v-if="column.plain"
+			ref="input"
+			:value="draft"
+			:placeholder="value.placeholder"
+			rows="1"
+			class="k-seo-meta-cell-input k-seo-meta-cell-textarea"
+			@input="onInput($event.target.value)"
+		/>
 		<k-seo-writer-input
+			v-else
 			ref="input"
 			:value="draft"
 			:placeholder="value.placeholder"
@@ -176,7 +238,7 @@ const onFocusout = (event) => {
 		:is="editable ? 'button' : 'div'"
 		v-else
 		ref="display"
-		:data-inherited="inherited && rangeText === null"
+		:data-inherited="dimmed"
 		:data-in-range="inRange"
 		:data-range-start="rangeEdge?.start"
 		:data-range-end="rangeEdge?.end"
@@ -191,15 +253,16 @@ const onFocusout = (event) => {
 		</p>
 		<p v-else class="k-seo-meta-cell-text">
 			<k-tag
-				v-if="inherited"
-				:text="$t(`seo.overview.sourceLabel.${value.source}`)"
-				:title="$t(`seo.overview.source.${value.source}`)"
+				v-if="tag"
+				:text="tag.text"
+				:title="tag.title"
 				element="span"
 				theme="light"
 				class="k-seo-meta-cell-source"
 			/>
 			<span v-if="value.text">{{ value.text }}</span>
-			<span v-else class="k-seo-meta-cell-empty">—</span>
+			<!-- a tag of its own (e.g. decorative images) explains the missing text -->
+			<span v-else-if="!value.tag" class="k-seo-meta-cell-empty">—</span>
 		</p>
 	</component>
 </template>
@@ -291,6 +354,21 @@ button.k-seo-meta-cell {
 
 	br.ProseMirror-trailingBreak {
 		display: none;
+	}
+}
+
+/* same text position & line height as in the display state */
+.k-seo-meta-cell-textarea {
+	padding: 0;
+	font: inherit;
+	color: inherit;
+	background: none;
+	border: 0;
+	outline: none;
+	resize: none;
+
+	&::placeholder {
+		color: var(--color-text-dimmed);
 	}
 }
 

@@ -142,79 +142,90 @@ class AltTextField extends FieldClass
 						], 400);
 					}
 
-					$data = $kirby->request()->body()->data();
 					$lang = $kirby->api()->language();
 
 					if ($lang) {
 						$kirby->setCurrentLanguage($lang);
 					}
 
-					// begin SSE stream
-					ignore_user_abort(true);
-					@set_time_limit(0);
-
-					while (ob_get_level() > 0) {
-						ob_end_flush();
-					}
-
-					header('Content-Type: text/event-stream');
-					header('Cache-Control: no-cache');
-					header('Connection: keep-alive');
-					header('X-Accel-Buffering: no');
-					echo ":ok\n\n";
-					flush();
-
-					$send = static function (array $event): void {
-						echo 'data: ' . json_encode(
-							$event,
-							JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
-						) . "\n\n";
-
-						if (ob_get_level() > 0) {
-							ob_flush();
-						}
-
-						flush();
-					};
-
-					try {
-						$kirby->data = [
-							'file' => $model,
-							'site' => $kirby->site(),
-							'kirby' => $kirby,
-						];
-
-						$prompt = trim(snippet('seo/prompts/tasks/alt-text', [
-							'file' => $model,
-							'instructions' => $data['instructions'] ?? null,
-						], return: true));
-
-						$content = [
-							Content::user()
-								->image($model)
-								->text($prompt),
-						];
-
-						foreach ($component::provider()->stream($content) as $chunk) {
-							$send([
-								'type' => $chunk->type,
-								'text' => $chunk->text,
-								'payload' => $chunk->payload,
-							]);
-						}
-					} catch (\Throwable $exception) {
-						$send([
-							'type' => 'error',
-							'payload' => [
-								'message' => $exception->getMessage(),
-							],
-						]);
-					}
-
-					exit();
+					AltTextField::stream($model, $kirby->request()->body()->data()['instructions'] ?? null);
 				}
 			]
 		];
+	}
+
+	/**
+	 * Streams an alt text for the image in the current language as server-sent events
+	 * (`text-delta` chunks of the AI provider, `error` events) & ends the request
+	 */
+	public static function stream(File $file, string|null $instructions = null): never
+	{
+		$kirby = $file->kirby();
+		$component = Seo::option('components.ai');
+
+		// begin SSE stream
+		ignore_user_abort(true);
+		@set_time_limit(0);
+
+		while (ob_get_level() > 0) {
+			ob_end_flush();
+		}
+
+		header('Content-Type: text/event-stream');
+		header('Cache-Control: no-cache');
+		header('Connection: keep-alive');
+		header('X-Accel-Buffering: no');
+		echo ":ok\n\n";
+		flush();
+
+		$send = static function (array $event): void {
+			echo 'data: ' . json_encode(
+				$event,
+				JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+			) . "\n\n";
+
+			if (ob_get_level() > 0) {
+				ob_flush();
+			}
+
+			flush();
+		};
+
+		try {
+			$kirby->data = [
+				'file' => $file,
+				'site' => $kirby->site(),
+				'kirby' => $kirby,
+			];
+
+			$prompt = trim(snippet('seo/prompts/tasks/alt-text', [
+				'file' => $file,
+				'instructions' => $instructions,
+			], return: true));
+
+			$content = [
+				Content::user()
+					->image($file)
+					->text($prompt),
+			];
+
+			foreach ($component::provider()->stream($content) as $chunk) {
+				$send([
+					'type' => $chunk->type,
+					'text' => $chunk->text,
+					'payload' => $chunk->payload,
+				]);
+			}
+		} catch (\Throwable $exception) {
+			$send([
+				'type' => 'error',
+				'payload' => [
+					'message' => $exception->getMessage(),
+				],
+			]);
+		}
+
+		exit();
 	}
 
 	/**
