@@ -3,8 +3,8 @@
 namespace tobimori\Seo\Jobs;
 
 use tobimori\Queues\BatchJob;
-use tobimori\Queues\Queues;
 use tobimori\Seo\Links\Checker;
+use tobimori\Seo\Links\Crawler;
 use tobimori\Seo\Seo;
 
 /**
@@ -46,16 +46,17 @@ class CheckLinksJob extends BatchJob
 			$checker->invalidate();
 		}
 
-		// leave time for the last step, which might take longer (e.g. slow external URLs)
-		$deadline = time() + $this->timeout() - self::STEP - (int)Seo::option('links.timeout') * 2;
+		// leave time for the last step, which might take longer (e.g. slow pages, or external URLs
+		// that need a HEAD & a GET request)
+		$deadline = time() + $this->timeout() - self::STEP - max(Crawler::timeout(), (int)Seo::option('links.timeout') * 2);
 
 		do {
 			$progress = $checker->step(self::STEP);
 		} while (!$progress['done'] && !$progress['running'] && time() < $deadline);
 
-		// continue in a new job, unless another scan is running
+		// continue in a new job right away, unless another scan is running
 		if (!$progress['done'] && !$progress['running']) {
-			Queues::push(static::class, ['full' => false]);
+			Checker::dispatch(now: true);
 		}
 	}
 }

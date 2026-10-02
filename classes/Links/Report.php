@@ -29,6 +29,7 @@ class Report
 	protected App $kirby;
 	protected array $data;
 	protected array|null $entries = null;
+	protected array|null $targets = null;
 	protected array|null $links = null;
 	protected Router|null $router = null;
 
@@ -186,6 +187,11 @@ class Report
 			}
 		}
 
+		// a page that hasn't been scanned yet, e.g. during the first scan or right after publishing it
+		if (isset($this->targets()[static::normalize($url)])) {
+			return ['state' => 'unknown', 'reason' => 'unchecked'];
+		}
+
 		$path = $this->path($url);
 
 		// permalinks redirect to the current URL of the model
@@ -250,6 +256,8 @@ class Report
 		return match (true) {
 			$result === null, $result['error'] === 'curl' => ['state' => 'unknown', 'reason' => 'unchecked'],
 			$result['error'] === 'timeout' => ['state' => 'unknown', 'reason' => 'timeout'],
+			// not requested, e.g. a server in the network of the site
+			$result['error'] === 'private' => ['state' => 'unknown', 'reason' => 'private'],
 			$result['error'] !== null => ['state' => 'broken', 'reason' => 'unreachable'],
 			$code >= 200 && $code < 300 => ['state' => 'ok', 'code' => $code],
 			$code >= 300 && $code < 400 => ['state' => 'redirect', 'reason' => 'redirect', 'code' => $code, 'target' => $result['location']],
@@ -274,6 +282,14 @@ class Report
 		}
 
 		return $this->entries;
+	}
+
+	/**
+	 * Comparable URLs of all pages the scan renders (as keys)
+	 */
+	protected function targets(): array
+	{
+		return $this->targets ??= array_flip($this->data['targets']);
 	}
 
 	/**

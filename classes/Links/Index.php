@@ -3,7 +3,9 @@
 namespace tobimori\Seo\Links;
 
 use Kirby\Cache\Cache;
+use Kirby\Cache\FileCache;
 use Kirby\Cms\App;
+use Kirby\Filesystem\Dir;
 use Kirby\Toolkit\Str;
 
 /**
@@ -12,15 +14,20 @@ use Kirby\Toolkit\Str;
  * - `strings`: all linked URLs, pages refer to them by their index,
  *   as most links (navigation, footer) are the same on all pages
  * - `urls`: results of external URLs
+ * - `targets`: comparable URLs of all pages to scan, e.g. to tell links to pages that aren't scanned yet from broken ones
  * - `invalidated`: time of the last "scan again", pages scanned before are scanned again
  * - `revision`: changes with every write, e.g. to cache the results derived from the index
  */
 class Index
 {
 	protected const KEY = 'index';
-	protected const LOCK = 'lock';
 
-	protected string|null $token = null;
+	/**
+	 * Handle of the lock file while this instance holds the lock
+	 *
+	 * @var resource|null
+	 */
+	protected $handle = null;
 
 	public static function cache(): Cache
 	{
@@ -33,6 +40,7 @@ class Index
 			'pages' => [],
 			'strings' => [],
 			'urls' => [],
+			'targets' => [],
 			'invalidated' => 0,
 			'revision' => null,
 			...(static::cache()->get(self::KEY) ?? []),
@@ -80,31 +88,38 @@ class Index
 
 	/**
 	 * Only one scan runs at a time, e.g. with multiple Panel users or a queue worker.
-	 * Locks expire, in case a scan is interrupted
+	 * Uses a file lock, which the system releases when the process ends, e.g. if a scan is interrupted
 	 */
-	public function lock(int $seconds): bool
+	public function lock(): bool
 	{
-		$lock = static::cache()->get(self::LOCK);
+		if ($this->handle !== null) {
+			return true;
+		}
 
-		if ($lock !== null && $lock !== $this->token) {
+		$handle = @fopen(static::lockFile(), 'c');
+
+		if ($handle === false) {
 			return false;
 		}
 
-		$this->token ??= Str::random(16);
-		// the cache expires in minutes
-		static::cache()->set(self::LOCK, $this->token, (int)ceil(($seconds + 60) / 60));
+		if (!flock($handle, LOCK_EX | LOCK_NB)) {
+			fclose($handle);
+			return false;
+		}
 
-		return static::cache()->get(self::LOCK) === $this->token;
+		$this->handle = $handle;
+
+		return true;
 	}
 
 	/**
 	 * Waits for a running scan step to finish, e.g. to change the index from the Panel
 	 */
-	public function wait(int $seconds, int $timeout = 15): bool
+	public function wait(int $timeout = 15): bool
 	{
 		$until = microtime(true) + $timeout;
 
-		while (!$this->lock($seconds)) {
+		while (!$this->lock()) {
 			if (microtime(true) >= $until) {
 				return false;
 			}
@@ -117,15 +132,37 @@ class Index
 
 	public function unlock(): void
 	{
-		if ($this->token !== null && static::cache()->get(self::LOCK) === $this->token) {
-			static::cache()->remove(self::LOCK);
+		if ($this->handle !== null) {
+			flock($this->handle, LOCK_UN);
+			fclose($this->handle);
+			$this->handle = null;
 		}
-
-		$this->token = null;
 	}
 
 	public function isLocked(): bool
 	{
-		return static::cache()->get(self::LOCK) !== null;
+		if ($this->handle !== null) {
+			return true;
+		}
+
+		if (!$this->lock()) {
+			return true;
+		}
+
+		$this->unlock();
+
+		return false;
+	}
+
+	/**
+	 * Next to the index if it's stored in files, so all processes using the same index share the lock
+	 */
+	protected static function lockFile(): string
+	{
+		$cache = static::cache();
+		$root = $cache instanceof FileCache ? $cache->root() : App::instance()->root('cache');
+		Dir::make($root);
+
+		return $root . '/' . ($cache instanceof FileCache ? 'links' : 'tobimori-seo-links-' . md5(App::instance()->url())) . '.lock';
 	}
 }

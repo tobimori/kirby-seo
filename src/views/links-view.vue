@@ -62,7 +62,13 @@ const isScanning = computed(() => !progress.value.done)
 const isCheckingPages = computed(() => progress.value.pages.done < progress.value.pages.total)
 
 const progressText = computed(() => {
-	const { pages, urls } = progress.value
+	const { pages, urls, queue, running } = progress.value
+
+	// the job hasn't started yet, or no worker is running
+	if (queue && !running) {
+		return panel.t("seo.overview.links.progress.queue")
+	}
+
 	return isCheckingPages.value
 		? panel.t("seo.overview.links.progress.pages", pages)
 		: panel.t("seo.overview.links.progress.urls", urls)

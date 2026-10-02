@@ -46,8 +46,12 @@ return [
 	'links' => [
 		// run the check in a queue worker if Kirby Queues is installed, otherwise the Panel runs it
 		'queue' => true,
-		// cron expression for checking all pages & external URLs again (with queues only), `null` to disable
+		// cron expression for checking all pages & external URLs again (with queues only), `false` to disable.
+		// The queue worker applies changes when it starts
 		'schedule' => '0 3 * * *',
+		// request pages over HTTP instead of rendering them in the same process, `null` for queue workers only
+		// (requires the `url` option). Set to `false` if the worker can't request the site, e.g. behind basic auth
+		'http' => null,
 		// hours until external URLs are checked again
 		'ttl' => 24 * 7,
 		// seconds to wait for external servers & number of parallel requests

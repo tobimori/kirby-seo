@@ -124,7 +124,7 @@ class LinksView extends OverviewView
 
 		$checker = new Checker();
 		$checker->invalidate();
-		Checker::dispatch(full: true);
+		Checker::dispatch(full: true, now: true);
 
 		return $checker->progress();
 	}
@@ -187,7 +187,7 @@ class LinksView extends OverviewView
 
 		$checker = new Checker();
 		$checker->recheck((string)$this->kirby->request()->get('url'));
-		Checker::dispatch();
+		Checker::dispatch(now: true);
 
 		return $checker->progress();
 	}

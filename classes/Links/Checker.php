@@ -3,6 +3,7 @@
 namespace tobimori\Seo\Links;
 
 use Closure;
+use CurlMultiHandle;
 use Kirby\Cms\App;
 use Kirby\Exception\Exception;
 use Kirby\Toolkit\I18n;
@@ -39,13 +40,54 @@ class Checker
 	}
 
 	/**
-	 * Starts a scan in the background, e.g. after changing content
+	 * Starts a scan in the background: after changing content, changes within the job's
+	 * batch window are checked together, scans started by users (`$now`) start right away
 	 */
-	public static function dispatch(bool $full = false): void
+	public static function dispatch(bool $full = false, bool $now = false): void
 	{
-		if (static::usesQueue()) {
+		if (!static::usesQueue()) {
+			return;
+		}
+
+		if ($now) {
+			\tobimori\Queues\Queues::later(0, CheckLinksJob::class, ['full' => $full]);
+		} else {
 			\tobimori\Queues\Queues::push(CheckLinksJob::class, ['full' => $full]);
 		}
+	}
+
+	/**
+	 * Schedules the regular check of all pages & external URLs (`links.schedule`) for the queue worker.
+	 * Queues stores schedules, so schedules of previous values of the option are removed
+	 */
+	public static function schedule(): void
+	{
+		$scheduler = \tobimori\Queues\Queues::scheduler();
+		$expression = static::usesQueue() ? Seo::option('links.schedule') : null;
+		$type = (new CheckLinksJob())->type();
+		$exists = false;
+
+		foreach ($scheduler->all() as $id => $entry) {
+			if ($entry['job'] !== $type) {
+				continue;
+			}
+
+			if ($entry['expression'] === $expression && !$exists) {
+				$exists = true;
+				continue;
+			}
+
+			$scheduler->unschedule($id);
+		}
+
+		if ($expression && !$exists) {
+			$scheduler->schedule($expression, CheckLinksJob::class, ['full' => true]);
+		}
+	}
+
+	public static function userAgent(): string
+	{
+		return 'Mozilla/5.0 (compatible; Kirby SEO link checker; +' . App::instance()->url() . ')';
 	}
 
 	/**
@@ -84,7 +126,7 @@ class Checker
 	 */
 	protected function change(Closure $change): void
 	{
-		if (!$this->index->wait(seconds: 10)) {
+		if (!$this->index->wait()) {
 			throw new Exception(message: I18n::translate('seo.links.busy'));
 		}
 
@@ -100,7 +142,7 @@ class Checker
 	 */
 	public function step(int $seconds): array
 	{
-		if (!$this->index->lock($seconds)) {
+		if (!$this->index->lock()) {
 			return [...$this->progress(), 'running' => true];
 		}
 
@@ -111,16 +153,29 @@ class Checker
 			$targets = $this->prepare();
 			$crawler = new Crawler($this->onExit(...));
 
-			foreach ($targets as $key => [$page, $language]) {
-				if ($this->isScanned($key)) {
-					continue;
-				}
+			$pending = array_filter($targets, fn ($key) => !$this->isScanned($key), ARRAY_FILTER_USE_KEY);
+			$http = Crawler::usesHttp();
 
+			// requests run in parallel, rendering in this process one page after the other
+			foreach (array_chunk($pending, $http ? max(1, (int)Seo::option('links.concurrency')) : 1, true) as $batch) {
 				if (microtime(true) >= $deadline) {
 					break;
 				}
 
-				$this->store($key, $page, $language, $crawler->crawl($key, $page, $language));
+				$results = [];
+
+				if ($http) {
+					$results = Crawler::fetch(array_map(fn ($target) => $target[0]->url($target[1]), $batch));
+				} else {
+					foreach ($batch as $key => [$page, $language]) {
+						$results[$key] = $crawler->render($key, $page, $language);
+					}
+				}
+
+				foreach ($results as $key => $result) {
+					[$page, $language] = $targets[$key];
+					$this->store($key, $page, $language, $result);
+				}
 			}
 
 			while (microtime(true) < $deadline && ($urls = $this->dueUrls())) {
@@ -206,6 +261,7 @@ class Checker
 		}
 
 		$this->data['pages'] = array_intersect_key($this->data['pages'], $targets);
+		$this->data['targets'] = array_keys($urls);
 
 		if ($removed !== []) {
 			$ids = array_filter(
@@ -249,14 +305,14 @@ class Checker
 	/**
 	 * A template ended the script while rendering the page, e.g. with `go()`
 	 */
-	protected function onExit(string $key, string|null $location): void
+	protected function onExit(string $key, int $code, string|null $location): void
 	{
 		[$language, $id] = explode('/', $key, 2);
 		$page = App::instance()->page($id);
 
 		if ($this->data !== null && $page !== null) {
 			$this->store($key, $page, $language ?: null, [
-				'status' => $location ? 302 : 200,
+				'status' => $location && $code < 300 ? 302 : $code,
 				'location' => $location,
 				'error' => null,
 				'links' => ['content' => [], 'layout' => []],
@@ -266,6 +322,11 @@ class Checker
 		}
 
 		$this->index->unlock();
+
+		// the script ends, e.g. a queue worker rendering pages in its own process: the next job continues
+		if (PHP_SAPI === 'cli') {
+			static::dispatch(now: true);
+		}
 	}
 
 	/**
@@ -316,7 +377,9 @@ class Checker
 
 	/**
 	 * Checks the URLs in parallel: a HEAD request first, servers that
-	 * don't support it get a GET request that stops after the first bytes
+	 * don't support it get a GET request that stops after the first bytes.
+	 * URLs of private networks aren't requested (e.g. the router or cloud metadata),
+	 * the request connects to the checked address, even if the DNS answer changes
 	 *
 	 * @return array<string, array{code: int, location: string|null, error: string|null, checked: int}>
 	 */
@@ -328,7 +391,28 @@ class Checker
 			return array_fill_keys($urls, ['code' => 0, 'location' => null, 'error' => 'curl', 'checked' => time()]);
 		}
 
+		$addresses = [];
+		$resolve = [];
+
+		foreach ($urls as $url) {
+			$host = strtolower(trim((string)parse_url($url, PHP_URL_HOST), '[]'));
+			$address = $addresses[$host] ??= static::address($host);
+
+			if ($address === null) {
+				$results[$url] = ['code' => 0, 'location' => null, 'error' => 'private', 'checked' => time()];
+			} elseif ($address !== false) {
+				$port = parse_url($url, PHP_URL_PORT) ?? (str_starts_with(strtolower($url), 'https:') ? 443 : 80);
+				$resolve[$url] = ["{$host}:{$port}:" . (str_contains($address, ':') ? "[{$address}]" : $address)];
+			}
+		}
+
+		$urls = array_values(array_diff($urls, array_keys($results)));
+
 		foreach (['HEAD', 'GET'] as $method) {
+			if ($urls === []) {
+				break;
+			}
+
 			$multi = curl_multi_init();
 			$handles = [];
 
@@ -339,9 +423,11 @@ class Checker
 					CURLOPT_RETURNTRANSFER => false,
 					CURLOPT_HEADER => false,
 					CURLOPT_FOLLOWLOCATION => false,
+					CURLOPT_PROTOCOLS => CURLPROTO_HTTP | CURLPROTO_HTTPS,
+					CURLOPT_RESOLVE => $resolve[$url] ?? [],
 					CURLOPT_CONNECTTIMEOUT => 5,
 					CURLOPT_TIMEOUT => (int)Seo::option('links.timeout'),
-					CURLOPT_USERAGENT => 'Mozilla/5.0 (compatible; Kirby SEO link checker; +' . App::instance()->url() . ')',
+					CURLOPT_USERAGENT => static::userAgent(),
 					CURLOPT_HTTPHEADER => ['Accept: text/html,application/xhtml+xml,*/*;q=0.8'],
 					// only the status is needed: stop at the first bytes of the body
 					CURLOPT_WRITEFUNCTION => fn () => 0,
@@ -350,12 +436,7 @@ class Checker
 				$handles[$url] = $handle;
 			}
 
-			do {
-				$status = curl_multi_exec($multi, $running);
-				if ($running) {
-					curl_multi_select($multi);
-				}
-			} while ($running && $status === CURLM_OK);
+			static::perform($multi);
 
 			$retry = [];
 
@@ -384,12 +465,52 @@ class Checker
 			}
 
 			curl_multi_close($multi);
-
-			if (($urls = $retry) === []) {
-				break;
-			}
+			$urls = $retry;
 		}
 
 		return $results;
+	}
+
+	/**
+	 * Runs the requests of the handle until all of them are done
+	 */
+	public static function perform(CurlMultiHandle $multi): void
+	{
+		do {
+			$status = curl_multi_exec($multi, $running);
+
+			// `-1` if there's nothing to wait for yet, without a pause this would be a busy loop
+			if ($running && curl_multi_select($multi) === -1) {
+				usleep(10_000);
+			}
+		} while ($running && $status === CURLM_OK);
+
+		// `curl_errno()` of the handles is only set once their messages are read
+		do {
+			$message = curl_multi_info_read($multi);
+		} while ($message !== false);
+	}
+
+	/**
+	 * Public IP address of the host, `null` if any of its addresses is private or reserved,
+	 * `false` if it can't be resolved (the request reports why)
+	 */
+	protected static function address(string $host): string|false|null
+	{
+		$addresses = filter_var($host, FILTER_VALIDATE_IP) !== false
+			? [$host]
+			: (@gethostbynamel($host) ?: array_column(@dns_get_record($host, DNS_AAAA) ?: [], 'ipv6'));
+
+		if ($addresses === []) {
+			return false;
+		}
+
+		foreach ($addresses as $address) {
+			if (filter_var($address, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) === false) {
+				return null;
+			}
+		}
+
+		return $addresses[0];
 	}
 }
