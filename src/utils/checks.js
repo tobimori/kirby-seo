@@ -1,11 +1,12 @@
 /**
- * Severity of the issue types: `negative` needs fixing, `notice` is acceptable
+ * Severity of the issue types: `negative` needs fixing, `notice` is acceptable.
+ * A fallback description is shared with other pages, which makes it a duplicate
  */
 export const SEVERITY = {
 	descriptionMissing: "negative",
 	descriptionDuplicate: "negative",
 	titleDuplicate: "negative",
-	descriptionFallback: "notice",
+	descriptionFallback: "negative",
 	titleLength: "notice",
 	descriptionLength: "notice"
 }
