@@ -2,8 +2,6 @@
 
 namespace tobimori\Seo\Views;
 
-use Kirby\Cms\ModelWithContent;
-use Kirby\Content\Changes;
 use Kirby\Content\VersionId;
 use Kirby\Exception\NotFoundException;
 use Kirby\Exception\PermissionException;
@@ -315,32 +313,5 @@ class LinksView extends OverviewView
 			],
 			'location' => I18n::translate("seo.overview.links.location.{$location}"),
 		];
-	}
-
-	// the table is read-only, there's nothing to edit, save or publish
-
-	protected function find(string $id): array|null
-	{
-		return null;
-	}
-
-	protected function ids(ModelWithContent $model): array
-	{
-		return [];
-	}
-
-	protected function tracked(Changes $changes): iterable
-	{
-		return [];
-	}
-
-	protected function input(array $entry, array $columns): array
-	{
-		return [];
-	}
-
-	protected function live(): array
-	{
-		return [];
 	}
 }

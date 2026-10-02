@@ -3,7 +3,7 @@
 use Kirby\Cms\App;
 use tobimori\Seo\Views\ImagesView;
 use tobimori\Seo\Views\LinksView;
-use tobimori\Seo\Views\OverviewView;
+use tobimori\Seo\Views\EditableOverviewView;
 
 return [
 	'routes' => [
@@ -15,7 +15,7 @@ return [
 			'method' => 'POST',
 			'action' => function (string $tab, string $action) {
 				$request = App::instance()->request();
-				$view = OverviewView::for($tab);
+				$view = EditableOverviewView::for($tab);
 
 				return match ($action) {
 					'save' => $view->save((array)$request->get('changes', [])),

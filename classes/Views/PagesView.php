@@ -21,7 +21,7 @@ use tobimori\Seo\Seo;
  * Meta values are resolved lazily: only for the rows of the current table page,
  * unless searching or sorting needs them.
  */
-class PagesView extends OverviewView
+class PagesView extends EditableOverviewView
 {
 	public const SORTABLE = ['title', 'metaTitle', 'metaDescription', 'ogDescription', 'template'];
 	public const EDITABLE = ['metaTitle', 'metaDescription', 'ogDescription'];

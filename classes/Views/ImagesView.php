@@ -14,21 +14,16 @@ use Kirby\Toolkit\Str;
 use tobimori\Seo\Ai\Content;
 use tobimori\Seo\AltText;
 use tobimori\Seo\Field\AltTextField;
+use tobimori\Seo\ImageAudit;
 
 /**
  * Panel view listing the alt texts of all images, one row per alt text field
  */
-class ImagesView extends OverviewView
+class ImagesView extends EditableOverviewView
 {
 	public const SORTABLE = ['title', 'alt', 'decorative', 'template'];
 	public const SEARCHABLE = ['id', 'alt', 'parent', 'template'];
 	public const SOURCES = [AltText::SOURCE_AI, AltText::SOURCE_MANUAL, AltText::SOURCE_REVIEWED];
-
-	/**
-	 * States of alt texts the table can be filtered by, `issues` combines the ones that need work
-	 */
-	public const FILTERS = ['missing', 'ai', 'decorative'];
-	public const ISSUES = ['missing', 'ai'];
 
 	public function load(): array
 	{
@@ -41,12 +36,13 @@ class ImagesView extends OverviewView
 			$search = trim($request->get('search', ''));
 			$sort = in_array($request->get('sort'), self::SORTABLE, true) ? $request->get('sort') : null;
 			$dir = $request->get('dir') === 'desc' ? 'desc' : 'asc';
-			$issue = in_array($request->get('issue'), [...self::FILTERS, 'issues'], true) ? $request->get('issue') : null;
+			// states of alt texts, `issues` combines the ones that need work
+			$issue = in_array($request->get('issue'), [...ImageAudit::FILTERS, 'issues'], true) ? $request->get('issue') : null;
 
-			$entries = array_values($this->images());
+			$entries = array_values($this->images()->entries());
 
 			if ($issue) {
-				$entries = array_values(array_filter($entries, fn ($entry) => $this->has($entry, $issue)));
+				$entries = array_values(array_filter($entries, fn ($entry) => $this->images()->has($entry, $issue)));
 			}
 
 			if ($search !== '') {
@@ -77,7 +73,7 @@ class ImagesView extends OverviewView
 					'changes' => $this->changes(),
 					'pagination' => $pagination,
 					'ids' => array_column($entries, 'id'),
-					'summary' => $this->summary(),
+					'summary' => $this->images()->summary(),
 					'issue' => $issue,
 					'ai' => $this->canUseAi(),
 					'search' => $search,
@@ -90,7 +86,7 @@ class ImagesView extends OverviewView
 
 	protected function find(string $id): array|null
 	{
-		return $this->images()[$id] ?? null;
+		return $this->images()->find($id);
 	}
 
 	/**
@@ -136,8 +132,8 @@ class ImagesView extends OverviewView
 	protected function ids(ModelWithContent $model): array
 	{
 		return array_map(
-			fn ($field) => static::imageId($model, $field),
-			$this->altFields($model)
+			fn ($field) => ImageAudit::id($model, $field),
+			$this->images()->fields($model)
 		);
 	}
 
@@ -189,40 +185,9 @@ class ImagesView extends OverviewView
 	protected function live(): array
 	{
 		return [
-			'summary' => $this->summary(),
-			'stats' => ['images' => $this->imageStats()],
+			'summary' => $this->images()->summary(),
+			'stats' => ['images' => $this->images()->stats()],
 		];
-	}
-
-	/**
-	 * Number of images per filter
-	 */
-	protected function summary(): array
-	{
-		$summary = array_fill_keys(self::FILTERS, 0);
-
-		foreach ($this->images() as $entry) {
-			foreach (self::FILTERS as $filter) {
-				if ($this->has($entry, $filter)) {
-					$summary[$filter]++;
-				}
-			}
-		}
-
-		return $summary;
-	}
-
-	protected function has(array $entry, string $filter): bool
-	{
-		$alt = $this->altText($entry);
-
-		return match ($filter) {
-			'missing' => $alt->isMissing(),
-			'ai' => !$alt->isMissing() && $alt->isAiGenerated(),
-			'decorative' => $alt->isDecorative(),
-			'issues' => $this->has($entry, 'missing') || $this->has($entry, 'ai'),
-			default => false,
-		};
 	}
 
 	/**
@@ -234,9 +199,9 @@ class ImagesView extends OverviewView
 
 		return match ($key) {
 			'id' => $file->id(),
-			'alt' => $this->altText($entry)->text(),
+			'alt' => $this->images()->altText($entry)->text(),
 			// decorative images first when sorting ascending
-			'decorative' => $this->altText($entry)->isDecorative() ? '0' : '1',
+			'decorative' => $this->images()->altText($entry)->isDecorative() ? '0' : '1',
 			'parent' => (string)$file->parent()->title()->value(),
 			'template' => (string)$file->blueprint()->title(),
 		};
@@ -318,10 +283,10 @@ class ImagesView extends OverviewView
 		$file = $entry['model'];
 		['lock' => $lock, 'editable' => $editable, 'translated' => $translated] = $this->state($file);
 		$hasChanges = $this->fieldChanges($entry) !== [];
-		$alt = $this->altText($entry);
+		$alt = $this->images()->altText($entry);
 		$blueprint = $file->blueprint()->field($entry['field']) ?? [];
 		$parent = $file->parent();
-		$label = count($this->altFields($file)) > 1
+		$label = count($this->images()->fields($file)) > 1
 			? I18n::translate($blueprint['label'] ?? null, $blueprint['label'] ?? $entry['field'])
 			: null;
 
