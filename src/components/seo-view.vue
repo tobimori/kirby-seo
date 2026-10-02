@@ -14,7 +14,7 @@ const props = defineProps({
 		type: Array,
 		default: () => []
 	},
-	/** `{ checked, title, description, images: { total, missing, ai } }` */
+	/** `{ checked, title, description, images: { total, missing, ai }, links: { ok, notice, negative, unknown } }` */
 	stats: Object,
 	tab: String,
 	tabs: {
@@ -31,13 +31,15 @@ const emit = defineEmits(["filter"])
 
 const panel = usePanel()
 
-const SEVERITIES = ["ok", "notice", "negative"]
+// `unknown`: values that couldn't be checked, e.g. links to servers that block bots
+const SEVERITIES = ["ok", "notice", "negative", "unknown"]
+const ICONS = { ...SEVERITY_ICONS, unknown: "question" }
 
 /**
  * Stat card with the distribution of values by severity, shown as bar & legend
  */
 const toCard = ({ key, icon, distribution, legend, click, highlight = ["notice", "negative"] }) => {
-	const total = SEVERITIES.reduce((sum, severity) => sum + distribution[severity], 0)
+	const total = SEVERITIES.reduce((sum, severity) => sum + (distribution[severity] ?? 0), 0)
 
 	return {
 		key,
@@ -45,11 +47,13 @@ const toCard = ({ key, icon, distribution, legend, click, highlight = ["notice",
 		label: panel.t(`seo.overview.stats.${key}`),
 		total,
 		highlight: highlight.map((severity) => ({ severity, count: distribution[severity] })),
-		segments: SEVERITIES.filter((severity) => distribution[severity] > 0).map((severity) => ({
-			severity,
-			count: distribution[severity],
-			label: panel.t(`seo.overview.stats.${legend}.${severity}`)
-		})),
+		segments: SEVERITIES.filter((severity) => (distribution[severity] ?? 0) > 0).map(
+			(severity) => ({
+				severity,
+				count: distribution[severity],
+				label: panel.t(`seo.overview.stats.${legend}.${severity}`)
+			})
+		),
 		// filtering only makes sense if there's something to fix
 		click: click && total - distribution.ok > 0 ? click : null
 	}
@@ -85,6 +89,14 @@ const cards = computed(() => {
 			highlight: ["negative"],
 			// missing & AI-generated alt texts
 			click: () => emit("filter", "issues", "images")
+		}),
+		toCard({
+			key: "links",
+			icon: "url",
+			distribution: props.stats.links,
+			legend: "links",
+			highlight: ["negative"],
+			click: () => emit("filter", "issues", "links")
 		})
 	]
 })
@@ -135,7 +147,7 @@ const cards = computed(() => {
 						:key="segment.severity"
 						:data-severity="segment.severity"
 					>
-						<k-icon :type="SEVERITY_ICONS[segment.severity]" />{{ segment.count }}
+						<k-icon :type="ICONS[segment.severity]" />{{ segment.count }}
 						{{ segment.label }}
 					</span>
 					<span v-if="!card.total">{{ $t(`seo.overview.stats.${card.key}.none`) }}</span>
@@ -173,6 +185,8 @@ const cards = computed(() => {
 	--severity-notice-back: var(--color-orange-600);
 	--severity-negative: var(--color-red-500);
 	--severity-negative-back: var(--color-red-600);
+	--severity-unknown: var(--color-gray-400);
+	--severity-unknown-back: var(--color-gray-500);
 	text-align: start;
 }
 
@@ -259,6 +273,11 @@ button.k-seo-stat {
 .k-seo-stat [data-severity="negative"] {
 	--color: var(--severity-negative);
 	--color-back: var(--severity-negative-back);
+}
+
+.k-seo-stat [data-severity="unknown"] {
+	--color: var(--severity-unknown);
+	--color-back: var(--severity-unknown-back);
 }
 
 .k-seo-stat-bar span {

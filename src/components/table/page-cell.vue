@@ -9,7 +9,12 @@ defineProps({
 <template>
 	<div :data-translated="value.translated !== false" class="k-seo-page-cell">
 		<span class="k-seo-page-cell-heading">
-			<k-link :to="value.href" class="k-seo-page-cell-title" @click.native.stop>
+			<k-link
+				:to="value.href"
+				:target="value.target"
+				class="k-seo-page-cell-title"
+				@click.native.stop
+			>
 				{{ value.text }}
 			</k-link>
 			<!-- browsers don't show tooltips for the `title` of (inline) SVGs, so the icons are wrapped -->
@@ -33,7 +38,7 @@ defineProps({
 			</span>
 		</span>
 		<span v-if="value.info !== undefined" class="k-seo-page-cell-info">{{ value.info }}</span>
-		<span v-else class="k-seo-page-cell-path">{{ value.path }}</span>
+		<span v-else-if="value.path !== undefined" class="k-seo-page-cell-path">{{ value.path }}</span>
 	</div>
 </template>
 

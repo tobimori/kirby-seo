@@ -4,18 +4,37 @@ use Kirby\Cms\File;
 use Kirby\Cms\Page;
 use Kirby\Toolkit\A;
 use Kirby\Toolkit\Str;
+use Kirby\Cms\Event;
 use tobimori\Seo\Field\AltTextField;
+use tobimori\Seo\Links\Checker;
 use tobimori\Seo\Seo;
+
+// changes that might break links or fix them (only starts a scan with queues,
+// otherwise the Panel scans the changed pages when opening the links tab)
+$checkLinks = function (Event $event) {
+	if (in_array($event->action(), ['update', 'changeSlug', 'changeStatus', 'changeTemplate', 'changeName', 'delete'], true)) {
+		Checker::dispatch();
+	}
+};
 
 return [
 	'system.loadPlugins:after' => function () {
 		if (class_exists('tobimori\Queues\Queues')) {
 			\tobimori\Queues\Queues::register([
+				\tobimori\Seo\Jobs\CheckLinksJob::class,
 				\tobimori\Seo\Jobs\GenerateAltTextJob::class,
 				\tobimori\Seo\Jobs\IndexNowBatchJob::class,
 			]);
+
+			// checks all pages & external URLs again, e.g. for external pages that went offline
+			if (Checker::usesQueue() && ($schedule = Seo::option('links.schedule'))) {
+				\tobimori\Queues\Queues::schedule($schedule, \tobimori\Seo\Jobs\CheckLinksJob::class, ['full' => true]);
+			}
 		}
 	},
+	'page.*:after' => $checkLinks,
+	'site.*:after' => $checkLinks,
+	'file.*:after' => $checkLinks,
 	'file.create:after' => function (File $file) {
 		if ($file->type() !== 'image') {
 			return;

@@ -2,6 +2,7 @@
 
 use Kirby\Cms\App;
 use tobimori\Seo\Views\ImagesView;
+use tobimori\Seo\Views\LinksView;
 use tobimori\Seo\Views\OverviewView;
 
 return [
@@ -36,6 +37,14 @@ return [
 
 				return (new ImagesView())->generate((string)$kirby->request()->body()->get('id'));
 			}
+		],
+		[
+			// - scan: runs a step of the link check (without queues) & returns the progress
+			// - rescan: checks all pages & URLs again
+			// - recheck: checks a link again (the pages linking to it & the URL)
+			'pattern' => 'seo/overview/links/(scan|rescan|recheck)',
+			'method' => 'POST',
+			'action' => fn (string $action) => (new LinksView())->$action()
 		],
 	]
 ];

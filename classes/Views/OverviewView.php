@@ -21,6 +21,7 @@ use Kirby\Panel\Ui\Buttons\ViewButtons;
 use Kirby\Toolkit\I18n;
 use tobimori\Seo\AltText;
 use tobimori\Seo\Audit;
+use tobimori\Seo\Links\Report;
 use tobimori\Seo\Meta;
 use tobimori\Seo\Seo;
 
@@ -62,6 +63,7 @@ abstract class OverviewView
 		return match ($tab) {
 			'pages' => new PagesView(),
 			'images' => new ImagesView(),
+			'links' => new LinksView(),
 			default => throw new NotFoundException(key: 'view.notFound'),
 		};
 	}
@@ -258,22 +260,6 @@ abstract class OverviewView
 		});
 	}
 
-	/**
-	 * Tabs that don't have their own view yet
-	 */
-	public function tab(string $tab): array
-	{
-		if (!static::canAccess()) {
-			throw new PermissionException(key: 'access.view');
-		}
-
-		return VersionId::render('changes', fn () => [
-			'component' => 'k-seo-tab-view',
-			'title' => I18n::translate('seo.overview.title'),
-			'props' => $this->layout($tab),
-		]);
-	}
-
 	protected function apply(array $ids, Closure $action): array
 	{
 		if (!static::canAccess()) {
@@ -398,6 +384,7 @@ abstract class OverviewView
 			'stats' => [
 				...$this->audit()->stats(),
 				'images' => $this->imageStats(),
+				'links' => (new Report())->stats(),
 			],
 			'tab' => $tab,
 			'tabs' => array_map(fn ($name, $icon) => [

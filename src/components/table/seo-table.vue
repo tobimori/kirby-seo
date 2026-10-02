@@ -3,7 +3,8 @@ import { computed, ref } from "kirbyuse"
 
 /**
  * Wrapper around Kirby's `k-table` that adds sortable headers, resizable columns
- * and a controlled selection column that persists across pagination
+ * and a column with row numbers, which turn into checkboxes in selectable tables
+ * (the selection persists across pagination)
  */
 const props = defineProps({
 	columns: {
@@ -48,6 +49,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits([
+	"cell",
 	"commit",
 	"input",
 	"option",
@@ -281,7 +283,7 @@ const cancelEdit = (key) => {
 const MIN_WIDTH = 64
 const KEYBOARD_STEP = 16
 
-const isResizable = (key) => key !== "_select" && props.columns[key]?.resizable !== false
+const isResizable = (key) => key !== "_index" && props.columns[key]?.resizable !== false
 
 // the next resizable column gives/takes the width, so the table never grows
 // wider than its container (which would require horizontal scrolling)
@@ -427,34 +429,32 @@ const tableColumns = computed(() => {
 		})
 	)
 
-	if (!props.selectable) {
-		return columns
-	}
-
 	return {
-		_select: {
-			label: " ",
+		_index: {
+			label: "#",
 			mobile: true,
-			type: "seo-select",
-			width: "var(--table-row-height)",
+			type: "seo-index",
+			// wide enough for the highest number on the page, like Kirby's index column
+			width: `max(var(--table-row-height), calc(${String(offset.value + props.rows.length).length}ch + 1.5rem))`,
 			// cells receive the column config, so we pass the selection state along
+			selectable: props.selectable,
 			isSelected,
 			toggle,
-			// rows with a `lock` show a lock button instead of the checkbox
+			// rows with a `lock` show a lock button instead of the number
 			openLock: (row) => emit("lock", row)
 		},
 		...columns
 	}
 })
 
-const tableRows = computed(() => {
-	if (!props.selectable) {
-		return props.rows
-	}
+// numbers continue across table pages
+const offset = computed(() =>
+	props.pagination ? (props.pagination.page - 1) * props.pagination.limit : 0
+)
 
-	// cells are only rendered for non-empty values
-	return props.rows.map((row) => ({ ...row, _select: keyOf(row) }))
-})
+const tableRows = computed(() =>
+	props.rows.map((row, index) => ({ ...row, _index: offset.value + index + 1 }))
+)
 
 const hasPagination = computed(
 	() => props.pagination !== false && props.pagination.total > props.pagination.limit
@@ -480,16 +480,20 @@ const onSort = (columnIndex) => {
 </script>
 
 <template>
-	<div class="k-seo-table">
+	<div :data-selecting="selected.length > 0" class="k-seo-table">
 		<k-table
 			:columns="tableColumns"
 			:rows="tableRows"
 			:empty="empty"
 			:index="false"
+			@cell="(...args) => emit('cell', ...args)"
 			@option="(...args) => emit('option', ...args)"
 		>
 			<template #header="{ column, columnIndex, label }">
-				<label v-if="columnIndex === '_select'" class="k-table-select-checkbox k-seo-table-select">
+				<label
+					v-if="columnIndex === '_index' && selectable"
+					class="k-seo-table-index k-seo-table-select"
+				>
 					<input
 						:checked="allSelected"
 						:indeterminate.prop="someSelected"
@@ -498,7 +502,11 @@ const onSort = (columnIndex) => {
 						type="checkbox"
 						@change="toggleAll"
 					/>
+					<span class="k-seo-table-index-number" aria-hidden="true">#</span>
 				</label>
+				<span v-else-if="columnIndex === '_index'" class="k-seo-table-index">
+					<span class="k-seo-table-index-number">#</span>
+				</span>
 				<button
 					v-else-if="column.sortable"
 					:data-sorted="String(sort === columnIndex)"
@@ -550,8 +558,17 @@ const onSort = (columnIndex) => {
 	}
 
 	th:has(> .k-seo-table-sort),
-	th:has(> .k-seo-table-select) {
+	th:has(> .k-seo-table-index),
+	td:has(> .k-seo-table-index) {
 		padding: 0;
+	}
+
+	/* empty values, like in Retour */
+	td.k-table-cell:empty::after {
+		content: "–";
+		display: block;
+		padding-inline: var(--table-cell-padding);
+		color: var(--color-text-dimmed);
 	}
 
 	.k-seo-table-sort {

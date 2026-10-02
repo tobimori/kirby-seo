@@ -41,6 +41,21 @@ return [
 	'cache.searchConsole' => true,
 	'cache.indexnow' => true,
 	'cache.overview' => true,
+	'cache.links' => true,
+	// broken links check in the SEO overview, renders all published pages & checks their links
+	'links' => [
+		// run the check in a queue worker if Kirby Queues is installed, otherwise the Panel runs it
+		'queue' => true,
+		// cron expression for checking all pages & external URLs again (with queues only), `null` to disable
+		'schedule' => '0 3 * * *',
+		// hours until external URLs are checked again
+		'ttl' => 24 * 7,
+		// seconds to wait for external servers & number of parallel requests
+		'timeout' => 10,
+		'concurrency' => 5,
+		// other hosts of the site (besides the site & language URLs), e.g. `['www.example.com']`
+		'hosts' => [],
+	],
 	'overview' => [
 		// recommended lengths (in characters) for the checks in the SEO overview, as [min, max].
 		// search engines don't have hard limits, they truncate snippets to fit the screen

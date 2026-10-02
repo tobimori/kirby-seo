@@ -13,6 +13,7 @@ use tobimori\Seo\Buttons\UtmShareViewButton;
 use tobimori\Seo\Dialogs\UtmShareDialog;
 use tobimori\Seo\Seo;
 use tobimori\Seo\Views\ImagesView;
+use tobimori\Seo\Views\LinksView;
 use tobimori\Seo\Views\OverviewView;
 use tobimori\Seo\Views\PagesView;
 
@@ -36,9 +37,9 @@ return [
 				'pattern' => 'seo/images',
 				'action' => fn () => (new ImagesView())->load()
 			],
-			'seo.tab' => [
-				'pattern' => 'seo/(links)',
-				'action' => fn (string $tab) => (new PagesView())->tab($tab)
+			'seo.links' => [
+				'pattern' => 'seo/links',
+				'action' => fn () => (new LinksView())->load()
 			],
 		],
 		'buttons' => [
@@ -47,6 +48,11 @@ return [
 			'seo.overview.languages' => fn (Site $site) => new OverviewLanguagesButton($site)
 		],
 		'drawers' => [
+			// pages linking to a URL of the links tab
+			'seo-link-pages' => [
+				'pattern' => 'seo/links/pages',
+				'load' => fn () => (new LinksView())->linkingPages((string)App::instance()->request()->get('url'))
+			],
 			'gsc-data' => [
 				'pattern' => 'seo/gsc/data/(:all)',
 				'load' => function (string $parent) {

@@ -8,24 +8,11 @@ const AI_CONCURRENCY = 2
 const isLockError = (error) => error?.key?.startsWith("error.content.lock")
 
 /**
- * Shared logic of the tables in the SEO area (pages, images): inline editing with autosave
- * to the changes versions, locks, publishing & discarding, selection, search, sorting,
- * column settings and AI generation.
+ * Search, sorting & pagination of the tables in the SEO area, via the query of the view
  *
- * Rows are updated in place after saving or when checking locks, instead of reloading
- * the view: a reload would resort the table & make rows jump while editing.
- * The order only changes when the user sorts, searches or paginates.
- *
- * @param {object} props Props of the view: `rows`, `columns`, `changes`, `summary`, `stats`, `ids`, `search`
- * @param {object} options
- * @param {string} options.endpoint API endpoint of the table, e.g. `seo/overview/pages`
- * @param {string} options.storageKey Key for the column settings in the local storage
- * @param {(cell: object, pending: { value: string, source?: string }) => object} options.applyPending
- *   Shows a value that hasn't been confirmed by the server yet in its cell
- * @param {(row: object, column: string) => { url: string, body: object }} [options.aiRequest]
- *   Endpoint streaming the generated value of a cell, defaults to the AI route of the field with the column's name
+ * @param {object} props Props of the view: `search`
  */
-export function useOverviewTable(props, { endpoint, storageKey, applyPending, aiRequest }) {
+export function useTableQuery(props) {
 	const panel = usePanel()
 	const helpers = useHelpers()
 
@@ -52,6 +39,79 @@ export function useOverviewTable(props, { endpoint, storageKey, applyPending, ai
 
 	const onSort = ({ sort, dir }) => reload({ sort: sort ?? "", dir, page: "1" })
 	const onPaginate = ({ page }) => reload({ page: String(page) })
+
+	return { reload, searchterm, isSearching, toggleSearch, onSort, onPaginate }
+}
+
+/**
+ * Columns of the tables in the SEO area that can be shown/hidden & resized
+ *
+ * @param {object} props Props of the view: `columns`
+ * @param {string} storageKey Key for the column settings in the local storage
+ */
+export function useColumnSettings(props, storageKey) {
+	/**
+	 * Column visibility & widths are remembered per browser
+	 */
+	const settings = ref({
+		columns: {},
+		widths: {},
+		...JSON.parse(window.localStorage.getItem(storageKey) ?? "{}")
+	})
+
+	watch(settings, (value) => window.localStorage.setItem(storageKey, JSON.stringify(value)), {
+		deep: true
+	})
+
+	// columns with a `toggle` label can be shown/hidden
+	const isVisible = (key) => {
+		const column = props.columns[key]
+		return !column.toggle || (settings.value.columns[key] ?? column.hidden !== true)
+	}
+
+	const columnOptions = computed(() =>
+		Object.entries(props.columns)
+			.filter(([, column]) => column.toggle)
+			.map(([value, column]) => ({ value, text: column.toggle }))
+	)
+
+	const visibleColumnKeys = computed(() =>
+		columnOptions.value.filter(({ value }) => isVisible(value)).map(({ value }) => value)
+	)
+
+	const onColumns = (values) => {
+		settings.value.columns = Object.fromEntries(
+			columnOptions.value.map(({ value }) => [value, values.includes(value)])
+		)
+		// the remaining columns should fill the table again
+		settings.value.widths = {}
+	}
+
+	return { settings, isVisible, columnOptions, visibleColumnKeys, onColumns }
+}
+
+/**
+ * Shared logic of the tables in the SEO area (pages, images): inline editing with autosave
+ * to the changes versions, locks, publishing & discarding, selection, search, sorting,
+ * column settings and AI generation.
+ *
+ * Rows are updated in place after saving or when checking locks, instead of reloading
+ * the view: a reload would resort the table & make rows jump while editing.
+ * The order only changes when the user sorts, searches or paginates.
+ *
+ * @param {object} props Props of the view: `rows`, `columns`, `changes`, `summary`, `stats`, `ids`, `search`
+ * @param {object} options
+ * @param {string} options.endpoint API endpoint of the table, e.g. `seo/overview/pages`
+ * @param {string} options.storageKey Key for the column settings in the local storage
+ * @param {(cell: object, pending: { value: string, source?: string }) => object} options.applyPending
+ *   Shows a value that hasn't been confirmed by the server yet in its cell
+ * @param {(row: object, column: string) => { url: string, body: object }} [options.aiRequest]
+ *   Endpoint streaming the generated value of a cell, defaults to the AI route of the field with the column's name
+ */
+export function useOverviewTable(props, { endpoint, storageKey, applyPending, aiRequest }) {
+	const panel = usePanel()
+
+	const { reload, searchterm, isSearching, toggleSearch, onSort, onPaginate } = useTableQuery(props)
 
 	/**
 	 * Selection, across table pages
@@ -623,42 +683,10 @@ export function useOverviewTable(props, { endpoint, storageKey, applyPending, ai
 		settled().then(unlock)
 	})
 
-	/**
-	 * Column visibility & widths are remembered per browser
-	 */
-	const settings = ref({
-		columns: {},
-		widths: {},
-		...JSON.parse(window.localStorage.getItem(storageKey) ?? "{}")
-	})
-
-	watch(settings, (value) => window.localStorage.setItem(storageKey, JSON.stringify(value)), {
-		deep: true
-	})
-
-	// columns with a `toggle` label can be shown/hidden
-	const isVisible = (key) => {
-		const column = props.columns[key]
-		return !column.toggle || (settings.value.columns[key] ?? column.hidden !== true)
-	}
-
-	const columnOptions = computed(() =>
-		Object.entries(props.columns)
-			.filter(([, column]) => column.toggle)
-			.map(([value, column]) => ({ value, text: column.toggle }))
+	const { settings, isVisible, columnOptions, visibleColumnKeys, onColumns } = useColumnSettings(
+		props,
+		storageKey
 	)
-
-	const visibleColumnKeys = computed(() =>
-		columnOptions.value.filter(({ value }) => isVisible(value)).map(({ value }) => value)
-	)
-
-	const onColumns = (values) => {
-		settings.value.columns = Object.fromEntries(
-			columnOptions.value.map(({ value }) => [value, values.includes(value)])
-		)
-		// the remaining columns should fill the table again
-		settings.value.widths = {}
-	}
 
 	return {
 		reload,

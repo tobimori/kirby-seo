@@ -423,15 +423,11 @@ const onGenerate = async () => {
 					</k-button-group>
 				</template>
 
-				<!-- separate buttons, like in the header of Kirby's sections -->
-				<k-button
-					:text="$t('filter')"
-					:current="isSearching"
-					icon="filter"
-					size="xs"
-					variant="filled"
-					responsive
-					@click="toggleSearch"
+				<k-seo-search
+					:value="searchterm"
+					:searching="isSearching"
+					@input="searchterm = $event"
+					@toggle="toggleSearch"
 				/>
 				<!-- the active filter & its reset belong together -->
 				<k-button-group layout="collapsed">
@@ -497,18 +493,6 @@ const onGenerate = async () => {
 		</k-empty>
 
 		<div v-else :inert="isGenerating">
-			<k-input
-				v-if="isSearching"
-				:autofocus="true"
-				:value="searchterm"
-				:placeholder="$t('filter') + ' …'"
-				icon="search"
-				type="text"
-				class="k-seo-overview-search"
-				@input="searchterm = $event"
-				@keydown.native.esc="toggleSearch"
-			/>
-
 			<k-seo-table
 				:columns="visibleColumns"
 				:rows="items"
