@@ -153,7 +153,7 @@ class Audit
 		$kirby = App::instance();
 		$cache = $kirby->cache('tobimori.seo.overview');
 
-		$key = 'audit-v4-' . md5(json_encode([$kirby->language()?->code(), $this->modified($kirby->site())]));
+		$key = 'audit-v5-' . md5(json_encode([$kirby->language()?->code(), $this->modified($kirby->site())]));
 		$cached = $cache->get($key) ?? [];
 		$entries = [];
 		$changed = false;
@@ -374,8 +374,8 @@ class Audit
 
 		['field' => $field, 'source' => $source] = $meta->resolve('robotsIndex');
 
-		// set by editors (or page models) for this page
-		if ($source !== 'options') {
+		// set by editors (or page models) for this page, `null` if the default is `false`
+		if ($source !== null && $source !== 'options') {
 			return $field->toBool();
 		}
 
