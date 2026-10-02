@@ -120,7 +120,7 @@ export function useOverviewTable(props, { endpoint, storageKey, applyPending, ai
 
 	const isAllSelected = computed(() => {
 		const ids = new Set(selected.value)
-		return props.ids.every((id) => ids.has(id))
+		return props.ids.length > 0 && props.ids.every((id) => ids.has(id))
 	})
 	const selectAll = () => (selected.value = [...new Set([...selected.value, ...props.ids])])
 

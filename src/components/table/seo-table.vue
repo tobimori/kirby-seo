@@ -52,6 +52,7 @@ const emit = defineEmits([
 	"cell",
 	"commit",
 	"input",
+	"lock",
 	"option",
 	"paginate",
 	"sort",
