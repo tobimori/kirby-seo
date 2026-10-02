@@ -135,7 +135,7 @@ checksums:
     overview.stats.images: 767047c34b8bf93f8b02a9c8a16be6f0
     overview.stats.title.none: 4a35e6dfaf3f5596f2654a49066f23ea
     overview.stats.description.none: 4a35e6dfaf3f5596f2654a49066f23ea
-    overview.stats.images.none: 290ce6029eb36c180a81ced80010482f
+    overview.stats.images.none: 00bf32f2c24cd155f5a78a9e39a537ab
     overview.stats.pages.ok: 84efc0ed1e582eea4beeaec68fad1858
     overview.stats.pages.notice: 63471eece679ea7d1d10af692ede2369
     overview.stats.pages.negative: dac1d2faa0ba4770685261321a362a51
@@ -202,6 +202,40 @@ checksums:
     overview.changes.discard.confirm.all: 1062c9b3ef694150e9693497d02e2fdd
     overview.changes.published: 45fd314da8acde61d61a4425f526f12b
     overview.changes.discarded: ed0a2fdb5d32fd0421d4215f7b7b61ad
+    overview.images.empty: 2ccd4f1843d1809611bb7cb35eac99ca
+    overview.images.empty.noImages: ef52ca3b3496c3acc53e520ef18ad113
+    overview.images.columns.status: 4e1fcce15854d824919b4a582c697c90
+    overview.images.columns.image: b688d3c04f800cb742622a68ae26ac89
+    overview.images.columns.alt: 1ed1a17eea3b0823959177a689d2e563
+    overview.images.columns.decorative: 9f88b9d30a9ee695f5f4875e855d009b
+    overview.images.status.missing: 4305cbedef6cf6cde0db9a7e4294d851
+    overview.images.status.ai: 6c649a0de0202eceb0a5475b711dbb72
+    overview.images.status.decorative: 5e2805994307fe88954c7b97eb4ece1b
+    overview.images.status.ok: 3eb2236078c59f2dff598160d5e08c2f
+    overview.images.tag.ai: b764382ca31f0c1570802ead170ad235
+    overview.images.tag.decorative: 9f88b9d30a9ee695f5f4875e855d009b
+    overview.images.filter.all: 0894b7574b713d89bd13034a85f9956c
+    overview.images.filter.clear: 4b0e315911aed07c18da9da777831a91
+    overview.images.filter.issues: f62a2cb9a98934924c4cac9ffcd7736c
+    overview.images.filter.missing: 4305cbedef6cf6cde0db9a7e4294d851
+    overview.images.filter.ai: 6343209f24fffc56be39b191c887a084
+    overview.images.filter.decorative: 9f88b9d30a9ee695f5f4875e855d009b
+    overview.images.mark: d6477784ea4b3269ca432d329bb20bb1
+    overview.images.mark.reviewed: 7387d3303c204db754abedb340f3e641
+    overview.images.mark.decorative: 9f88b9d30a9ee695f5f4875e855d009b
+    overview.images.mark.described: c92631da3094ac3b9827fe7fa280fa70
+    overview.images.mark.done: 4cb1d87a552e44e5d4ed2f8a69b737ba
+    overview.images.mark.none: 57229f9e1b03d916814a6db500c609d2
+    overview.images.options.open: b96eb0dcf1671297772c6bec81980147
+    overview.images.options.reviewed: ad94a6cf7d901d59ba183fdc0e9d8e3a
+    overview.images.options.decorative: 0e72b2050c7d0bfe53d9ab3fdfb92684
+    overview.images.options.described: 40f70e5a7f7c02f28286f73a26ec0806
+    overview.images.options.file: aeca6020b62f7d25190391e152b52e4a
+    overview.images.options.parent: f87291b555d1cf992506bdba0cca6656
+    overview.images.ai.confirm: 0cd268c64370d010717229f1b28ab931
+    overview.images.ai.onlyEmpty: d44973fbb414bbde4ba2e0133cb67f7f
+    overview.images.ai.none: 4ec25b54d33eefc80672290c76f9dda9
+    overview.images.ai.unsupported: f3a7b66cdb4fe01ee6698d9de1c8c76c
     table.resize: 8b492cd1fde92efc89b7ea886b953ff5
     table.resizeReset: 1ba1dc71b090b2dfa0fecbaa7a9e8d88
     table.selectAll: aa08dc308608eacaa9527cd58b963ade
