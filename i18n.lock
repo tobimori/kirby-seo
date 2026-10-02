@@ -275,6 +275,7 @@ checksums:
     overview.links.reason.route: cf410f2ae5291c31a7bce4a5a2b26864
     overview.links.reason.render: 15ff819c947136fff8e8c01ce971443e
     overview.links.reason.scheme: 00b1ae474dc86e1cca19b132b74aa02d
+    overview.links.reason.private: c789d327231e230772088760a3587386
     overview.links.filter.all: ce511654252eafa82c32512f0badda04
     overview.links.filter.issues: c78bb1c1502c4a3a37cbeda4b2c9c0cc
     overview.links.filter.clear: fe92ecca7972e248954434c00a3642bd
@@ -285,6 +286,7 @@ checksums:
     overview.links.filter.content: 3f9a6141d46dde52d541e4f52e969db0
     overview.links.progress.pages: e63ae0a6f4aacecca45cf5b15b4cbf8f
     overview.links.progress.urls: 7b122578676a30cd1f16c537d6060924
+    overview.links.progress.queue: 762d4ccec39cab0cdac1e46cd142023f
     overview.links.rescan: 6ff1a8ce611ac06d5faaa4facfad215d
     overview.links.rescan.confirm: b563bf9b4f658d772be65e6c3a9554bf
     overview.links.recheck: 28977724f27e4f2b48ca9f26c5455390
