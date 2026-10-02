@@ -153,7 +153,7 @@ class Audit
 		$kirby = App::instance();
 		$cache = $kirby->cache('tobimori.seo.overview');
 
-		$key = 'audit-v5-' . md5(json_encode([$kirby->language()?->code(), $this->modified($kirby->site())]));
+		$key = 'audit-v6-' . md5(json_encode([$kirby->language()?->code(), $this->modified($kirby->site()), $this->options()]));
 		$cached = $cache->get($key) ?? [];
 		$entries = [];
 		$changed = false;
@@ -175,6 +175,21 @@ class Audit
 		}
 
 		return $entries;
+	}
+
+	/**
+	 * Options the results depend on, e.g. after enabling `debug` (which sets `robots.index` to `false`).
+	 * Closures (e.g. most defaults) are encoded as empty objects, changes of their code aren't detected
+	 */
+	protected function options(): array
+	{
+		return [
+			Seo::option('robots.enabled'),
+			Seo::option('robots.index'),
+			Seo::option('robots.followPageStatus'),
+			Seo::option('cascade'),
+			Seo::option('default'),
+		];
 	}
 
 	protected function fingerprint(Page $page): string
