@@ -91,19 +91,13 @@ return [
 		'mixins' => ['headline'],
 		'computed' => [
 			'status' => function () {
-				if (!Seo::option('components.gsc')::hasCredentials()) {
-					return 'NO_CREDENTIALS';
-				}
-
-				if (!Seo::option('components.gsc')::isConnected()) {
-					return 'NOT_CONNECTED';
-				}
-
-				if (!Seo::option('components.gsc')::property()) {
-					return 'SELECT_PROPERTY';
-				}
-
-				return 'CONNECTED';
+				$gsc = Seo::option('components.gsc');
+				return match (true) {
+					!$gsc::hasCredentials() => 'NO_CREDENTIALS',
+					!$gsc::isConnected() => 'NOT_CONNECTED',
+					!$gsc::property() => 'SELECT_PROPERTY',
+					default => 'CONNECTED',
+				};
 			},
 			'property' => fn () => Seo::option('components.gsc')::property(),
 			'pageUrl' => function () {
@@ -115,7 +109,7 @@ return [
 			},
 			'data' => function () {
 				$gsc = Seo::option('components.gsc');
-				if (!$gsc::hasCredentials() || !$gsc::isConnected() || !$gsc::property()) {
+				if (!$gsc::ready()) {
 					return [];
 				}
 
