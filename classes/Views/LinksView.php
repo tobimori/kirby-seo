@@ -36,15 +36,8 @@ class LinksView extends OverviewView
 				self::SORTABLE,
 				[...Report::FILTERS, 'issues']
 			);
-			$scope = $this->kirby->request()->get('scope') === 'content' ? 'content' : null;
-
 			$links = array_values($this->report()->links());
 
-			if ($scope) {
-				$links = array_values(array_filter($links, fn ($link) => $link['content'] !== ''));
-			}
-
-			// counts of the filters within the scope
 			$summary = Report::summary($links);
 
 			if ($issue) {
@@ -55,7 +48,7 @@ class LinksView extends OverviewView
 				'url' => $link['url'],
 				'details' => $this->reason($link),
 				// line breaks between the titles, so a search can't match across two of them
-				'pages' => implode("\n", array_map($this->title(...), array_keys(Report::pages($link)))),
+				'pages' => implode("\n", array_map($this->title(...), explode("\n", $link['pages']))),
 			});
 
 			$links = $this->sort($links, fn ($link) => match ($sort) {
@@ -79,7 +72,6 @@ class LinksView extends OverviewView
 					'severity' => Report::SEVERITY,
 					'summary' => $summary,
 					'issue' => $issue,
-					'scope' => $scope,
 					'search' => $search,
 					'sort' => $sort,
 					'dir' => $dir,
@@ -145,19 +137,15 @@ class LinksView extends OverviewView
 			. (isset($parts['fragment']) ? "#{$parts['fragment']}" : '');
 	}
 
-	/**
-	 * Title, Panel link & location of the linking pages (see `Report::pages()`)
-	 */
 	protected function linking(array $pages): array
 	{
 		$items = [];
 
-		foreach ($pages as $id => $location) {
+		foreach ($pages as $id) {
 			if ($page = $this->kirby->page($id)) {
 				$items[] = [
 					'text' => (string)$page->title()->value(),
 					'link' => $page->panel()->url(true),
-					'info' => I18n::translate("seo.overview.links.location.{$location}"),
 				];
 			}
 		}
@@ -217,24 +205,12 @@ class LinksView extends OverviewView
 				'type' => 'seo-link-pages',
 				'width' => '1/4'
 			],
-			'location' => [
-				'hidden' => true,
-				'label' => I18n::translate('seo.overview.links.columns.location'),
-				'toggle' => I18n::translate('seo.overview.links.columns.location'),
-				'type' => 'text',
-				'width' => '8rem'
-			],
 		];
 	}
 
 	protected function row(array $link): array
 	{
-		// links in the content can be edited, links in the layout (navigation, footer) come from templates
-		$location = match (true) {
-			$link['content'] !== '' && $link['layout'] !== '' => 'both',
-			$link['content'] !== '' => 'content',
-			default => 'layout',
-		};
+		$pages = explode("\n", $link['pages']);
 
 		return [
 			'id' => $link['url'],
@@ -245,13 +221,11 @@ class LinksView extends OverviewView
 				'target' => '_blank',
 			],
 			'details' => $this->reason($link),
-			// the first pages, links in the content first
 			'pages' => [
-				'text' => $this->title(array_key_first($pages = Report::pages($link))),
+				'text' => $this->title($pages[0]),
 				'total' => $link['total'],
-				'items' => $this->linking(array_slice($pages, 0, self::PAGES, true)),
+				'items' => $this->linking(array_slice($pages, 0, self::PAGES)),
 			],
-			'location' => I18n::translate("seo.overview.links.location.{$location}"),
 		];
 	}
 }

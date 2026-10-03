@@ -109,7 +109,7 @@ class Checker
 			$id = array_search($url, $data['strings'], true);
 
 			foreach ($data['pages'] as $key => $entry) {
-				if (in_array($id, [...$entry['links']['content'], ...$entry['links']['layout']], true)) {
+				if (in_array($id, $entry['links'], true)) {
 					$data['pages'][$key]['fingerprint'] = null;
 				}
 			}
@@ -258,7 +258,7 @@ class Checker
 			);
 
 			foreach ($this->data['pages'] as $key => $entry) {
-				foreach ([...$entry['links']['content'], ...$entry['links']['layout']] as $id) {
+				foreach ($entry['links'] as $id) {
 					if (isset($ids[$id])) {
 						$this->data['pages'][$key]['fingerprint'] = null;
 						break;
@@ -325,7 +325,7 @@ class Checker
 			'status' => $result['status'],
 			'location' => $result['location'],
 			'error' => $result['error'],
-			'links' => array_map($this->intern(...), $result['links']),
+			'links' => $this->intern($result['links']),
 			'ids' => $result['ids'],
 		];
 	}
@@ -343,7 +343,7 @@ class Checker
 				'status' => $location && $code < 300 ? 302 : $code,
 				'location' => $location,
 				'error' => null,
-				'links' => ['content' => [], 'layout' => []],
+				'links' => [],
 				'ids' => [],
 			]);
 			$this->index->write($this->data);

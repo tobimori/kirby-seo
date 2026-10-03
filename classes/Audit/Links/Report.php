@@ -83,37 +83,13 @@ class Report
 	}
 
 	/**
-	 * All linked URLs (with fragments) of the language, with their state & the pages linking to them:
-	 * page ids separated by line breaks, by the location of the link (see `pages()`)
-	 *
-	 * @return array<string, array{url: string, state: string, reason: string|null, target: string|null, code: int|null, internal: bool, total: int, content: string, layout: string}>
+	 * @return array<string, array{url: string, state: string, reason: string|null, target: string|null, code: int|null, internal: bool, total: int, pages: string}>
 	 */
 	public function links(): array
 	{
 		return $this->results()['links'];
 	}
 
-	/**
-	 * Pages linking to the URL with the location of the link (`content` or `layout`), links in the content first
-	 *
-	 * @return array<string, string>
-	 */
-	public static function pages(array $link): array
-	{
-		$pages = [];
-
-		foreach (['content', 'layout'] as $location) {
-			if ($link[$location] !== '') {
-				$pages += array_fill_keys(explode("\n", $link[$location]), $location);
-			}
-		}
-
-		return $pages;
-	}
-
-	/**
-	 * Whether the link is in the given state (see `FILTERS`), `issues` for any of the `ISSUES`
-	 */
 	public static function has(array $link, string $filter): bool
 	{
 		return $filter === 'issues'
@@ -149,7 +125,7 @@ class Report
 		}
 
 		$cache = Index::cache();
-		$key = 'links/' . ($this->language ?? 'default');
+		$key = 'links-v2/' . ($this->language ?? 'default');
 		$cached = $cache->get($key);
 
 		if ($cached !== null && $cached['revision'] === Index::revision()) {
@@ -179,12 +155,8 @@ class Report
 				continue;
 			}
 
-			foreach ($entry['links']['content'] as $id) {
-				$pages[$id][$entry['page']] = 'content';
-			}
-
-			foreach ($entry['links']['layout'] as $id) {
-				$pages[$id][$entry['page']] ??= 'layout';
+			foreach ($entry['links'] as $id) {
+				$pages[$id][$entry['page']] = true;
 			}
 		}
 
@@ -202,8 +174,7 @@ class Report
 				'url' => $url,
 				'internal' => static::isInternal($url),
 				'total' => count($linking),
-				'content' => implode("\n", array_keys($linking, 'content', true)),
-				'layout' => implode("\n", array_keys($linking, 'layout', true)),
+				'pages' => implode("\n", array_keys($linking)),
 				'code' => null,
 				'target' => null,
 				'reason' => null,

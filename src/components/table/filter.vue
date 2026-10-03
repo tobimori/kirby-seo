@@ -80,7 +80,6 @@ const dropdown = ref(null)
 				{{ filter.text }}
 				<span class="k-seo-filter-count">{{ filter.count }}</span>
 			</k-dropdown-item>
-			<slot name="after" />
 		</k-dropdown-content>
 	</div>
 </template>

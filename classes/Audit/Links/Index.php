@@ -38,7 +38,7 @@ class Index
 
 	public function read(): array
 	{
-		return [
+		$data = [
 			'pages' => [],
 			'strings' => [],
 			'urls' => [],
@@ -47,6 +47,15 @@ class Index
 			'revision' => null,
 			...(static::cache()->get(self::KEY) ?? []),
 		];
+
+		foreach ($data['pages'] as $key => $entry) {
+			// Older scans stored links in separate content and layout lists
+			if (isset($entry['links']['content'])) {
+				$data['pages'][$key]['links'] = array_values(array_unique([...$entry['links']['content'], ...$entry['links']['layout']]));
+			}
+		}
+
+		return $data;
 	}
 
 	public function write(array $data): void
@@ -119,9 +128,7 @@ class Index
 	{
 		$used = [];
 		foreach ($data['pages'] as $entry) {
-			foreach ($entry['links'] as $ids) {
-				$used += array_flip($ids);
-			}
+			$used += array_flip($entry['links']);
 		}
 
 		if (count($used) === count($data['strings'])) {
@@ -133,9 +140,7 @@ class Index
 		$data['strings'] = array_values(array_intersect_key($data['strings'], $used));
 
 		foreach ($data['pages'] as $key => $entry) {
-			foreach ($entry['links'] as $location => $ids) {
-				$data['pages'][$key]['links'][$location] = array_map(fn ($id) => $map[$id], $ids);
-			}
+			$data['pages'][$key]['links'] = array_map(fn ($id) => $map[$id], $entry['links']);
 		}
 
 		$data['urls'] = array_intersect_key($data['urls'], array_flip(array_map(fn ($url) => strtok($url, '#'), $data['strings'])));

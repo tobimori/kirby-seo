@@ -60,9 +60,7 @@ class Crawler
 	}
 
 	/**
-	 * Renders the page in the given language in this process, like a visitor's request
-	 *
-	 * @return array{status: int, location: string|null, error: string|null, links: array{content: array<string>, layout: array<string>}, ids: array<string>}
+	 * @return array{status: int, location: string|null, error: string|null, links: array<string>, ids: array<string>}
 	 */
 	public function render(string $key, Page $page, string|null $language): array
 	{
@@ -110,7 +108,7 @@ class Crawler
 	 * Requests the pages like a visitor does, in parallel
 	 *
 	 * @param array<string, string> $urls URLs of the pages by their key
-	 * @return array<string, array{status: int, location: string|null, error: string|null, links: array{content: array<string>, layout: array<string>}, ids: array<string>}>
+	 * @return array<string, array{status: int, location: string|null, error: string|null, links: array<string>, ids: array<string>}>
 	 */
 	public static function fetch(array $urls): array
 	{
@@ -195,7 +193,7 @@ class Crawler
 			'status' => $status,
 			'location' => $location,
 			'error' => null,
-			...($status >= 200 && $status < 300 && $isHtml ? static::extract($html, $url) : ['links' => ['content' => [], 'layout' => []], 'ids' => []]),
+			...($status >= 200 && $status < 300 && $isHtml ? static::extract($html, $url) : ['links' => [], 'ids' => []]),
 		];
 	}
 
@@ -244,11 +242,7 @@ class Crawler
 	}
 
 	/**
-	 * Links of the HTML, split by whether they are part of the main content
-	 * or of the layout (navigation, footer, …), and the ids anchors can point to.
-	 * Pages without a `<main>` element only have content links.
-	 *
-	 * @return array{links: array{content: array<string>, layout: array<string>}, ids: array<string>}
+	 * @return array{links: array<string>, ids: array<string>}
 	 */
 	public static function extract(string $html, string $url): array
 	{
@@ -259,16 +253,14 @@ class Crawler
 
 		$base = $xpath->query('//base[@href]')->item(0);
 		$base = $base instanceof DOMElement ? static::resolve($base->getAttribute('href'), $url) ?? $url : $url;
-		$hasMain = $xpath->query('//main')->length > 0;
-		$links = ['content' => [], 'layout' => []];
+		$links = [];
 
 		foreach ($xpath->query('//a[@href] | //area[@href]') as $element) {
 			if (!($href = static::resolve($element->getAttribute('href'), $base))) {
 				continue;
 			}
 
-			$location = !$hasMain || $xpath->query('ancestor::main', $element)->length > 0 ? 'content' : 'layout';
-			$links[$location][$href] = true;
+			$links[$href] = true;
 		}
 
 		$ids = [];
@@ -277,11 +269,7 @@ class Crawler
 		}
 
 		return [
-			'links' => [
-				'content' => array_keys($links['content']),
-				// links in both places are content links
-				'layout' => array_keys(array_diff_key($links['layout'], $links['content'])),
-			],
+			'links' => array_keys($links),
 			'ids' => array_keys($ids),
 		];
 	}

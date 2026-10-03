@@ -1,14 +1,10 @@
 <script setup>
 import { computed, usePanel } from "kirbyuse"
 
-/**
- * Pages linking to a URL: the first one & the number of others,
- * the popover lists the first pages (links in the content first)
- */
 const props = defineProps({
 	column: Object,
 	row: Object,
-	/** `{ text, total, items: [{ text, link, info }] }` */
+	/** `{ text, total, items: [{ text, link }] }` */
 	value: Object
 })
 
@@ -46,7 +42,6 @@ const name = computed(() =>
 			class="k-seo-popover-item"
 		>
 			<span class="k-seo-popover-text">{{ page.text }}</span>
-			<span class="k-seo-popover-info">{{ page.info }}</span>
 		</k-dropdown-item>
 		<p v-if="value.total > value.items.length" class="k-seo-link-pages-cell-rest">
 			{{ $t("seo.overview.links.pages.more", { count: value.total - value.items.length }) }}

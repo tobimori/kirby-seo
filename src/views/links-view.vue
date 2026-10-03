@@ -28,8 +28,6 @@ const props = defineProps({
 	tabs: Array,
 	/** Active filter: `broken`, `anchor`, `redirect`, `unknown` or `issues` (broken, anchors & redirects) */
 	issue: String,
-	/** `content` to only list links in the main content of pages */
-	scope: String,
 	/** `{ pages: { done, total }, urls: { done, total }, done, running, queue }` */
 	progress: Object,
 	/** Whether any page has been checked yet */
@@ -192,7 +190,6 @@ const filterLabel = computed(() =>
 )
 
 const setFilter = (issue = "") => reload({ issue, page: "1" })
-const toggleScope = () => reload({ scope: props.scope ? "" : "content", page: "1" })
 
 const copyUrl = async (url) => {
 	await window.navigator.clipboard.writeText(url)
@@ -260,7 +257,7 @@ const visibleColumns = computed(() =>
 				/>
 				<k-seo-filter
 					:label="filterLabel"
-					:active="Boolean(issue || scope)"
+					:active="Boolean(issue)"
 					:clearable="Boolean(issue)"
 					:clear="$t('seo.overview.links.filter.clear')"
 					:all="{ text: $t('seo.overview.links.filter.all'), icon: 'url' }"
@@ -275,16 +272,6 @@ const visibleColumns = computed(() =>
 							@click="setFilter('issues')"
 						>
 							{{ $t("seo.overview.links.filter.issues") }}
-						</k-dropdown-item>
-					</template>
-					<template #after>
-						<hr />
-						<k-dropdown-item
-							:current="scope === 'content'"
-							:icon="scope === 'content' ? 'toggle-on' : 'toggle-off'"
-							@click="toggleScope"
-						>
-							{{ $t("seo.overview.links.filter.content") }}
 						</k-dropdown-item>
 					</template>
 				</k-seo-filter>
