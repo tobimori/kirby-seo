@@ -23,6 +23,8 @@ class LlmContent
 {
 	public const MARKDOWN_TYPE = 'text/markdown';
 
+	protected ?bool $available = null;
+
 	public function __construct(protected Page $page)
 	{
 	}
@@ -68,15 +70,9 @@ class LlmContent
 
 	public function available(): bool
 	{
-		if ($this->enabled() === false || $this->page->isPublished() === false) {
-			return false;
-		}
-
-		if ($this->hasExplicitRepresentation()) {
-			return true;
-		}
-
-		return $this->automaticConversionEnabled() && $this->converter() !== null;
+		return $this->available ??= $this->enabled()
+			&& $this->page->isPublished()
+			&& ($this->hasExplicitRepresentation() || ($this->automaticConversionEnabled() && $this->converter() !== null));
 	}
 
 	/**
