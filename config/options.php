@@ -89,7 +89,7 @@ return [
 		'enabled' => true, // whether robots handling should be done by the plugin
 
 		// @deprecated - please use robots.enabled
-		'active' => fn () => Seo::option('sitemap.enabled'),
+		'active' => fn () => Seo::option('robots.enabled'),
 		'followPageStatus' => true, // should unlisted pages be noindex by default?
 		'pageSettings' => true, // whether to have robots settings on each page
 		'index' => fn () => !App::instance()->option('debug'), // default site-wide robots setting
