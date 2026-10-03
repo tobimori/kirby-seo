@@ -3,12 +3,14 @@
 @include_once __DIR__ . '/vendor/autoload.php';
 
 use Kirby\Cms\App;
+use Kirby\Cms\Site;
 use Kirby\Data\Json;
 use Spatie\SchemaOrg\Schema;
 use Kirby\Toolkit\A;
 use Kirby\Filesystem\Dir;
 use Kirby\Filesystem\F;
 use tobimori\Seo\AltText;
+use tobimori\Seo\Seo;
 
 if (
 	version_compare(App::version() ?? '0.0.0', '5.0.0', '<') === true ||
@@ -52,8 +54,12 @@ App::plugin(
 			'seo/head' => __DIR__ . '/snippets/head.php',
 			'seo/robots.txt' => __DIR__ . '/snippets/robots.txt.php',
 		],
+		'controllers' => [
+			'llms.txt' => fn (Site $site) => (new (Seo::option('components.agentic'))($site->homePage()))->llmsTxtData(),
+		],
 		'templates' => [
 			'error.md' => __DIR__ . '/templates/error.md.php',
+			'llms' => __DIR__ . '/templates/llms.php',
 			'llms.txt' => __DIR__ . '/templates/llms.txt.php',
 			'sitemap' => __DIR__ . '/templates/sitemap.php',
 			'sitemap.xml' => __DIR__ . '/templates/sitemap.xml.php',

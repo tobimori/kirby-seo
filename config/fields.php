@@ -1,9 +1,7 @@
 <?php
 
-use Kirby\Cms\App;
 use Kirby\Cms\Page;
 use Kirby\Content\VersionId;
-use Kirby\Http\Response;
 use Kirby\Toolkit\Str;
 use tobimori\Seo\Ai;
 use tobimori\Seo\Field\AltTextField;
@@ -36,16 +34,8 @@ return [
 			 * Enables/disables the character counter in the top right corner
 			 */
 			'ai' => function (string|bool $ai = false) {
-				if (!Seo::option('components.ai')::enabled()) {
-					return false;
-				}
-
-				// check ai permission @see index.php L31
-				if (App::instance()->user()->role()->permissions()->for('tobimori.seo', 'ai') === false) {
-					return false;
-				}
-
-				return $ai;
+				$component = Seo::option('components.ai');
+				return $component::enabled() && $component::permitted() ? $ai : false;
 			},
 
 			// reset defaults
@@ -62,18 +52,8 @@ return [
 					$kirby = $this->kirby();
 					$component = Seo::option('components.ai');
 
-					if (!$component::enabled()) {
-						return Response::json([
-							'status' => 'error',
-							'message' => t('seo.ai.error.disabled')
-						], 404);
-					}
-
-					if ($kirby->user()->role()->permissions()->for('tobimori.seo', 'ai') === false) {
-						return Response::json([
-							'status' => 'error',
-							'message' => t('seo.ai.error.permission')
-						], 404);
+					if ($error = $component::denied()) {
+						return $error;
 					}
 
 					$data = $kirby->request()->body()->data();
@@ -94,61 +74,18 @@ return [
 						'kirby' => $kirby
 					];
 
-					// begin streaming thingy
-					ignore_user_abort(true);
-					@set_time_limit(0);
-
-					while (ob_get_level() > 0) {
-						ob_end_flush();
-					}
-
-					header('Content-Type: text/event-stream');
-					header('Cache-Control: no-cache');
-					header('Connection: keep-alive');
-					header('X-Accel-Buffering: no');
-					echo ":ok\n\n";
-					flush();
-
-					$send = static function (array $event): void {
-						echo 'data: ' . json_encode(
-							$event,
-							JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
-						) . "\n\n";
-
-						if (ob_get_level() > 0) {
-							ob_flush();
+					// use the unsaved Panel changes (if any) for rendering & reading content,
+					// falls back to the latest version if no changes exist
+					$component::sendStream(fn (Closure $send) => VersionId::render('changes', function () use ($component, $data, $send) {
+						foreach (
+							$component::streamTask($this->field()->ai(), [
+								'instructions' => $data['instructions'] ?? null,
+								'edit' => $data['edit'] ?? null
+							]) as $chunk
+						) {
+							$send($chunk);
 						}
-
-						flush();
-					};
-
-					try {
-						// use the unsaved Panel changes (if any) for rendering & reading content,
-						// falls back to the latest version if no changes exist
-						VersionId::render('changes', function () use ($component, $data, $send) {
-							foreach (
-								$component::streamTask($this->field()->ai(), [
-									'instructions' => $data['instructions'] ?? null,
-									'edit' => $data['edit'] ?? null
-								]) as $chunk
-							) {
-								$send([
-									'type' => $chunk->type,
-									'text' => $chunk->text,
-									'payload' => $chunk->payload,
-								]);
-							}
-						});
-					} catch (\Throwable $exception) {
-						$send([
-							'type' => 'error',
-							'payload' => [
-								'message' => $exception->getMessage(),
-							],
-						]);
-					}
-
-					exit();
+					}));
 				}
 			]
 		]

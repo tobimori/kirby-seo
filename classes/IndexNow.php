@@ -332,7 +332,6 @@ class IndexNow
 	protected function isIndexable(Page $page): bool
 	{
 		return $page->isListed()
-			&& $page->robots() !== 'noindex'
-			&& $page->robots() !== 'none';
+			&& !Str::contains($page->robots(), 'noindex');
 	}
 }

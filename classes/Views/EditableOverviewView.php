@@ -297,8 +297,8 @@ abstract class EditableOverviewView extends OverviewView
 
 	protected function canUseAi(): bool
 	{
-		return $this->ai ??= Seo::option('components.ai')::enabled()
-			&& $this->kirby->user()?->role()->permissions()->for('tobimori.seo', 'ai') !== false;
+		$component = Seo::option('components.ai');
+		return $this->ai ??= $component::enabled() && $component::permitted();
 	}
 
 	/**

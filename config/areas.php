@@ -65,7 +65,7 @@ return [
 					}
 
 					$gsc = Seo::option('components.gsc');
-					if (!$gsc::hasCredentials() || !$gsc::isConnected() || !$gsc::property()) {
+					if (!$gsc::ready()) {
 						return ['component' => 'k-error-drawer', 'props' => ['message' => 'GSC not connected']];
 					}
 

@@ -15,6 +15,12 @@ $checkLinks = function (Event $event) {
 	}
 };
 
+$indexNow = function (Page $newPage): void {
+	if (Seo::option('indexnow.enabled')) {
+		(new (Seo::option('components.indexnow'))($newPage))->dispatch();
+	}
+};
+
 return [
 	'system.loadPlugins:after' => function () {
 		if (class_exists('tobimori\Queues\Queues')) {
@@ -45,7 +51,7 @@ return [
 
 		return AltTextField::generateForFile($file);
 	},
-	'page.update:after' => function (Page $newPage, Page $oldPage) {
+	'page.update:after' => function (Page $newPage, Page $oldPage) use ($indexNow) {
 		// only inject blueprint defaults if the seo tab is present
 		if ($newPage->blueprint()->tab('seo')) {
 			$updates = A::reduce(
@@ -67,37 +73,26 @@ return [
 			}
 		}
 
-		if (Seo::option('indexnow.enabled')) {
-			$indexNow = new (Seo::option('components.indexnow'))($newPage);
-			$indexNow->dispatch();
-		}
+		$indexNow($newPage);
 
 		return $newPage;
 	},
-	'page.changeStatus:after' => function (Page $newPage, Page $oldPage) {
-		if (Seo::option('indexnow.enabled')) {
-			$indexNow = new (Seo::option('components.indexnow'))($newPage);
-			$indexNow->dispatch();
-		}
-	},
-	'page.changeSlug:after' => function (Page $newPage, Page $oldPage) {
-		if (Seo::option('indexnow.enabled')) {
-			$indexNow = new (Seo::option('components.indexnow'))($newPage);
-			$indexNow->dispatch();
-		}
-	},
+	'page.changeStatus:after' => $indexNow,
+	'page.changeSlug:after' => $indexNow,
 	'page.render:before' => function (string $contentType, array $data, Page $page) {
-		if (!class_exists('Spatie\SchemaOrg\Schema')) {
+		// schemas are only output in HTML, skip markdown, XML and text representations
+		if ($contentType !== 'html' || !class_exists('Spatie\SchemaOrg\Schema')) {
 			return;
 		}
 
 		if (option('tobimori.seo.generateSchema')) {
+			$meta = $page->metadata();
 			$page->schema('WebSite')
-				->url($page->metadata()->canonicalUrl())
+				->url($meta->canonicalUrl())
 				->copyrightYear(date('Y'))
-				->description($page->metadata()->metaDescription())
-				->name($page->metadata()->metaTitle())
-				->headline($page->metadata()->title());
+				->description($meta->metaDescription())
+				->name($meta->metaTitle())
+				->headline($meta->title());
 		}
 	},
 	'route:after' => function (string $path, string $method, mixed $result, bool $final) {

@@ -48,8 +48,7 @@ class GoogleSearchConsole
 	 */
 	protected static function tokenPath(): string
 	{
-		$path = Seo::option('searchConsole.tokenPath');
-		return is_callable($path) ? $path() : $path;
+		return Seo::option('searchConsole.tokenPath');
 	}
 
 	/**
@@ -77,6 +76,14 @@ class GoogleSearchConsole
 	{
 		static::$tokens = $tokens;
 		Json::write(static::tokenPath(), $tokens);
+	}
+
+	/**
+	 * Check if credentials, tokens and a property are set up
+	 */
+	public static function ready(): bool
+	{
+		return static::hasCredentials() && static::isConnected() && static::property();
 	}
 
 	/**
@@ -114,27 +121,11 @@ class GoogleSearchConsole
 	 */
 	public static function exchangeCode(string $code, string $redirectUri): array
 	{
-		$credentials = static::credentials();
-
-		$response = Remote::request(static::TOKEN_URL, [
-			'method' => 'POST',
-			'headers' => [
-				'Content-Type' => 'application/x-www-form-urlencoded'
-			],
-			'data' => [
-				'client_id' => $credentials['client_id'],
-				'client_secret' => $credentials['client_secret'],
-				'code' => $code,
-				'grant_type' => 'authorization_code',
-				'redirect_uri' => $redirectUri
-			]
+		$data = static::tokenRequest([
+			'code' => $code,
+			'grant_type' => 'authorization_code',
+			'redirect_uri' => $redirectUri
 		]);
-
-		$data = $response->json();
-
-		if (isset($data['error'])) {
-			throw new \Exception($data['error_description'] ?? $data['error']);
-		}
 
 		// store tokens with expiry timestamp
 		$tokens = [
@@ -152,37 +143,47 @@ class GoogleSearchConsole
 	 */
 	public static function refreshToken(): string
 	{
-		$credentials = static::credentials();
 		$tokens = static::tokens();
 
 		if (empty($tokens['refresh_token'])) {
 			throw new \Exception('No refresh token available');
 		}
 
-		$response = Remote::request(static::TOKEN_URL, [
-			'method' => 'POST',
-			'headers' => [
-				'Content-Type' => 'application/x-www-form-urlencoded'
-			],
-			'data' => [
-				'client_id' => $credentials['client_id'],
-				'client_secret' => $credentials['client_secret'],
-				'refresh_token' => $tokens['refresh_token'],
-				'grant_type' => 'refresh_token'
-			]
+		$data = static::tokenRequest([
+			'refresh_token' => $tokens['refresh_token'],
+			'grant_type' => 'refresh_token'
 		]);
-
-		$data = $response->json();
-
-		if (isset($data['error'])) {
-			throw new \Exception($data['error_description'] ?? $data['error']);
-		}
 
 		$tokens['access_token'] = $data['access_token'];
 		$tokens['expires_at'] = time() + $data['expires_in'];
 
 		static::saveTokens($tokens);
 		return $tokens['access_token'];
+	}
+
+	/**
+	 * Send a request to the OAuth token endpoint with the client credentials
+	 */
+	protected static function tokenRequest(array $data): array
+	{
+		$credentials = static::credentials();
+
+		$data = Remote::post(static::TOKEN_URL, [
+			'headers' => [
+				'Content-Type' => 'application/x-www-form-urlencoded'
+			],
+			'data' => [
+				'client_id' => $credentials['client_id'],
+				'client_secret' => $credentials['client_secret'],
+				...$data
+			]
+		])->json();
+
+		if (isset($data['error'])) {
+			throw new \Exception($data['error_description'] ?? $data['error']);
+		}
+
+		return $data;
 	}
 
 	/**
@@ -316,36 +317,27 @@ class GoogleSearchConsole
 			]];
 		}
 
-		$cacheKey = md5($property . json_encode($body));
+		return static::cache()->getOrSet(md5($property . json_encode($body)), function () use ($property, $body) {
+			$uri = new Uri('https://www.googleapis.com/webmasters/v3/sites');
+			$uri->setPath($uri->path() . '/' . urlencode($property) . '/searchAnalytics/query');
 
-		$cached = static::cache()->get($cacheKey);
-		if ($cached !== null) {
-			return $cached;
-		}
+			$response = Remote::request($uri->toString(), [
+				'method' => 'POST',
+				'headers' => [
+					'Authorization' => 'Bearer ' . static::accessToken(),
+					'Content-Type' => 'application/json'
+				],
+				'data' => json_encode($body)
+			]);
 
-		$uri = new Uri('https://www.googleapis.com/webmasters/v3/sites');
-		$uri->setPath($uri->path() . '/' . urlencode($property) . '/searchAnalytics/query');
+			$data = $response->json();
 
-		$response = Remote::request($uri->toString(), [
-			'method' => 'POST',
-			'headers' => [
-				'Authorization' => 'Bearer ' . static::accessToken(),
-				'Content-Type' => 'application/json'
-			],
-			'data' => json_encode($body)
-		]);
+			if (isset($data['error'])) {
+				throw new \Exception($data['error']['message'] ?? 'Failed to query search analytics');
+			}
 
-		$data = $response->json();
-
-		if (isset($data['error'])) {
-			throw new \Exception($data['error']['message'] ?? 'Failed to query search analytics');
-		}
-
-		$rows = $data['rows'] ?? [];
-
-		static::cache()->set($cacheKey, $rows, static::CACHE_DURATION);
-
-		return $rows;
+			return $data['rows'] ?? [];
+		}, static::CACHE_DURATION);
 	}
 
 	/**

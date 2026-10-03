@@ -2,9 +2,8 @@
 
 namespace tobimori\Seo\Sitemap;
 
-use DOMDocument;
-use Kirby\Cms\App;
 use Kirby\Cms\Page;
+use Kirby\Exception\NotFoundException;
 use Kirby\Toolkit\Collection;
 
 class SitemapIndex extends Collection
@@ -39,22 +38,7 @@ class SitemapIndex extends Collection
 
 	public function toString(): string
 	{
-		$doc = new DOMDocument('1.0', 'UTF-8');
-		$doc->formatOutput = true;
-
-		$stylesheetUrl = App::instance()->url() . '/sitemap.xsl';
-		$doc->appendChild($doc->createProcessingInstruction('xml-stylesheet', 'type="text/xsl" href="' . $stylesheetUrl . '"'));
-
-		$root = $doc->createElementNS('http://www.sitemaps.org/schemas/sitemap/0.9', 'sitemapindex');
-		$root->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xhtml', 'http://www.w3.org/1999/xhtml');
-		$root->setAttribute('seo-version', App::plugin('tobimori/seo')->version());
-		$doc->appendChild($root);
-
-		foreach ($this as $sitemap) {
-			$root->appendChild($sitemap->toDOMNode($doc));
-		}
-
-		return $doc->saveXML();
+		return Sitemap::toXml('sitemapindex', $this);
 	}
 
 	public function isValidIndex(?string $key = null): bool
@@ -74,7 +58,12 @@ class SitemapIndex extends Collection
 		}
 	}
 
-	public function render(Page $page): string|null
+	/**
+	 * Renders the sitemap index or a single sitemap
+	 *
+	 * @throws \Kirby\Exception\NotFoundException if the requested index does not exist
+	 */
+	public function render(Page $page): string
 	{
 		// There always has to be at least one index,
 		// otherwise the sitemap will fail to render
@@ -91,11 +80,10 @@ class SitemapIndex extends Collection
 			return $this->count() > 1 ? $this->toString() : $this->first()->toString();
 		}
 
-		$sitemap = $this->findBy('key', $index->value());
-		if ($sitemap) {
-			return $sitemap->toString();
+		if (!$this->isValidIndex($index->value())) {
+			throw new NotFoundException("[Kirby SEO] Sitemap index '{$index->value()}' does not exist");
 		}
 
-		return null;
+		return $this->findBy('key', $index->value())->toString();
 	}
 }
