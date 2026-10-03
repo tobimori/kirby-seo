@@ -2,21 +2,15 @@
 defineProps({
 	column: Object,
 	row: Object,
+	/** Same icon, text & theme as the robots view button: `{ icon, text, theme, value }` */
 	value: Object
 })
-
-// same themes as the robots view button
-const THEMES = {
-	index: "positive-icon",
-	any: "notice-icon",
-	noindex: "negative-icon"
-}
 </script>
 
 <template>
 	<k-button
-		:icon="value.state === 'index' ? 'robots' : 'robots-off'"
-		:theme="THEMES[value.state]"
+		:icon="value.icon"
+		:theme="value.theme"
 		:title="`${value.text} (${value.value})`"
 		:link="`${row.link}?tab=seo`"
 		size="md"

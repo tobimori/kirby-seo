@@ -1,5 +1,5 @@
 <script setup>
-import { computed, usePanel } from "kirbyuse"
+import { computed, ref, usePanel, watch } from "kirbyuse"
 
 import { SEVERITY_ICONS } from "../utils/checks.js"
 
@@ -14,8 +14,10 @@ const props = defineProps({
 		type: Array,
 		default: () => []
 	},
-	/** `{ checked, title, description, images: { total, missing, ai }, links: { ok, notice, negative, unknown } }` */
+	/** `{ checked, title, description, images: { ok, notice, negative }, links: { ok, notice, negative, unknown } }` */
 	stats: Object,
+	/** State for screen readers, e.g. the progress of a task, announced when it changes */
+	status: String,
 	tab: String,
 	tabs: {
 		type: Array,
@@ -24,12 +26,35 @@ const props = defineProps({
 })
 
 /**
- * `filter` is emitted with the issue & the tab it belongs to,
- * e.g. `("title", "pages")` when clicking the stats of titles
+ * `filter` is emitted with the issue when clicking the stats of the current tab,
+ * the stats of other tabs open them with the issue as filter
  */
 const emit = defineEmits(["filter"])
 
 const panel = usePanel()
+
+/**
+ * Screen readers only announce changes of a live region that already exists, so it's always rendered.
+ * Kirby doesn't announce its notifications (e.g. after publishing), so they're announced here as well
+ */
+const announcement = ref("")
+
+watch(
+	() => props.status,
+	(status) => (announcement.value = status ?? "")
+)
+
+watch(
+	() => panel.notification.message,
+	(message) => {
+		if (message && panel.notification.type !== "error") {
+			announcement.value = message
+		}
+	}
+)
+
+const filter = (issue, tab) =>
+	tab === props.tab ? emit("filter", issue) : panel.view.open(`seo/${tab}`, { query: { issue } })
 
 // `unknown`: values that couldn't be checked, e.g. links to servers that block bots
 const SEVERITIES = ["ok", "notice", "negative", "unknown"]
@@ -64,31 +89,29 @@ const cards = computed(() => {
 		return []
 	}
 
-	const { total, missing, ai } = props.stats.images
-
 	return [
 		toCard({
 			key: "title",
 			icon: "title",
 			distribution: props.stats.title,
 			legend: "pages",
-			click: () => emit("filter", "title", "pages")
+			click: () => filter("title", "pages")
 		}),
 		toCard({
 			key: "description",
 			icon: "text",
 			distribution: props.stats.description,
 			legend: "pages",
-			click: () => emit("filter", "description", "pages")
+			click: () => filter("description", "pages")
 		}),
 		toCard({
 			key: "images",
 			icon: "image",
-			distribution: { ok: total - missing - ai, notice: ai, negative: missing },
+			distribution: props.stats.images,
 			legend: "images",
 			highlight: ["negative"],
 			// missing & AI-generated alt texts
-			click: () => emit("filter", "issues", "images")
+			click: () => filter("issues", "images")
 		}),
 		toCard({
 			key: "links",
@@ -96,7 +119,7 @@ const cards = computed(() => {
 			distribution: props.stats.links,
 			legend: "links",
 			highlight: ["negative"],
-			click: () => emit("filter", "issues", "links")
+			click: () => filter("issues", "links")
 		})
 	]
 })
@@ -104,6 +127,7 @@ const cards = computed(() => {
 
 <template>
 	<k-panel-inside class="k-seo-view">
+		<p class="sr-only" role="status">{{ announcement }}</p>
 		<k-header>
 			{{ $t("seo.overview.title") }}
 
@@ -115,15 +139,15 @@ const cards = computed(() => {
 
 		<!-- Kirby's stat cards, with the distribution as bar & legend -->
 		<dl v-if="cards.length" :inert="busy" class="k-stats k-seo-view-stats" data-size="large">
-			<component
-				:is="card.click ? 'button' : 'div'"
-				v-for="card in cards"
-				:key="card.key"
-				:type="card.click ? 'button' : null"
-				class="k-stat k-seo-stat"
-				@click="card.click?.()"
-			>
-				<dt class="k-stat-label"><k-icon :type="card.icon" />{{ card.label }}</dt>
+			<!-- the button only wraps the label & covers the whole card, so it's announced once -->
+			<div v-for="card in cards" :key="card.key" class="k-stat k-seo-stat">
+				<dt class="k-stat-label">
+					<k-icon :type="card.icon" />
+					<button v-if="card.click" type="button" class="k-seo-stat-button" @click="card.click">
+						{{ card.label }}
+					</button>
+					<template v-else>{{ card.label }}</template>
+				</dt>
 				<dd v-if="card.total" class="k-stat-value k-seo-stat-value" aria-hidden="true">
 					<span
 						v-for="value in card.highlight"
@@ -152,7 +176,7 @@ const cards = computed(() => {
 					</span>
 					<span v-if="!card.total">{{ $t(`seo.overview.stats.${card.key}.none`) }}</span>
 				</dd>
-			</component>
+			</div>
 		</dl>
 
 		<div class="k-seo-view-tabs">
@@ -187,18 +211,26 @@ const cards = computed(() => {
 	--severity-negative-back: var(--color-red-600);
 	--severity-unknown: var(--color-gray-400);
 	--severity-unknown-back: var(--color-gray-500);
+	position: relative;
 	text-align: start;
-}
 
-button.k-seo-stat {
-	cursor: pointer;
-
-	&:hover {
+	&:has(.k-seo-stat-button:hover) {
 		background: var(--stat-color-hover-back);
 	}
 
-	&:focus-visible {
+	&:has(.k-seo-stat-button:focus-visible) {
 		outline: var(--outline);
+	}
+}
+
+.k-seo-stat-button {
+	cursor: pointer;
+	outline: none;
+
+	&::after {
+		content: "";
+		position: absolute;
+		inset: 0;
 	}
 }
 

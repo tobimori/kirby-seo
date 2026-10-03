@@ -3,8 +3,6 @@
 namespace tobimori\Seo\Views;
 
 use Kirby\Content\VersionId;
-use Kirby\Exception\NotFoundException;
-use Kirby\Panel\Ui\Item\PageItem;
 use Kirby\Toolkit\I18n;
 use tobimori\Seo\Audit\Links\Checker;
 use tobimori\Seo\Audit\Links\Report;
@@ -23,6 +21,11 @@ class LinksView extends OverviewView
 	 * Seconds per scan request of the Panel
 	 */
 	public const STEP = 4;
+
+	/**
+	 * Linking pages listed in the popover of a row
+	 */
+	public const PAGES = 10;
 
 	protected Report|null $report = null;
 
@@ -72,6 +75,8 @@ class LinksView extends OverviewView
 					'columns' => $this->columns(),
 					'rows' => array_map($this->row(...), $visible),
 					'pagination' => $pagination,
+					// severity of each issue type/state, for the filters
+					'severity' => Report::SEVERITY,
 					'summary' => $summary,
 					'issue' => $issue,
 					'scope' => $scope,
@@ -119,49 +124,6 @@ class LinksView extends OverviewView
 		return $checker->progress();
 	}
 
-	/**
-	 * Drawer with all pages linking to the URL, links in the content first
-	 */
-	public function linkingPages(string $url): array
-	{
-		$link = $this->report()->links()[$url] ?? throw new NotFoundException(message: 'Link not found');
-		[$pagination, $visible] = $this->paginate($this->linking($link));
-
-		return [
-			'component' => 'k-seo-link-drawer',
-			'props' => [
-				'icon' => 'url',
-				'title' => $this->display($url),
-				'url' => $url,
-				'state' => $link['state'],
-				'details' => $this->reason($link),
-				'items' => array_map(fn ($entry) => [
-					...(new PageItem(page: $entry['page']))->props(),
-					'info' => I18n::translate("seo.overview.links.location.{$entry['location']}"),
-				], $visible),
-				'pagination' => $pagination,
-			],
-		];
-	}
-
-	/**
-	 * Pages linking to the URL, links in the content first, then by title
-	 *
-	 * @return array<array{page: \Kirby\Cms\Page, location: string}>
-	 */
-	protected function linking(array $link): array
-	{
-		$entries = [];
-
-		foreach (Report::pages($link) as $id => $location) {
-			if ($page = $this->kirby->page($id)) {
-				$entries[] = ['page' => $page, 'location' => $location];
-			}
-		}
-
-		return $this->sort($entries, fn ($entry) => ($entry['location'] === 'content' ? '0' : '1') . $entry['page']->title()->value(), 'asc');
-	}
-
 	protected function report(): Report
 	{
 		return $this->report ??= new Report();
@@ -181,6 +143,26 @@ class LinksView extends OverviewView
 		return ($parts['path'] ?? '/')
 			. (isset($parts['query']) ? "?{$parts['query']}" : '')
 			. (isset($parts['fragment']) ? "#{$parts['fragment']}" : '');
+	}
+
+	/**
+	 * Title, Panel link & location of the linking pages (see `Report::pages()`)
+	 */
+	protected function linking(array $pages): array
+	{
+		$items = [];
+
+		foreach ($pages as $id => $location) {
+			if ($page = $this->kirby->page($id)) {
+				$items[] = [
+					'text' => (string)$page->title()->value(),
+					'link' => $page->panel()->url(true),
+					'info' => I18n::translate("seo.overview.links.location.{$location}"),
+				];
+			}
+		}
+
+		return $items;
 	}
 
 	protected function title(string $id): string
@@ -263,10 +245,11 @@ class LinksView extends OverviewView
 				'target' => '_blank',
 			],
 			'details' => $this->reason($link),
-			// the first page (preferably linking in the content), all pages are listed in a drawer
+			// the first pages, links in the content first
 			'pages' => [
-				'text' => $this->title(array_key_first(Report::pages($link))),
+				'text' => $this->title(array_key_first($pages = Report::pages($link))),
 				'total' => $link['total'],
+				'items' => $this->linking(array_slice($pages, 0, self::PAGES, true)),
 			],
 			'location' => I18n::translate("seo.overview.links.location.{$location}"),
 		];

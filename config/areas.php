@@ -48,11 +48,6 @@ return [
 			'seo.overview.languages' => fn (Site $site) => new OverviewLanguagesButton($site)
 		],
 		'drawers' => [
-			// pages linking to a URL of the links tab
-			'seo-link-pages' => [
-				'pattern' => 'seo/links/pages',
-				'load' => fn () => (new LinksView())->linkingPages((string)App::instance()->request()->get('url'))
-			],
 			'gsc-data' => [
 				'pattern' => 'seo/gsc/data/(:all)',
 				'load' => function (string $parent) {

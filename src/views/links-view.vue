@@ -15,6 +15,8 @@ const props = defineProps({
 	search: String,
 	sort: String,
 	dir: String,
+	/** Severity per state of the links */
+	severity: Object,
 	/** Number of links per state */
 	summary: {
 		type: Object,
@@ -72,6 +74,22 @@ const progressText = computed(() => {
 	return isCheckingPages.value
 		? panel.t("seo.overview.links.progress.pages", pages)
 		: panel.t("seo.overview.links.progress.urls", urls)
+})
+
+// for screen readers: only when the phase changes, the numbers change every few seconds
+const phase = computed(() => {
+	const { queue, running, done } = progress.value
+
+	if (done) {
+		return "done"
+	}
+
+	return queue && !running ? "queue" : isCheckingPages.value ? "pages" : "urls"
+})
+
+const status = ref("")
+watch(phase, (value) => {
+	status.value = value === "done" ? panel.t("seo.overview.links.progress.done") : progressText.value
 })
 
 let isActive = false
@@ -155,17 +173,15 @@ onBeforeUnmount(() => (isActive = false))
 /**
  * Filters: the dropdown shows the number of links per state & filters the table by them
  */
-const filtersDropdown = ref(null)
-
-const SEVERITIES = { broken: "negative", anchor: "notice", redirect: "notice", unknown: "unknown" }
 const ICONS = { ...SEVERITY_ICONS, unknown: "question" }
 
 const filters = computed(() =>
 	Object.entries(props.summary).map(([type, count]) => ({
 		type,
 		count,
-		theme: SEVERITIES[type] === "unknown" ? null : `${SEVERITIES[type]}-icon`,
-		icon: ICONS[SEVERITIES[type]]
+		text: panel.t(`seo.overview.links.filter.${type}`),
+		theme: props.severity[type] === "unknown" ? null : `${props.severity[type]}-icon`,
+		icon: ICONS[props.severity[type]]
 	}))
 )
 
@@ -177,10 +193,6 @@ const filterLabel = computed(() =>
 
 const setFilter = (issue = "") => reload({ issue, page: "1" })
 const toggleScope = () => reload({ scope: props.scope ? "" : "content", page: "1" })
-
-// the stats filter this tab or another one
-const onFilter = (issue, tab) =>
-	tab === props.tab ? setFilter(issue) : panel.view.open(`seo/${tab}`, { query: { issue } })
 
 const copyUrl = async (url) => {
 	await window.navigator.clipboard.writeText(url)
@@ -208,25 +220,14 @@ const items = computed(() =>
 				text: panel.t("seo.overview.links.recheck"),
 				disabled: isScanning.value,
 				click: () => recheck(row)
-			},
-			"-",
-			{
-				icon: "page",
-				text: panel.t("seo.overview.links.pages.show"),
-				click: () => openPages(row)
 			}
 		]
 	}))
 )
 
-const columnsDropdown = ref(null)
-
 const visibleColumns = computed(() =>
 	Object.fromEntries(Object.entries(props.columns).filter(([key]) => isVisible(key)))
 )
-
-// like in Retour, a click on a row opens its details
-const openPages = (row) => panel.drawer.open("seo/links/pages", { query: { url: row.id } })
 </script>
 
 <template>
@@ -235,8 +236,9 @@ const openPages = (row) => panel.drawer.open("seo/links/pages", { query: { url: 
 		:stats="stats"
 		:tab="tab"
 		:tabs="tabs"
+		:status="status"
 		class="k-seo-overview-view k-seo-links-view"
-		@filter="onFilter"
+		@filter="setFilter"
 	>
 		<template #toolbar>
 			<k-button v-if="isScanning" :text="progressText" icon="loader" size="xs" variant="filled" />
@@ -256,73 +258,37 @@ const openPages = (row) => panel.drawer.open("seo/links/pages", { query: { url: 
 					@input="searchterm = $event"
 					@toggle="toggleSearch"
 				/>
-				<!-- the active filter & its reset belong together -->
-				<k-button-group layout="collapsed">
-					<k-button
-						:text="filterLabel"
-						:theme="issue || scope ? 'info' : null"
-						:dropdown="true"
-						icon="checklist"
-						size="xs"
-						variant="filled"
-						class="k-seo-overview-checks-button"
-						@click="filtersDropdown.toggle()"
-					/>
-					<k-button
-						v-if="issue"
-						:title="$t('seo.overview.links.filter.clear')"
-						icon="cancel-small"
-						size="xs"
-						variant="filled"
-						theme="info"
-						@click="setFilter()"
-					/>
-				</k-button-group>
-				<k-button
-					:title="$t('seo.overview.columns.toggle')"
-					icon="layout-columns"
-					size="xs"
-					variant="filled"
-					@click="columnsDropdown.toggle()"
-				/>
-
-				<k-dropdown-content ref="filtersDropdown" align-x="end">
-					<k-dropdown-item :current="!issue" icon="url" @click="setFilter()">
-						{{ $t("seo.overview.links.filter.all") }}
-					</k-dropdown-item>
-					<k-dropdown-item :current="issue === 'issues'" icon="alert" @click="setFilter('issues')">
-						{{ $t("seo.overview.links.filter.issues") }}
-					</k-dropdown-item>
-					<hr />
-					<k-dropdown-item
-						v-for="filter in filters"
-						:key="filter.type"
-						:current="issue === filter.type"
-						:disabled="filter.count === 0 && issue !== filter.type"
-						:theme="filter.theme"
-						:icon="filter.icon"
-						class="k-seo-overview-checks-item"
-						@click="setFilter(filter.type)"
-					>
-						{{ $t(`seo.overview.links.filter.${filter.type}`) }}
-						<span class="k-seo-overview-checks-count">{{ filter.count }}</span>
-					</k-dropdown-item>
-					<hr />
-					<k-dropdown-item
-						:current="scope === 'content'"
-						:icon="scope === 'content' ? 'toggle-on' : 'toggle-off'"
-						@click="toggleScope"
-					>
-						{{ $t("seo.overview.links.filter.content") }}
-					</k-dropdown-item>
-				</k-dropdown-content>
-				<k-picklist-dropdown
-					ref="columnsDropdown"
-					:options="columnOptions"
-					:value="visibleColumnKeys"
-					:search="false"
-					@input="onColumns"
-				/>
+				<k-seo-filter
+					:label="filterLabel"
+					:active="Boolean(issue || scope)"
+					:clearable="Boolean(issue)"
+					:clear="$t('seo.overview.links.filter.clear')"
+					:all="{ text: $t('seo.overview.links.filter.all'), icon: 'url' }"
+					:current="issue"
+					:filters="filters"
+					@filter="setFilter"
+				>
+					<template #before>
+						<k-dropdown-item
+							:current="issue === 'issues'"
+							icon="alert"
+							@click="setFilter('issues')"
+						>
+							{{ $t("seo.overview.links.filter.issues") }}
+						</k-dropdown-item>
+					</template>
+					<template #after>
+						<hr />
+						<k-dropdown-item
+							:current="scope === 'content'"
+							:icon="scope === 'content' ? 'toggle-on' : 'toggle-off'"
+							@click="toggleScope"
+						>
+							{{ $t("seo.overview.links.filter.content") }}
+						</k-dropdown-item>
+					</template>
+				</k-seo-filter>
+				<k-seo-columns :options="columnOptions" :value="visibleColumnKeys" @input="onColumns" />
 			</template>
 		</template>
 
@@ -342,16 +308,8 @@ const openPages = (row) => panel.drawer.open("seo/links/pages", { query: { url: 
 			:widths.sync="settings.widths"
 			:empty="$t('seo.overview.links.empty')"
 			resizable
-			@cell="({ row, columnIndex }) => columnIndex !== '_index' && openPages(row)"
 			@sort="onSort"
 			@paginate="onPaginate"
 		/>
 	</k-seo-view>
 </template>
-
-<style>
-/* a click on a row opens its details */
-.k-seo-links-view .k-table-cell {
-	cursor: pointer;
-}
-</style>

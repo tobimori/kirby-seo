@@ -136,26 +136,26 @@ export function useOverviewTable(props, { endpoint, storageKey, applyPending, ai
 		return { language, id, column }
 	}
 
+	/**
+	 * State of the server, updated by the responses of edits until the view loads new props
+	 */
+	const fromProp = (key) => {
+		const value = ref(props[key])
+		watch(
+			() => props[key],
+			(next) => (value.value = next)
+		)
+		return value
+	}
+
 	const updates = ref({})
-	const serverChanges = ref(props.changes)
-	const serverSummary = ref(props.summary)
-	const serverStats = ref(props.stats)
+	const serverChanges = fromProp("changes")
+	const serverSummary = fromProp("summary")
+	const serverStats = fromProp("stats")
 
 	watch(
 		() => props.rows,
 		() => (updates.value = {})
-	)
-	watch(
-		() => props.changes,
-		(value) => (serverChanges.value = value)
-	)
-	watch(
-		() => props.summary,
-		(value) => (serverSummary.value = value)
-	)
-	watch(
-		() => props.stats,
-		(value) => (serverStats.value = value)
 	)
 
 	const serverRow = (row) => updates.value[row.id] ?? row
@@ -219,7 +219,10 @@ export function useOverviewTable(props, { endpoint, storageKey, applyPending, ai
 	// models edited in this view (by their Panel link, e.g. `/pages/blog+post`) & language,
 	// their locks get released when leaving the view or switching languages
 	const touched = new Map()
-	const touchedKey = (link, language = currentLanguage()) => `${language}\u0000${link}`
+	const touch = (link) => {
+		const language = currentLanguage()
+		touched.set(`${language}\u0000${link}`, { api: link, language })
+	}
 
 	/**
 	 * @param {Array<{ row: object, column: string, value: string, source?: string }>} changes
@@ -237,7 +240,7 @@ export function useOverviewTable(props, { endpoint, storageKey, applyPending, ai
 
 			queue.set(key, { id: row.id, column, value, source, language: currentLanguage() })
 			pending.value = { ...pending.value, [key]: { value, source } }
-			touched.set(touchedKey(row.link), { api: row.link, language: currentLanguage() })
+			touch(row.link)
 		}
 
 		window.clearTimeout(timer)
@@ -321,7 +324,7 @@ export function useOverviewTable(props, { endpoint, storageKey, applyPending, ai
 			applyResponse(response)
 
 			for (const row of Object.values(response.rows ?? {})) {
-				touched.set(touchedKey(row.link), { api: row.link, language: currentLanguage() })
+				touch(row.link)
 			}
 
 			return notifyErrors(response)
@@ -599,6 +602,17 @@ export function useOverviewTable(props, { endpoint, storageKey, applyPending, ai
 
 	const cancelGeneration = () => generation.value?.controller.abort()
 
+	// for screen readers: each generated value, otherwise when the number of unsaved changes changes
+	const status = computed(() => {
+		if (generation.value) {
+			return panel.t("seo.overview.ai.progress", generation.value)
+		}
+
+		return changes.value.length
+			? panel.t("seo.overview.changes.unsaved", { count: changes.value.length })
+			: ""
+	})
+
 	/**
 	 * Asks which of the given rows should be generated, then generates them
 	 *
@@ -716,6 +730,7 @@ export function useOverviewTable(props, { endpoint, storageKey, applyPending, ai
 		// changes
 		changes,
 		targets,
+		status,
 		isProcessing,
 		onSave,
 		onDiscard,

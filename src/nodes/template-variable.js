@@ -1,15 +1,20 @@
+import { usePanel } from "kirbyuse"
+
 export const createTemplateVariableNode = (options) => {
 	const config = {
 		theme: "blue",
 		...options
 	}
 
+	// translated when shown, the Panel's language might change
+	const label = () => usePanel().t(config.label)
+
 	return {
 		get button() {
 			return {
 				id: config.name,
 				icon: config.icon,
-				label: window.panel?.$t?.(config.label),
+				label: label(),
 				name: config.name,
 				inline: true
 			}
@@ -74,13 +79,13 @@ export const createTemplateVariableNode = (options) => {
 			dom.dataset.theme = config.theme
 			dom.dataset.seoTemplateVariable = node.attrs.variable
 			dom.setAttribute("contenteditable", "false")
-			dom.textContent = window.panel?.$t?.(config.label)
+			dom.textContent = label()
 
 			return {
 				dom,
 				update(updatedNode) {
 					dom.dataset.seoTemplateVariable = updatedNode.attrs.variable
-					dom.textContent = window.panel?.$t?.(config.label)
+					dom.textContent = label()
 					return true
 				},
 				ignoreMutation: () => true

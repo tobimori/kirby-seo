@@ -19,6 +19,8 @@ const props = defineProps({
 	search: String,
 	sort: String,
 	dir: String,
+	/** Severity per state of the alt texts */
+	severity: Object,
 	/** Number of images per filter */
 	summary: {
 		type: Object,
@@ -69,6 +71,7 @@ const {
 	isProcessing,
 	onSave,
 	onDiscard,
+	status,
 	onLock,
 	generation,
 	isGenerating,
@@ -176,7 +179,9 @@ const setDecorative = async (row, value) => {
 }
 
 // without images (with alt text fields), there's nothing to list, filter or edit
-const hasImages = computed(() => Boolean(serverStats.value?.images?.total))
+const hasImages = computed(() =>
+	Object.values(serverStats.value?.images ?? {}).some((count) => count > 0)
+)
 
 const markDropdown = ref(null)
 const onMark = async (action) => mark(await fetchRows(selected.value), action)
@@ -193,7 +198,7 @@ const items = computed(() =>
 
 		return {
 			...item,
-			status: { state },
+			status: { state, severity: props.severity[state] },
 			decorative: {
 				value: item.alt.decorative,
 				editable: item.editable
@@ -256,8 +261,6 @@ const items = computed(() =>
 	})
 )
 
-const columnsDropdown = ref(null)
-
 const visibleColumns = computed(() =>
 	Object.fromEntries(
 		Object.entries(props.columns)
@@ -288,16 +291,13 @@ const visibleColumns = computed(() =>
 /**
  * Filters: the dropdown shows the number of images per state & filters the table by them
  */
-const filtersDropdown = ref(null)
-
-const SEVERITIES = { missing: "negative", ai: "notice", decorative: "ok" }
-
 const filters = computed(() =>
 	Object.entries(serverSummary.value).map(([type, count]) => ({
 		type,
 		count,
-		severity: SEVERITIES[type],
-		icon: type === "decorative" ? "hidden" : SEVERITY_ICONS[SEVERITIES[type]]
+		text: panel.t(`seo.overview.images.filter.${type}`),
+		theme: `${props.severity[type]}-icon`,
+		icon: type === "decorative" ? "hidden" : SEVERITY_ICONS[props.severity[type]]
 	}))
 )
 
@@ -308,10 +308,6 @@ const filterLabel = computed(() =>
 )
 
 const setFilter = (issue = "") => reload({ issue, page: "1" })
-
-// the stats filter this tab or another one
-const onFilter = (issue, tab) =>
-	tab === props.tab ? setFilter(issue) : panel.view.open(`seo/${tab}`, { query: { issue } })
 
 const onGenerate = async () => {
 	const candidates = (await fetchRows(selected.value)).filter(
@@ -340,8 +336,9 @@ const onGenerate = async () => {
 		:tab="tab"
 		:tabs="tabs"
 		:busy="isGenerating"
+		:status="status"
 		class="k-seo-overview-view k-seo-images-view"
-		@filter="onFilter"
+		@filter="setFilter"
 	>
 		<template #buttons>
 			<k-seo-changes-controls
@@ -355,21 +352,7 @@ const onGenerate = async () => {
 		</template>
 
 		<template #toolbar>
-			<k-button-group v-if="generation" layout="collapsed">
-				<k-button
-					:text="$t('seo.overview.ai.progress', generation)"
-					icon="loader"
-					size="xs"
-					variant="filled"
-				/>
-				<k-button
-					:title="$t('seo.ai.action.stop')"
-					icon="cancel-small"
-					size="xs"
-					variant="filled"
-					@click="cancelGeneration"
-				/>
-			</k-button-group>
+			<k-seo-generation v-if="generation" :generation="generation" @cancel="cancelGeneration" />
 			<template v-else-if="hasImages">
 				<template v-if="selected.length">
 					<k-button
@@ -400,27 +383,13 @@ const onGenerate = async () => {
 						</k-dropdown-item>
 					</k-dropdown-content>
 
-					<k-button-group layout="collapsed">
-						<k-button
-							:text="$t('seo.overview.selection.count', { count: selected.length })"
-							size="xs"
-							variant="filled"
-						/>
-						<k-button
-							v-if="!isAllSelected"
-							:text="$t('seo.overview.selection.all', { count: ids.length })"
-							size="xs"
-							variant="filled"
-							@click="selectAll"
-						/>
-						<k-button
-							:title="$t('seo.overview.selection.clear')"
-							icon="cancel-small"
-							size="xs"
-							variant="filled"
-							@click="selected = []"
-						/>
-					</k-button-group>
+					<k-seo-selection
+						:count="selected.length"
+						:total="ids.length"
+						:all="isAllSelected"
+						@all="selectAll"
+						@clear="selected = []"
+					/>
 				</template>
 
 				<k-seo-search
@@ -429,62 +398,17 @@ const onGenerate = async () => {
 					@input="searchterm = $event"
 					@toggle="toggleSearch"
 				/>
-				<!-- the active filter & its reset belong together -->
-				<k-button-group layout="collapsed">
-					<k-button
-						:text="filterLabel"
-						:theme="issue ? 'info' : null"
-						:dropdown="true"
-						icon="checklist"
-						size="xs"
-						variant="filled"
-						class="k-seo-overview-checks-button"
-						@click="filtersDropdown.toggle()"
-					/>
-					<k-button
-						v-if="issue"
-						:title="$t('seo.overview.images.filter.clear')"
-						icon="cancel-small"
-						size="xs"
-						variant="filled"
-						theme="info"
-						@click="setFilter()"
-					/>
-				</k-button-group>
-				<k-button
-					:title="$t('seo.overview.columns.toggle')"
-					icon="layout-columns"
-					size="xs"
-					variant="filled"
-					@click="columnsDropdown.toggle()"
+				<k-seo-filter
+					:label="filterLabel"
+					:active="Boolean(issue)"
+					:clearable="Boolean(issue)"
+					:clear="$t('seo.overview.images.filter.clear')"
+					:all="{ text: $t('seo.overview.images.filter.all'), icon: 'image' }"
+					:current="issue"
+					:filters="filters"
+					@filter="setFilter"
 				/>
-
-				<k-dropdown-content ref="filtersDropdown" align-x="end">
-					<k-dropdown-item :current="!issue" icon="image" @click="setFilter()">
-						{{ $t("seo.overview.images.filter.all") }}
-					</k-dropdown-item>
-					<hr />
-					<k-dropdown-item
-						v-for="filter in filters"
-						:key="filter.type"
-						:current="issue === filter.type"
-						:disabled="filter.count === 0 && issue !== filter.type"
-						:theme="`${filter.severity}-icon`"
-						:icon="filter.icon"
-						class="k-seo-overview-checks-item"
-						@click="setFilter(filter.type)"
-					>
-						{{ $t(`seo.overview.images.filter.${filter.type}`) }}
-						<span class="k-seo-overview-checks-count">{{ filter.count }}</span>
-					</k-dropdown-item>
-				</k-dropdown-content>
-				<k-picklist-dropdown
-					ref="columnsDropdown"
-					:options="columnOptions"
-					:value="visibleColumnKeys"
-					:search="false"
-					@input="onColumns"
-				/>
+				<k-seo-columns :options="columnOptions" :value="visibleColumnKeys" @input="onColumns" />
 			</template>
 		</template>
 

@@ -10,20 +10,12 @@ import { SEVERITY_ICONS } from "../../utils/checks.js"
 const props = defineProps({
 	column: Object,
 	row: Object,
-	/** `{ state }` */
+	/** `{ state, severity }` */
 	value: Object
 })
 
-const SEVERITIES = {
-	missing: "negative",
-	ai: "notice",
-	decorative: "ok",
-	ok: "ok"
-}
-
-const severity = computed(() => SEVERITIES[props.value.state])
 const icon = computed(() =>
-	props.value.state === "decorative" ? "hidden" : SEVERITY_ICONS[severity.value]
+	props.value.state === "decorative" ? "hidden" : SEVERITY_ICONS[props.value.severity]
 )
 </script>
 
@@ -31,7 +23,7 @@ const icon = computed(() =>
 	<k-button
 		v-if="value.state !== 'ok' && column.filterIssue"
 		:icon="icon"
-		:theme="`${severity}-icon`"
+		:theme="`${value.severity}-icon`"
 		:title="$t(`seo.overview.images.status.${value.state}`)"
 		:data-state="value.state"
 		size="md"

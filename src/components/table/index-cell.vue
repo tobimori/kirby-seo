@@ -1,4 +1,6 @@
 <script setup>
+import { rowName } from "../../utils/rows.js"
+
 /**
  * Row number like in Retour & Kirby's tables. In selectable tables, the number turns
  * into a checkbox while hovering the row (or when rows are selected), rows that
@@ -25,7 +27,7 @@ defineProps({
 		<input
 			:checked="column.isSelected(row)"
 			:disabled="row.selectable === false"
-			:aria-label="$t('seo.table.selectRow', { title: row.title?.text ?? value })"
+			:aria-label="$t('seo.table.selectRow', { title: rowName(row) ?? value })"
 			type="checkbox"
 			@click.stop="column.toggle(row, $event)"
 		/>

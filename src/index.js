@@ -5,7 +5,6 @@ import SeoWriterField from "./fields/seo-writer.vue"
 import SeoWriterInput from "./fields/seo-writer-input.vue"
 import UtmShareDialog from "./components/utm-share-dialog.vue"
 import GscDrawer from "./components/gsc-drawer.vue"
-import LinkDrawer from "./components/link-drawer.vue"
 import { createTemplateVariableNode } from "./nodes/template-variable.js"
 import HeadingStructure from "./sections/heading-structure.vue"
 import SeoPreview from "./sections/seo-preview.vue"
@@ -13,6 +12,11 @@ import SearchConsole from "./sections/search-console.vue"
 import ChangesControls from "./components/changes-controls.vue"
 import SeoTable from "./components/table/seo-table.vue"
 import SeoSearch from "./components/table/search.vue"
+import SeoColumns from "./components/table/columns.vue"
+import SeoFilter from "./components/table/filter.vue"
+import SeoGeneration from "./components/table/generation.vue"
+import SeoPopover from "./components/table/popover.vue"
+import SeoSelection from "./components/table/selection.vue"
 import SeoTableAltStatusCell from "./components/table/alt-status-cell.vue"
 import SeoTableChecksCell from "./components/table/checks-cell.vue"
 import SeoTableDecorativeCell from "./components/table/decorative-cell.vue"
@@ -47,7 +51,6 @@ panel.plugin("tobimori/seo", {
 		"k-seo-writer-input": SeoWriterInput,
 		"k-seo-utm-share-dialog": UtmShareDialog,
 		"k-gsc-drawer": GscDrawer,
-		"k-seo-link-drawer": LinkDrawer,
 		"k-seo-changes-controls": ChangesControls,
 		"k-seo-overview-view": OverviewView,
 		"k-seo-images-view": ImagesView,
@@ -55,6 +58,11 @@ panel.plugin("tobimori/seo", {
 		"k-seo-view": SeoView,
 		"k-seo-table": SeoTable,
 		"k-seo-search": SeoSearch,
+		"k-seo-columns": SeoColumns,
+		"k-seo-filter": SeoFilter,
+		"k-seo-generation": SeoGeneration,
+		"k-seo-popover": SeoPopover,
+		"k-seo-selection": SeoSelection,
 		// cell types for k-table, used via `type: seo-*` in column definitions
 		"k-table-seo-alt-status-cell": SeoTableAltStatusCell,
 		"k-table-seo-checks-cell": SeoTableChecksCell,

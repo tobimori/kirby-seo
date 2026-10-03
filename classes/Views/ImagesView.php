@@ -56,6 +56,8 @@ class ImagesView extends EditableOverviewView
 					'changes' => $this->changes(),
 					'pagination' => $pagination,
 					'ids' => array_column($entries, 'id'),
+					// severity of each issue type/state, for the filters
+					'severity' => Audit\Images::SEVERITY,
 					'summary' => $this->images()->summary(),
 					'issue' => $issue,
 					'ai' => $this->canUseAi(),
@@ -189,13 +191,15 @@ class ImagesView extends EditableOverviewView
 	/**
 	 * Columns with a `toggle` label can be shown/hidden by the user,
 	 * columns with `hidden: true` are hidden until the user enables them,
-	 * columns with `resizable: false` keep their width.
+	 * columns with `resizable: false` keep their width,
+	 * columns with `hideLabel: true` only show their label to screen readers.
 	 */
 	protected function columns(): array
 	{
 		return [
 			'status' => [
-				'label' => ' ',
+				'hideLabel' => true,
+				'label' => I18n::translate('seo.overview.images.columns.status'),
 				'mobile' => true,
 				'resizable' => false,
 				'toggle' => I18n::translate('seo.overview.images.columns.status'),
@@ -203,7 +207,8 @@ class ImagesView extends EditableOverviewView
 				'width' => 'var(--table-row-height)'
 			],
 			'image' => [
-				'label' => ' ',
+				'hideLabel' => true,
+				'label' => I18n::translate('seo.overview.images.columns.image'),
 				'mobile' => true,
 				'resizable' => false,
 				'ratio' => '1/1',

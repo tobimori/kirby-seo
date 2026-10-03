@@ -1,5 +1,7 @@
 <script setup>
-import { computed, ref } from "kirbyuse"
+import { computed, nextTick, onMounted, ref, usePanel, watch } from "kirbyuse"
+
+import { providePopoverGroup } from "../../composables/popover.js"
 
 /**
  * Wrapper around Kirby's `k-table` that adds sortable headers, resizable columns
@@ -47,6 +49,11 @@ const props = defineProps({
 		default: () => ({})
 	}
 })
+
+const panel = usePanel()
+
+// only one popover of the cells is open at a time
+providePopoverGroup()
 
 const emit = defineEmits([
 	"cell",
@@ -322,7 +329,7 @@ const applyResize = (start, delta) => {
 	})
 }
 
-const direction = () => (window.panel.direction === "rtl" ? -1 : 1)
+const direction = () => (panel.direction === "rtl" ? -1 : 1)
 const resizing = ref(null)
 
 const onResizeStart = (event, key) => {
@@ -354,6 +361,35 @@ const onResizeStart = (event, key) => {
 const onResizeKey = (event, key, step) => {
 	applyResize(measure(event.currentTarget, key), step * direction())
 }
+
+// widths in percent of the table, screen readers read them from the resize handles.
+// Measured, as columns without a stored width share the space & change with the viewport
+const root = ref(null)
+const sizes = ref({})
+
+const measureSizes = () => {
+	const table = root.value?.querySelector("table")
+
+	if (!table) {
+		return
+	}
+
+	const total = table.getBoundingClientRect().width
+	const headers = [...table.querySelectorAll("thead th[data-column-id]")]
+
+	sizes.value = Object.fromEntries(
+		headers.map((th) => [
+			th.dataset.columnId,
+			Math.round((th.getBoundingClientRect().width / total) * 100)
+		])
+	)
+}
+
+onMounted(measureSizes)
+watch(
+	() => [props.widths, props.columns],
+	() => nextTick(measureSizes)
+)
 
 // row index of the last toggled checkbox, used for shift-click range selection
 const lastIndex = ref(null)
@@ -461,6 +497,9 @@ const hasPagination = computed(
 	() => props.pagination !== false && props.pagination.total > props.pagination.limit
 )
 
+// the icon only shows the direction, screen readers get it as text
+const sortState = computed(() => `, ${panel.t(`seo.table.sorted.${props.dir}`)}`)
+
 const sortIcon = (columnIndex) => {
 	// unsorted columns hint at the first click (ascending) on hover
 	return props.sort === columnIndex && props.dir === "desc" ? "angle-down" : "angle-up"
@@ -481,7 +520,7 @@ const onSort = (columnIndex) => {
 </script>
 
 <template>
-	<div :data-selecting="selected.length > 0" class="k-seo-table">
+	<div ref="root" :data-selecting="selected.length > 0" class="k-seo-table">
 		<k-table
 			:columns="tableColumns"
 			:rows="tableRows"
@@ -511,6 +550,7 @@ const onSort = (columnIndex) => {
 				<button
 					v-else-if="column.sortable"
 					:data-sorted="String(sort === columnIndex)"
+					:aria-label="sort === columnIndex ? `${label}${sortState}` : null"
 					type="button"
 					class="k-seo-table-sort"
 					@click="onSort(columnIndex)"
@@ -518,6 +558,7 @@ const onSort = (columnIndex) => {
 					<span>{{ label }}</span>
 					<k-icon :type="sortIcon(columnIndex)" />
 				</button>
+				<span v-else-if="column.hideLabel" class="sr-only">{{ label }}</span>
 				<template v-else>{{ label }}</template>
 
 				<span
@@ -525,10 +566,14 @@ const onSort = (columnIndex) => {
 					:aria-label="$t('seo.table.resize', { column: label })"
 					:data-active="resizing === columnIndex"
 					:title="$t('seo.table.resizeReset')"
+					:aria-valuenow="sizes[columnIndex] ?? 0"
 					role="separator"
 					aria-orientation="vertical"
+					aria-valuemin="0"
+					aria-valuemax="100"
 					tabindex="0"
 					class="k-seo-table-resize"
+					@focus="measureSizes"
 					@click.stop
 					@dblclick.stop="emit('update:widths', {})"
 					@pointerdown.stop.prevent="onResizeStart($event, columnIndex)"

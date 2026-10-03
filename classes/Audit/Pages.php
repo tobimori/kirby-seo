@@ -328,7 +328,7 @@ class Pages
 		// most severe first
 		usort($issues, fn ($a, $b) => array_search($a['type'], self::TYPES) <=> array_search($b['type'], self::TYPES));
 
-		return $issues;
+		return array_map(fn ($issue) => [...$issue, 'severity' => self::SEVERITY[$issue['type']]], $issues);
 	}
 
 	/**

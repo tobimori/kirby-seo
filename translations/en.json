@@ -207,6 +207,7 @@
   "overview.changes.discard.confirm.all": "Do you really want to <strong>discard the unsaved changes</strong> of all pages ({count})?",
   "overview.changes.published": "Changes published ({count})",
   "overview.changes.discarded": "Changes discarded ({count})",
+  "overview.changes.unsaved": "Unsaved changes: {count}",
   "overview.images.empty": "No images found",
   "overview.images.empty.noImages": "No images yet",
   "overview.images.columns.status": "Status",
@@ -248,7 +249,8 @@
   "overview.links.columns.url": "Link",
   "overview.links.columns.details": "Details",
   "overview.links.columns.pages": "Linked from",
-  "overview.links.pages.show": "Show all pages linking here",
+  "overview.links.pages.show": "Show the pages linking here",
+  "overview.links.pages.more": "{count} more pages",
   "overview.links.columns.location": "Location",
   "overview.links.location.content": "Content",
   "overview.links.location.layout": "Layout",
@@ -285,6 +287,7 @@
   "overview.links.progress.pages": "Checking pages {done}/{total}",
   "overview.links.progress.urls": "Checking external links {done}/{total}",
   "overview.links.progress.queue": "Waiting for the queue worker",
+  "overview.links.progress.done": "All links checked",
   "overview.links.rescan": "Check again",
   "overview.links.rescan.confirm": "Check all {pages} pages again? They are rendered again and all external links are requested again, this can take a few minutes.",
   "overview.links.recheck": "Check this link again",
@@ -292,5 +295,7 @@
   "table.resize": "Resize column {column}",
   "table.resizeReset": "Drag to resize, double-click to reset",
   "table.selectAll": "Select all rows on this page",
-  "table.selectRow": "Select {title}"
+  "table.selectRow": "Select {title}",
+  "table.sorted.asc": "sorted ascending",
+  "table.sorted.desc": "sorted descending"
 }

@@ -247,11 +247,11 @@ const onFocusout = (event) => {
 		@mousedown="onMousedown"
 		@click="onClick"
 	>
-		<p v-if="rangeText !== null" class="k-seo-meta-cell-text">
+		<span v-if="rangeText !== null" class="k-seo-meta-cell-text">
 			<span v-if="rangeText">{{ rangeText }}</span>
 			<span v-else class="k-seo-meta-cell-empty">—</span>
-		</p>
-		<p v-else class="k-seo-meta-cell-text">
+		</span>
+		<span v-else class="k-seo-meta-cell-text">
 			<k-tag
 				v-if="tag"
 				:text="tag.text"
@@ -263,7 +263,7 @@ const onFocusout = (event) => {
 			<span v-if="value.text">{{ value.text }}</span>
 			<!-- a tag of its own (e.g. decorative images) explains the missing text -->
 			<span v-else-if="!value.tag" class="k-seo-meta-cell-empty">—</span>
-		</p>
+		</span>
 	</component>
 </template>
 

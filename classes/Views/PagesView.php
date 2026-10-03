@@ -69,6 +69,8 @@ class PagesView extends EditableOverviewView
 					'changes' => $this->changes(),
 					'pagination' => $pagination,
 					'ids' => array_map(fn (Page $page) => $page->id(), $pages),
+					// severity of each issue type/state, for the filters
+					'severity' => Audit\Pages::SEVERITY,
 					'summary' => $this->audit()->summary(),
 					'issue' => $issue,
 					'ai' => $this->canUseAi(),
@@ -168,7 +170,8 @@ class PagesView extends EditableOverviewView
 	/**
 	 * Columns with a `toggle` label can be shown/hidden by the user,
 	 * columns with `hidden: true` are hidden until the user enables them,
-	 * columns with `resizable: false` keep their width.
+	 * columns with `resizable: false` keep their width,
+	 * columns with `hideLabel: true` only show their label to screen readers.
 	 * Text columns don't set a width, so they share the available space equally
 	 */
 	protected function columns(): array
@@ -176,7 +179,8 @@ class PagesView extends EditableOverviewView
 		$columns = [
 			// a single indicator per page in front, details on hover & click
 			'checks' => [
-				'label' => ' ',
+				'hideLabel' => true,
+				'label' => I18n::translate('seo.overview.columns.checks'),
 				'mobile' => true,
 				'resizable' => false,
 				'toggle' => I18n::translate('seo.overview.columns.checks'),
@@ -185,7 +189,8 @@ class PagesView extends EditableOverviewView
 			],
 			'image' => [
 				'hidden' => true,
-				'label' => ' ',
+				'hideLabel' => true,
+				'label' => I18n::translate('seo.overview.columns.image'),
 				'mobile' => true,
 				'resizable' => false,
 				'toggle' => I18n::translate('seo.overview.columns.image'),
@@ -238,7 +243,8 @@ class PagesView extends EditableOverviewView
 
 		if (Seo::option('robots.enabled')) {
 			$columns['robots'] = [
-				'label' => ' ',
+				'hideLabel' => true,
+				'label' => I18n::translate('seo.overview.columns.robots'),
 				'mobile' => true,
 				'resizable' => false,
 				'toggle' => I18n::translate('seo.overview.columns.robots'),
@@ -248,7 +254,8 @@ class PagesView extends EditableOverviewView
 		}
 
 		$columns['flag'] = [
-			'label' => ' ',
+			'hideLabel' => true,
+			'label' => I18n::translate('page.status'),
 			'mobile' => true,
 			'resizable' => false,
 			'type' => 'flag',

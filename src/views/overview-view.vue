@@ -2,7 +2,7 @@
 import { computed, ref, usePanel, useHelpers } from "kirbyuse"
 
 import { useOverviewTable } from "../composables/overview-table.js"
-import { SEVERITY, SEVERITY_ICONS } from "../utils/checks.js"
+import { SEVERITY_ICONS } from "../utils/checks.js"
 
 const props = defineProps({
 	buttons: {
@@ -19,6 +19,8 @@ const props = defineProps({
 	search: String,
 	sort: String,
 	dir: String,
+	/** Severity per issue type */
+	severity: Object,
 	/** Number of pages per issue type */
 	summary: {
 		type: Object,
@@ -73,6 +75,7 @@ const {
 	isProcessing,
 	onSave,
 	onDiscard,
+	status,
 	onLock,
 	generation,
 	isGenerating,
@@ -151,8 +154,6 @@ const items = computed(() =>
 	})
 )
 
-const columnsDropdown = ref(null)
-
 const visibleColumns = computed(() =>
 	Object.fromEntries(
 		Object.entries(props.columns)
@@ -175,14 +176,13 @@ const visibleColumns = computed(() =>
 /**
  * Checks: the filter dropdown shows the number of pages per issue type & filters the table by them
  */
-const checksDropdown = ref(null)
-
-// all checks with the number of affected pages, for the checks dropdown
 const filters = computed(() =>
 	Object.entries(serverSummary.value).map(([type, count]) => ({
 		type,
 		count,
-		severity: SEVERITY[type]
+		text: panel.t(`seo.overview.checks.${type}`),
+		theme: `${props.severity[type]}-icon`,
+		icon: SEVERITY_ICONS[props.severity[type]]
 	}))
 )
 
@@ -211,10 +211,6 @@ const setFilter = (issue = "") =>
 		page: "1",
 		...(DUPLICATE_SORT[issue] ? { sort: DUPLICATE_SORT[issue], dir: "asc" } : {})
 	})
-
-// the stats filter this tab or another one
-const onFilter = (issue, tab) =>
-	tab === props.tab ? setFilter(issue) : panel.view.open(`seo/${tab}`, { query: { issue } })
 
 // pages sharing the same title/description as a page
 function filterGroup(group) {
@@ -251,8 +247,9 @@ const onGenerate = async (column) => {
 		:tab="tab"
 		:tabs="tabs"
 		:busy="isGenerating"
+		:status="status"
 		class="k-seo-overview-view"
-		@filter="onFilter"
+		@filter="setFilter"
 	>
 		<template #buttons>
 			<k-seo-changes-controls
@@ -265,21 +262,7 @@ const onGenerate = async (column) => {
 		</template>
 
 		<template #toolbar>
-			<k-button-group v-if="generation" layout="collapsed">
-				<k-button
-					:text="$t('seo.overview.ai.progress', generation)"
-					icon="loader"
-					size="xs"
-					variant="filled"
-				/>
-				<k-button
-					:title="$t('seo.ai.action.stop')"
-					icon="cancel-small"
-					size="xs"
-					variant="filled"
-					@click="cancelGeneration"
-				/>
-			</k-button-group>
+			<k-seo-generation v-if="generation" :generation="generation" @cancel="cancelGeneration" />
 			<template v-else-if="ai && selected.length">
 				<k-button
 					:text="$t('seo.overview.ai.generate')"
@@ -301,91 +284,36 @@ const onGenerate = async (column) => {
 				</k-dropdown-content>
 			</template>
 			<template v-if="!generation">
-				<k-button-group v-if="selected.length" layout="collapsed">
-					<k-button
-						:text="$t('seo.overview.selection.count', { count: selected.length })"
-						size="xs"
-						variant="filled"
-					/>
-					<k-button
-						v-if="!isAllSelected"
-						:text="$t('seo.overview.selection.all', { count: ids.length })"
-						size="xs"
-						variant="filled"
-						@click="selectAll"
-					/>
-					<k-button
-						:title="$t('seo.overview.selection.clear')"
-						icon="cancel-small"
-						size="xs"
-						variant="filled"
-						@click="selected = []"
-					/>
-				</k-button-group>
-
+				<k-seo-selection
+					v-if="selected.length"
+					:count="selected.length"
+					:total="ids.length"
+					:all="isAllSelected"
+					@all="selectAll"
+					@clear="selected = []"
+				/>
 				<k-seo-search
 					:value="searchterm"
 					:searching="isSearching"
 					@input="searchterm = $event"
 					@toggle="toggleSearch"
 				/>
-				<!-- the active filter & its reset belong together -->
-				<k-button-group layout="collapsed">
-					<k-button
-						:text="checksLabel"
-						:title="group ? group.text : null"
-						:theme="issue || group ? 'info' : null"
-						:dropdown="true"
-						icon="checklist"
-						size="xs"
-						variant="filled"
-						class="k-seo-overview-checks-button"
-						@click="checksDropdown.toggle()"
-					/>
-					<k-button
-						v-if="issue || group"
-						:title="$t('seo.overview.checks.filter.clear')"
-						icon="cancel-small"
-						size="xs"
-						variant="filled"
-						theme="info"
-						@click="setFilter()"
-					/>
-				</k-button-group>
-				<k-button
-					:title="$t('seo.overview.columns.toggle')"
-					icon="layout-columns"
-					size="xs"
-					variant="filled"
-					@click="columnsDropdown.toggle()"
+				<k-seo-filter
+					:label="checksLabel"
+					:title="group ? group.text : null"
+					:active="Boolean(issue || group)"
+					:clearable="Boolean(issue || group)"
+					:clear="$t('seo.overview.checks.filter.clear')"
+					:all="{
+						text: $t('seo.overview.checks.filter.all'),
+						icon: 'page',
+						current: !issue && !group
+					}"
+					:current="issue"
+					:filters="filters"
+					@filter="setFilter"
 				/>
-
-				<k-dropdown-content ref="checksDropdown" align-x="end">
-					<k-dropdown-item :current="!issue && !group" icon="page" @click="setFilter()">
-						{{ $t("seo.overview.checks.filter.all") }}
-					</k-dropdown-item>
-					<hr />
-					<k-dropdown-item
-						v-for="{ type, count, severity } in filters"
-						:key="type"
-						:current="issue === type"
-						:disabled="count === 0 && issue !== type"
-						:theme="`${severity}-icon`"
-						:icon="SEVERITY_ICONS[severity]"
-						class="k-seo-overview-checks-item"
-						@click="setFilter(type)"
-					>
-						{{ $t(`seo.overview.checks.${type}`) }}
-						<span class="k-seo-overview-checks-count">{{ count }}</span>
-					</k-dropdown-item>
-				</k-dropdown-content>
-				<k-picklist-dropdown
-					ref="columnsDropdown"
-					:options="columnOptions"
-					:value="visibleColumnKeys"
-					:search="false"
-					@input="onColumns"
-				/>
+				<k-seo-columns :options="columnOptions" :value="visibleColumnKeys" @input="onColumns" />
 			</template>
 		</template>
 
@@ -424,23 +352,5 @@ const onGenerate = async (column) => {
 	.k-seo-image-cell .k-frame {
 		opacity: 0.5;
 	}
-}
-
-.k-seo-overview-checks-button .k-button-text {
-	max-width: 24ch;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-
-/* the number of pages, aligned to the end of the dropdown item */
-.k-seo-overview-checks-item .k-button-text {
-	display: flex;
-	flex-grow: 1;
-	gap: var(--spacing-6);
-}
-
-.k-seo-overview-checks-count {
-	margin-inline-start: auto;
-	font-variant-numeric: tabular-nums;
 }
 </style>
