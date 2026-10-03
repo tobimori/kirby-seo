@@ -4,8 +4,16 @@ use Kirby\Cms\File;
 use Kirby\Cms\Page;
 use Kirby\Toolkit\A;
 use Kirby\Toolkit\Str;
+use Kirby\Cms\Event;
 use tobimori\Seo\Field\AltTextField;
+use tobimori\Seo\Audit\Links\Checker;
 use tobimori\Seo\Seo;
+
+$checkLinks = function (Event $event) {
+	if (in_array($event->action(), ['create', 'duplicate', 'update', 'move', 'changeSlug', 'changeStatus', 'changeTemplate', 'changeName', 'delete'], true)) {
+		Checker::dispatch();
+	}
+};
 
 $indexNow = function (Page $newPage): void {
 	if (Seo::option('indexnow.enabled')) {
@@ -17,11 +25,17 @@ return [
 	'system.loadPlugins:after' => function () {
 		if (class_exists('tobimori\Queues\Queues')) {
 			\tobimori\Queues\Queues::register([
+				\tobimori\Seo\Jobs\CheckLinksJob::class,
 				\tobimori\Seo\Jobs\GenerateAltTextJob::class,
 				\tobimori\Seo\Jobs\IndexNowBatchJob::class,
 			]);
 		}
 	},
+	// Persisted schedules are synchronized when the worker starts
+	'tobimori.queues.worker:before' => fn () => Checker::schedule(),
+	'page.*:after' => $checkLinks,
+	'site.*:after' => $checkLinks,
+	'file.*:after' => $checkLinks,
 	'file.create:after' => function (File $file) {
 		if ($file->type() !== 'image') {
 			return;

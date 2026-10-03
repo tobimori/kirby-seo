@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from "vue"
+import { computed, usePanel } from "kirbyuse"
 
 const props = defineProps({
 	columns: Object,
@@ -21,6 +21,8 @@ const props = defineProps({
 	options: Array
 })
 
+const panel = usePanel()
+
 const emit = defineEmits(["cancel", "crumb", "submit", "tab"])
 
 const pagination = computed(() => ({
@@ -31,7 +33,7 @@ const pagination = computed(() => ({
 }))
 
 const reload = (overrides = {}) => {
-	window.panel.drawer.refresh({
+	panel.drawer.refresh({
 		query: {
 			metric: overrides.metric ?? props.metric,
 			asc: (overrides.asc ?? props.sortAsc) ? 1 : 0,

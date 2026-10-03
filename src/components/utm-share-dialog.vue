@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watch, nextTick, onMounted, onUnmounted } from "kirbyuse"
+import { ref, computed, watch, nextTick, onMounted, onUnmounted, useHelpers } from "kirbyuse"
 
 const props = defineProps({
 	pageUrl: {
@@ -17,6 +17,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(["cancel"])
+const helpers = useHelpers()
 
 const params = ref({
 	utm_source: "",
@@ -51,16 +52,12 @@ const generatedUrl = computed(() => {
 	return url.toString()
 })
 
-const copyToClipboard = async () => {
-	try {
-		await navigator.clipboard.writeText(generatedUrl.value)
-		copied.value = true
-		setTimeout(() => {
-			copied.value = false
-		}, 2000)
-	} catch (err) {
-		console.error("Failed to copy:", err)
-	}
+const copyToClipboard = () => {
+	helpers.clipboard.write(generatedUrl.value)
+	copied.value = true
+	setTimeout(() => {
+		copied.value = false
+	}, 2000)
 }
 
 watch(generatedUrl, () => {

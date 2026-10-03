@@ -9,6 +9,28 @@ import { createTemplateVariableNode } from "./nodes/template-variable.js"
 import HeadingStructure from "./sections/heading-structure.vue"
 import SeoPreview from "./sections/seo-preview.vue"
 import SearchConsole from "./sections/search-console.vue"
+import ChangesControls from "./components/changes-controls.vue"
+import SeoTable from "./components/table/seo-table.vue"
+import SeoSearch from "./components/table/toolbar/search.vue"
+import SeoColumns from "./components/table/toolbar/columns.vue"
+import SeoFilter from "./components/table/toolbar/filter.vue"
+import SeoGeneration from "./components/table/toolbar/generation.vue"
+import SeoPopover from "./components/table/popover.vue"
+import SeoSelection from "./components/table/toolbar/selection.vue"
+import SeoTableAltStatusCell from "./components/table/cells/alt-status.vue"
+import SeoTableChecksCell from "./components/table/cells/checks.vue"
+import SeoTableDecorativeCell from "./components/table/cells/decorative.vue"
+import SeoTableImageCell from "./components/table/cells/image.vue"
+import SeoTableIndexCell from "./components/table/cells/index.vue"
+import SeoTableLinkPagesCell from "./components/table/cells/link-pages.vue"
+import SeoTableLinkStatusCell from "./components/table/cells/link-status.vue"
+import SeoTableMetaCell from "./components/table/cells/meta.vue"
+import SeoTablePageCell from "./components/table/cells/page.vue"
+import SeoTableRobotsCell from "./components/table/cells/robots.vue"
+import ImagesView from "./views/images-view.vue"
+import LinksView from "./views/links-view.vue"
+import OverviewView from "./views/overview-view.vue"
+import SeoView from "./components/seo-view.vue"
 
 panel.plugin("tobimori/seo", {
 	icons: {
@@ -28,7 +50,30 @@ panel.plugin("tobimori/seo", {
 	components: {
 		"k-seo-writer-input": SeoWriterInput,
 		"k-seo-utm-share-dialog": UtmShareDialog,
-		"k-gsc-drawer": GscDrawer
+		"k-gsc-drawer": GscDrawer,
+		"k-seo-changes-controls": ChangesControls,
+		"k-seo-overview-view": OverviewView,
+		"k-seo-images-view": ImagesView,
+		"k-seo-links-view": LinksView,
+		"k-seo-view": SeoView,
+		"k-seo-table": SeoTable,
+		"k-seo-search": SeoSearch,
+		"k-seo-columns": SeoColumns,
+		"k-seo-filter": SeoFilter,
+		"k-seo-generation": SeoGeneration,
+		"k-seo-popover": SeoPopover,
+		"k-seo-selection": SeoSelection,
+		// cell types for k-table, used via `type: seo-*` in column definitions
+		"k-table-seo-alt-status-cell": SeoTableAltStatusCell,
+		"k-table-seo-checks-cell": SeoTableChecksCell,
+		"k-table-seo-decorative-cell": SeoTableDecorativeCell,
+		"k-table-seo-image-cell": SeoTableImageCell,
+		"k-table-seo-index-cell": SeoTableIndexCell,
+		"k-table-seo-link-pages-cell": SeoTableLinkPagesCell,
+		"k-table-seo-link-status-cell": SeoTableLinkStatusCell,
+		"k-table-seo-meta-cell": SeoTableMetaCell,
+		"k-table-seo-page-cell": SeoTablePageCell,
+		"k-table-seo-robots-cell": SeoTableRobotsCell
 	},
 	writerNodes: {
 		seoTemplateTitle: createTemplateVariableNode({

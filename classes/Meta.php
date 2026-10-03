@@ -400,15 +400,6 @@ class Meta
 	 */
 	public function get(string $key, array $exclude = []): Field
 	{
-		if ($this->cascade === null) {
-			$cascade = Seo::option('cascade');
-			if (count(array_intersect(get_class_methods($this), $cascade)) !== count($cascade)) {
-				throw new InvalidArgumentException('[Kirby SEO] Invalid cascade method in config. Please check your options for `tobimori.seo.cascade`.');
-			}
-
-			$this->cascade = $cascade;
-		}
-
 		// Track consumed keys, so we don't output legacy field values
 		// (skip without meta defaults, the lookup would build the full meta array)
 		$toBeConsumed = $key;
@@ -421,21 +412,39 @@ class Meta
 			$this->consumed[] = $toBeConsumed;
 		}
 
+		return $this->resolve($key, $exclude)['field'];
+	}
+
+	/**
+	 * Resolves a value and its cascade source without marking the key as consumed
+	 *
+	 * @return array{field: Field, source: string|null}
+	 */
+	public function resolve(string $key, array $exclude = []): array
+	{
+		if ($this->cascade === null) {
+			$cascade = Seo::option('cascade');
+			if (count(array_intersect(get_class_methods($this), $cascade)) !== count($cascade)) {
+				throw new InvalidArgumentException('[Kirby SEO] Invalid cascade method in config. Please check your options for `tobimori.seo.cascade`.');
+			}
+
+			$this->cascade = $cascade;
+		}
+
 		foreach (array_diff($this->cascade, $exclude) as $method) {
 			if ($field = $this->$method($key)) {
 				if (
 					is_string($value = $field->value())
 					&& Str::contains($value, 'data-seo-template-variable')
 				) {
-					$value = Str::unhtml($value);
-					return new Field($this->page, $key, $value);
+					$field = new Field($this->page, $key, Str::unhtml($value));
 				}
 
-				return $field;
+				return ['field' => $field, 'source' => $method];
 			}
 		}
 
-		return new Field($this->page, $key, '');
+		return ['field' => new Field($this->page, $key, ''), 'source' => null];
 	}
 
 	/**

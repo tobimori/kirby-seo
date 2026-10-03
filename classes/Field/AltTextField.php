@@ -126,38 +126,49 @@ class AltTextField extends FieldClass
 						], 400);
 					}
 
-					$data = $kirby->request()->body()->data();
 					$lang = $kirby->api()->language();
 
 					if ($lang) {
 						$kirby->setCurrentLanguage($lang);
 					}
 
-					$component::sendStream(function (Closure $send) use ($kirby, $model, $data, $component) {
-						$kirby->data = [
-							'file' => $model,
-							'site' => $kirby->site(),
-							'kirby' => $kirby,
-						];
-
-						$prompt = trim(snippet('seo/prompts/tasks/alt-text', [
-							'file' => $model,
-							'instructions' => $data['instructions'] ?? null,
-						], return: true));
-
-						$content = [
-							Content::user()
-								->image($model)
-								->text($prompt),
-						];
-
-						foreach ($component::provider()->stream($content) as $chunk) {
-							$send($chunk);
-						}
-					});
+					AltTextField::stream($model, $kirby->request()->body()->data()['instructions'] ?? null);
 				}
 			]
 		];
+	}
+
+	/**
+	 * Streams alt text in the current language and ends the request.
+	 * Callers must check permissions before starting the stream
+	 */
+	public static function stream(File $file, string|null $instructions = null): never
+	{
+		$kirby = $file->kirby();
+		$component = Seo::option('components.ai');
+
+		$component::sendStream(function (Closure $send) use ($kirby, $file, $instructions, $component) {
+			$kirby->data = [
+				'file' => $file,
+				'site' => $kirby->site(),
+				'kirby' => $kirby,
+			];
+
+			$prompt = trim(snippet('seo/prompts/tasks/alt-text', [
+				'file' => $file,
+				'instructions' => $instructions,
+			], return: true));
+
+			$content = [
+				Content::user()
+					->image($file)
+					->text($prompt),
+			];
+
+			foreach ($component::provider()->stream($content) as $chunk) {
+				$send($chunk);
+			}
+		});
 	}
 
 	/**

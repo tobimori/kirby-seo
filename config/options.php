@@ -40,6 +40,35 @@ return [
 	],
 	'cache.searchConsole' => true,
 	'cache.indexnow' => true,
+	'cache.overview' => true,
+	'cache.links' => true,
+	// Link audit for the SEO overview: scans published pages and checks their links
+	'links' => [
+		// run the check in a queue worker if Kirby Queues is installed, otherwise the Panel runs it
+		'queue' => true,
+		// cron expression for checking all pages & external URLs again (with queues only), `false` to disable.
+		// The queue worker applies changes when it starts
+		'schedule' => '0 3 * * *',
+		// null: use HTTP in CLI mode with an absolute site URL; false: render in-process.
+		// Disable HTTP if the worker cannot access the site, e.g. behind basic auth
+		'http' => null,
+		// hours until external URLs are checked again
+		'ttl' => 24 * 7,
+		// External request timeout in seconds
+		'timeout' => 10,
+		// Maximum parallel HTTP page requests; external URL checks use twice this limit
+		'concurrency' => 5,
+		// other hosts of the site (besides the site & language URLs), e.g. `['www.example.com']`
+		'hosts' => [],
+	],
+	'overview' => [
+		// recommended lengths (in characters) for the checks in the SEO overview, as [min, max].
+		// search engines don't have hard limits, they truncate snippets to fit the screen
+		'lengths' => [
+			'title' => [30, 60], // the full title, including the title template
+			'description' => [70, 160],
+		],
+	],
 	'cascade' => [
 		'fields',
 		'programmatic',

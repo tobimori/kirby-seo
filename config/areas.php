@@ -4,18 +4,48 @@ use Kirby\Cms\App;
 use Kirby\Cms\Find;
 use Kirby\Cms\ModelWithContent;
 use Kirby\Cms\Page;
+use Kirby\Cms\Site;
+use Kirby\Panel\Panel;
 use Kirby\Toolkit\I18n;
+use tobimori\Seo\Buttons\OverviewLanguagesButton;
 use tobimori\Seo\Buttons\RobotsViewButton;
 use tobimori\Seo\Buttons\UtmShareViewButton;
 use tobimori\Seo\Dialogs\UtmShareDialog;
 use tobimori\Seo\Seo;
+use tobimori\Seo\Views\ImagesView;
+use tobimori\Seo\Views\LinksView;
+use tobimori\Seo\Views\OverviewView;
+use tobimori\Seo\Views\PagesView;
 
 return [
 	'seo' => fn () =>
 	[
+		'label' => I18n::translate('seo.overview.title'),
+		'icon' => 'search',
+		'link' => 'seo',
+		'menu' => fn () => OverviewView::canAccess(),
+		'views' => [
+			'seo' => [
+				'pattern' => 'seo',
+				'action' => fn () => Panel::go('seo/pages')
+			],
+			'seo.pages' => [
+				'pattern' => 'seo/pages',
+				'action' => fn () => (new PagesView())->load()
+			],
+			'seo.images' => [
+				'pattern' => 'seo/images',
+				'action' => fn () => (new ImagesView())->load()
+			],
+			'seo.links' => [
+				'pattern' => 'seo/links',
+				'action' => fn () => (new LinksView())->load()
+			],
+		],
 		'buttons' => [
 			'page.robots' => fn (Page $page) => Seo::option('robots.enabled') ? new RobotsViewButton($page) : null,
-			'utm-share' => fn (ModelWithContent $model) => new UtmShareViewButton($model)
+			'utm-share' => fn (ModelWithContent $model) => new UtmShareViewButton($model),
+			'seo.overview.languages' => fn (Site $site) => new OverviewLanguagesButton($site)
 		],
 		'drawers' => [
 			'gsc-data' => [
