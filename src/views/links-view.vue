@@ -21,10 +21,7 @@ const { settings, isVisible, columnOptions, visibleColumnKeys, onColumns } = use
 	"kirby-seo.overview.links.table"
 )
 
-/**
- * The check runs in steps: without queues, the Panel runs them while the tab is open,
- * with queues, the Panel only shows the progress of the queue worker
- */
+// Panel requests perform scan steps without queues; otherwise they only poll progress
 const POLL_DELAY = 5000
 
 const progress = ref(props.progress)
@@ -91,7 +88,7 @@ const run = async () => {
 
 			progress.value = response
 
-			// internal links are complete before the external ones are checked
+			// Refresh internal link results as soon as all page scans finish
 			if (!hadPages && !isCheckingPages.value) {
 				hadPages = true
 				await panel.view.reload()
@@ -113,7 +110,6 @@ const run = async () => {
 	}
 }
 
-// rendering all pages again takes a while
 const rescan = () =>
 	panel.dialog.open({
 		component: "k-text-dialog",

@@ -42,20 +42,21 @@ return [
 	'cache.indexnow' => true,
 	'cache.overview' => true,
 	'cache.links' => true,
-	// broken links check in the SEO overview, renders all published pages & checks their links
+	// Link audit for the SEO overview: scans published pages and checks their links
 	'links' => [
 		// run the check in a queue worker if Kirby Queues is installed, otherwise the Panel runs it
 		'queue' => true,
 		// cron expression for checking all pages & external URLs again (with queues only), `false` to disable.
 		// The queue worker applies changes when it starts
 		'schedule' => '0 3 * * *',
-		// request pages over HTTP instead of rendering them in the same process, `null` for queue workers only
-		// (requires the `url` option). Set to `false` if the worker can't request the site, e.g. behind basic auth
+		// null: use HTTP in CLI mode with an absolute site URL; false: render in-process.
+		// Disable HTTP if the worker cannot access the site, e.g. behind basic auth
 		'http' => null,
 		// hours until external URLs are checked again
 		'ttl' => 24 * 7,
-		// seconds to wait for external servers & number of parallel requests
+		// External request timeout in seconds
 		'timeout' => 10,
+		// Maximum parallel HTTP page requests; external URL checks use twice this limit
 		'concurrency' => 5,
 		// other hosts of the site (besides the site & language URLs), e.g. `['www.example.com']`
 		'hosts' => [],

@@ -3,9 +3,6 @@ import { computed, useHelpers } from "kirbyuse"
 
 import { rowName } from "../../utils/rows.js"
 
-/**
- * Toggle whether an image is decorative (doesn't need an alt text)
- */
 const props = defineProps({
 	column: Object,
 	row: Object,
@@ -22,7 +19,6 @@ const label = computed(() =>
 </script>
 
 <template>
-	<!-- the toggle's label covers the whole cell, so it's clickable everywhere -->
 	<div class="k-seo-decorative-cell" @click.stop>
 		<k-toggle-input
 			:value="value.value"
@@ -49,7 +45,6 @@ const label = computed(() =>
 		}
 	}
 
-	/* same as Kirby's `sr-only` class */
 	.k-choice-input-label {
 		position: absolute;
 		width: 1px;

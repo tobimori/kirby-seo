@@ -410,9 +410,7 @@ class Meta
 	}
 
 	/**
-	 * Walks the cascade and returns both the meta value for a given key and the name
-	 * of the cascade method that provided it, e.g. `fields` if the value is set on the page
-	 * itself, or `site` if it's inherited from the site (`null` if none did)
+	 * Resolves a value and its cascade source without marking the key as consumed
 	 *
 	 * @return array{field: Field, source: string|null}
 	 */

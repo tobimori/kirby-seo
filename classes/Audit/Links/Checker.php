@@ -11,12 +11,7 @@ use tobimori\Seo\Jobs\CheckLinksJob;
 use tobimori\Seo\Seo;
 
 /**
- * Checks the links of all pages in steps, so it fits into requests & queue jobs:
- * each step renders the pages that changed since they were scanned, then checks the
- * external URLs that weren't checked recently, until its time is up.
- *
- * Runs in a queue worker if Kirby Queues is installed, otherwise the Panel
- * runs the steps while the links tab is open.
+ * Coordinates page scans and external URL checks for the link audit
  */
 class Checker
 {
@@ -25,7 +20,7 @@ class Checker
 	protected array $fingerprints = [];
 
 	/**
-	 * Comparable URLs of the pages to scan (as keys), see `targets()`
+	 * Normalized scan target URLs, stored as array keys
 	 */
 	protected array $urls = [];
 	protected array|null $lookup = null;
@@ -35,17 +30,14 @@ class Checker
 		$this->index = new Index();
 	}
 
-	/**
-	 * Whether the scan runs in a queue worker (instead of the Panel)
-	 */
 	public static function usesQueue(): bool
 	{
 		return class_exists('tobimori\Queues\Queues') && Seo::option('links.queue') !== false;
 	}
 
 	/**
-	 * Starts a scan in the background: after changing content, changes within the job's
-	 * batch window are checked together, scans started by users (`$now`) start right away
+	 * Enqueues a scan if queue processing is enabled.
+	 * `$full` invalidates all results when the job starts; `$now` bypasses the batch window
 	 */
 	public static function dispatch(bool $full = false, bool $now = false): void
 	{
@@ -61,8 +53,7 @@ class Checker
 	}
 
 	/**
-	 * Schedules the regular check of all pages & external URLs (`links.schedule`) for the queue worker.
-	 * Queues stores schedules, so schedules of previous values of the option are removed
+	 * Replaces obsolete persisted schedules to match the current queue settings
 	 */
 	public static function schedule(): void
 	{
@@ -90,7 +81,7 @@ class Checker
 	}
 
 	/**
-	 * Scans all pages & URLs again, also if they didn't change
+	 * Invalidates page scans and external URL checks for subsequent scan steps
 	 */
 	public function invalidate(): void
 	{
@@ -101,7 +92,7 @@ class Checker
 	}
 
 	/**
-	 * Scans the pages linking to the URL & checks the URL again
+	 * Marks pages linking to the URL for rescanning and removes its external check result
 	 */
 	public function recheck(string $url): void
 	{
@@ -121,7 +112,7 @@ class Checker
 	}
 
 	/**
-	 * Changes the index between two steps of a running scan
+	 * Updates the index under an exclusive lock, waiting for any active scan step
 	 */
 	protected function change(Closure $change): void
 	{
@@ -137,7 +128,9 @@ class Checker
 	}
 
 	/**
-	 * Renders pages & checks URLs for the given number of seconds
+	 * Processes pending page scans and external URL checks within a time budget.
+	 * The deadline is checked between batches; an active batch can exceed it.
+	 * Returns progress without processing if another instance holds the index lock
 	 */
 	public function step(int $seconds): array
 	{
@@ -157,7 +150,6 @@ class Checker
 			$pending = array_filter($targets, fn ($key) => !$this->isScanned($key), ARRAY_FILTER_USE_KEY);
 			$http = Crawler::usesHttp();
 
-			// requests run in parallel, rendering in this process one page after the other
 			foreach (array_chunk($pending, $http ? max(1, (int)Seo::option('links.concurrency')) : 1, true) as $batch) {
 				if (microtime(true) >= $deadline) {
 					break;
@@ -193,8 +185,6 @@ class Checker
 	}
 
 	/**
-	 * How far the scan is, whether pages or URLs are left
-	 *
 	 * @return array{pages: array{done: int, total: int}, urls: array{done: int, total: int}, done: bool, running: bool, queue: bool}
 	 */
 	public function progress(): array
@@ -230,9 +220,8 @@ class Checker
 	}
 
 	/**
-	 * Published pages in all languages, by `{language}/{page id}`.
-	 * Removes the results of pages that don't exist anymore & marks pages
-	 * as changed that link to them, e.g. after changing a slug
+	 * Reconciles stored page scans with the current targets.
+	 * Removes results for obsolete targets and invalidates pages linking to removed URLs
 	 *
 	 * @return array<string, array{0: \Kirby\Cms\Page, 1: string|null}>
 	 */
@@ -240,7 +229,6 @@ class Checker
 	{
 		$targets = $this->targets($this->data['invalidated']);
 
-		// pages that don't exist anymore (or aren't published, or have a new URL)
 		$removed = [];
 		foreach ($this->data['pages'] as $entry) {
 			if (!isset($this->urls[$normalized = Report::normalize($entry['url'])])) {
@@ -271,8 +259,8 @@ class Checker
 	}
 
 	/**
-	 * Published pages in all languages, by `{language}/{page id}`, with their fingerprints
-	 * (pages are scanned again if it changes) & their comparable URLs (see `$urls`)
+	 * Returns published pages with an existing template, keyed by `{language}/{page id}`.
+	 * Populates `$fingerprints` and `$urls` for all page-language pairs
 	 *
 	 * @return array<string, array{0: \Kirby\Cms\Page, 1: string|null}>
 	 */
@@ -282,7 +270,7 @@ class Checker
 		$languages = $kirby->multilang() ? $kirby->languages()->codes() : [null];
 		$pages = $kirby->site()->index()->filter(fn (Page $page) => $page->template()->exists());
 
-		// navigation & footer are often part of the site's content
+		// Site content can supply shared links, so changes must invalidate every page
 		$site = [$invalidated];
 		foreach ($languages as $language) {
 			$site[] = $kirby->site()->version('latest')->modified($language ?? 'default');
@@ -331,7 +319,8 @@ class Checker
 	}
 
 	/**
-	 * A template ended the script while rendering the page, e.g. with `go()`
+	 * Saves the interrupted scan and releases the lock when a template exits.
+	 * Enqueues a continuation in CLI mode if queue processing is enabled
 	 */
 	protected function onExit(string $key, int $code, string|null $location): void
 	{
@@ -351,14 +340,13 @@ class Checker
 
 		$this->index->unlock();
 
-		// the script ends, e.g. a queue worker rendering pages in its own process: the next job continues
 		if (PHP_SAPI === 'cli') {
 			static::dispatch(now: true);
 		}
 	}
 
 	/**
-	 * Index of the URL in the list of linked URLs
+	 * Maps URLs to IDs in the index's shared string table, adding new URLs as needed
 	 */
 	protected function intern(array $urls): array
 	{
@@ -375,7 +363,7 @@ class Checker
 	}
 
 	/**
-	 * External URLs that haven't been checked recently
+	 * Returns external URLs whose checks have expired or predate the last invalidation
 	 *
 	 * @param array<string, int> $external Check times by URL, see `Index::external()`
 	 */
@@ -387,10 +375,8 @@ class Checker
 	}
 
 	/**
-	 * Checks the URLs in parallel: a HEAD request first, servers that
-	 * don't support it get a GET request that stops after the first bytes.
-	 * URLs of private networks aren't requested (e.g. the router or cloud metadata),
-	 * the request connects to the checked address, even if the DNS answer changes
+	 * Checks external HTTP statuses without following redirects or downloading bodies.
+	 * Retries HEAD errors with GET and pins resolved public addresses to prevent DNS changes
 	 *
 	 * @return array<string, array{code: int, location: string|null, error: string|null, checked: int}>
 	 */
@@ -483,8 +469,7 @@ class Checker
 	}
 
 	/**
-	 * Public IP address of the host, `null` if any of its addresses is private or reserved,
-	 * `false` if it can't be resolved (the request reports why)
+	 * Returns a resolved public address, `null` for a blocked address, or `false` on DNS failure
 	 */
 	protected static function address(string $host): string|false|null
 	{

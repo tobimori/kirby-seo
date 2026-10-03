@@ -9,14 +9,7 @@ use Kirby\Filesystem\Dir;
 use Kirby\Toolkit\Str;
 
 /**
- * Stored results of the link check:
- * - `pages`: rendered pages per language (`{language}/{page id}`), with their links & anchors
- * - `strings`: all linked URLs, pages refer to them by their index,
- *   as most links (navigation, footer) are the same on all pages
- * - `urls`: results of external URLs
- * - `targets`: comparable URLs of all pages to scan, e.g. to tell links to pages that aren't scanned yet from broken ones
- * - `invalidated`: time of the last "scan again", pages scanned before are scanned again
- * - `revision`: changes with every write, e.g. to cache the results derived from the index
+ * Stores link audit results and provides locking for scan updates
  */
 class Index
 {
@@ -25,8 +18,6 @@ class Index
 	protected const STATE = 'state';
 
 	/**
-	 * Handle of the lock file while this instance holds the lock
-	 *
 	 * @var resource|null
 	 */
 	protected $handle = null;
@@ -36,6 +27,16 @@ class Index
 		return App::instance()->cache('tobimori.seo.links');
 	}
 
+	/**
+	 * Returns stored scan data with defaults for an empty index.
+	 *
+	 * - `pages`: scan results by `{language}/{page id}`, including links and anchor IDs
+	 * - `strings`: shared URL table; page links refer to its integer keys to avoid repeated strings
+	 * - `urls`: external URL check results
+	 * - `targets`: normalized page URLs, used to distinguish unscanned targets from missing pages
+	 * - `invalidated`: timestamp used to invalidate page fingerprints and external checks
+	 * - `revision`: token changed on each write to invalidate derived reports
+	 */
 	public function read(): array
 	{
 		$data = [
@@ -58,6 +59,10 @@ class Index
 		return $data;
 	}
 
+	/**
+	 * Stores compacted scan data and updates the revision and progress summary.
+	 * URL IDs in the stored data can differ from those in the supplied array
+	 */
 	public function write(array $data): void
 	{
 		$data = static::compact($data);
@@ -70,8 +75,8 @@ class Index
 	}
 
 	/**
-	 * What the progress of a scan needs from the index (see `summarize()`), without reading the whole index.
-	 * Falls back to the index if it has been written before the summary was stored separately
+	 * Reads the progress summary without loading page links and anchors.
+	 * Falls back to the full index if no summary is stored
 	 */
 	public function state(): array
 	{
@@ -79,8 +84,7 @@ class Index
 	}
 
 	/**
-	 * Fingerprint & comparable URL of each scanned page and the check time of each external URL:
-	 * a small part of the index, most of it are the links & anchors of the pages
+	 * Extracts page fingerprints, normalized URLs, and external check times for progress reporting
 	 *
 	 * @return array{invalidated: int, pages: array<string, array{0: string|null, 1: string}>, external: array<string, int>}
 	 */
@@ -113,8 +117,7 @@ class Index
 	}
 
 	/**
-	 * Revision of the stored index without reading it, falls back to the index
-	 * if it has been written before the revision was stored separately
+	 * Reads the revision token without loading the index, unless no separate token is stored
 	 */
 	public static function revision(): string|null
 	{
@@ -122,7 +125,7 @@ class Index
 	}
 
 	/**
-	 * Removes the URLs that no page links to anymore
+	 * Removes unreferenced URLs and remaps page links to the remaining string IDs
 	 */
 	protected static function compact(array $data): array
 	{
@@ -149,8 +152,8 @@ class Index
 	}
 
 	/**
-	 * Only one scan runs at a time, e.g. with multiple Panel users or a queue worker.
-	 * Uses a file lock, which the system releases when the process ends, e.g. if a scan is interrupted
+	 * Acquires a non-blocking exclusive file lock.
+	 * The operating system releases the lock when the process exits
 	 */
 	public function lock(): bool
 	{

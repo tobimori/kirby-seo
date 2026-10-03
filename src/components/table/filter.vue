@@ -1,17 +1,9 @@
 <script setup>
 import { ref } from "kirbyuse"
 
-/**
- * Filter of a table: the button shows the active filter (& resets it),
- * the dropdown lists the filters with the number of rows they match.
- * `filter` is emitted with the selected filter, an empty string for all rows
- */
 defineProps({
-	/** Text of the button, e.g. the active filter */
 	label: String,
-	/** Tooltip of the button, e.g. the full text of a long filter */
 	title: String,
-	/** Whether a filter is active */
 	active: Boolean,
 	/** Whether the active filter can be reset next to the button */
 	clearable: Boolean,
@@ -19,7 +11,6 @@ defineProps({
 	clear: String,
 	/** First item of the dropdown, which shows all rows: `{ text, icon, current? }` */
 	all: Object,
-	/** The active filter */
 	current: String,
 	/** `[{ type, count, text, icon, theme }]` */
 	filters: Array
@@ -32,7 +23,6 @@ const dropdown = ref(null)
 
 <template>
 	<div class="k-seo-filter">
-		<!-- the active filter & its reset belong together -->
 		<k-button-group layout="collapsed">
 			<k-button
 				:text="label"
@@ -64,7 +54,6 @@ const dropdown = ref(null)
 			>
 				{{ all.text }}
 			</k-dropdown-item>
-			<!-- e.g. a filter combining others -->
 			<slot name="before" />
 			<hr />
 			<k-dropdown-item
@@ -85,7 +74,6 @@ const dropdown = ref(null)
 </template>
 
 <style>
-/* the buttons are part of the toolbar, the dropdowns are positioned at them */
 .k-seo-filter {
 	display: contents;
 }
@@ -96,7 +84,6 @@ const dropdown = ref(null)
 	text-overflow: ellipsis;
 }
 
-/* the number of rows, aligned to the end of the dropdown item */
 .k-seo-filter-item .k-button-text {
 	display: flex;
 	flex-grow: 1;

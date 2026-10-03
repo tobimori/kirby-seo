@@ -18,34 +18,20 @@ use tobimori\Seo\Audit\Links\Report;
 use tobimori\Seo\Meta;
 use tobimori\Seo\Seo;
 
-/**
- * Base of the tabs of the SEO area: the header, stats & tabs shared by all of them,
- * and the sorting & pagination of their tables. Tabs that edit their rows extend `EditableOverviewView`
- */
 abstract class OverviewView
 {
 	public const LIMIT = 50;
-	// tabs & their icons
 	public const TABS = ['pages' => 'page', 'images' => 'image', 'links' => 'url'];
 
 	protected App $kirby;
 
-	/**
-	 * Meta instances per page, for the current request
-	 */
 	protected array $metas = [];
 
-	/**
-	 * Blueprints per template, for the current request
-	 */
 	protected array $blueprints = [];
 	protected Audit\Pages|null $audit = null;
 	protected Pages|null $pages = null;
 	protected Audit\Images|null $images = null;
 
-	/**
-	 * All tabs, actions & drawers of the SEO area need the permission
-	 */
 	public function __construct()
 	{
 		if (!static::canAccess()) {
@@ -55,29 +41,19 @@ abstract class OverviewView
 		$this->kirby = App::instance();
 	}
 
-	/**
-	 * Whether the current user may access the overview
-	 */
 	public static function canAccess(): bool
 	{
 		return App::instance()->user()?->role()->permissions()->for('tobimori.seo', 'overview') === true;
 	}
 
-	/**
-	 * Props of the view
-	 */
 	abstract public function load(): array;
 
-	/**
-	 * Props shared by all tabs: header buttons, stats & tabs
-	 */
 	protected function layout(string $tab): array
 	{
 		return [
-			// `panel.content` expects the content props of a model view, e.g. the languages dropdown
-			// (and plugins building on it) unlocks the content via `{api}/changes/unlock` before
-			// switching. The view buttons are bound to the site, so is this; the overview itself
-			// has no content: edits are saved per model & their locks are released by the view
+			// Language buttons use `panel.content` to unlock `{api}/changes/unlock` before switching
+			// The buttons are bound to the site, so they need site model-view props here
+			// The overview has no content of its own; edits and locks are managed per row model
 			'api' => 'site',
 			'lock' => ['isLocked' => false],
 			'versions' => ['latest' => [], 'changes' => []],
@@ -108,10 +84,6 @@ abstract class OverviewView
 		return $this->pages ??= $this->kirby->site()->index(true)->filter($this->isListedPage(...));
 	}
 
-	/**
-	 * Whether the page is part of the overview
-	 * (skips e.g. form submissions or other pages that aren't meant to be public)
-	 */
 	protected function isListedPage(Page $page): bool
 	{
 		return $page->isListable()
@@ -120,8 +92,7 @@ abstract class OverviewView
 	}
 
 	/**
-	 * Blueprint of the model's template: each model creates & keeps its own blueprint object,
-	 * the blueprints of all pages & images of larger sites wouldn't fit into memory
+	 * Shares blueprints by template to avoid retaining one object per model
 	 */
 	protected function blueprint(Page|File $model): Blueprint
 	{
@@ -148,9 +119,6 @@ abstract class OverviewView
 		return $this->metas[$page->id()] ??= new (Seo::option('components.meta'))($page);
 	}
 
-	/**
-	 * Alt texts of all images, shared by the images tab & the stats
-	 */
 	protected function images(): Audit\Images
 	{
 		return $this->images ??= new Audit\Images();
@@ -219,9 +187,6 @@ abstract class OverviewView
 		});
 	}
 
-	/**
-	 * Sorts the entries by the given (plain text) value
-	 */
 	protected function sort(array $entries, Closure $value, string $dir): array
 	{
 		$compare = $this->comparator();

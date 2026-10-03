@@ -7,10 +7,6 @@ use Kirby\Toolkit\I18n;
 use tobimori\Seo\Audit\Links\Checker;
 use tobimori\Seo\Audit\Links\Report;
 
-/**
- * Panel view listing all links of the rendered pages, one row per linked URL.
- * The table is read-only: links are fixed on the pages linking to them
- */
 class LinksView extends OverviewView
 {
 	public const SORTABLE = ['url', 'status', 'pages'];
@@ -18,12 +14,12 @@ class LinksView extends OverviewView
 	public const SEARCHABLE = ['url', 'details', 'pages'];
 
 	/**
-	 * Seconds per scan request of the Panel
+	 * Time budget in seconds for a Panel-driven scan step
 	 */
 	public const STEP = 4;
 
 	/**
-	 * Linking pages listed in the popover of a row
+	 * Maximum number of linking pages shown in a row's popover
 	 */
 	public const PAGES = 10;
 
@@ -68,7 +64,6 @@ class LinksView extends OverviewView
 					'columns' => $this->columns(),
 					'rows' => array_map($this->row(...), $visible),
 					'pagination' => $pagination,
-					// severity of each issue type/state, for the filters
 					'severity' => Report::SEVERITY,
 					'summary' => $summary,
 					'issue' => $issue,
@@ -83,7 +78,7 @@ class LinksView extends OverviewView
 	}
 
 	/**
-	 * Runs a step of the check (without queues) & returns the progress
+	 * Returns scan progress, running a step only when queue processing is disabled
 	 */
 	public function scan(): array
 	{
@@ -93,7 +88,8 @@ class LinksView extends OverviewView
 	}
 
 	/**
-	 * Checks all pages & URLs again
+	 * Invalidates all scan results and enqueues a full scan if queue processing is enabled.
+	 * Otherwise, subsequent Panel scan requests perform the checks
 	 */
 	public function rescan(): array
 	{
@@ -105,7 +101,8 @@ class LinksView extends OverviewView
 	}
 
 	/**
-	 * Checks a link again: the pages linking to it & the URL itself
+	 * Invalidates the link's source pages and external check result.
+	 * Enqueues a scan if queue processing is enabled; otherwise the Panel continues it
 	 */
 	public function recheck(): array
 	{
@@ -121,9 +118,6 @@ class LinksView extends OverviewView
 		return $this->report ??= new Report();
 	}
 
-	/**
-	 * Internal links without the host, as all of them have the same
-	 */
 	protected function display(string $url): string
 	{
 		if (!Report::isInternal($url)) {
@@ -158,10 +152,6 @@ class LinksView extends OverviewView
 		return (string)$this->kirby->page($id)?->title()->value();
 	}
 
-	/**
-	 * Why the link is broken (or can't be checked), the target of redirects, …
-	 * Empty for links that work
-	 */
 	protected function reason(array $link): string
 	{
 		if ($link['reason'] === null) {

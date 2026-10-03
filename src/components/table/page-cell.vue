@@ -75,7 +75,6 @@ defineProps({
 	--icon-color: var(--color-text-dimmed);
 }
 
-/* same as the unsaved changes indicator in Kirby's language dropdown */
 .k-seo-page-cell-changes {
 	--icon-color: var(--color-orange-500);
 }

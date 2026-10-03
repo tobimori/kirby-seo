@@ -15,23 +15,12 @@ use Kirby\Exception\PermissionException;
 use tobimori\Seo\Seo;
 
 /**
- * Tabs with tables of models (pages, images) whose fields can be edited inline,
- * with the same workflow as editing a model in the Panel.
- *
- * Edits are written to the changes version of the model (which locks it for others)
- * and can be published or discarded per row. All values are read from the changes
- * version (if any), so the tables reflect what editors see in the Panel.
- *
- * Rows are described as entries: `['id' => string, 'model' => ModelWithContent, 'fields' => [...]]`,
- * with the content fields the row may edit
+ * Manages changes versions and content locks for inline edits to overview rows
  */
 abstract class EditableOverviewView extends OverviewView
 {
 	protected bool|null $ai = null;
 
-	/**
-	 * The tabs that can be edited, e.g. for the API routes
-	 */
 	public static function for(string $tab): static
 	{
 		return match ($tab) {
@@ -42,7 +31,10 @@ abstract class EditableOverviewView extends OverviewView
 	}
 
 	/**
-	 * Entry of the row with the given id, `null` if the row isn't part of the table
+	 * Returns a table entry, or `null` if the row is outside this overview.
+	 * `fields` limits the content fields that the row can save, publish, or discard
+	 *
+	 * @return array{id: string, model: ModelWithContent, fields: array<string>}|null
 	 */
 	abstract protected function find(string $id): array|null;
 
@@ -56,9 +48,6 @@ abstract class EditableOverviewView extends OverviewView
 	 */
 	abstract protected function tracked(Changes $changes): iterable;
 
-	/**
-	 * Data of a row in the table
-	 */
 	abstract protected function row(array $entry): array;
 
 	/**
@@ -76,9 +65,6 @@ abstract class EditableOverviewView extends OverviewView
 		return new NotFoundException(key: 'page.notFound', data: ['slug' => $id]);
 	}
 
-	/**
-	 * Name of the row in the list of changes
-	 */
 	protected function label(array $entry): string
 	{
 		return (string)$entry['model']->title()->value();
@@ -100,7 +86,6 @@ abstract class EditableOverviewView extends OverviewView
 		$changes = [];
 
 		foreach ($this->tracked($tracked) as $model) {
-			// someone else is editing the model
 			if ($model->version('changes')->isLocked('*') || !$model->permissions()->can('update')) {
 				continue;
 			}
@@ -120,8 +105,8 @@ abstract class EditableOverviewView extends OverviewView
 	}
 
 	/**
-	 * Current state of the given rows, e.g. to update locks or values after saving
-	 * without reloading (and resorting) the whole table
+	 * Returns complete rows, not patches, so the client can replace cached rows
+	 * without reloading or reordering the table
 	 */
 	public function rows(array $ids): array
 	{
@@ -144,8 +129,7 @@ abstract class EditableOverviewView extends OverviewView
 	}
 
 	/**
-	 * Saves values of multiple rows to the changes versions of their models in a single request,
-	 * using the same logic as the Panel when editing a model
+	 * Saves permitted row fields to changes versions through Kirby's content controller
 	 *
 	 * @param array $changes List of `['id' => 'row-id', 'column' => 'metaTitle', 'value' => '…']`
 	 */
@@ -163,7 +147,6 @@ abstract class EditableOverviewView extends OverviewView
 
 		foreach ($input as $id => $columns) {
 			try {
-				// only rows listed in the overview can be edited
 				$entry = $this->find($id) ?? throw $this->notFound($id);
 
 				// Kirby would store values of fields that don't exist in the blueprint as well
@@ -319,21 +302,19 @@ abstract class EditableOverviewView extends OverviewView
 	}
 
 	/**
-	 * Lock, permissions & translation state of a row, same conditions as editing the model in the Panel
+	 * @return array{lock: array|null, editable: bool, translated: bool}
 	 */
 	protected function state(ModelWithContent $model): array
 	{
 		$version = $model->version('changes');
 
-		// someone else is editing the model right now
 		$lock = $version->lock('*');
 		$lock = $lock->isLocked() ? $lock->toArray() : null;
 
 		return [
 			'lock' => $lock,
 			'editable' => $model->permissions()->can('update') && $lock === null,
-			// models without a translation in the current language show the content
-			// of the default language (like everywhere in Kirby), until someone edits them
+			// Either version can supply the current translation
 			'translated' => $version->exists('current') || $model->version('latest')->exists('current'),
 		];
 	}

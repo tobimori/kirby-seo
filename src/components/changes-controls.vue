@@ -1,10 +1,6 @@
 <script setup>
 import { computed, ref, usePanel } from "kirbyuse"
 
-/**
- * Save & discard buttons for unsaved changes of multiple models,
- * modelled after Kirby's `k-form-controls` of page views
- */
 const props = defineProps({
 	/** Models with unsaved changes: `{ id, link, text }` */
 	changes: {
@@ -23,8 +19,6 @@ const emit = defineEmits(["discard", "submit"])
 
 const panel = usePanel()
 const dropdown = ref(null)
-
-// confirmations are up to the parent, as they depend on what is being published/discarded
 
 const buttons = computed(() => {
 	if (props.changes.length === 0) {

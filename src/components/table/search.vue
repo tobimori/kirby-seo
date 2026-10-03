@@ -1,7 +1,4 @@
 <script setup>
-/**
- * Search of the tables, like in Retour: the button shows the field next to it
- */
 defineProps({
 	value: String,
 	/** Whether the field is shown */
@@ -38,7 +35,6 @@ const emit = defineEmits(["input", "toggle"])
 	display: flex;
 	gap: var(--spacing-2);
 
-	/* same as in Retour */
 	.k-search-input {
 		--input-color-border: transparent;
 		--input-color-back: light-dark(var(--color-gray-300), var(--color-gray-950));

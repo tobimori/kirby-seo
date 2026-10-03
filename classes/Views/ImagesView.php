@@ -14,9 +14,6 @@ use tobimori\Seo\AltText;
 use tobimori\Seo\Audit;
 use tobimori\Seo\Field\AltTextField;
 
-/**
- * Panel view listing the alt texts of all images, one row per alt text field
- */
 class ImagesView extends EditableOverviewView
 {
 	public const SORTABLE = ['title', 'alt', 'decorative', 'template'];
@@ -26,7 +23,6 @@ class ImagesView extends EditableOverviewView
 	public function load(): array
 	{
 		return VersionId::render('changes', function () {
-			// states of alt texts, `issues` combines the ones that need work
 			['search' => $search, 'sort' => $sort, 'dir' => $dir, 'issue' => $issue] = $this->query(
 				self::SORTABLE,
 				[...Audit\Images::FILTERS, 'issues']
@@ -56,7 +52,6 @@ class ImagesView extends EditableOverviewView
 					'changes' => $this->changes(),
 					'pagination' => $pagination,
 					'ids' => array_column($entries, 'id'),
-					// severity of each issue type/state, for the filters
 					'severity' => Audit\Images::SEVERITY,
 					'summary' => $this->images()->summary(),
 					'issue' => $issue,
@@ -128,9 +123,6 @@ class ImagesView extends EditableOverviewView
 		return $entry['model']->filename();
 	}
 
-	/**
-	 * Alt text fields store the text, whether the image is decorative & who wrote the text
-	 */
 	protected function input(array $entry, array $columns): array
 	{
 		$text = $columns['alt'] ?? null;
@@ -171,9 +163,6 @@ class ImagesView extends EditableOverviewView
 		];
 	}
 
-	/**
-	 * Plain text value of a searchable/sortable column
-	 */
 	protected function value(array $entry, string $key): string
 	{
 		$file = $entry['model'];
@@ -188,12 +177,6 @@ class ImagesView extends EditableOverviewView
 		};
 	}
 
-	/**
-	 * Columns with a `toggle` label can be shown/hidden by the user,
-	 * columns with `hidden: true` are hidden until the user enables them,
-	 * columns with `resizable: false` keep their width,
-	 * columns with `hideLabel: true` only show their label to screen readers.
-	 */
 	protected function columns(): array
 	{
 		return [
@@ -230,7 +213,6 @@ class ImagesView extends EditableOverviewView
 				'editable' => true,
 				'label' => I18n::translate('seo.overview.images.columns.alt'),
 				'mobile' => true,
-				// plain text instead of a writer
 				'plain' => true,
 				'sortable' => true,
 				'type' => 'seo-meta'
@@ -290,7 +272,6 @@ class ImagesView extends EditableOverviewView
 				// files with multiple alt text fields have a row per field
 				'text' => $label ? "{$file->filename()} · {$label}" : $file->filename(),
 				'href' => $file->panel()->url(true),
-				// the page is easier to recognize by its title than by its path
 				'info' => (string)$parent->title()->value(),
 				// the lock already tells that someone else is editing
 				'changes' => $hasChanges && $lock === null,

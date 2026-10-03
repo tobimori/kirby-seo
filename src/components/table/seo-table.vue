@@ -3,11 +3,6 @@ import { computed, nextTick, onMounted, ref, usePanel, watch } from "kirbyuse"
 
 import { providePopoverGroup } from "../../composables/popover.js"
 
-/**
- * Wrapper around Kirby's `k-table` that adds sortable headers, resizable columns
- * and a column with row numbers, which turn into checkboxes in selectable tables
- * (the selection persists across pagination)
- */
 const props = defineProps({
 	columns: {
 		type: Object,
@@ -22,14 +17,11 @@ const props = defineProps({
 		default: false
 	},
 	empty: String,
-	/** Currently sorted column */
 	sort: String,
-	/** Sort direction: `asc` or `desc` */
 	dir: {
 		type: String,
 		default: "asc"
 	},
-	/** Whether rows can be selected */
 	selectable: Boolean,
 	/** Ids of the selected rows, use with `.sync` */
 	selected: {
@@ -47,7 +39,6 @@ const props = defineProps({
 
 const panel = usePanel()
 
-// only one popover of the cells is open at a time
 providePopoverGroup()
 
 const emit = defineEmits([
@@ -111,9 +102,7 @@ const stopEdit = () => {
 }
 
 /**
- * Range editing, like in spreadsheets: shift-click selects all cells of a column
- * between the anchor & the clicked cell. The editor stays in the anchor cell,
- * typing there writes the value into all selected cells.
+ * Shift-click extends editing to a range in one column; the editor stays in the anchor cell
  */
 const anchor = ref(null)
 const range = ref(null)
@@ -184,7 +173,6 @@ const extendRange = (row, key) => {
 	)
 }
 
-// selects all editable cells of the column (on the current table page)
 const selectAll = (key) => {
 	if (editing.value?.column === key) {
 		setRange(
@@ -194,7 +182,6 @@ const selectAll = (key) => {
 	}
 }
 
-// the rows that are being edited: the range or the single edited cell
 const editedRows = (key) =>
 	range.value?.column === key ? rowsByKeys(range.value.rows) : rowsByKeys([editing.value?.row])
 
@@ -274,7 +261,6 @@ const commitEdit = (row, key, value, direction = null) => {
 	moveEdit(row, key, direction)
 }
 
-// restores the original values of all edited cells
 const cancelEdit = (key) => {
 	emit(
 		"input",
@@ -440,7 +426,6 @@ const tableColumns = computed(() => {
 			}
 
 			if (column.editable) {
-				// cells receive the column config, so we pass the editing state along
 				column = {
 					...column,
 					isEditable: (row) => isEditable(row, key),
@@ -468,18 +453,15 @@ const tableColumns = computed(() => {
 			type: "seo-index",
 			// wide enough for the highest number on the page, like Kirby's index column
 			width: `max(var(--table-row-height), calc(${String(offset.value + props.rows.length).length}ch + 1.5rem))`,
-			// cells receive the column config, so we pass the selection state along
 			selectable: props.selectable,
 			isSelected,
 			toggle,
-			// rows with a `lock` show a lock button instead of the number
 			openLock: (row) => emit("lock", row)
 		},
 		...columns
 	}
 })
 
-// numbers continue across table pages
 const offset = computed(() =>
 	props.pagination ? (props.pagination.page - 1) * props.pagination.limit : 0
 )
@@ -571,7 +553,6 @@ const onSort = (columnIndex) => {
 			</template>
 		</k-table>
 
-		<!-- same placement as in Kirby's collections (e.g. pages sections, users view) -->
 		<footer v-if="hasPagination" class="k-collection-footer">
 			<k-pagination
 				v-bind="pagination"
@@ -597,7 +578,6 @@ const onSort = (columnIndex) => {
 		padding: 0;
 	}
 
-	/* empty values, like in Retour */
 	td.k-table-cell:empty::after {
 		content: "–";
 		display: block;
@@ -686,7 +666,6 @@ const onSort = (columnIndex) => {
 		border-end-end-radius: var(--rounded);
 	}
 
-	/* rows that someone else is editing right now */
 	tbody tr:has(.k-seo-table-lock) {
 		--lock-border: var(--color-red-500);
 		--lock-top: inset 0 1px 0 var(--lock-border);
@@ -741,7 +720,6 @@ const onSort = (columnIndex) => {
 		border-block-end-color: var(--range-border);
 	}
 
-	/* same highlight as Kirby's own batch selection */
 	tbody tr:has(.k-seo-table-select input:checked) {
 		--table-color-back: light-dark(var(--color-blue-250), var(--color-blue-800));
 		--table-color-hover: var(--table-color-back);

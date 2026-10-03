@@ -89,7 +89,6 @@ const name = computed(() =>
 	color: var(--color-text-dimmed);
 }
 
-/* the pages that aren't listed */
 .k-seo-link-pages-cell-rest {
 	padding: var(--spacing-1) var(--spacing-3);
 	font-size: var(--text-xs);

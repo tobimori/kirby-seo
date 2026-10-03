@@ -155,15 +155,14 @@ class AltTextField extends FieldClass
 	}
 
 	/**
-	 * Streams an alt text for the image in the current language as server-sent events
-	 * (`text-delta` chunks of the AI provider, `error` events) & ends the request
+	 * Streams alt text in the current language and ends the request.
+	 * Callers must check permissions before starting the stream
 	 */
 	public static function stream(File $file, string|null $instructions = null): never
 	{
 		$kirby = $file->kirby();
 		$component = Seo::option('components.ai');
 
-		// begin SSE stream
 		ignore_user_abort(true);
 		@set_time_limit(0);
 

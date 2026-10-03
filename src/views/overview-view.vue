@@ -117,7 +117,6 @@ const visibleColumns = computed(() =>
 	Object.fromEntries(
 		Object.entries(props.columns)
 			.filter(([key]) => isVisible(key))
-			// cells receive the column config, issues filter the table
 			.map(([key, column]) => {
 				if (column.type === "seo-checks") {
 					return [key, { ...column, filterGroup, filterIssue: setFilter }]
@@ -132,9 +131,6 @@ const visibleColumns = computed(() =>
 	)
 )
 
-/**
- * Checks: the filter dropdown shows the number of pages per issue type & filters the table by them
- */
 const filters = computed(() =>
 	Object.entries(serverSummary.value).map(([type, count]) => ({
 		type,
@@ -171,7 +167,6 @@ const setFilter = (issue = "") =>
 		...(DUPLICATE_SORT[issue] ? { sort: DUPLICATE_SORT[issue], dir: "asc" } : {})
 	})
 
-// pages sharing the same title/description as a page
 function filterGroup(group) {
 	reload({ group, issue: "", page: "1" })
 }

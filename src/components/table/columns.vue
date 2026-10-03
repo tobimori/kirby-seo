@@ -1,9 +1,6 @@
 <script setup>
 import { ref } from "kirbyuse"
 
-/**
- * Shows/hides the columns of a table
- */
 defineProps({
 	/** `[{ value, text }]` of the columns that can be toggled */
 	options: Array,
@@ -36,7 +33,6 @@ const dropdown = ref(null)
 </template>
 
 <style>
-/* the buttons are part of the toolbar, the dropdowns are positioned at them */
 .k-seo-columns {
 	display: contents;
 }

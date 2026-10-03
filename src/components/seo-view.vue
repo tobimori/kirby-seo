@@ -3,10 +3,6 @@ import { computed, ref, usePanel, watch } from "kirbyuse"
 
 import { SEVERITY_ICONS } from "../utils/checks.js"
 
-/**
- * Layout of the SEO area, like Retour's view: header, stats & tabs,
- * with buttons for the current tab next to the tabs
- */
 const props = defineProps({
 	busy: Boolean,
 	/** Header buttons, e.g. the languages dropdown */
@@ -25,18 +21,11 @@ const props = defineProps({
 	}
 })
 
-/**
- * `filter` is emitted with the issue when clicking the stats of the current tab,
- * the stats of other tabs open them with the issue as filter
- */
 const emit = defineEmits(["filter"])
 
 const panel = usePanel()
 
-/**
- * Screen readers only announce changes of a live region that already exists, so it's always rendered.
- * Kirby doesn't announce its notifications (e.g. after publishing), so they're announced here as well
- */
+// Keep the live region mounted and include notifications that Kirby does not announce
 const announcement = ref("")
 
 watch(
@@ -56,12 +45,8 @@ watch(
 const filter = (issue, tab) =>
 	tab === props.tab ? emit("filter", issue) : panel.view.open(`seo/${tab}`, { query: { issue } })
 
-// `unknown`: values that couldn't be checked, e.g. links to servers that block bots
 const SEVERITIES = ["ok", "notice", "negative", "unknown"]
 
-/**
- * Stat card with the distribution of values by severity, shown as bar & legend
- */
 const toCard = ({ key, icon, distribution, legend, click, highlight = ["notice", "negative"] }) => {
 	const total = SEVERITIES.reduce((sum, severity) => sum + (distribution[severity] ?? 0), 0)
 
@@ -136,7 +121,6 @@ const cards = computed(() => {
 			</template>
 		</k-header>
 
-		<!-- Kirby's stat cards, with the distribution as bar & legend -->
 		<dl v-if="cards.length" :inert="busy" class="k-stats k-seo-view-stats" data-size="large">
 			<!-- the button only wraps the label & covers the whole card, so it's announced once -->
 			<div v-for="card in cards" :key="card.key" class="k-stat k-seo-stat">
@@ -316,7 +300,6 @@ const cards = computed(() => {
 		linear-gradient(rgb(255 255 255 / 20%) 0%, rgb(255 255 255 / 0%) 100%), var(--color-back);
 }
 
-/* same as Retour: tabs & the buttons of the current tab in one row */
 .k-seo-view-tabs {
 	display: flex;
 	flex-wrap: wrap;

@@ -1,7 +1,4 @@
 <script setup>
-/**
- * Progress of the AI generation of multiple rows, which can be stopped
- */
 defineProps({
 	/** `{ done, total }` */
 	generation: Object

@@ -1,10 +1,6 @@
 <script setup>
 import { computed, usePanel } from "kirbyuse"
 
-/**
- * State of a link as colored dot & its HTTP status code, like in Retour:
- * `broken`, `anchor`, `redirect`, `unknown` or `ok`
- */
 const props = defineProps({
 	column: Object,
 	row: Object,
@@ -16,7 +12,6 @@ const panel = usePanel()
 
 const label = computed(() => panel.t(`seo.overview.links.status.${props.value.state}`))
 
-// the page exists, the anchor doesn't
 const code = computed(() => (props.value.state === "anchor" ? "#" : props.value.code))
 </script>
 

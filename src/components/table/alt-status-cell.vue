@@ -3,10 +3,6 @@ import { computed } from "kirbyuse"
 
 import { SEVERITY_ICONS } from "../../utils/checks.js"
 
-/**
- * State of an alt text: `missing`, `ai` (not reviewed yet), `decorative` or `ok`.
- * States other than `ok` filter the table by images in the same state
- */
 const props = defineProps({
 	column: Object,
 	row: Object,

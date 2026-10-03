@@ -7,11 +7,7 @@ const AI_CONCURRENCY = 2
 
 const isLockError = (error) => error?.key?.startsWith("error.content.lock")
 
-/**
- * Search, sorting & pagination of the tables in the SEO area, via the query of the view
- *
- * @param {object} props Props of the view: `search`
- */
+/** Keeps table search, sorting, and pagination in the view query */
 export function useTableQuery(props) {
 	const panel = usePanel()
 	const helpers = useHelpers()
@@ -19,13 +15,9 @@ export function useTableQuery(props) {
 	// the query is merged with the current one, so empty strings are used to reset values
 	const reload = (query) => panel.view.reload({ query })
 
-	/**
-	 * Search: like in Kirby's pages sections, the search field is shown on demand
-	 */
 	const searchterm = ref(props.search ?? "")
 	const isSearching = ref(Boolean(props.search))
 
-	// hiding the search field resets the search
 	const toggleSearch = () => {
 		isSearching.value = !isSearching.value
 
@@ -43,16 +35,8 @@ export function useTableQuery(props) {
 	return { reload, searchterm, isSearching, toggleSearch, onSort, onPaginate }
 }
 
-/**
- * Columns of the tables in the SEO area that can be shown/hidden & resized
- *
- * @param {object} props Props of the view: `columns`
- * @param {string} storageKey Key for the column settings in the local storage
- */
+/** Stores column visibility and widths per table in local storage */
 export function useColumnSettings(props, storageKey) {
-	/**
-	 * Column visibility & widths are remembered per browser
-	 */
 	const settings = ref({
 		columns: {},
 		widths: {},
@@ -63,7 +47,6 @@ export function useColumnSettings(props, storageKey) {
 		deep: true
 	})
 
-	// columns with a `toggle` label can be shown/hidden
 	const isVisible = (key) => {
 		const column = props.columns[key]
 		return !column.toggle || (settings.value.columns[key] ?? column.hidden !== true)
@@ -91,13 +74,7 @@ export function useColumnSettings(props, storageKey) {
 }
 
 /**
- * Shared logic of the tables in the SEO area (pages, images): inline editing with autosave
- * to the changes versions, locks, publishing & discarding, selection, search, sorting,
- * column settings and AI generation.
- *
- * Rows are updated in place after saving or when checking locks, instead of reloading
- * the view: a reload would resort the table & make rows jump while editing.
- * The order only changes when the user sorts, searches or paginates.
+ * Coordinates inline editing, content locks, and bulk actions for editable overview tables
  *
  * @param {object} props Props of the view: `rows`, `columns`, `changes`, `summary`, `stats`, `ids`, `search`
  * @param {object} options
@@ -119,10 +96,7 @@ export function useOverviewTable(props, { endpoint, storageKey, applyPending, ai
 	})
 	const selectAll = () => (selected.value = [...new Set([...selected.value, ...props.ids])])
 
-	/**
-	 * Edits belong to the language they were made in: saves that are still on their way
-	 * when switching languages must not end up in the new language
-	 */
+	// Pending autosaves must retain their original language after a language switch
 	const currentLanguage = () => panel.language.code
 	const cellKey = (id, column, language = currentLanguage()) =>
 		`${language}\u0000${id}\u0000${column}`
@@ -131,9 +105,7 @@ export function useOverviewTable(props, { endpoint, storageKey, applyPending, ai
 		return { language, id, column }
 	}
 
-	/**
-	 * State of the server, updated by the responses of edits until the view loads new props
-	 */
+	// Keep server responses locally until the next view load supplies fresh props
 	const fromProp = (key) => {
 		const value = ref(props[key])
 		watch(
@@ -164,6 +136,7 @@ export function useOverviewTable(props, { endpoint, storageKey, applyPending, ai
 			return
 		}
 
+		// Updating rows in place avoids changing their order during editing
 		updates.value = { ...updates.value, ...rows }
 
 		if (changes) {
@@ -180,7 +153,6 @@ export function useOverviewTable(props, { endpoint, storageKey, applyPending, ai
 		}
 	}
 
-	// shows the first error of a response
 	const notifyErrors = (response) => {
 		const errors = Object.values(response.errors ?? {})
 		const lockError = errors.find(isLockError)
@@ -195,13 +167,7 @@ export function useOverviewTable(props, { endpoint, storageKey, applyPending, ai
 		return errors.length === 0
 	}
 
-	/**
-	 * Autosave, same as editing a model: values are written to the changes version
-	 * (which also locks the model for others) while typing. To keep the number of requests low,
-	 * changes are collected & sent in a single request for all rows, at most one request is
-	 * running at a time and typing only triggers a save after a short pause.
-	 */
-
+	// Batch autosaves across rows and allow only one autosave request at a time
 	// values that still need to be sent
 	const queue = new Map()
 	// values that have been typed but are not confirmed by the server yet,
@@ -211,8 +177,7 @@ export function useOverviewTable(props, { endpoint, storageKey, applyPending, ai
 	let timer = null
 	let request = null
 
-	// models edited in this view (by their Panel link, e.g. `/pages/blog+post`) & language,
-	// their locks get released when leaving the view or switching languages
+	// Track model URLs and languages so their locks can be released when leaving
 	const touched = new Map()
 	const touch = (link) => {
 		const language = currentLanguage()
@@ -392,10 +357,7 @@ export function useOverviewTable(props, { endpoint, storageKey, applyPending, ai
 		return Object.values(rows)
 	}
 
-	/**
-	 * Publishing & discarding applies to the selected rows if there is a selection,
-	 * otherwise to all rows with unsaved changes
-	 */
+	// Bulk actions use the selection, or all changed rows when nothing is selected
 	const scope = computed(() => (selected.value.length ? "selected" : "all"))
 
 	const targets = computed(() =>
@@ -506,9 +468,6 @@ export function useOverviewTable(props, { endpoint, storageKey, applyPending, ai
 		unlock((model) => model.language !== language)
 	})
 
-	/**
-	 * AI generation of the values of a column, for multiple rows at once
-	 */
 	const generation = ref(null)
 	const isGenerating = computed(() => generation.value !== null)
 
@@ -634,9 +593,6 @@ export function useOverviewTable(props, { endpoint, storageKey, applyPending, ai
 		})
 	}
 
-	/**
-	 * Lifecycle
-	 */
 	const onBeforeUnload = (event) => {
 		if (request || queue.size > 0 || isGenerating.value) {
 			event.preventDefault()
@@ -682,7 +638,6 @@ export function useOverviewTable(props, { endpoint, storageKey, applyPending, ai
 		serverSummary,
 		serverStats,
 		fetchRows,
-		// editing
 		onInput,
 		onCommit,
 		saveNow,
@@ -694,7 +649,6 @@ export function useOverviewTable(props, { endpoint, storageKey, applyPending, ai
 		onSave,
 		onDiscard,
 		onLock,
-		// AI
 		generation,
 		isGenerating,
 		runGeneration,

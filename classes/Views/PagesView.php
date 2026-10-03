@@ -15,22 +15,13 @@ use tobimori\Seo\Buttons\RobotsViewButton;
 use tobimori\Seo\Meta;
 use tobimori\Seo\Seo;
 
-/**
- * Panel view listing the metadata of all pages
- *
- * Meta values are resolved lazily: only for the rows of the current table page,
- * unless searching or sorting needs them.
- */
 class PagesView extends EditableOverviewView
 {
 	public const SORTABLE = ['title', 'metaTitle', 'metaDescription', 'ogDescription', 'template'];
 	public const EDITABLE = ['metaTitle', 'metaDescription', 'ogDescription'];
-	// cheap values first, so searching can skip resolving the meta cascade for many pages
+	// Check inexpensive values first so a match can skip the remaining lookups
 	public const SEARCHABLE = ['id', 'title', 'template', 'metaTitle', 'metaDescription', 'ogDescription'];
 
-	/**
-	 * Resolved meta values per page, for the current request
-	 */
 	protected array $resolved = [];
 
 	public function load(): array
@@ -121,9 +112,6 @@ class PagesView extends EditableOverviewView
 		);
 	}
 
-	/**
-	 * Only the stats of the pages, the alt texts don't change when editing pages
-	 */
 	protected function live(): array
 	{
 		return [
@@ -143,17 +131,13 @@ class PagesView extends EditableOverviewView
 	}
 
 	/**
-	 * Plain text value of a searchable/sortable column, for searching & sorting all pages:
-	 * cached with the checks of the page if possible (see `Audit\Pages::value()`)
+	 * Uses cached audit inputs for search and sorting, resolving other columns on demand
 	 */
 	protected function indexed(Page $page, string $key): string
 	{
 		return $this->audit()->value($page, $key) ?? $this->value($page, $key);
 	}
 
-	/**
-	 * Plain text value of a searchable/sortable column, resolved for the visible rows
-	 */
 	protected function value(Page $page, string $key): string
 	{
 		return match ($key) {
@@ -164,17 +148,9 @@ class PagesView extends EditableOverviewView
 		};
 	}
 
-	/**
-	 * Columns with a `toggle` label can be shown/hidden by the user,
-	 * columns with `hidden: true` are hidden until the user enables them,
-	 * columns with `resizable: false` keep their width,
-	 * columns with `hideLabel: true` only show their label to screen readers.
-	 * Text columns don't set a width, so they share the available space equally
-	 */
 	protected function columns(): array
 	{
 		$columns = [
-			// a single indicator per page in front, details on hover & click
 			'checks' => [
 				'hideLabel' => true,
 				'label' => I18n::translate('seo.overview.columns.checks'),
@@ -343,9 +319,6 @@ class PagesView extends EditableOverviewView
 		return $src ? ['src' => $src, 'source' => $source] : null;
 	}
 
-	/**
-	 * Same states as the robots view button on pages
-	 */
 	protected function robots(Meta $meta): array
 	{
 		$robots = $meta->robots();

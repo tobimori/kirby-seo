@@ -15,7 +15,7 @@ use Throwable;
 use tobimori\Seo\Seo;
 
 /**
- * Renders (or requests) pages like visitors see them & extracts their links and anchors
+ * Extracts links and anchor IDs from rendered or fetched pages
  */
 class Crawler
 {
@@ -43,15 +43,13 @@ class Crawler
 	}
 
 	/**
-	 * Whether pages are requested over HTTP instead of rendered in this process.
-	 * Queue workers request them, as a template that ends the script (e.g. with `go()`)
-	 * would end the worker. Requests need the `url` option, e.g. `https://example.com`
+	 * Defaults to HTTP in CLI mode with an absolute site URL, so template exits do not end workers.
+	 * An explicit option overrides the default; HTTP always requires cURL
 	 */
 	public static function usesHttp(): bool
 	{
 		$option = Seo::option('links.http');
 
-		// without curl, pages can only be rendered in this process
 		if ($option === false || !function_exists('curl_multi_init')) {
 			return false;
 		}
@@ -96,17 +94,12 @@ class Crawler
 		}
 	}
 
-	/**
-	 * Seconds to wait for a page of the site, rendering might take longer than answering a HEAD request
-	 */
 	public static function timeout(): int
 	{
 		return max(30, (int)Seo::option('links.timeout'));
 	}
 
 	/**
-	 * Requests the pages like a visitor does, in parallel
-	 *
 	 * @param array<string, string> $urls URLs of the pages by their key
 	 * @return array<string, array{status: int, location: string|null, error: string|null, links: array<string>, ids: array<string>}>
 	 */
@@ -157,16 +150,13 @@ class Crawler
 	}
 
 	/**
-	 * Browsers' format, as some servers block requests of unknown clients
+	 * Uses a browser-compatible user agent because some servers reject unknown clients
 	 */
 	public static function userAgent(): string
 	{
 		return 'Mozilla/5.0 (compatible; Kirby SEO link checker; +' . App::instance()->url() . ')';
 	}
 
-	/**
-	 * Runs the requests of the handle until all of them are done
-	 */
 	public static function perform(CurlMultiHandle $multi): void
 	{
 		do {
@@ -198,9 +188,8 @@ class Crawler
 	}
 
 	/**
-	 * Replaces the current request with a visitor's GET request of the URL, so templates don't see
-	 * the request of the Panel (e.g. forms would handle its POST request as a submission, or redirect
-	 * to its referer). Returns a closure that restores the current request & the state rendering changes
+	 * Prevents templates from treating the Panel's POST body or cookies as visitor input.
+	 * Returns a closure that restores the request and CMS state after rendering
 	 */
 	protected static function isolate(App $kirby, string $url): Closure
 	{
@@ -309,9 +298,6 @@ class Crawler
 			&& in_array(strtolower($match[1]), self::IGNORED_SCHEMES, true);
 	}
 
-	/**
-	 * Removes `.` & `..` segments
-	 */
 	protected static function normalizePath(string $path): string
 	{
 		$suffix = '';
@@ -333,9 +319,8 @@ class Crawler
 	}
 
 	/**
-	 * Templates might end the script while rendering, e.g. with `go()` for a redirect.
-	 * The page is stored as redirect, so the next scan continues with the next page,
-	 * and the redirect response is replaced, as it belongs to the page, not the request
+	 * Saves progress if a template exits before rendering completes.
+	 * Replaces the template's response with a retry signal for the Panel
 	 */
 	protected static function shutdown(): void
 	{

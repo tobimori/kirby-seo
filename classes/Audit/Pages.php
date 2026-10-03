@@ -10,9 +10,7 @@ use tobimori\Seo\Meta;
 use tobimori\Seo\Seo;
 
 /**
- * Checks the metadata of pages as search engines see it, e.g. for duplicate titles
- * & descriptions. Duplicates can only be detected across all pages, so the checks always
- * run for all given pages, the results are cached until any of them changes.
+ * Audits page titles and descriptions for SEO issues across a page collection
  */
 class Pages
 {
@@ -28,33 +26,23 @@ class Pages
 		'descriptionLength',
 	];
 
-	/**
-	 * Severity of the issue types: `negative` needs fixing, `notice` is acceptable.
-	 * A fallback description is shared with other pages, which makes it a duplicate
-	 */
 	public const SEVERITY = [
 		'descriptionMissing' => 'negative',
 		'descriptionDuplicate' => 'negative',
 		'titleDuplicate' => 'negative',
+		// Fallback descriptions need review even when no duplicate is found
 		'descriptionFallback' => 'negative',
 		'titleLength' => 'notice',
 		'descriptionLength' => 'notice',
 	];
 
-	/**
-	 * Issue types are prefixed with the kind of value they're about
-	 */
 	public const KINDS = ['title', 'description'];
 
 	/**
-	 * Cascade methods that provide a page-specific value,
-	 * anything else (parent, site, defaults) is a fallback shared with other pages
+	 * Sources treated as page-specific when classifying descriptions
 	 */
 	public const OWN_SOURCES = ['fields', 'programmatic'];
 
-	/**
-	 * Meta values that are cached as plain text with the checks (see `value()`)
-	 */
 	public const VALUES = ['metaTitle', 'metaDescription', 'ogDescription'];
 
 	protected array|null $entries = null;
@@ -74,9 +62,6 @@ class Pages
 		return $this->result()['pages'][$page->id()] ?? null;
 	}
 
-	/**
-	 * Number of pages per issue type
-	 */
 	public function summary(): array
 	{
 		return $this->result()['summary'];
@@ -93,18 +78,17 @@ class Pages
 	}
 
 	/**
-	 * Whether the page has an issue of the given type, or of the given kind (any title/description issue)
-	 */
-	/**
-	 * Plain text of the page's title or of a meta value (see `VALUES`), cached until the page changes:
-	 * searching & sorting all pages would otherwise resolve the meta of each of them.
-	 * `null` for other keys & pages that aren't part of the audit
+	 * Returns a cached plain-text title or metadata value for search and sorting.
+	 * Returns `null` for unsupported keys or pages outside the audit
 	 */
 	public function value(Page $page, string $key): string|null
 	{
 		return $this->entries()[$page->id()]['values'][$key] ?? null;
 	}
 
+	/**
+	 * Matches an issue type or any issue of a given kind (`title` or `description`)
+	 */
 	public function has(Page $page, string $type): bool
 	{
 		foreach (array_column($this->page($page)['issues'] ?? [], 'type') as $issue) {
@@ -160,6 +144,10 @@ class Pages
 		return $this->result ??= $this->evaluate($this->entries());
 	}
 
+	/**
+	 * Loads per-page audit inputs, resolving metadata only for missing or changed entries.
+	 * Duplicate groups and issues are evaluated separately for the current collection
+	 */
 	protected function entries(): array
 	{
 		if ($this->entries !== null) {
@@ -228,8 +216,7 @@ class Pages
 
 	protected function entry(Page $page): array
 	{
-		// not shared with the rows of the overview: with a warm cache, no meta is resolved
-		// for the audit, and building the cache would keep the meta of all pages in memory
+		// Do not retain Meta instances while filling the cache for the entire site
 		/** @var \tobimori\Seo\Meta $meta */
 		$meta = new (Seo::option('components.meta'))($page);
 		$values = ['title' => (string)$page->title()->value()];
@@ -268,7 +255,6 @@ class Pages
 
 		$groups = $this->groups($entries);
 
-		// group hashes by page id & kind (title/description)
 		$memberOf = [];
 		foreach ($groups as $hash => $group) {
 			foreach ($group['pages'] as $id) {
@@ -325,7 +311,6 @@ class Pages
 			}
 		}
 
-		// most severe first
 		usort($issues, fn ($a, $b) => array_search($a['type'], self::TYPES) <=> array_search($b['type'], self::TYPES));
 
 		return array_map(fn ($issue) => [...$issue, 'severity' => self::SEVERITY[$issue['type']]], $issues);
@@ -382,9 +367,6 @@ class Pages
 		};
 	}
 
-	/**
-	 * Why the page isn't checked, if it isn't
-	 */
 	protected function skipped(Page $page, Meta $meta): string|null
 	{
 		return match (true) {
@@ -396,10 +378,6 @@ class Pages
 		};
 	}
 
-	/**
-	 * Whether search engines may index the page. If the whole site is set to `noindex`
-	 * (e.g. on staging environments), pages are checked as if it wasn't
-	 */
 	protected function isIndexable(Page $page, Meta $meta): bool
 	{
 		if (!Seo::option('robots.enabled')) {
@@ -410,6 +388,8 @@ class Pages
 			return !Str::contains($meta->robots(), 'noindex');
 		}
 
+		// Ignore site-wide noindex (e.g. on staging) so the audit still checks public pages
+		// Page-specific indexing rules still apply
 		['field' => $field, 'source' => $source] = $meta->resolve('robotsIndex');
 
 		// set by editors (or page models) for this page, `null` if the default is `false`
@@ -421,17 +401,11 @@ class Pages
 		return Seo::option('robots.followPageStatus') ? $page->isListed() : true;
 	}
 
-	/**
-	 * Plain text, as shown in search results
-	 */
 	public static function text(mixed $value): string
 	{
 		return trim(preg_replace('/\s+/u', ' ', Str::unhtml((string)$value)));
 	}
 
-	/**
-	 * Values that only differ in case or whitespace count as duplicates
-	 */
 	protected static function normalize(string $text): string
 	{
 		return Str::lower($text);

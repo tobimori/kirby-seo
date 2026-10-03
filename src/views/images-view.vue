@@ -64,16 +64,12 @@ const {
 					? "reviewed"
 					: "manual")
 	}),
-	// same checks as the table, e.g. fields with `ai: false`
 	aiRequest: (row) => ({
 		url: `${panel.urls.api}/seo/overview/images/generate`,
 		body: { id: row.id }
 	})
 })
 
-/**
- * State of an alt text, like the checks of pages
- */
 const stateOf = (alt) => {
 	if (alt.decorative) {
 		return "decorative"
@@ -133,7 +129,6 @@ const setDecorative = async (row, value) => {
 	}
 }
 
-// without images (with alt text fields), there's nothing to list, filter or edit
 const hasImages = computed(() =>
 	Object.values(serverStats.value?.images ?? {}).some((count) => count > 0)
 )
@@ -220,7 +215,6 @@ const visibleColumns = computed(() =>
 	Object.fromEntries(
 		Object.entries(props.columns)
 			.filter(([key]) => isVisible(key))
-			// cells receive the column config, states filter the table
 			.map(([key, column]) => {
 				if (column.type === "seo-alt-status") {
 					return [key, { ...column, filterIssue: setFilter }]
@@ -243,9 +237,6 @@ const visibleColumns = computed(() =>
 	)
 )
 
-/**
- * Filters: the dropdown shows the number of images per state & filters the table by them
- */
 const filters = computed(() =>
 	Object.entries(serverSummary.value).map(([type, count]) => ({
 		type,

@@ -4,17 +4,10 @@ import { computed, nextTick, onBeforeUnmount, ref, usePanel, watch } from "kirby
 import { usePopoverGroup } from "../../composables/popover.js"
 
 /**
- * Disclosure (https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/) for the cells of tables:
- * the button toggles a popover with details & actions. It also opens on hover, then closes
- * again when the pointer leaves (after a short delay, so the pointer can move onto it).
- * When opened via click/keyboard, it's pinned: it stays open until Escape, clicking outside
- * or moving the focus away, and hovering other cells doesn't replace it.
- * Opening it doesn't move the focus, Tab continues from the button into it.
- *
- * Slots: `button` for the content of the button, the default slot (with `close`) for the popover
+ * Table-cell disclosure: hover previews it; click or keyboard pins it open.
+ * Focus stays on the trigger so Tab can reach the popover actions
  */
 defineProps({
-	/** Attributes of the button, e.g. its `class` & `aria-label` */
 	button: Object
 })
 
@@ -22,7 +15,6 @@ const HIDE_DELAY = 150
 
 const panel = usePanel()
 
-// only one popover of the table is open at a time
 const group = usePopoverGroup()
 const self = Symbol("popover")
 const isOpen = computed(() => group.value?.owner === self)
@@ -124,7 +116,6 @@ const onLeave = () => {
 	}
 }
 
-// click, Enter & Space
 const onClick = () => (isPinned.value ? close() : open(true))
 
 const onFocusout = (event) => {
@@ -169,7 +160,6 @@ onBeforeUnmount(() => {
 </template>
 
 <style>
-/* same look as Kirby's dropdowns, e.g. the languages dropdown */
 .k-seo-popover-content {
 	position: fixed;
 	inset: auto;
@@ -201,7 +191,6 @@ onBeforeUnmount(() => {
 	}
 }
 
-/* the info is aligned to the end, like the codes in Kirby's languages dropdown */
 .k-seo-popover-item .k-button-text {
 	display: flex;
 	flex-grow: 1;

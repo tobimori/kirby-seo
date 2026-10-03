@@ -9,8 +9,6 @@ use tobimori\Seo\Field\AltTextField;
 use tobimori\Seo\Audit\Links\Checker;
 use tobimori\Seo\Seo;
 
-// changes that might break links or fix them (only starts a scan with queues,
-// otherwise the Panel scans the changed pages when opening the links tab)
 $checkLinks = function (Event $event) {
 	if (in_array($event->action(), ['create', 'duplicate', 'update', 'move', 'changeSlug', 'changeStatus', 'changeTemplate', 'changeName', 'delete'], true)) {
 		Checker::dispatch();
@@ -27,8 +25,7 @@ return [
 			]);
 		}
 	},
-	// checks all pages & external URLs again, e.g. for external pages that went offline.
-	// Only the worker runs schedules, so they are only updated when it starts
+	// Persisted schedules are synchronized when the worker starts
 	'tobimori.queues.worker:before' => fn () => Checker::schedule(),
 	'page.*:after' => $checkLinks,
 	'site.*:after' => $checkLinks,

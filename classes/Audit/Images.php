@@ -8,15 +8,12 @@ use Kirby\Cms\Page;
 use tobimori\Seo\AltText;
 
 /**
- * Alt texts of the images of the site & all pages the current user can see, one entry per `alt-text` field.
- * Not limited to the pages of the overview, as images are often stored on pages without SEO fields
- * (e.g. a media library page) & used elsewhere
+ * Audits accessible image alt-text fields across the site.
+ * Images can be stored on pages without SEO fields (e.g. a media library) and used elsewhere,
+ * so the audit is not limited to pages in the overview
  */
 class Images
 {
-	/**
-	 * States of alt texts (besides `ok`), `ISSUES` need work
-	 */
 	public const FILTERS = ['missing', 'ai', 'decorative'];
 	public const ISSUES = ['missing', 'ai'];
 
@@ -32,19 +29,11 @@ class Images
 	 */
 	protected array|null $entries = null;
 
-	/**
-	 * Names of the alt text fields per file template
-	 */
 	protected array $fields = [];
 
-	/**
-	 * States of the entries by their id, see `state()`
-	 */
 	protected array $states = [];
 
 	/**
-	 * Entries by their id, see `id()`
-	 *
 	 * @return array<string, array{id: string, model: \Kirby\Cms\File, fields: array<string>, field: string}>
 	 */
 	public function entries(): array
@@ -110,8 +99,7 @@ class Images
 	}
 
 	/**
-	 * `decorative`, `missing`, `ai` (generated & not reviewed yet) or `ok`, in this order:
-	 * the text of decorative images isn't used, whoever wrote it
+	 * Decorative images take precedence over missing or unreviewed text
 	 */
 	public function state(array $entry): string
 	{
@@ -129,9 +117,6 @@ class Images
 		};
 	}
 
-	/**
-	 * Whether the entry is in the given state (see `FILTERS`), `issues` for any of the `ISSUES`
-	 */
 	public function has(array $entry, string $filter): bool
 	{
 		return $filter === 'issues'
@@ -139,9 +124,6 @@ class Images
 			: $this->state($entry) === $filter;
 	}
 
-	/**
-	 * Number of images per filter
-	 */
 	public function summary(): array
 	{
 		$summary = array_fill_keys(self::FILTERS, 0);
@@ -156,8 +138,6 @@ class Images
 	}
 
 	/**
-	 * Number of alt texts per severity, like the stats of the other tabs
-	 *
 	 * @return array{ok: int, notice: int, negative: int}
 	 */
 	public function stats(): array

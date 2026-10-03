@@ -19,7 +19,6 @@ const label = (issue) =>
 			: `seo.overview.checks.${issue.type}`
 	)
 
-// short info, shown next to the issue like the codes in Kirby's languages dropdown
 const info = (issue) => {
 	if (issue.group) {
 		return panel.t("seo.overview.checks.duplicate.show", { count: issue.count })
@@ -44,7 +43,6 @@ const issues = computed(() =>
 	}))
 )
 
-// the most severe issue decides the indicator
 const severity = computed(() =>
 	issues.value.some((issue) => issue.severity === "negative") ? "negative" : "notice"
 )

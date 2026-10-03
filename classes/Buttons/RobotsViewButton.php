@@ -30,9 +30,6 @@ class RobotsViewButton extends ViewButton
 	}
 
 	/**
-	 * How the robots directives are shown, also in the SEO overview: `noindex` if search engines
-	 * may not index the page, `any` for other restrictions (e.g. `nofollow`), otherwise `index`
-	 *
 	 * @return array{state: string, icon: string, text: string, theme: string}
 	 */
 	public static function indicator(string $robots): array

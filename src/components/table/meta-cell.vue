@@ -1,11 +1,6 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, ref, watch, useLibrary, usePanel } from "kirbyuse"
 
-/**
- * Editable text cell: writer values (HTML) by default, plain text with `plain: true` in the column.
- * Values can set a `tag` (`{ text, title }`) shown in front of the text & `dimmed: true`;
- * a `source` other than `fields` tells that the value is inherited
- */
 const props = defineProps({
 	column: Object,
 	row: Object,
@@ -22,7 +17,6 @@ const draft = ref("")
 // prevents saving twice, e.g. on Enter and the following focusout
 const committed = ref(false)
 
-// anything but `fields` means the value is not set on the page itself
 const inherited = computed(() => props.value.source && props.value.source !== "fields")
 const tag = computed(() => {
 	if (props.value.tag) {
@@ -42,7 +36,6 @@ const editable = computed(() => props.column.isEditable?.(props.row) ?? false)
 const editing = computed(() => props.column.isEditing?.(props.row) ?? false)
 const inRange = computed(() => props.column.inRange?.(props.row) ?? false)
 const rangeEdge = computed(() => props.column.rangeEdge?.(props.row) ?? null)
-// value typed into the range editor, shown live in all selected cells
 const rangeText = computed(() => (inRange.value ? props.column.rangeText() : null))
 const dimmed = computed(
 	() => (inherited.value || props.value.dimmed === true) && rangeText.value === null
@@ -69,7 +62,6 @@ watch(
 
 		if (props.column.plain && input.value) {
 			library.autosize(input.value)
-			// cursor at the end, like in the writer
 			input.value.setSelectionRange(draft.value.length, draft.value.length)
 		}
 
@@ -182,7 +174,6 @@ const onClick = (event) => {
 	}
 }
 
-// clicking outside of the cell saves
 const onFocusout = (event) => {
 	if (!event.currentTarget.contains(event.relatedTarget)) {
 		commit()
@@ -261,7 +252,6 @@ const onFocusout = (event) => {
 				class="k-seo-meta-cell-source"
 			/>
 			<span v-if="value.text">{{ value.text }}</span>
-			<!-- a tag of its own (e.g. decorative images) explains the missing text -->
 			<span v-else-if="!value.tag" class="k-seo-meta-cell-empty">—</span>
 		</span>
 	</component>
@@ -341,7 +331,6 @@ button.k-seo-meta-cell {
 		outline: none;
 	}
 
-	/* same as in the seo-writer field */
 	img.ProseMirror-separator {
 		display: inline-block;
 		width: 0;
@@ -357,7 +346,6 @@ button.k-seo-meta-cell {
 	}
 }
 
-/* same text position & line height as in the display state */
 .k-seo-meta-cell-textarea {
 	padding: 0;
 	font: inherit;

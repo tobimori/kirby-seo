@@ -8,8 +8,7 @@ use tobimori\Seo\Audit\Links\Crawler;
 use tobimori\Seo\Seo;
 
 /**
- * Queue job for checking links after content changes (batched) & on a schedule.
- * Runs the steps of the check until the job's time is up and continues in a new job
+ * Runs link audits in a queue worker, rescheduling incomplete scans
  */
 class CheckLinksJob extends BatchJob
 {
@@ -46,15 +45,13 @@ class CheckLinksJob extends BatchJob
 			$checker->invalidate();
 		}
 
-		// leave time for the last step, which might take longer (e.g. slow pages, or external URLs
-		// that need a HEAD & a GET request)
+		// Reserve time for a final batch that exceeds the step budget
 		$deadline = time() + $this->timeout() - self::STEP - max(Crawler::timeout(), (int)Seo::option('links.timeout') * 2);
 
 		do {
 			$progress = $checker->step(self::STEP);
 		} while (!$progress['done'] && !$progress['running'] && time() < $deadline);
 
-		// continue in a new job right away, unless another scan is running
 		if (!$progress['done'] && !$progress['running']) {
 			Checker::dispatch(now: true);
 		}

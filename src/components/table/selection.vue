@@ -1,7 +1,4 @@
 <script setup>
-/**
- * Selected rows of a table: their number, selecting all results & clearing the selection
- */
 defineProps({
 	count: Number,
 	/** Number of all rows matching the current search & filters */

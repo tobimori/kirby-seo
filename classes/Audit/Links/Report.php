@@ -9,8 +9,7 @@ use Throwable;
 use tobimori\Seo\Seo;
 
 /**
- * Results of the link check for one language: the state of each linked URL & the pages linking to it.
- * The results are cached until the index changes, so the Panel only reads the whole index after a scan
+ * Classifies indexed links and groups their source pages for a single-language audit report
  */
 class Report
 {
@@ -27,9 +26,6 @@ class Report
 		'ok' => 'ok',
 	];
 
-	/**
-	 * States the links can be filtered by, `ISSUES` need fixing
-	 */
 	public const FILTERS = ['broken', 'anchor', 'redirect', 'unknown'];
 	public const ISSUES = ['broken', 'anchor', 'redirect'];
 
@@ -46,9 +42,6 @@ class Report
 		$this->language ??= $this->kirby->language()?->code();
 	}
 
-	/**
-	 * The stored index, only read to build the results (see `results()`)
-	 */
 	protected function data(): array
 	{
 		return $this->data ??= (new Index())->read();
@@ -74,9 +67,6 @@ class Report
 		return in_array(strtolower(parse_url($url, PHP_URL_HOST) ?? ''), $hosts, true);
 	}
 
-	/**
-	 * Whether any page has been scanned yet
-	 */
 	public function isEmpty(): bool
 	{
 		return !$this->results()['scanned'];
@@ -97,9 +87,6 @@ class Report
 			: $link['state'] === $filter;
 	}
 
-	/**
-	 * Number of the given links per state (see `FILTERS`)
-	 */
 	public static function summary(array $links): array
 	{
 		$summary = array_fill_keys(self::FILTERS, 0);
@@ -114,9 +101,8 @@ class Report
 	}
 
 	/**
-	 * Links of the language & whether any page has been scanned, cached until the index changes.
-	 * The pages linking to a URL are stored as strings, as an array per link
-	 * would need several times the memory (most links are on all pages)
+	 * Caches classified links per language and index revision.
+	 * Source page IDs use newline-separated strings to reduce memory use for shared links
 	 */
 	protected function results(): array
 	{
@@ -140,7 +126,6 @@ class Report
 
 		$cache->set($key, $this->results);
 
-		// only needed to build the results
 		$this->data = $this->entries = $this->targets = null;
 
 		return $this->results;
@@ -212,8 +197,7 @@ class Report
 	}
 
 	/**
-	 * State of a link: `ok`, `broken`, `redirect`, `anchor` (the page exists, the anchor doesn't)
-	 * or `unknown` (can't be checked, or not checked yet)
+	 * Classifies a URL from stored scan results; does not make network requests
 	 */
 	protected function check(string $url): array
 	{
@@ -280,7 +264,6 @@ class Report
 			return ['state' => 'unknown', 'reason' => 'route'];
 		}
 
-		// drafts aren't public
 		if ($this->isDraft($path)) {
 			return ['state' => 'broken', 'reason' => 'draft', 'code' => 404];
 		}
@@ -328,7 +311,6 @@ class Report
 			$result['error'] !== null => ['state' => 'broken', 'reason' => 'unreachable'],
 			$code >= 200 && $code < 300 => ['state' => 'ok', 'code' => $code],
 			$code >= 300 && $code < 400 => ['state' => 'redirect', 'reason' => 'redirect', 'code' => $code, 'target' => $result['location']],
-			// gone, or the server has an error
 			in_array($code, [404, 410], true) || $code >= 500 => ['state' => 'broken', 'reason' => 'status', 'code' => $code],
 			// e.g. 403 or 429: the server doesn't answer requests of bots
 			default => ['state' => 'unknown', 'reason' => 'blocked', 'code' => $code],
@@ -351,9 +333,6 @@ class Report
 		return $this->entries;
 	}
 
-	/**
-	 * Comparable URLs of all pages the scan renders (as keys)
-	 */
 	protected function targets(): array
 	{
 		return $this->targets ??= array_flip($this->data()['targets']);
@@ -453,9 +432,6 @@ class Report
 		return false;
 	}
 
-	/**
-	 * Files in the public folder, e.g. assets
-	 */
 	protected function isStatic(string $path): bool
 	{
 		$root = realpath($this->kirby->root('index'));

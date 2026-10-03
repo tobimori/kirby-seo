@@ -1,11 +1,6 @@
 <script setup>
 import { rowName } from "../../utils/rows.js"
 
-/**
- * Row number like in Retour & Kirby's tables. In selectable tables, the number turns
- * into a checkbox while hovering the row (or when rows are selected), rows that
- * someone else is editing show a lock instead
- */
 defineProps({
 	column: Object,
 	row: Object,
