@@ -66,10 +66,10 @@ return [
 
 			return Seo::option('robots.followPageStatus') ? $page->isListed() : true;
 		},
-		'robotsFollow' => fn (Page $page) => $page->kirby()->option('tobimori.seo.default.robotsIndex')($page),
-		'robotsArchive' => fn (Page $page) => $page->kirby()->option('tobimori.seo.default.robotsIndex')($page),
-		'robotsImageindex' => fn (Page $page) => $page->kirby()->option('tobimori.seo.default.robotsIndex')($page),
-		'robotsSnippet' => fn (Page $page) => $page->kirby()->option('tobimori.seo.default.robotsIndex')($page),
+		'robotsFollow' => fn (Page $page) => Seo::option('default.robotsIndex', args: [$page]),
+		'robotsArchive' => fn (Page $page) => Seo::option('default.robotsIndex', args: [$page]),
+		'robotsImageindex' => fn (Page $page) => Seo::option('default.robotsIndex', args: [$page]),
+		'robotsSnippet' => fn (Page $page) => Seo::option('default.robotsIndex', args: [$page]),
 	],
 	'socialMedia' => [ // default fields for social media links, format is [field => placeholder]
 		'twitter' => 'https://twitter.com/my-company',
@@ -89,7 +89,7 @@ return [
 		'enabled' => true, // whether robots handling should be done by the plugin
 
 		// @deprecated - please use robots.enabled
-		'active' => fn () => Seo::option('sitemap.enabled'),
+		'active' => fn () => Seo::option('robots.enabled'),
 		'followPageStatus' => true, // should unlisted pages be noindex by default?
 		'pageSettings' => true, // whether to have robots settings on each page
 		'index' => fn () => !App::instance()->option('debug'), // default site-wide robots setting

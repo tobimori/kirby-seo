@@ -2,6 +2,7 @@
 
 namespace tobimori\Seo\Field;
 
+use Closure;
 use Kirby\Cms\App;
 use Kirby\Cms\File;
 use Kirby\Form\Field;
@@ -31,19 +32,12 @@ class AltTextField extends FieldClass
 
 	protected function setAi(bool $ai = true): void
 	{
-		if ($ai && !Seo::option('components.ai')::enabled()) {
-			$ai = false;
-		}
+		$component = Seo::option('components.ai');
 
-		if ($ai && App::instance()->user()?->role()->permissions()->for('tobimori.seo', 'ai') === false) {
-			$ai = false;
-		}
-
-		if ($ai && $this->model() instanceof File && !Content::supportsImage($this->model())) {
-			$ai = false;
-		}
-
-		$this->ai = $ai;
+		$this->ai = $ai
+			&& $component::enabled()
+			&& $component::permitted()
+			&& !($this->model() instanceof File && !Content::supportsImage($this->model()));
 	}
 
 	public function ai(): bool
@@ -112,18 +106,8 @@ class AltTextField extends FieldClass
 					$kirby = App::instance();
 					$component = Seo::option('components.ai');
 
-					if (!$component::enabled()) {
-						return Response::json([
-							'status' => 'error',
-							'message' => t('seo.ai.error.disabled')
-						], 404);
-					}
-
-					if ($kirby->user()->role()->permissions()->for('tobimori.seo', 'ai') === false) {
-						return Response::json([
-							'status' => 'error',
-							'message' => t('seo.ai.error.permission')
-						], 404);
+					if ($error = $component::denied()) {
+						return $error;
 					}
 
 					$model = $field->model();
@@ -149,35 +133,7 @@ class AltTextField extends FieldClass
 						$kirby->setCurrentLanguage($lang);
 					}
 
-					// begin SSE stream
-					ignore_user_abort(true);
-					@set_time_limit(0);
-
-					while (ob_get_level() > 0) {
-						ob_end_flush();
-					}
-
-					header('Content-Type: text/event-stream');
-					header('Cache-Control: no-cache');
-					header('Connection: keep-alive');
-					header('X-Accel-Buffering: no');
-					echo ":ok\n\n";
-					flush();
-
-					$send = static function (array $event): void {
-						echo 'data: ' . json_encode(
-							$event,
-							JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
-						) . "\n\n";
-
-						if (ob_get_level() > 0) {
-							ob_flush();
-						}
-
-						flush();
-					};
-
-					try {
+					$component::sendStream(function (Closure $send) use ($kirby, $model, $data, $component) {
 						$kirby->data = [
 							'file' => $model,
 							'site' => $kirby->site(),
@@ -196,22 +152,9 @@ class AltTextField extends FieldClass
 						];
 
 						foreach ($component::provider()->stream($content) as $chunk) {
-							$send([
-								'type' => $chunk->type,
-								'text' => $chunk->text,
-								'payload' => $chunk->payload,
-							]);
+							$send($chunk);
 						}
-					} catch (\Throwable $exception) {
-						$send([
-							'type' => 'error',
-							'payload' => [
-								'message' => $exception->getMessage(),
-							],
-						]);
-					}
-
-					exit();
+					});
 				}
 			]
 		];

@@ -34,6 +34,10 @@ class Meta
 	protected array $consumed = [];
 	protected array $metaDefaults = [];
 	protected array $metaArray = [];
+	protected ?array $cascade = null;
+	protected ?string $robots = null;
+	protected ?Meta $parentMeta = null;
+	protected FileVersion|File|Asset|false|null $ogImageThumb = false;
 
 	/**
 	 * Creates a new Meta instance
@@ -396,22 +400,28 @@ class Meta
 	 */
 	public function get(string $key, array $exclude = []): Field
 	{
-		$cascade = Seo::option('cascade');
-		if (count(array_intersect(get_class_methods($this), $cascade)) !== count($cascade)) {
-			throw new InvalidArgumentException('[Kirby SEO] Invalid cascade method in config. Please check your options for `tobimori.seo.cascade`.');
+		if ($this->cascade === null) {
+			$cascade = Seo::option('cascade');
+			if (count(array_intersect(get_class_methods($this), $cascade)) !== count($cascade)) {
+				throw new InvalidArgumentException('[Kirby SEO] Invalid cascade method in config. Please check your options for `tobimori.seo.cascade`.');
+			}
+
+			$this->cascade = $cascade;
 		}
 
 		// Track consumed keys, so we don't output legacy field values
+		// (skip without meta defaults, the lookup would build the full meta array)
 		$toBeConsumed = $key;
 		if (
-			(array_key_exists($toBeConsumed, $this->metaDefaults)
+			$this->metaDefaults
+			&& (array_key_exists($toBeConsumed, $this->metaDefaults)
 				|| array_key_exists($toBeConsumed = $this->findTagForField($toBeConsumed), $this->metaDefaults))
 			&& !in_array($toBeConsumed, $this->consumed)
 		) {
 			$this->consumed[] = $toBeConsumed;
 		}
 
-		foreach (array_diff($cascade, $exclude) as $method) {
+		foreach (array_diff($this->cascade, $exclude) as $method) {
 			if ($field = $this->$method($key)) {
 				if (
 					is_string($value = $field->value())
@@ -547,9 +557,8 @@ class Meta
 	protected function parent(string $key): Field|null
 	{
 		if ($this->canInherit($key)) {
-			$parent = $this->page->parent();
-			$parentMeta = new Meta($parent, $this->lang);
-			if ($value = $parentMeta->get($key)) {
+			$this->parentMeta ??= new Meta($this->page->parent(), $this->lang);
+			if ($value = $this->parentMeta->get($key)) {
 				return $value;
 			}
 		}
@@ -609,25 +618,7 @@ class Meta
 	 */
 	public function metaTitle()
 	{
-		$title = $this->get('metaTitle');
-		$template = $this->get('metaTemplate');
-
-		$useTemplate = $this->page->useTitleTemplate();
-		$useTemplate = $useTemplate->isEmpty() ? true : $useTemplate->toBool();
-
-		$string = $title->value();
-		if ($useTemplate) {
-			$string = $this->page->toString(
-				$template,
-				['title' => $title]
-			);
-		}
-
-		return new Field(
-			$this->page,
-			'metaTitle',
-			$string
-		);
+		return $this->applyTitleTemplate('metaTitle', 'metaTemplate', $this->page->useTitleTemplate());
 	}
 
 	/**
@@ -635,24 +626,23 @@ class Meta
 	 */
 	public function ogTitle()
 	{
+		return $this->applyTitleTemplate('ogTitle', 'ogTemplate', $this->page->useOgTemplate());
+	}
+
+	/**
+	 * Fills the template with the meta title, unless the page disables the template
+	 */
+	protected function applyTitleTemplate(string $name, string $templateKey, Field $useTemplate): Field
+	{
 		$title = $this->get('metaTitle');
-		$template = $this->get('ogTemplate');
-
-		$useTemplate = $this->page->useOgTemplate();
-		$useTemplate = $useTemplate->isEmpty() ? true : $useTemplate->toBool();
-
-		$string = $title->value();
-		if ($useTemplate) {
-			$string = $this->page->toString(
-				$template,
-				['title' => $title]
-			);
-		}
+		$template = $this->get($templateKey);
 
 		return new Field(
 			$this->page,
-			'ogTitle',
-			$string
+			$name,
+			$useTemplate->isEmpty() || $useTemplate->toBool()
+				? $this->page->toString($template, ['title' => $title])
+				: $title->value()
 		);
 	}
 
@@ -689,6 +679,10 @@ class Meta
 	 */
 	public function robots()
 	{
+		if ($this->robots !== null) {
+			return $this->robots;
+		}
+
 		$robots = [];
 		foreach (Seo::option('robots.types') as $type) {
 			if (!$this->get('robots' . Str::ucfirst($type))->toBool()) {
@@ -700,7 +694,7 @@ class Meta
 			$robots = ['all'];
 		}
 
-		return A::join($robots, ',');
+		return $this->robots = A::join($robots, ',');
 	}
 
 	/**
@@ -708,6 +702,10 @@ class Meta
 	 */
 	public function ogImageThumb(): FileVersion|File|Asset|null
 	{
+		if ($this->ogImageThumb !== false) {
+			return $this->ogImageThumb;
+		}
+
 		$field = $this->get('ogImage');
 
 		// Only process if we have a file object
@@ -716,14 +714,14 @@ class Meta
 
 			if ($cropOgImage) {
 				// Crop to 1200x630
-				return $file->thumb([
+				return $this->ogImageThumb = $file->thumb([
 					'width' => 1200,
 					'height' => 630,
 					'crop' => true,
 				]);
 			} else {
 				// Resize to max 1500px on the longest side
-				return $file->thumb([
+				return $this->ogImageThumb = $file->thumb([
 					'width' => 1500,
 					'height' => 1500,
 					'upscale' => false,
@@ -732,7 +730,7 @@ class Meta
 		}
 
 		// Return null if it's a custom URL or empty
-		return null;
+		return $this->ogImageThumb = null;
 	}
 
 	/**
@@ -761,21 +759,7 @@ class Meta
 		$path = App::instance()->request()->url()->toString();
 		$matches = Str::match($path, "/pages\/([a-zA-Z0-9-_+]+)\/?/m");
 
-		if (!isset($matches[1])) {
-			return null;
-		}
-
-		$segments = Str::split($matches[1], '+');
-
-		$page = App::instance()->site();
-		foreach ($segments as $segment) {
-			if ($page = $page->findPageOrDraft($segment)) {
-				continue;
-			}
-
-			return null;
-		}
-
-		return $page;
+		// not Find::page(), its permission check loads blueprints that call this method again
+		return isset($matches[1]) ? App::instance()->page(Str::replace($matches[1], '+', '/')) : null;
 	}
 }

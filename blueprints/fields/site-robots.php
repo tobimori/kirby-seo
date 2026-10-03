@@ -1,9 +1,10 @@
 <?php
 
 use Kirby\Cms\App;
+use tobimori\Seo\Seo;
 
 return function (App $kirby) {
-	if (!$kirby->option('tobimori.seo.robots.active') || !$kirby->option('tobimori.seo.robots.pageSettings')) {
+	if (!Seo::option('robots.active') || !Seo::option('robots.pageSettings')) {
 		return [
 			'type' => 'hidden'
 		];
@@ -17,12 +18,8 @@ return function (App $kirby) {
 		]
 	];
 
+	$index = Seo::option('robots.index');
 	foreach ($kirby->option('tobimori.seo.robots.types') as $robots) {
-		$index = $kirby->option('tobimori.seo.robots.index');
-		if (is_callable($index)) {
-			$index = $index();
-		}
-
 		$fields["robots{$robots}"] = [
 			'label' =>  "seo.fields.robots.{$robots}.label",
 			'type' => 'toggles',

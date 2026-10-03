@@ -23,6 +23,8 @@ class LlmContent
 {
 	public const MARKDOWN_TYPE = 'text/markdown';
 
+	protected ?bool $available = null;
+
 	public function __construct(protected Page $page)
 	{
 	}
@@ -68,15 +70,9 @@ class LlmContent
 
 	public function available(): bool
 	{
-		if ($this->enabled() === false || $this->page->isPublished() === false) {
-			return false;
-		}
-
-		if ($this->hasExplicitRepresentation()) {
-			return true;
-		}
-
-		return $this->automaticConversionEnabled() && $this->converter() !== null;
+		return $this->available ??= $this->enabled()
+			&& $this->page->isPublished()
+			&& ($this->hasExplicitRepresentation() || ($this->automaticConversionEnabled() && $this->converter() !== null));
 	}
 
 	/**
@@ -182,29 +178,50 @@ class LlmContent
 		return Str::rtrim($this->page->site()->url($languageCode), '/') . '/llms.txt';
 	}
 
-	public function llmsTxtResponse(Language|null $language = null, string $method = 'GET'): Response
+	/**
+	 * Returns a virtual page for llms.txt in the current language, so the pages cache applies.
+	 * The page ID mirrors the URL path (e.g. `en/llms`), so a static pages cache
+	 * writes one file for each language.
+	 */
+	public function llmsTxtPage(): Page
 	{
-		$languageCode = $language?->code() ?? $this->page->kirby()->languageCode();
-		$pages = $this->llmsTxtPages($languageCode);
-		$content = $this->page->kirby()->template('llms', 'txt')->render([
-			'entries' => $this->llmsTxtEntries($pages, $languageCode),
-			'pages' => $pages,
-			'site' => $this->page->site(),
-		]);
-		$headers = [
-			'Link' => '<' . $this->llmsTxtUrl($language) . '>; rel="canonical"',
-			'X-Content-Type-Options' => 'nosniff',
-		];
-		if ($language !== null) {
-			$headers['Content-Language'] = $language->code();
+		$kirby = $this->page->kirby();
+		$prefix = Str::after($this->page->site()->url($kirby->languageCode()), $kirby->url('index'));
+
+		$parent = null;
+		foreach (Str::split($prefix, '/') as $slug) {
+			$parent = Page::factory(['slug' => $slug, 'parent' => $parent]);
 		}
 
-		return new Response(
-			Str::upper($method) === 'HEAD' ? '' : $content,
-			'text/plain',
-			200,
-			$headers
-		);
+		return Page::factory([
+			'slug' => 'llms',
+			'template' => 'llms',
+			'parent' => $parent,
+			'content' => ['title' => 'llms.txt'],
+		]);
+	}
+
+	/**
+	 * Returns the data for the llms.txt template and sets the response headers
+	 */
+	public function llmsTxtData(): array
+	{
+		$kirby = $this->page->kirby();
+		$language = $kirby->language();
+		$pages = $this->llmsTxtPages($language?->code());
+
+		$response = $kirby->response();
+		$response->type('text/plain');
+		$response->header('Link', '<' . $this->llmsTxtUrl($language) . '>; rel="canonical"');
+		$response->header('X-Content-Type-Options', 'nosniff');
+		if ($language !== null) {
+			$response->header('Content-Language', $language->code());
+		}
+
+		return [
+			'entries' => $this->llmsTxtEntries($pages, $language?->code()),
+			'pages' => $pages,
+		];
 	}
 
 	public function addDiscoveryHeaders(): void
