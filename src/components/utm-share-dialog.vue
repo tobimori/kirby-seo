@@ -53,15 +53,11 @@ const generatedUrl = computed(() => {
 })
 
 const copyToClipboard = () => {
-	try {
-		helpers.clipboard.write(generatedUrl.value)
-		copied.value = true
-		setTimeout(() => {
-			copied.value = false
-		}, 2000)
-	} catch (err) {
-		console.error("Failed to copy:", err)
-	}
+	helpers.clipboard.write(generatedUrl.value)
+	copied.value = true
+	setTimeout(() => {
+		copied.value = false
+	}, 2000)
 }
 
 watch(generatedUrl, () => {

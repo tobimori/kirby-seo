@@ -67,7 +67,7 @@ const onKeydown = (event) => {
 		return
 	}
 
-	const hadFocus = root.value?.contains(document.activeElement)
+	const hadFocus = root.value?.contains(window.document.activeElement)
 	close()
 
 	if (hadFocus) {

@@ -23,16 +23,7 @@ return [
 		[
 			'pattern' => 'seo/overview/images/generate',
 			'method' => 'POST',
-			'action' => function () {
-				$kirby = App::instance();
-
-				// the alt text is written in the language of the edited content
-				if ($language = $kirby->api()->language()) {
-					$kirby->setCurrentLanguage($language);
-				}
-
-				return (new ImagesView())->generate((string)$kirby->request()->body()->get('id'));
-			}
+			'action' => fn () => (new ImagesView())->generate((string)App::instance()->request()->body()->get('id'))
 		],
 		[
 			'pattern' => 'seo/overview/links/(scan|rescan|recheck)',

@@ -233,7 +233,7 @@ class Crawler
 	/**
 	 * @return array{links: array<string>, ids: array<string>}
 	 */
-	public static function extract(string $html, string $url): array
+	protected static function extract(string $html, string $url): array
 	{
 		$document = new DOMDocument();
 		// without the encoding, libxml reads the HTML as ISO-8859-1
@@ -266,7 +266,7 @@ class Crawler
 	/**
 	 * Absolute URL of a link, `null` for links that aren't checked
 	 */
-	public static function resolve(string $href, string $base): string|null
+	protected static function resolve(string $href, string $base): string|null
 	{
 		$href = trim($href);
 

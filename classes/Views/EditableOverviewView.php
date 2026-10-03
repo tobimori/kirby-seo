@@ -21,7 +21,7 @@ abstract class EditableOverviewView extends OverviewView
 {
 	protected bool|null $ai = null;
 
-	public static function for(string $tab): static
+	public static function for(string $tab): self
 	{
 		return match ($tab) {
 			'pages' => new PagesView(),

@@ -50,7 +50,7 @@ class Report
 	/**
 	 * Hosts of the site: links to them are checked without requests
 	 */
-	public static function hosts(): array
+	protected static function hosts(): array
 	{
 		$kirby = App::instance();
 		$urls = [$kirby->url(), ...($kirby->multilang() ? $kirby->languages()->values(fn ($language) => $language->url()) : [])];
@@ -111,7 +111,7 @@ class Report
 		}
 
 		$cache = Index::cache();
-		$key = 'links-v2/' . ($this->language ?? 'default');
+		$key = 'links/' . ($this->language ?? 'default');
 		$cached = $cache->get($key);
 
 		if ($cached !== null && $cached['revision'] === Index::revision()) {

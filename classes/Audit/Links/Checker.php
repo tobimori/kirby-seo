@@ -149,8 +149,9 @@ class Checker
 
 			$pending = array_filter($targets, fn ($key) => !$this->isScanned($key), ARRAY_FILTER_USE_KEY);
 			$http = Crawler::usesHttp();
+			$concurrency = max(1, (int)Seo::option('links.concurrency'));
 
-			foreach (array_chunk($pending, $http ? max(1, (int)Seo::option('links.concurrency')) : 1, true) as $batch) {
+			foreach (array_chunk($pending, $http ? $concurrency : 1, true) as $batch) {
 				if (microtime(true) >= $deadline) {
 					break;
 				}
@@ -172,7 +173,7 @@ class Checker
 			}
 
 			while (microtime(true) < $deadline && ($urls = $this->dueUrls(Index::external($this->data), $this->data['invalidated']))) {
-				$batch = array_slice($urls, 0, max(1, (int)Seo::option('links.concurrency')) * 2);
+				$batch = array_slice($urls, 0, $concurrency * 2);
 				$this->data['urls'] = [...$this->data['urls'], ...static::request($batch)];
 			}
 
@@ -380,7 +381,7 @@ class Checker
 	 *
 	 * @return array<string, array{code: int, location: string|null, error: string|null, checked: int}>
 	 */
-	public static function request(array $urls): array
+	protected static function request(array $urls): array
 	{
 		$results = [];
 

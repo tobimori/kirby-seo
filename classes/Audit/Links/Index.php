@@ -39,7 +39,7 @@ class Index
 	 */
 	public function read(): array
 	{
-		$data = [
+		return [
 			'pages' => [],
 			'strings' => [],
 			'urls' => [],
@@ -48,15 +48,6 @@ class Index
 			'revision' => null,
 			...(static::cache()->get(self::KEY) ?? []),
 		];
-
-		foreach ($data['pages'] as $key => $entry) {
-			// Older scans stored links in separate content and layout lists
-			if (isset($entry['links']['content'])) {
-				$data['pages'][$key]['links'] = array_values(array_unique([...$entry['links']['content'], ...$entry['links']['layout']]));
-			}
-		}
-
-		return $data;
 	}
 
 	/**

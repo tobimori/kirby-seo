@@ -63,8 +63,8 @@ const toCard = ({ key, icon, distribution, legend, click, highlight = ["notice",
 				label: panel.t(`seo.overview.stats.${legend}.${severity}`)
 			})
 		),
-		// filtering only makes sense if there's something to fix
-		click: click && total - distribution.ok > 0 ? click : null
+		// filtering only makes sense if there's something to fix, unknown links aren't issues
+		click: click && (distribution.notice ?? 0) + (distribution.negative ?? 0) > 0 ? click : null
 	}
 }
 

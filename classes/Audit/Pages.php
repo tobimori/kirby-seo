@@ -127,8 +127,14 @@ class Pages
 				$severity = 'ok';
 
 				foreach ($page['issues'] as $issue) {
-					if (str_starts_with($issue['type'], $kind)) {
-						$severity = self::SEVERITY[$issue['type']] === 'negative' ? 'negative' : ($severity === 'negative' ? 'negative' : 'notice');
+					if (!str_starts_with($issue['type'], $kind)) {
+						continue;
+					}
+
+					if (self::SEVERITY[$issue['type']] === 'negative') {
+						$severity = 'negative';
+					} elseif ($severity === 'ok') {
+						$severity = 'notice';
 					}
 				}
 
@@ -157,7 +163,7 @@ class Pages
 		$kirby = App::instance();
 		$cache = $kirby->cache('tobimori.seo.overview');
 
-		$key = 'audit-v7-' . md5(json_encode([$kirby->language()?->code(), $this->modified($kirby->site()), $this->options()]));
+		$key = 'audit-' . md5(json_encode([$kirby->language()?->code(), $this->modified($kirby->site()), $this->options()]));
 		$cached = $cache->get($key) ?? [];
 		$entries = [];
 		$changed = false;
@@ -401,7 +407,7 @@ class Pages
 		return Seo::option('robots.followPageStatus') ? $page->isListed() : true;
 	}
 
-	public static function text(mixed $value): string
+	protected static function text(mixed $value): string
 	{
 		return trim(preg_replace('/\s+/u', ' ', Str::unhtml((string)$value)));
 	}
