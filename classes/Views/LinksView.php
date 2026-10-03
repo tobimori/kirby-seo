@@ -8,8 +8,8 @@ use Kirby\Exception\PermissionException;
 use Kirby\Panel\Ui\Item\PageItem;
 use Kirby\Toolkit\I18n;
 use Kirby\Toolkit\Str;
-use tobimori\Seo\Links\Checker;
-use tobimori\Seo\Links\Report;
+use tobimori\Seo\Audit\Links\Checker;
+use tobimori\Seo\Audit\Links\Report;
 
 /**
  * Panel view listing all links of the rendered pages, one row per linked URL.

@@ -10,8 +10,7 @@ use Kirby\Cms\Pages;
 use Kirby\Panel\Ui\Buttons\ViewButtons;
 use Kirby\Toolkit\I18n;
 use tobimori\Seo\Audit;
-use tobimori\Seo\ImageAudit;
-use tobimori\Seo\Links\Report;
+use tobimori\Seo\Audit\Links\Report;
 use tobimori\Seo\Meta;
 use tobimori\Seo\Seo;
 
@@ -31,9 +30,9 @@ abstract class OverviewView
 	 * Meta instances per page, for the current request
 	 */
 	protected array $metas = [];
-	protected Audit|null $audit = null;
+	protected Audit\Pages|null $audit = null;
 	protected Pages|null $pages = null;
-	protected ImageAudit|null $images = null;
+	protected Audit\Images|null $images = null;
 
 	public function __construct()
 	{
@@ -107,9 +106,9 @@ abstract class OverviewView
 	/**
 	 * Checks of all pages (e.g. for duplicates), shared by all rows
 	 */
-	protected function audit(): Audit
+	protected function audit(): Audit\Pages
 	{
-		return $this->audit ??= new Audit($this->pages(), $this->meta(...));
+		return $this->audit ??= new Audit\Pages($this->pages(), $this->meta(...));
 	}
 
 	/**
@@ -123,9 +122,9 @@ abstract class OverviewView
 	/**
 	 * Alt texts of all images, shared by the images tab & the stats
 	 */
-	protected function images(): ImageAudit
+	protected function images(): Audit\Images
 	{
-		return $this->images ??= new ImageAudit();
+		return $this->images ??= new Audit\Images();
 	}
 
 	/**

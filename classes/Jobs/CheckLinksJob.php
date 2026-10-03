@@ -3,8 +3,8 @@
 namespace tobimori\Seo\Jobs;
 
 use tobimori\Queues\BatchJob;
-use tobimori\Seo\Links\Checker;
-use tobimori\Seo\Links\Crawler;
+use tobimori\Seo\Audit\Links\Checker;
+use tobimori\Seo\Audit\Links\Crawler;
 use tobimori\Seo\Seo;
 
 /**

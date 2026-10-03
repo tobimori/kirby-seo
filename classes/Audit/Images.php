@@ -1,17 +1,18 @@
 <?php
 
-namespace tobimori\Seo;
+namespace tobimori\Seo\Audit;
 
 use Kirby\Cms\App;
 use Kirby\Cms\File;
 use Kirby\Cms\Page;
+use tobimori\Seo\AltText;
 
 /**
  * Alt texts of the images of the site & all pages the current user can see, one entry per `alt-text` field.
  * Not limited to the pages of the overview, as images are often stored on pages without SEO fields
  * (e.g. a media library page) & used elsewhere
  */
-class ImageAudit
+class Images
 {
 	/**
 	 * States of alt texts, `ISSUES` need work

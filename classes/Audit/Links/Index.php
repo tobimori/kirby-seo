@@ -1,6 +1,6 @@
 <?php
 
-namespace tobimori\Seo\Links;
+namespace tobimori\Seo\Audit\Links;
 
 use Kirby\Cache\Cache;
 use Kirby\Cache\FileCache;

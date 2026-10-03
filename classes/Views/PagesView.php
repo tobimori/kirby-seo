@@ -46,7 +46,7 @@ class PagesView extends EditableOverviewView
 			$dir = $request->get('dir') === 'desc' ? 'desc' : 'asc';
 			// show only pages with the given issue type (or any title/description issue),
 			// or sharing the same title/description
-			$issue = in_array($request->get('issue'), [...Audit::TYPES, ...Audit::KINDS], true) ? $request->get('issue') : null;
+			$issue = in_array($request->get('issue'), [...Audit\Pages::TYPES, ...Audit\Pages::KINDS], true) ? $request->get('issue') : null;
 			$group = $this->audit()->group($hash = (string)$request->get('group')) ? $hash : null;
 
 			$pages = $this->pages()->values();

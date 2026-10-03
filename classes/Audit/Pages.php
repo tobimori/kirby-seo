@@ -1,20 +1,20 @@
 <?php
 
-namespace tobimori\Seo;
+namespace tobimori\Seo\Audit;
 
 use Closure;
 use Kirby\Cms\App;
 use Kirby\Cms\Page;
-use Kirby\Cms\Pages;
 use Kirby\Cms\Site;
 use Kirby\Toolkit\Str;
+use tobimori\Seo\Seo;
 
 /**
  * Checks the metadata of pages as search engines see it, e.g. for duplicate titles
  * & descriptions. Duplicates can only be detected across all pages, so the checks always
  * run for all given pages, the results are cached until any of them changes.
  */
-class Audit
+class Pages
 {
 	/**
 	 * Types of issues, roughly ordered by severity
@@ -59,7 +59,7 @@ class Audit
 	 * @param \Closure(\Kirby\Cms\Page): \tobimori\Seo\Meta $meta
 	 */
 	public function __construct(
-		protected Pages $pages,
+		protected \Kirby\Cms\Pages $pages,
 		protected Closure $meta
 	) {
 	}

@@ -1,6 +1,6 @@
 <?php
 
-namespace tobimori\Seo\Links;
+namespace tobimori\Seo\Audit\Links;
 
 use Closure;
 use CurlMultiHandle;

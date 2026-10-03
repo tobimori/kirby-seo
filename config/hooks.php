@@ -6,7 +6,7 @@ use Kirby\Toolkit\A;
 use Kirby\Toolkit\Str;
 use Kirby\Cms\Event;
 use tobimori\Seo\Field\AltTextField;
-use tobimori\Seo\Links\Checker;
+use tobimori\Seo\Audit\Links\Checker;
 use tobimori\Seo\Seo;
 
 // changes that might break links or fix them (only starts a scan with queues,

@@ -13,8 +13,8 @@ use Kirby\Toolkit\I18n;
 use Kirby\Toolkit\Str;
 use tobimori\Seo\Ai\Content;
 use tobimori\Seo\AltText;
+use tobimori\Seo\Audit;
 use tobimori\Seo\Field\AltTextField;
-use tobimori\Seo\ImageAudit;
 
 /**
  * Panel view listing the alt texts of all images, one row per alt text field
@@ -37,7 +37,7 @@ class ImagesView extends EditableOverviewView
 			$sort = in_array($request->get('sort'), self::SORTABLE, true) ? $request->get('sort') : null;
 			$dir = $request->get('dir') === 'desc' ? 'desc' : 'asc';
 			// states of alt texts, `issues` combines the ones that need work
-			$issue = in_array($request->get('issue'), [...ImageAudit::FILTERS, 'issues'], true) ? $request->get('issue') : null;
+			$issue = in_array($request->get('issue'), [...Audit\Images::FILTERS, 'issues'], true) ? $request->get('issue') : null;
 
 			$entries = array_values($this->images()->entries());
 
@@ -132,7 +132,7 @@ class ImagesView extends EditableOverviewView
 	protected function ids(ModelWithContent $model): array
 	{
 		return array_map(
-			fn ($field) => ImageAudit::id($model, $field),
+			fn ($field) => Audit\Images::id($model, $field),
 			$this->images()->fields($model)
 		);
 	}
