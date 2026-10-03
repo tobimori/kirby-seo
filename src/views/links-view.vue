@@ -4,38 +4,13 @@ import { computed, onBeforeUnmount, onMounted, ref, usePanel, watch } from "kirb
 import { useColumnSettings, useTableQuery } from "../composables/overview-table.js"
 import { SEVERITY_ICONS } from "../utils/checks.js"
 
+import { overviewProps } from "./props.js"
+
 const props = defineProps({
-	buttons: {
-		type: Array,
-		default: () => []
-	},
-	columns: Object,
-	rows: Array,
-	pagination: Object,
-	search: String,
-	sort: String,
-	dir: String,
-	/** Severity per state of the links */
-	severity: Object,
-	/** Number of links per state */
-	summary: {
-		type: Object,
-		default: () => ({})
-	},
-	/** Health of titles, descriptions, alt texts & links, shown above the tabs */
-	stats: Object,
-	tab: String,
-	tabs: Array,
-	/** Active filter: `broken`, `anchor`, `redirect`, `unknown` or `issues` (broken, anchors & redirects) */
-	issue: String,
-	/** `{ pages: { done, total }, urls: { done, total }, done, running, queue }` */
+	...overviewProps,
+	/** { pages: { done, total }, urls: { done, total }, done, running, queue } */
 	progress: Object,
-	/** Whether any page has been checked yet */
-	scanned: Boolean,
-	// only read by `panel.content` (e.g. when switching languages), declared so they don't end up as attributes
-	api: String,
-	lock: Object,
-	versions: Object
+	scanned: Boolean
 })
 
 const panel = usePanel()
@@ -168,18 +143,13 @@ onMounted(() => {
 
 onBeforeUnmount(() => (isActive = false))
 
-/**
- * Filters: the dropdown shows the number of links per state & filters the table by them
- */
-const ICONS = { ...SEVERITY_ICONS, unknown: "question" }
-
 const filters = computed(() =>
 	Object.entries(props.summary).map(([type, count]) => ({
 		type,
 		count,
 		text: panel.t(`seo.overview.links.filter.${type}`),
 		theme: props.severity[type] === "unknown" ? null : `${props.severity[type]}-icon`,
-		icon: ICONS[props.severity[type]]
+		icon: SEVERITY_ICONS[props.severity[type]]
 	}))
 )
 

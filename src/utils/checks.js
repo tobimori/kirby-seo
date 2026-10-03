@@ -4,5 +4,6 @@
 export const SEVERITY_ICONS = {
 	ok: "check",
 	notice: "info",
-	negative: "alert"
+	negative: "alert",
+	unknown: "question"
 }

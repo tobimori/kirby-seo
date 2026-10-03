@@ -32,10 +32,10 @@ class ImagesView extends EditableOverviewView
 				[...Audit\Images::FILTERS, 'issues']
 			);
 
-			$entries = array_values($this->images()->entries());
+			$entries = $this->images()->entries();
 
 			if ($issue) {
-				$entries = array_values(array_filter($entries, fn ($entry) => $this->images()->has($entry, $issue)));
+				$entries = array_filter($entries, fn ($entry) => $this->images()->has($entry, $issue));
 			}
 
 			$entries = $this->search($entries, $search, self::SEARCHABLE, $this->value(...));
@@ -277,7 +277,6 @@ class ImagesView extends EditableOverviewView
 		return [
 			...(new FileItem(file: $file))->props(),
 			'id' => $entry['id'],
-			'file' => $file->id(),
 			'changes' => $hasChanges,
 			'previewUrl' => $file->url(),
 			'editable' => $editable,
@@ -302,7 +301,6 @@ class ImagesView extends EditableOverviewView
 				'value' => $alt->text(),
 				'decorative' => $alt->isDecorative(),
 				'source' => $alt->source(),
-				'field' => $entry['field'],
 				'editable' => $editable,
 				'ai' => $editable && $this->canGenerate($entry),
 			],

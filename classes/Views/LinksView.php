@@ -36,12 +36,12 @@ class LinksView extends OverviewView
 				self::SORTABLE,
 				[...Report::FILTERS, 'issues']
 			);
-			$links = array_values($this->report()->links());
+			$links = $this->report()->links();
 
 			$summary = Report::summary($links);
 
 			if ($issue) {
-				$links = array_values(array_filter($links, fn ($link) => Report::has($link, $issue)));
+				$links = array_filter($links, fn ($link) => Report::has($link, $issue));
 			}
 
 			$links = $this->search($links, $search, self::SEARCHABLE, fn ($link, $key) => match ($key) {

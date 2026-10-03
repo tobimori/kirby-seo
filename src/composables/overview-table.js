@@ -111,11 +111,6 @@ export function useColumnSettings(props, storageKey) {
 export function useOverviewTable(props, { endpoint, storageKey, applyPending, aiRequest }) {
 	const panel = usePanel()
 
-	const { reload, searchterm, isSearching, toggleSearch, onSort, onPaginate } = useTableQuery(props)
-
-	/**
-	 * Selection, across table pages
-	 */
 	const selected = ref([])
 
 	const isAllSelected = computed(() => {
@@ -338,7 +333,7 @@ export function useOverviewTable(props, { endpoint, storageKey, applyPending, ai
 
 	// the row with the values that are still on their way
 	const withPending = (row) => {
-		const item = { ...row, ...serverRow(row) }
+		const item = { ...serverRow(row) }
 
 		for (const column of Object.keys(props.columns)) {
 			const value = pending.value[cellKey(row.id, column)]
@@ -443,22 +438,6 @@ export function useOverviewTable(props, { endpoint, storageKey, applyPending, ai
 		return [...targets.value]
 	}
 
-	const confirm = ({ component, text, submitButton }) =>
-		new Promise((resolve) => {
-			panel.dialog.open({
-				component,
-				props: { size: "medium", text, submitButton },
-				on: {
-					submit: () => {
-						resolve(true)
-						panel.dialog.close()
-					},
-					cancel: () => resolve(false),
-					close: () => resolve(false)
-				}
-			})
-		})
-
 	const onSave = async (event) => {
 		event?.preventDefault?.()
 
@@ -484,17 +463,22 @@ export function useOverviewTable(props, { endpoint, storageKey, applyPending, ai
 			return
 		}
 
-		if (
-			await confirm({
-				component: "k-remove-dialog",
+		panel.dialog.open({
+			component: "k-remove-dialog",
+			props: {
+				size: "medium",
 				text: panel.t(`seo.overview.changes.discard.confirm.${scope.value}`, {
 					count: items.length
 				}),
 				submitButton: { theme: "notice", icon: "undo", text: panel.t("form.discard") }
-			})
-		) {
-			runOnChanges("discard", items)
-		}
+			},
+			on: {
+				submit: () => {
+					panel.dialog.close()
+					runOnChanges("discard", items)
+				}
+			}
+		})
 	}
 
 	const onLock = (row) => {
@@ -621,17 +605,9 @@ export function useOverviewTable(props, { endpoint, storageKey, applyPending, ai
 	 * @param {string} options.column
 	 * @param {string} options.text Confirmation text
 	 * @param {string} options.onlyEmpty Label of the toggle to skip rows that have a value
-	 * @param {(row: object) => boolean} [options.isEmpty]
 	 * @param {string} [options.source] Saved along with the generated values
 	 */
-	const confirmGeneration = ({
-		rows,
-		column,
-		text,
-		onlyEmpty,
-		isEmpty = (row) => !row[column].value,
-		source
-	}) => {
+	const confirmGeneration = ({ rows, column, text, onlyEmpty, source }) => {
 		panel.dialog.open({
 			component: "k-form-dialog",
 			props: {
@@ -646,7 +622,7 @@ export function useOverviewTable(props, { endpoint, storageKey, applyPending, ai
 				submit: ({ onlyEmpty }) => {
 					panel.dialog.close()
 
-					const targets = rows.filter((row) => !onlyEmpty || isEmpty(row))
+					const targets = rows.filter((row) => !onlyEmpty || !row[column].value)
 
 					if (targets.length === 0) {
 						return panel.notification.info(panel.t("seo.overview.ai.none"))
@@ -697,38 +673,21 @@ export function useOverviewTable(props, { endpoint, storageKey, applyPending, ai
 		settled().then(unlock)
 	})
 
-	const { settings, isVisible, columnOptions, visibleColumnKeys, onColumns } = useColumnSettings(
-		props,
-		storageKey
-	)
-
 	return {
-		reload,
-		// search, sorting & pagination
-		searchterm,
-		isSearching,
-		toggleSearch,
-		onSort,
-		onPaginate,
-		// selection
+		...useTableQuery(props),
+		...useColumnSettings(props, storageKey),
 		selected,
 		isAllSelected,
 		selectAll,
-		// server state
-		serverRow,
 		serverSummary,
 		serverStats,
-		applyResponse,
 		fetchRows,
 		// editing
 		onInput,
 		onCommit,
 		saveNow,
-		settled,
 		withPending,
 		isSaving,
-		// changes
-		changes,
 		targets,
 		status,
 		isProcessing,
@@ -740,12 +699,6 @@ export function useOverviewTable(props, { endpoint, storageKey, applyPending, ai
 		isGenerating,
 		runGeneration,
 		confirmGeneration,
-		cancelGeneration,
-		// columns
-		settings,
-		isVisible,
-		columnOptions,
-		visibleColumnKeys,
-		onColumns
+		cancelGeneration
 	}
 }

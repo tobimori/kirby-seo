@@ -4,46 +4,9 @@ import { computed, ref, usePanel } from "kirbyuse"
 import { useOverviewTable } from "../composables/overview-table.js"
 import { SEVERITY_ICONS } from "../utils/checks.js"
 
-const props = defineProps({
-	buttons: {
-		type: Array,
-		default: () => []
-	},
-	changes: {
-		type: Array,
-		default: () => []
-	},
-	columns: Object,
-	rows: Array,
-	pagination: Object,
-	search: String,
-	sort: String,
-	dir: String,
-	/** Severity per state of the alt texts */
-	severity: Object,
-	/** Number of images per filter */
-	summary: {
-		type: Object,
-		default: () => ({})
-	},
-	/** Health of titles, descriptions & alt texts, shown above the tabs */
-	stats: Object,
-	tab: String,
-	tabs: Array,
-	/** Active filter: `missing`, `ai`, `decorative` or `issues` (missing & AI-generated) */
-	issue: String,
-	/** Whether the current user may use AI features */
-	ai: Boolean,
-	/** Ids of all rows matching the current search & filters */
-	ids: {
-		type: Array,
-		default: () => []
-	},
-	// only read by `panel.content` (e.g. when switching languages), declared so they don't end up as attributes
-	api: String,
-	lock: Object,
-	versions: Object
-})
+import { editableOverviewProps } from "./props.js"
+
+const props = defineProps(editableOverviewProps)
 
 const panel = usePanel()
 

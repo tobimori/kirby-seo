@@ -58,7 +58,6 @@ const filter = (issue, tab) =>
 
 // `unknown`: values that couldn't be checked, e.g. links to servers that block bots
 const SEVERITIES = ["ok", "notice", "negative", "unknown"]
-const ICONS = { ...SEVERITY_ICONS, unknown: "question" }
 
 /**
  * Stat card with the distribution of values by severity, shown as bar & legend
@@ -171,7 +170,7 @@ const cards = computed(() => {
 						:key="segment.severity"
 						:data-severity="segment.severity"
 					>
-						<k-icon :type="ICONS[segment.severity]" />{{ segment.count }}
+						<k-icon :type="SEVERITY_ICONS[segment.severity]" />{{ segment.count }}
 						{{ segment.label }}
 					</span>
 					<span v-if="!card.total">{{ $t(`seo.overview.stats.${card.key}.none`) }}</span>

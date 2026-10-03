@@ -4,49 +4,13 @@ import { computed, ref, usePanel, useHelpers } from "kirbyuse"
 import { useOverviewTable } from "../composables/overview-table.js"
 import { SEVERITY_ICONS } from "../utils/checks.js"
 
+import { editableOverviewProps } from "./props.js"
+
 const props = defineProps({
-	buttons: {
-		type: Array,
-		default: () => []
-	},
-	changes: {
-		type: Array,
-		default: () => []
-	},
-	columns: Object,
-	rows: Array,
-	pagination: Object,
-	search: String,
-	sort: String,
-	dir: String,
-	/** Severity per issue type */
-	severity: Object,
-	/** Number of pages per issue type */
-	summary: {
-		type: Object,
-		default: () => ({})
-	},
-	/** Health of titles, descriptions & alt texts, shown above the tabs */
-	stats: Object,
-	tab: String,
-	tabs: Array,
-	/** Active issue filter */
-	issue: String,
-	/** Whether the current user may use AI features */
-	ai: Boolean,
-	/** Whether Google Search Console is connected */
+	...editableOverviewProps,
 	gsc: Boolean,
-	/** Ids of all pages matching the current search & filters */
-	ids: {
-		type: Array,
-		default: () => []
-	},
-	/** Active filter for pages sharing a title/description: `{ hash, kind, text, count }` */
-	group: Object,
-	// only read by `panel.content` (e.g. when switching languages), declared so they don't end up as attributes
-	api: String,
-	lock: Object,
-	versions: Object
+	/** Active duplicate group: { kind, text } */
+	group: Object
 })
 
 const panel = usePanel()

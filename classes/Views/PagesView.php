@@ -40,15 +40,15 @@ class PagesView extends EditableOverviewView
 				self::SORTABLE,
 				[...Audit\Pages::TYPES, ...Audit\Pages::KINDS]
 			);
-			$group = $this->audit()->group($hash = (string)$this->kirby->request()->get('group'));
+			$group = $this->audit()->group((string)$this->kirby->request()->get('group'));
 			$members = array_flip($group['pages'] ?? []);
 
 			// pages with the given issue type (or any title/description issue), or sharing the same title/description
-			$pages = array_values(array_filter(
+			$pages = array_filter(
 				$this->pages()->values(),
 				fn (Page $page) => ($issue === null || $this->audit()->has($page, $issue))
 					&& ($group === null || isset($members[$page->id()]))
-			));
+			);
 
 			$pages = $this->search($pages, $search, self::SEARCHABLE, $this->indexed(...));
 
@@ -68,18 +68,15 @@ class PagesView extends EditableOverviewView
 					'rows' => array_map(fn (Page $page) => $this->row($this->entry($page)), $visible),
 					'changes' => $this->changes(),
 					'pagination' => $pagination,
-					'ids' => array_map(fn (Page $page) => $page->id(), $pages),
-					// severity of each issue type/state, for the filters
+					'ids' => array_values(array_map(fn (Page $page) => $page->id(), $pages)),
 					'severity' => Audit\Pages::SEVERITY,
 					'summary' => $this->audit()->summary(),
 					'issue' => $issue,
 					'ai' => $this->canUseAi(),
 					'gsc' => $this->hasSearchConsole(),
 					'group' => $group ? [
-						'hash' => $hash,
 						'kind' => $group['kind'],
 						'text' => $group['text'],
-						'count' => count($group['pages']),
 					] : null,
 					'search' => $search,
 					'sort' => $sort,

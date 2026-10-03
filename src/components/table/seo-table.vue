@@ -36,11 +36,6 @@ const props = defineProps({
 		type: Array,
 		default: () => []
 	},
-	/** Row property used as unique identifier */
-	rowKey: {
-		type: String,
-		default: "id"
-	},
 	/** Whether columns can be resized, unless they set `resizable: false` */
 	resizable: Boolean,
 	/** Custom column widths as `{ [column]: "25%" }`, use with `.sync` */
@@ -56,11 +51,9 @@ const panel = usePanel()
 providePopoverGroup()
 
 const emit = defineEmits([
-	"cell",
 	"commit",
 	"input",
 	"lock",
-	"option",
 	"paginate",
 	"sort",
 	"update:selected",
@@ -85,19 +78,19 @@ const editableKeys = computed(() =>
 )
 
 const isEditable = (row, key) => row.editable !== false && row[key]?.editable !== false
-const isEditing = (row, key) => editing.value?.row === keyOf(row) && editing.value?.column === key
-const rowsByKeys = (keys) => props.rows.filter((row) => keys.includes(keyOf(row)))
+const isEditing = (row, key) => editing.value?.row === row.id && editing.value?.column === key
+const rowsByKeys = (keys) => props.rows.filter((row) => keys.includes(row.id))
 
 const remember = (rows, key) => {
 	for (const row of rows) {
-		if (!(keyOf(row) in originals.value)) {
-			originals.value[keyOf(row)] = row[key]?.value ?? ""
+		if (!(row.id in originals.value)) {
+			originals.value[row.id] = row[key]?.value ?? ""
 		}
 	}
 }
 
 const setEditing = (row, key) => {
-	editing.value = { row: keyOf(row), column: key }
+	editing.value = { row: row.id, column: key }
 	// the last edited cell is the anchor for shift-click range selections
 	anchor.value = editing.value
 	originals.value = {}
@@ -133,7 +126,7 @@ const clearRange = () => {
 	rangeDraft.value = null
 }
 
-const inRange = (row, key) => range.value?.column === key && range.value.rows.includes(keyOf(row))
+const inRange = (row, key) => range.value?.column === key && range.value.rows.includes(row.id)
 
 // position within the range, so only the outer edges of the range get a border
 const rangeEdge = (row, key) => {
@@ -142,7 +135,7 @@ const rangeEdge = (row, key) => {
 	}
 
 	const rows = range.value.rows
-	return { start: rows[0] === keyOf(row), end: rows.at(-1) === keyOf(row) }
+	return { start: rows[0] === row.id, end: rows.at(-1) === row.id }
 }
 
 // selects the given rows as range; if something was typed already,
@@ -162,7 +155,7 @@ const setRange = (keys, key) => {
 			...rowsByKeys(previous.filter((k) => !keys.includes(k))).map((row) => ({
 				row,
 				column: key,
-				value: originals.value[keyOf(row)]
+				value: originals.value[row.id]
 			}))
 		])
 	}
@@ -170,8 +163,8 @@ const setRange = (keys, key) => {
 
 const extendRange = (row, key) => {
 	const from = [editing.value, anchor.value].find((cell) => cell?.column === key)
-	const start = props.rows.findIndex((item) => keyOf(item) === from?.row)
-	const end = props.rows.findIndex((item) => keyOf(item) === keyOf(row))
+	const start = props.rows.findIndex((item) => item.id === from?.row)
+	const end = props.rows.findIndex((item) => item.id === row.id)
 
 	if (start === -1 || end === -1) {
 		return startEdit(row, key)
@@ -186,7 +179,7 @@ const extendRange = (row, key) => {
 		props.rows
 			.slice(Math.min(start, end), Math.max(start, end) + 1)
 			.filter((item) => isEditable(item, key))
-			.map(keyOf),
+			.map((row) => row.id),
 		key
 	)
 }
@@ -194,7 +187,10 @@ const extendRange = (row, key) => {
 // selects all editable cells of the column (on the current table page)
 const selectAll = (key) => {
 	if (editing.value?.column === key) {
-		setRange(props.rows.filter((item) => isEditable(item, key)).map(keyOf), key)
+		setRange(
+			props.rows.filter((item) => isEditable(item, key)).map((row) => row.id),
+			key
+		)
 	}
 }
 
@@ -216,7 +212,7 @@ const setDraft = (row, key, value) => {
 		editedRows(key).map((item) => ({
 			row: item,
 			column: key,
-			value: dirty ? value : originals.value[keyOf(item)]
+			value: dirty ? value : originals.value[item.id]
 		}))
 	)
 }
@@ -233,7 +229,7 @@ const rangeText = computed(() => {
 // moves to the next editable cell: `next`/`prev` within the row (wrapping to the next/previous row), `down`/`up` within the column
 const moveEdit = (row, key, direction) => {
 	const columns = editableKeys.value
-	let rowIndex = props.rows.findIndex((item) => keyOf(item) === keyOf(row))
+	let rowIndex = props.rows.findIndex((item) => item.id === row.id)
 	let columnIndex = columns.indexOf(key)
 
 	clearRange()
@@ -282,7 +278,7 @@ const commitEdit = (row, key, value, direction = null) => {
 const cancelEdit = (key) => {
 	emit(
 		"input",
-		editedRows(key).map((row) => ({ row, column: key, value: originals.value[keyOf(row)] }))
+		editedRows(key).map((row) => ({ row, column: key, value: originals.value[row.id] }))
 	)
 	emit("commit")
 	stopEdit()
@@ -394,11 +390,10 @@ watch(
 // row index of the last toggled checkbox, used for shift-click range selection
 const lastIndex = ref(null)
 
-const keyOf = (row) => row[props.rowKey]
 const isSelectable = (row) => row.selectable !== false
-const isSelected = (row) => props.selected.includes(keyOf(row))
+const isSelected = (row) => props.selected.includes(row.id)
 
-const selectableKeys = computed(() => props.rows.filter(isSelectable).map(keyOf))
+const selectableKeys = computed(() => props.rows.filter(isSelectable).map((row) => row.id))
 const allSelected = computed(
 	() =>
 		selectableKeys.value.length > 0 &&
@@ -415,9 +410,9 @@ const update = (keys, select) => {
 }
 
 const toggle = (row, event) => {
-	const index = props.rows.findIndex((item) => keyOf(item) === keyOf(row))
+	const index = props.rows.findIndex((item) => item.id === row.id)
 	const select = !isSelected(row)
-	let keys = [keyOf(row)]
+	let keys = [row.id]
 
 	if (event?.shiftKey && lastIndex.value !== null) {
 		const start = Math.min(lastIndex.value, index)
@@ -425,7 +420,7 @@ const toggle = (row, event) => {
 		keys = props.rows
 			.slice(start, end + 1)
 			.filter(isSelectable)
-			.map(keyOf)
+			.map((row) => row.id)
 	}
 
 	lastIndex.value = index
@@ -521,14 +516,7 @@ const onSort = (columnIndex) => {
 
 <template>
 	<div ref="root" :data-selecting="selected.length > 0" class="k-seo-table">
-		<k-table
-			:columns="tableColumns"
-			:rows="tableRows"
-			:empty="empty"
-			:index="false"
-			@cell="(...args) => emit('cell', ...args)"
-			@option="(...args) => emit('option', ...args)"
-		>
+		<k-table :columns="tableColumns" :rows="tableRows" :empty="empty" :index="false">
 			<template #header="{ column, columnIndex, label }">
 				<label
 					v-if="columnIndex === '_index' && selectable"

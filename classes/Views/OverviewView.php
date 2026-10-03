@@ -208,7 +208,7 @@ abstract class OverviewView
 			return $entries;
 		}
 
-		return array_values(array_filter($entries, function ($entry) use ($search, $keys, $value) {
+		return array_filter($entries, function ($entry) use ($search, $keys, $value) {
 			foreach ($keys as $key) {
 				if (Str::contains($value($entry, $key), $search, true)) {
 					return true;
@@ -216,7 +216,7 @@ abstract class OverviewView
 			}
 
 			return false;
-		}));
+		});
 	}
 
 	/**
@@ -243,7 +243,7 @@ abstract class OverviewView
 
 		return [
 			['page' => $page, 'limit' => self::LIMIT, 'total' => count($entries)],
-			array_slice($entries, ($page - 1) * self::LIMIT, self::LIMIT),
+			array_values(array_slice($entries, ($page - 1) * self::LIMIT, self::LIMIT)),
 		];
 	}
 }

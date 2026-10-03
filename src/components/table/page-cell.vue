@@ -96,7 +96,8 @@ defineProps({
 	}
 }
 
-.k-seo-page-cell-info {
+.k-seo-page-cell-info,
+.k-seo-page-cell-path {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
@@ -105,11 +106,6 @@ defineProps({
 }
 
 .k-seo-page-cell-path {
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
 	font-family: var(--font-mono);
-	font-size: var(--text-xs);
-	color: var(--color-text-dimmed);
 }
 </style>
