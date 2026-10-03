@@ -63,25 +63,34 @@ class Sitemap extends Collection
 
 	public function toString(): string
 	{
+		return static::toXml('urlset', $this);
+	}
+
+	/**
+	 * Renders a sitemap document with the stylesheet and the
+	 * DOM nodes of the given items in the root element
+	 */
+	public static function toXml(string $root, iterable $items): string
+	{
 		$doc = new DOMDocument('1.0', 'UTF-8');
 		$doc->formatOutput = true;
 
 		$stylesheetUrl = App::instance()->url() . '/sitemap.xsl';
 		$doc->appendChild($doc->createProcessingInstruction('xml-stylesheet', 'type="text/xsl" href="' . $stylesheetUrl . '"'));
 
-		$root = $doc->createElementNS('http://www.sitemaps.org/schemas/sitemap/0.9', 'urlset');
-		$root->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xhtml', 'http://www.w3.org/1999/xhtml');
+		$element = $doc->createElementNS('http://www.sitemaps.org/schemas/sitemap/0.9', $root);
+		$element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xhtml', 'http://www.w3.org/1999/xhtml');
 
 		// version can be null when installing branches during development
 		if ($version = App::plugin('tobimori/seo')->version()) {
-			$root->setAttribute('seo-version', $version);
+			$element->setAttribute('seo-version', $version);
 		}
 
-		foreach ($this as $url) {
-			$root->appendChild($url->toDOMNode($doc));
+		foreach ($items as $item) {
+			$element->appendChild($item->toDOMNode($doc));
 		}
 
-		$doc->appendChild($root);
+		$doc->appendChild($element);
 		return $doc->saveXML();
 	}
 }

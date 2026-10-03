@@ -68,7 +68,7 @@ class SitemapUrl
 		foreach ($alternates as $alternate) {
 			foreach (['href', 'hreflang'] as $key) {
 				if (!array_key_exists($key, $alternate)) {
-					new Exception("[Kirby SEO] The alternate link to '{$this->loc()} is missing the '{$key}' attribute");
+					throw new Exception("[Kirby SEO] The alternate link to '{$this->loc()} is missing the '{$key}' attribute");
 				}
 			}
 		}

@@ -2,8 +2,6 @@
 
 namespace tobimori\Seo\Sitemap;
 
-use DOMDocument;
-use Kirby\Cms\App;
 use Kirby\Cms\Page;
 use Kirby\Exception\NotFoundException;
 use Kirby\Toolkit\Collection;
@@ -40,22 +38,7 @@ class SitemapIndex extends Collection
 
 	public function toString(): string
 	{
-		$doc = new DOMDocument('1.0', 'UTF-8');
-		$doc->formatOutput = true;
-
-		$stylesheetUrl = App::instance()->url() . '/sitemap.xsl';
-		$doc->appendChild($doc->createProcessingInstruction('xml-stylesheet', 'type="text/xsl" href="' . $stylesheetUrl . '"'));
-
-		$root = $doc->createElementNS('http://www.sitemaps.org/schemas/sitemap/0.9', 'sitemapindex');
-		$root->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xhtml', 'http://www.w3.org/1999/xhtml');
-		$root->setAttribute('seo-version', App::plugin('tobimori/seo')->version());
-		$doc->appendChild($root);
-
-		foreach ($this as $sitemap) {
-			$root->appendChild($sitemap->toDOMNode($doc));
-		}
-
-		return $doc->saveXML();
+		return Sitemap::toXml('sitemapindex', $this);
 	}
 
 	public function isValidIndex(?string $key = null): bool
