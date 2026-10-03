@@ -109,7 +109,8 @@ return [
 		'pattern' => 'sitemap',
 		'method' => 'ALL',
 		'action' => function () {
-			if (Seo::option('sitemap.active')) {
+			// GET and HEAD only get here if the redirect is off, which is not a method error
+			if (Seo::option('sitemap.active') && !in_array(App::instance()->request()->method(), ['GET', 'HEAD'], true)) {
 				return new Response('Method Not Allowed', 'text/plain', 405, ['Allow' => 'GET, HEAD']);
 			}
 
@@ -244,7 +245,8 @@ return [
 		'pattern' => 'sitemap-(:any).xml',
 		'method' => 'ALL',
 		'action' => function () {
-			if (Seo::option('sitemap.active')) {
+			// GET and HEAD only get here if the index does not exist, which is not a method error
+			if (Seo::option('sitemap.active') && !in_array(App::instance()->request()->method(), ['GET', 'HEAD'], true)) {
 				return new Response('Method Not Allowed', 'text/plain', 405, ['Allow' => 'GET, HEAD']);
 			}
 
