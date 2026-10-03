@@ -6,12 +6,12 @@ use Kirby\Cms\ModelWithContent;
 use Kirby\Cms\Page;
 use Kirby\Content\Changes;
 use Kirby\Content\VersionId;
-use Kirby\Exception\PermissionException;
 use Kirby\Panel\Ui\Item\PageItem;
 use Kirby\Toolkit\I18n;
 use Kirby\Toolkit\Str;
 use Kirby\Toolkit\V;
 use tobimori\Seo\Audit;
+use tobimori\Seo\Buttons\RobotsViewButton;
 use tobimori\Seo\Meta;
 use tobimori\Seo\Seo;
 
@@ -35,37 +35,25 @@ class PagesView extends EditableOverviewView
 
 	public function load(): array
 	{
-		if (!static::canAccess()) {
-			throw new PermissionException(key: 'access.view');
-		}
-
 		return VersionId::render('changes', function () {
-			$request = $this->kirby->request();
-			$search = trim($request->get('search', ''));
-			$sort = in_array($request->get('sort'), self::SORTABLE, true) ? $request->get('sort') : null;
-			$dir = $request->get('dir') === 'desc' ? 'desc' : 'asc';
-			// show only pages with the given issue type (or any title/description issue),
-			// or sharing the same title/description
-			$issue = in_array($request->get('issue'), [...Audit\Pages::TYPES, ...Audit\Pages::KINDS], true) ? $request->get('issue') : null;
-			$group = $this->audit()->group($hash = (string)$request->get('group')) ? $hash : null;
+			['search' => $search, 'sort' => $sort, 'dir' => $dir, 'issue' => $issue] = $this->query(
+				self::SORTABLE,
+				[...Audit\Pages::TYPES, ...Audit\Pages::KINDS]
+			);
+			$group = $this->audit()->group($hash = (string)$this->kirby->request()->get('group'));
+			$members = array_flip($group['pages'] ?? []);
 
-			$pages = $this->pages()->values();
+			// pages with the given issue type (or any title/description issue), or sharing the same title/description
+			$pages = array_values(array_filter(
+				$this->pages()->values(),
+				fn (Page $page) => ($issue === null || $this->audit()->has($page, $issue))
+					&& ($group === null || isset($members[$page->id()]))
+			));
 
-			if ($issue) {
-				$pages = array_values(array_filter($pages, fn ($page) => $this->audit()->has($page, $issue)));
-			}
-
-			if ($group) {
-				$pages = array_values(array_filter(
-					$pages,
-					fn ($page) => in_array($page->id(), $this->audit()->group($group)['pages'], true)
-				));
-			}
-
-			$pages = $this->search($pages, $search);
+			$pages = $this->search($pages, $search, self::SEARCHABLE, $this->indexed(...));
 
 			if ($sort) {
-				$pages = $this->sort($pages, fn (Page $page) => $this->value($page, $sort), $dir);
+				$pages = $this->sort($pages, fn (Page $page) => $this->indexed($page, $sort), $dir);
 			}
 
 			[$pagination, $visible] = $this->paginate($pages);
@@ -86,10 +74,10 @@ class PagesView extends EditableOverviewView
 					'ai' => $this->canUseAi(),
 					'gsc' => $this->hasSearchConsole(),
 					'group' => $group ? [
-						'hash' => $group,
-						'kind' => $this->audit()->group($group)['kind'],
-						'text' => $this->audit()->group($group)['text'],
-						'count' => count($this->audit()->group($group)['pages']),
+						'hash' => $hash,
+						'kind' => $group['kind'],
+						'text' => $group['text'],
+						'count' => count($group['pages']),
 					] : null,
 					'search' => $search,
 					'sort' => $sort,
@@ -111,7 +99,7 @@ class PagesView extends EditableOverviewView
 		return [
 			'id' => $page->id(),
 			'model' => $page,
-			'fields' => array_values(array_filter(self::EDITABLE, fn ($key) => $page->blueprint()->field($key) !== null)),
+			'fields' => array_values(array_filter(self::EDITABLE, fn ($key) => $this->blueprint($page)->field($key) !== null)),
 		];
 	}
 
@@ -156,39 +144,25 @@ class PagesView extends EditableOverviewView
 	}
 
 	/**
-	 * Plain text value of a searchable/sortable column
+	 * Plain text value of a searchable/sortable column, for searching & sorting all pages:
+	 * cached with the checks of the page if possible (see `Audit\Pages::value()`)
+	 */
+	protected function indexed(Page $page, string $key): string
+	{
+		return $this->audit()->value($page, $key) ?? $this->value($page, $key);
+	}
+
+	/**
+	 * Plain text value of a searchable/sortable column, resolved for the visible rows
 	 */
 	protected function value(Page $page, string $key): string
 	{
 		return match ($key) {
 			'id' => $page->id(),
 			'title' => (string)$page->title()->value(),
-			'template' => (string)$page->blueprint()->title(),
+			'template' => (string)$this->blueprint($page)->title(),
 			default => Str::unhtml((string)$this->resolve($page, $key)['field']->value()),
 		};
-	}
-
-	/**
-	 * @param array<Page> $pages
-	 */
-	protected function search(array $pages, string $search): array
-	{
-		if ($search === '') {
-			return $pages;
-		}
-
-		return array_values(array_filter(
-			$pages,
-			function (Page $page) use ($search) {
-				foreach (self::SEARCHABLE as $key) {
-					if (Str::contains($this->value($page, $key), $search, true)) {
-						return true;
-					}
-				}
-
-				return false;
-			}
-		));
 	}
 
 	/**
@@ -306,9 +280,7 @@ class PagesView extends EditableOverviewView
 				'changes' => $hasChanges && $lock === null,
 				'translated' => $translated,
 			],
-			'metaTitle' => $this->metaField($page, 'metaTitle', $editable),
-			'metaDescription' => $this->metaField($page, 'metaDescription', $editable),
-			'ogDescription' => $this->metaField($page, 'ogDescription', $editable),
+			...array_combine(self::EDITABLE, array_map(fn ($key) => $this->metaField($entry, $key, $editable), self::EDITABLE)),
 			'ogImage' => $this->ogImage($page),
 			'checks' => $this->audit()->page($page),
 			'template' => $this->value($page, 'template'),
@@ -319,8 +291,11 @@ class PagesView extends EditableOverviewView
 	/**
 	 * Resolved value & source for display, plus the page's own value for editing
 	 */
-	protected function metaField(Page $page, string $key, bool $editable): array
+	protected function metaField(array $entry, string $key, bool $editable): array
 	{
+		/** @var \Kirby\Cms\Page $page */
+		$page = $entry['model'];
+		$editable = $editable && in_array($key, $entry['fields'], true);
 		$own = (string)$page->content()->get($key)->value();
 		// what the page would show without its own value, same as the placeholder in the page form
 		$fallback = $this->resolve($page, $key, ['fields']);
@@ -332,8 +307,8 @@ class PagesView extends EditableOverviewView
 			'value' => in_array($own, Meta::DEFAULT_VALUES, true) ? '' : $own,
 			'placeholder' => Str::unhtml((string)$fallback['field']->value()),
 			'placeholderSource' => $fallback['source'],
-			'editable' => $editable && $page->blueprint()->field($key) !== null,
-			'ai' => $editable && $this->canUseAi() && !empty($page->blueprint()->field($key)['ai'] ?? false),
+			'editable' => $editable,
+			'ai' => $editable && $this->canUseAi() && !empty($this->blueprint($page)->field($key)['ai'] ?? false),
 		];
 	}
 
@@ -371,16 +346,6 @@ class PagesView extends EditableOverviewView
 	{
 		$robots = $meta->robots();
 
-		$state = match (true) {
-			Str::contains($robots, 'noindex') => 'noindex',
-			Str::contains($robots, 'no') => 'any',
-			default => 'index',
-		};
-
-		return [
-			'state' => $state,
-			'text' => I18n::translate("seo.fields.robots.indicator.{$state}"),
-			'value' => $robots,
-		];
+		return [...RobotsViewButton::indicator($robots), 'value' => $robots];
 	}
 }

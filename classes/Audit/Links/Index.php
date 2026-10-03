@@ -21,6 +21,8 @@ use Kirby\Toolkit\Str;
 class Index
 {
 	protected const KEY = 'index';
+	protected const REVISION = 'revision';
+	protected const STATE = 'state';
 
 	/**
 	 * Handle of the lock file while this instance holds the lock
@@ -53,6 +55,61 @@ class Index
 		$data['revision'] = Str::random(8);
 
 		static::cache()->set(self::KEY, $data);
+		// stored separately, so results derived from the index can be validated without reading it
+		static::cache()->set(self::REVISION, $data['revision']);
+		static::cache()->set(self::STATE, static::summarize($data));
+	}
+
+	/**
+	 * What the progress of a scan needs from the index (see `summarize()`), without reading the whole index.
+	 * Falls back to the index if it has been written before the summary was stored separately
+	 */
+	public function state(): array
+	{
+		return static::cache()->get(self::STATE) ?? static::summarize($this->read());
+	}
+
+	/**
+	 * Fingerprint & comparable URL of each scanned page and the check time of each external URL:
+	 * a small part of the index, most of it are the links & anchors of the pages
+	 *
+	 * @return array{invalidated: int, pages: array<string, array{0: string|null, 1: string}>, external: array<string, int>}
+	 */
+	public static function summarize(array $data): array
+	{
+		return [
+			'invalidated' => $data['invalidated'],
+			'pages' => array_map(fn ($entry) => [$entry['fingerprint'], Report::normalize($entry['url'])], $data['pages']),
+			'external' => static::external($data),
+		];
+	}
+
+	/**
+	 * All external URLs linked from any page (without fragments) & when they have been checked (`0` if never)
+	 *
+	 * @return array<string, int>
+	 */
+	public static function external(array $data): array
+	{
+		$urls = [];
+
+		foreach ($data['strings'] as $url) {
+			if (preg_match('#^https?://#i', $url) && !Report::isInternal($url)) {
+				$url = strtok($url, '#');
+				$urls[$url] = $data['urls'][$url]['checked'] ?? 0;
+			}
+		}
+
+		return $urls;
+	}
+
+	/**
+	 * Revision of the stored index without reading it, falls back to the index
+	 * if it has been written before the revision was stored separately
+	 */
+	public static function revision(): string|null
+	{
+		return static::cache()->get(self::REVISION) ?? (new static())->read()['revision'];
 	}
 
 	/**

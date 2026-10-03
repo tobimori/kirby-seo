@@ -6,11 +6,9 @@ use Kirby\Cms\ModelWithContent;
 use Kirby\Content\Changes;
 use Kirby\Content\VersionId;
 use Kirby\Exception\NotFoundException;
-use Kirby\Exception\PermissionException;
 use Kirby\Http\Response;
 use Kirby\Panel\Ui\Item\FileItem;
 use Kirby\Toolkit\I18n;
-use Kirby\Toolkit\Str;
 use tobimori\Seo\Ai\Content;
 use tobimori\Seo\AltText;
 use tobimori\Seo\Audit;
@@ -27,17 +25,12 @@ class ImagesView extends EditableOverviewView
 
 	public function load(): array
 	{
-		if (!static::canAccess()) {
-			throw new PermissionException(key: 'access.view');
-		}
-
 		return VersionId::render('changes', function () {
-			$request = $this->kirby->request();
-			$search = trim($request->get('search', ''));
-			$sort = in_array($request->get('sort'), self::SORTABLE, true) ? $request->get('sort') : null;
-			$dir = $request->get('dir') === 'desc' ? 'desc' : 'asc';
 			// states of alt texts, `issues` combines the ones that need work
-			$issue = in_array($request->get('issue'), [...Audit\Images::FILTERS, 'issues'], true) ? $request->get('issue') : null;
+			['search' => $search, 'sort' => $sort, 'dir' => $dir, 'issue' => $issue] = $this->query(
+				self::SORTABLE,
+				[...Audit\Images::FILTERS, 'issues']
+			);
 
 			$entries = array_values($this->images()->entries());
 
@@ -45,17 +38,7 @@ class ImagesView extends EditableOverviewView
 				$entries = array_values(array_filter($entries, fn ($entry) => $this->images()->has($entry, $issue)));
 			}
 
-			if ($search !== '') {
-				$entries = array_values(array_filter($entries, function ($entry) use ($search) {
-					foreach (self::SEARCHABLE as $key) {
-						if (Str::contains($this->value($entry, $key), $search, true)) {
-							return true;
-						}
-					}
-
-					return false;
-				}));
-			}
+			$entries = $this->search($entries, $search, self::SEARCHABLE, $this->value(...));
 
 			if ($sort) {
 				$entries = $this->sort($entries, fn ($entry) => $this->value($entry, $sort === 'title' ? 'id' : $sort), $dir);
@@ -94,10 +77,6 @@ class ImagesView extends EditableOverviewView
 	 */
 	public function generate(string $id): Response
 	{
-		if (!static::canAccess()) {
-			throw new PermissionException(key: 'access.view');
-		}
-
 		$entry = $this->find($id) ?? throw $this->notFound($id);
 
 		if (!$this->canGenerate($entry)) {
@@ -116,7 +95,7 @@ class ImagesView extends EditableOverviewView
 	 */
 	protected function canGenerate(array $entry): bool
 	{
-		$blueprint = $entry['model']->blueprint()->field($entry['field']) ?? [];
+		$blueprint = $this->blueprint($entry['model'])->field($entry['field']) ?? [];
 
 		return $this->canUseAi()
 			&& $entry['model']->permissions()->can('update')
@@ -203,7 +182,7 @@ class ImagesView extends EditableOverviewView
 			// decorative images first when sorting ascending
 			'decorative' => $this->images()->altText($entry)->isDecorative() ? '0' : '1',
 			'parent' => (string)$file->parent()->title()->value(),
-			'template' => (string)$file->blueprint()->title(),
+			'template' => (string)$this->blueprint($file)->title(),
 		};
 	}
 
@@ -284,7 +263,7 @@ class ImagesView extends EditableOverviewView
 		['lock' => $lock, 'editable' => $editable, 'translated' => $translated] = $this->state($file);
 		$hasChanges = $this->fieldChanges($entry) !== [];
 		$alt = $this->images()->altText($entry);
-		$blueprint = $file->blueprint()->field($entry['field']) ?? [];
+		$blueprint = $this->blueprint($file)->field($entry['field']) ?? [];
 		$parent = $file->parent();
 		$label = count($this->images()->fields($file)) > 1
 			? I18n::translate($blueprint['label'] ?? null, $blueprint['label'] ?? $entry['field'])
@@ -327,7 +306,7 @@ class ImagesView extends EditableOverviewView
 				$file->extension() === 'svg' => $file->url(),
 				default => null,
 			}],
-			'template' => (string)$file->blueprint()->title(),
+			'template' => (string)$this->blueprint($file)->title(),
 			'dimensions' => $file->isResizable() || $file->extension() === 'svg'
 				? $file->width() . ' × ' . $file->height()
 				: null,

@@ -9,7 +9,8 @@ use Throwable;
 use tobimori\Seo\Seo;
 
 /**
- * Results of the link check for one language: the state of each linked URL & the pages linking to it
+ * Results of the link check for one language: the state of each linked URL & the pages linking to it.
+ * The results are cached until the index changes, so the Panel only reads the whole index after a scan
  */
 class Report
 {
@@ -26,18 +27,31 @@ class Report
 		'ok' => 'ok',
 	];
 
+	/**
+	 * States the links can be filtered by, `ISSUES` need fixing
+	 */
+	public const FILTERS = ['broken', 'anchor', 'redirect', 'unknown'];
+	public const ISSUES = ['broken', 'anchor', 'redirect'];
+
 	protected App $kirby;
-	protected array $data;
+	protected array|null $data = null;
+	protected array|null $results = null;
 	protected array|null $entries = null;
 	protected array|null $targets = null;
-	protected array|null $links = null;
 	protected Router|null $router = null;
 
 	public function __construct(protected string|null $language = null)
 	{
 		$this->kirby = App::instance();
 		$this->language ??= $this->kirby->language()?->code();
-		$this->data = (new Index())->read();
+	}
+
+	/**
+	 * The stored index, only read to build the results (see `results()`)
+	 */
+	protected function data(): array
+	{
+		return $this->data ??= (new Index())->read();
 	}
 
 	/**
@@ -65,23 +79,102 @@ class Report
 	 */
 	public function isEmpty(): bool
 	{
-		return $this->data['pages'] === [];
+		return !$this->results()['scanned'];
 	}
 
 	/**
-	 * All linked URLs (with fragments) of the language, with their state & the pages linking to them
+	 * All linked URLs (with fragments) of the language, with their state & the pages linking to them:
+	 * page ids separated by line breaks, by the location of the link (see `pages()`)
 	 *
-	 * @return array<string, array{url: string, state: string, reason: string|null, target: string|null, code: int|null, internal: bool, pages: array<string, string>}>
+	 * @return array<string, array{url: string, state: string, reason: string|null, target: string|null, code: int|null, internal: bool, total: int, content: string, layout: string}>
 	 */
 	public function links(): array
 	{
-		if ($this->links !== null) {
-			return $this->links;
-		}
+		return $this->results()['links'];
+	}
 
+	/**
+	 * Pages linking to the URL with the location of the link (`content` or `layout`), links in the content first
+	 *
+	 * @return array<string, string>
+	 */
+	public static function pages(array $link): array
+	{
 		$pages = [];
 
-		foreach ($this->data['pages'] as $entry) {
+		foreach (['content', 'layout'] as $location) {
+			if ($link[$location] !== '') {
+				$pages += array_fill_keys(explode("\n", $link[$location]), $location);
+			}
+		}
+
+		return $pages;
+	}
+
+	/**
+	 * Whether the link is in the given state (see `FILTERS`), `issues` for any of the `ISSUES`
+	 */
+	public static function has(array $link, string $filter): bool
+	{
+		return $filter === 'issues'
+			? in_array($link['state'], self::ISSUES, true)
+			: $link['state'] === $filter;
+	}
+
+	/**
+	 * Number of the given links per state (see `FILTERS`)
+	 */
+	public static function summary(array $links): array
+	{
+		$summary = array_fill_keys(self::FILTERS, 0);
+
+		foreach ($links as $link) {
+			if (isset($summary[$link['state']])) {
+				$summary[$link['state']]++;
+			}
+		}
+
+		return $summary;
+	}
+
+	/**
+	 * Links of the language & whether any page has been scanned, cached until the index changes.
+	 * The pages linking to a URL are stored as strings, as an array per link
+	 * would need several times the memory (most links are on all pages)
+	 */
+	protected function results(): array
+	{
+		if ($this->results !== null) {
+			return $this->results;
+		}
+
+		$cache = Index::cache();
+		$key = 'links/' . ($this->language ?? 'default');
+		$cached = $cache->get($key);
+
+		if ($cached !== null && $cached['revision'] === Index::revision()) {
+			return $this->results = $cached;
+		}
+
+		$this->results = [
+			'revision' => $this->data()['revision'],
+			'scanned' => $this->data()['pages'] !== [],
+			'links' => $this->build(),
+		];
+
+		$cache->set($key, $this->results);
+
+		// only needed to build the results
+		$this->data = $this->entries = $this->targets = null;
+
+		return $this->results;
+	}
+
+	protected function build(): array
+	{
+		$pages = [];
+
+		foreach ($this->data()['pages'] as $entry) {
 			if ($entry['language'] !== $this->language) {
 				continue;
 			}
@@ -95,19 +188,22 @@ class Report
 			}
 		}
 
-		$this->links = [];
+		$links = [];
 
 		foreach ($pages as $id => $linking) {
-			$url = $this->data['strings'][$id];
+			$url = $this->data()['strings'][$id];
 
 			// e.g. links scanned before a scheme was ignored
 			if (Crawler::isIgnored($url)) {
 				continue;
 			}
-			$this->links[$url] = [
+
+			$links[$url] = [
 				'url' => $url,
 				'internal' => static::isInternal($url),
-				'pages' => $linking,
+				'total' => count($linking),
+				'content' => implode("\n", array_keys($linking, 'content', true)),
+				'layout' => implode("\n", array_keys($linking, 'layout', true)),
 				'code' => null,
 				'target' => null,
 				'reason' => null,
@@ -115,7 +211,7 @@ class Report
 			];
 		}
 
-		return $this->links;
+		return $links;
 	}
 
 	/**
@@ -129,7 +225,7 @@ class Report
 		$key = 'stats/' . ($this->language ?? 'default');
 		$cached = $cache->get($key);
 
-		if ($cached !== null && $cached['revision'] === $this->data['revision']) {
+		if ($cached !== null && $cached['revision'] === Index::revision()) {
 			return $cached['stats'];
 		}
 
@@ -139,7 +235,7 @@ class Report
 			$stats[self::SEVERITY[$link['state']]]++;
 		}
 
-		$cache->set($key, ['revision' => $this->data['revision'], 'stats' => $stats]);
+		$cache->set($key, ['revision' => $this->results()['revision'], 'stats' => $stats]);
 
 		return $stats;
 	}
@@ -250,7 +346,7 @@ class Report
 
 	protected function checkExternal(string $url): array
 	{
-		$result = $this->data['urls'][$url] ?? null;
+		$result = $this->data()['urls'][$url] ?? null;
 		$code = $result['code'] ?? 0;
 
 		return match (true) {
@@ -276,7 +372,7 @@ class Report
 		if ($this->entries === null) {
 			$this->entries = [];
 
-			foreach ($this->data['pages'] as $entry) {
+			foreach ($this->data()['pages'] as $entry) {
 				$this->entries[static::normalize($entry['url'])] = $entry;
 			}
 		}
@@ -289,7 +385,7 @@ class Report
 	 */
 	protected function targets(): array
 	{
-		return $this->targets ??= array_flip($this->data['targets']);
+		return $this->targets ??= array_flip($this->data()['targets']);
 	}
 
 	/**

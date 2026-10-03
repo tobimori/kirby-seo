@@ -5,10 +5,14 @@ namespace tobimori\Seo\Views;
 use Closure;
 use Collator;
 use Kirby\Cms\App;
+use Kirby\Cms\Blueprint;
+use Kirby\Cms\File;
 use Kirby\Cms\Page;
 use Kirby\Cms\Pages;
+use Kirby\Exception\PermissionException;
 use Kirby\Panel\Ui\Buttons\ViewButtons;
 use Kirby\Toolkit\I18n;
+use Kirby\Toolkit\Str;
 use tobimori\Seo\Audit;
 use tobimori\Seo\Audit\Links\Report;
 use tobimori\Seo\Meta;
@@ -30,12 +34,24 @@ abstract class OverviewView
 	 * Meta instances per page, for the current request
 	 */
 	protected array $metas = [];
+
+	/**
+	 * Blueprints per template, for the current request
+	 */
+	protected array $blueprints = [];
 	protected Audit\Pages|null $audit = null;
 	protected Pages|null $pages = null;
 	protected Audit\Images|null $images = null;
 
+	/**
+	 * All tabs, actions & drawers of the SEO area need the permission
+	 */
 	public function __construct()
 	{
+		if (!static::canAccess()) {
+			throw new PermissionException(key: 'access.view');
+		}
+
 		$this->kirby = App::instance();
 	}
 
@@ -99,8 +115,21 @@ abstract class OverviewView
 	protected function isListedPage(Page $page): bool
 	{
 		return $page->isListable()
-			&& $page->blueprint()->field('metaTitle') !== null
-			&& $page->blueprint()->field('metaDescription') !== null;
+			&& $this->blueprint($page)->field('metaTitle') !== null
+			&& $this->blueprint($page)->field('metaDescription') !== null;
+	}
+
+	/**
+	 * Blueprint of the model's template: each model creates & keeps its own blueprint object,
+	 * the blueprints of all pages & images of larger sites wouldn't fit into memory
+	 */
+	protected function blueprint(Page|File $model): Blueprint
+	{
+		$key = $model instanceof Page
+			? 'pages/' . $model->intendedTemplate()->name()
+			: 'files/' . ($model->template() ?? 'default');
+
+		return $this->blueprints[$key] ??= $model->blueprint();
 	}
 
 	/**
@@ -108,7 +137,7 @@ abstract class OverviewView
 	 */
 	protected function audit(): Audit\Pages
 	{
-		return $this->audit ??= new Audit\Pages($this->pages(), $this->meta(...));
+		return $this->audit ??= new Audit\Pages($this->pages());
 	}
 
 	/**
@@ -145,6 +174,49 @@ abstract class OverviewView
 		$collator->setAttribute(Collator::ALTERNATE_HANDLING, Collator::SHIFTED);
 
 		return fn (string $a, string $b) => $collator->compare($a, $b);
+	}
+
+	/**
+	 * Search, sorting & filter of the table from the query of the view, unknown values are ignored
+	 *
+	 * @return array{search: string, sort: string|null, dir: string, issue: string|null}
+	 */
+	protected function query(array $sortable, array $issues): array
+	{
+		$request = $this->kirby->request();
+		$sort = $request->get('sort');
+		$issue = $request->get('issue');
+
+		return [
+			'search' => trim((string)$request->get('search', '')),
+			'sort' => in_array($sort, $sortable, true) ? $sort : null,
+			'dir' => $request->get('dir') === 'desc' ? 'desc' : 'asc',
+			'issue' => in_array($issue, $issues, true) ? $issue : null,
+		];
+	}
+
+	/**
+	 * Entries with any value containing the search term (case-insensitive).
+	 * Values are resolved in the order of the keys & only until one matches,
+	 * so cheap values should come first
+	 *
+	 * @param \Closure(mixed $entry, string $key): string $value
+	 */
+	protected function search(array $entries, string $search, array $keys, Closure $value): array
+	{
+		if ($search === '') {
+			return $entries;
+		}
+
+		return array_values(array_filter($entries, function ($entry) use ($search, $keys, $value) {
+			foreach ($keys as $key) {
+				if (Str::contains($value($entry, $key), $search, true)) {
+					return true;
+				}
+			}
+
+			return false;
+		}));
 	}
 
 	/**

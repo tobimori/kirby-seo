@@ -3,6 +3,7 @@
 namespace tobimori\Seo\Audit\Links;
 
 use Closure;
+use CurlMultiHandle;
 use DOMDocument;
 use DOMElement;
 use DOMXPath;
@@ -50,11 +51,12 @@ class Crawler
 	{
 		$option = Seo::option('links.http');
 
-		if (is_bool($option)) {
-			return $option;
+		// without curl, pages can only be rendered in this process
+		if ($option === false || !function_exists('curl_multi_init')) {
+			return false;
 		}
 
-		return PHP_SAPI === 'cli' && function_exists('curl_multi_init') && preg_match('#^https?://#i', App::instance()->url()) === 1;
+		return $option === true || (PHP_SAPI === 'cli' && preg_match('#^https?://#i', App::instance()->url()) === 1);
 	}
 
 	/**
@@ -124,14 +126,14 @@ class Crawler
 				CURLOPT_CONNECTTIMEOUT => 5,
 				CURLOPT_TIMEOUT => static::timeout(),
 				CURLOPT_ENCODING => '',
-				CURLOPT_USERAGENT => Checker::userAgent(),
+				CURLOPT_USERAGENT => static::userAgent(),
 				CURLOPT_HTTPHEADER => ['Accept: text/html,application/xhtml+xml,*/*;q=0.8'],
 			]);
 			curl_multi_add_handle($multi, $handle);
 			$handles[$key] = $handle;
 		}
 
-		Checker::perform($multi);
+		static::perform($multi);
 
 		$results = [];
 
@@ -154,6 +156,34 @@ class Crawler
 		curl_multi_close($multi);
 
 		return $results;
+	}
+
+	/**
+	 * Browsers' format, as some servers block requests of unknown clients
+	 */
+	public static function userAgent(): string
+	{
+		return 'Mozilla/5.0 (compatible; Kirby SEO link checker; +' . App::instance()->url() . ')';
+	}
+
+	/**
+	 * Runs the requests of the handle until all of them are done
+	 */
+	public static function perform(CurlMultiHandle $multi): void
+	{
+		do {
+			$status = curl_multi_exec($multi, $running);
+
+			// `-1` if there's nothing to wait for yet, without a pause this would be a busy loop
+			if ($running && curl_multi_select($multi) === -1) {
+				usleep(10_000);
+			}
+		} while ($running && $status === CURLM_OK);
+
+		// `curl_errno()` of the handles is only set once their messages are read
+		do {
+			$message = curl_multi_info_read($multi);
+		} while ($message !== false);
 	}
 
 	/**

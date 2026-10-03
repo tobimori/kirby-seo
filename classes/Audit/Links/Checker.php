@@ -3,11 +3,10 @@
 namespace tobimori\Seo\Audit\Links;
 
 use Closure;
-use CurlMultiHandle;
 use Kirby\Cms\App;
+use Kirby\Cms\Page;
 use Kirby\Exception\Exception;
 use Kirby\Toolkit\I18n;
-use Kirby\Cms\Page;
 use tobimori\Seo\Jobs\CheckLinksJob;
 use tobimori\Seo\Seo;
 
@@ -24,6 +23,11 @@ class Checker
 	protected Index $index;
 	protected array|null $data = null;
 	protected array $fingerprints = [];
+
+	/**
+	 * Comparable URLs of the pages to scan (as keys), see `targets()`
+	 */
+	protected array $urls = [];
 	protected array|null $lookup = null;
 
 	public function __construct()
@@ -83,11 +87,6 @@ class Checker
 		if ($expression && !$exists) {
 			$scheduler->schedule($expression, CheckLinksJob::class, ['full' => true]);
 		}
-	}
-
-	public static function userAgent(): string
-	{
-		return 'Mozilla/5.0 (compatible; Kirby SEO link checker; +' . App::instance()->url() . ')';
 	}
 
 	/**
@@ -178,7 +177,7 @@ class Checker
 				}
 			}
 
-			while (microtime(true) < $deadline && ($urls = $this->dueUrls())) {
+			while (microtime(true) < $deadline && ($urls = $this->dueUrls(Index::external($this->data), $this->data['invalidated']))) {
 				$batch = array_slice($urls, 0, max(1, (int)Seo::option('links.concurrency')) * 2);
 				$this->data['urls'] = [...$this->data['urls'], ...static::request($batch)];
 			}
@@ -198,16 +197,30 @@ class Checker
 	 */
 	public function progress(): array
 	{
-		$this->data ??= $this->index->read();
-		$targets = $this->prepare();
-		$done = count(array_filter(array_keys($targets), $this->isScanned(...)));
+		// a step has the index in memory already, otherwise only its summary is read
+		$state = $this->data !== null ? Index::summarize($this->data) : $this->index->state();
+		$targets = $this->targets($state['invalidated']);
 
-		$urls = $this->externalUrls();
-		$due = count($this->dueUrls());
+		// pages that don't exist anymore (or have a new URL) mark the pages linking
+		// to them as changed (see `prepare()`), which needs the links of all pages
+		foreach ($state['pages'] as [, $url]) {
+			if (!isset($this->urls[$url])) {
+				$this->data ??= $this->index->read();
+				$this->prepare();
+				$state = Index::summarize($this->data);
+				break;
+			}
+		}
+
+		$done = count(array_filter(
+			array_keys($targets),
+			fn ($key) => ($state['pages'][$key][0] ?? null) === $this->fingerprints[$key]
+		));
+		$due = count($this->dueUrls($state['external'], $state['invalidated']));
 
 		return [
 			'pages' => ['done' => $done, 'total' => count($targets)],
-			'urls' => ['done' => count($urls) - $due, 'total' => count($urls)],
+			'urls' => ['done' => count($state['external']) - $due, 'total' => count($state['external'])],
 			'done' => $done === count($targets) && $due === 0,
 			'running' => $this->index->isLocked(),
 			'queue' => static::usesQueue(),
@@ -223,45 +236,18 @@ class Checker
 	 */
 	protected function prepare(): array
 	{
-		$kirby = App::instance();
-		$languages = $kirby->multilang() ? $kirby->languages()->codes() : [null];
-		$pages = $kirby->site()->index()->filter(fn (Page $page) => $page->template()->exists());
-
-		// navigation & footer are often part of the site's content
-		$site = [$this->data['invalidated']];
-		foreach ($languages as $language) {
-			$site[] = $kirby->site()->version('latest')->modified($language ?? 'default');
-		}
-
-		$targets = [];
-		$urls = [];
-
-		foreach ($pages as $page) {
-			foreach ($languages as $language) {
-				$key = ($language ?? '') . '/' . $page->id();
-				$url = $page->url($language);
-				$targets[$key] = [$page, $language];
-				$urls[Report::normalize($url)] = true;
-				$this->fingerprints[$key] = md5(json_encode([
-					$site,
-					$url,
-					$page->status(),
-					$page->intendedTemplate()->name(),
-					$page->version('latest')->modified($language ?? 'default'),
-				]));
-			}
-		}
+		$targets = $this->targets($this->data['invalidated']);
 
 		// pages that don't exist anymore (or aren't published, or have a new URL)
 		$removed = [];
 		foreach ($this->data['pages'] as $entry) {
-			if (!isset($urls[$normalized = Report::normalize($entry['url'])])) {
+			if (!isset($this->urls[$normalized = Report::normalize($entry['url'])])) {
 				$removed[$normalized] = true;
 			}
 		}
 
 		$this->data['pages'] = array_intersect_key($this->data['pages'], $targets);
-		$this->data['targets'] = array_keys($urls);
+		$this->data['targets'] = array_keys($this->urls);
 
 		if ($removed !== []) {
 			$ids = array_filter(
@@ -276,6 +262,46 @@ class Checker
 						break;
 					}
 				}
+			}
+		}
+
+		return $targets;
+	}
+
+	/**
+	 * Published pages in all languages, by `{language}/{page id}`, with their fingerprints
+	 * (pages are scanned again if it changes) & their comparable URLs (see `$urls`)
+	 *
+	 * @return array<string, array{0: \Kirby\Cms\Page, 1: string|null}>
+	 */
+	protected function targets(int $invalidated): array
+	{
+		$kirby = App::instance();
+		$languages = $kirby->multilang() ? $kirby->languages()->codes() : [null];
+		$pages = $kirby->site()->index()->filter(fn (Page $page) => $page->template()->exists());
+
+		// navigation & footer are often part of the site's content
+		$site = [$invalidated];
+		foreach ($languages as $language) {
+			$site[] = $kirby->site()->version('latest')->modified($language ?? 'default');
+		}
+
+		$targets = [];
+		$this->urls = [];
+
+		foreach ($pages as $page) {
+			foreach ($languages as $language) {
+				$key = ($language ?? '') . '/' . $page->id();
+				$url = $page->url($language);
+				$targets[$key] = [$page, $language];
+				$this->urls[Report::normalize($url)] = true;
+				$this->fingerprints[$key] = md5(json_encode([
+					$site,
+					$url,
+					$page->status(),
+					$page->intendedTemplate()->name(),
+					$page->version('latest')->modified($language ?? 'default'),
+				]));
 			}
 		}
 
@@ -347,32 +373,15 @@ class Checker
 	}
 
 	/**
-	 * All external URLs linked from any page (without fragments)
-	 */
-	protected function externalUrls(): array
-	{
-		$urls = [];
-
-		foreach ($this->data['strings'] as $url) {
-			if (preg_match('#^https?://#i', $url) && !Report::isInternal($url)) {
-				$urls[strtok($url, '#')] = true;
-			}
-		}
-
-		return array_keys($urls);
-	}
-
-	/**
 	 * External URLs that haven't been checked recently
+	 *
+	 * @param array<string, int> $external Check times by URL, see `Index::external()`
 	 */
-	protected function dueUrls(): array
+	protected function dueUrls(array $external, int $invalidated): array
 	{
-		$since = max(time() - (int)Seo::option('links.ttl') * 3600, $this->data['invalidated']);
+		$since = max(time() - (int)Seo::option('links.ttl') * 3600, $invalidated);
 
-		return array_values(array_filter(
-			$this->externalUrls(),
-			fn ($url) => ($this->data['urls'][$url]['checked'] ?? 0) < $since
-		));
+		return array_keys(array_filter($external, fn ($checked) => $checked < $since));
 	}
 
 	/**
@@ -427,7 +436,7 @@ class Checker
 					CURLOPT_RESOLVE => $resolve[$url] ?? [],
 					CURLOPT_CONNECTTIMEOUT => 5,
 					CURLOPT_TIMEOUT => (int)Seo::option('links.timeout'),
-					CURLOPT_USERAGENT => static::userAgent(),
+					CURLOPT_USERAGENT => Crawler::userAgent(),
 					CURLOPT_HTTPHEADER => ['Accept: text/html,application/xhtml+xml,*/*;q=0.8'],
 					// only the status is needed: stop at the first bytes of the body
 					CURLOPT_WRITEFUNCTION => fn () => 0,
@@ -436,7 +445,7 @@ class Checker
 				$handles[$url] = $handle;
 			}
 
-			static::perform($multi);
+			Crawler::perform($multi);
 
 			$retry = [];
 
@@ -469,26 +478,6 @@ class Checker
 		}
 
 		return $results;
-	}
-
-	/**
-	 * Runs the requests of the handle until all of them are done
-	 */
-	public static function perform(CurlMultiHandle $multi): void
-	{
-		do {
-			$status = curl_multi_exec($multi, $running);
-
-			// `-1` if there's nothing to wait for yet, without a pause this would be a busy loop
-			if ($running && curl_multi_select($multi) === -1) {
-				usleep(10_000);
-			}
-		} while ($running && $status === CURLM_OK);
-
-		// `curl_errno()` of the handles is only set once their messages are read
-		do {
-			$message = curl_multi_info_read($multi);
-		} while ($message !== false);
 	}
 
 	/**

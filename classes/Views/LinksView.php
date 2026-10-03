@@ -4,10 +4,8 @@ namespace tobimori\Seo\Views;
 
 use Kirby\Content\VersionId;
 use Kirby\Exception\NotFoundException;
-use Kirby\Exception\PermissionException;
 use Kirby\Panel\Ui\Item\PageItem;
 use Kirby\Toolkit\I18n;
-use Kirby\Toolkit\Str;
 use tobimori\Seo\Audit\Links\Checker;
 use tobimori\Seo\Audit\Links\Report;
 
@@ -18,8 +16,8 @@ use tobimori\Seo\Audit\Links\Report;
 class LinksView extends OverviewView
 {
 	public const SORTABLE = ['url', 'status', 'pages'];
-	public const FILTERS = ['broken', 'anchor', 'redirect', 'unknown'];
-	public const ISSUES = ['broken', 'anchor', 'redirect'];
+	// cheap values first, the titles of the linking pages need a lookup per page
+	public const SEARCHABLE = ['url', 'details', 'pages'];
 
 	/**
 	 * Seconds per scan request of the Panel
@@ -30,47 +28,35 @@ class LinksView extends OverviewView
 
 	public function load(): array
 	{
-		if (!static::canAccess()) {
-			throw new PermissionException(key: 'access.view');
-		}
-
 		return VersionId::render('changes', function () {
-			$request = $this->kirby->request();
-			$search = trim($request->get('search', ''));
-			$sort = in_array($request->get('sort'), self::SORTABLE, true) ? $request->get('sort') : null;
-			$dir = $request->get('dir') === 'desc' ? 'desc' : 'asc';
-			$issue = in_array($request->get('issue'), [...self::FILTERS, 'issues'], true) ? $request->get('issue') : null;
-			$scope = $request->get('scope') === 'content' ? 'content' : null;
+			['search' => $search, 'sort' => $sort, 'dir' => $dir, 'issue' => $issue] = $this->query(
+				self::SORTABLE,
+				[...Report::FILTERS, 'issues']
+			);
+			$scope = $this->kirby->request()->get('scope') === 'content' ? 'content' : null;
 
 			$links = array_values($this->report()->links());
 
 			if ($scope) {
-				$links = array_values(array_filter($links, fn ($link) => in_array('content', $link['pages'], true)));
+				$links = array_values(array_filter($links, fn ($link) => $link['content'] !== ''));
 			}
 
 			// counts of the filters within the scope
-			$summary = $this->summary($links);
+			$summary = Report::summary($links);
 
 			if ($issue) {
-				$links = array_values(array_filter($links, fn ($link) => $issue === 'issues'
-					? in_array($link['state'], self::ISSUES, true)
-					: $link['state'] === $issue));
+				$links = array_values(array_filter($links, fn ($link) => Report::has($link, $issue)));
 			}
 
-			if ($search !== '') {
-				$links = array_values(array_filter($links, function ($link) use ($search) {
-					foreach ([$link['url'], $this->reason($link), ...array_map($this->title(...), array_keys($link['pages']))] as $value) {
-						if (Str::contains($value, $search, true)) {
-							return true;
-						}
-					}
-
-					return false;
-				}));
-			}
+			$links = $this->search($links, $search, self::SEARCHABLE, fn ($link, $key) => match ($key) {
+				'url' => $link['url'],
+				'details' => $this->reason($link),
+				// line breaks between the titles, so a search can't match across two of them
+				'pages' => implode("\n", array_map($this->title(...), array_keys(Report::pages($link)))),
+			});
 
 			$links = $this->sort($links, fn ($link) => match ($sort) {
-				'pages' => (string)count($link['pages']),
+				'pages' => (string)$link['total'],
 				'url' => $this->display($link['url']),
 				// the status & the default order: most severe first
 				default => array_search($link['state'], Report::STATES, true) . $this->display($link['url']),
@@ -104,10 +90,6 @@ class LinksView extends OverviewView
 	 */
 	public function scan(): array
 	{
-		if (!static::canAccess()) {
-			throw new PermissionException(key: 'access.view');
-		}
-
 		$checker = new Checker();
 
 		return Checker::usesQueue() ? $checker->progress() : $checker->step(self::STEP);
@@ -118,13 +100,21 @@ class LinksView extends OverviewView
 	 */
 	public function rescan(): array
 	{
-		if (!static::canAccess()) {
-			throw new PermissionException(key: 'access.view');
-		}
-
 		$checker = new Checker();
 		$checker->invalidate();
 		Checker::dispatch(full: true, now: true);
+
+		return $checker->progress();
+	}
+
+	/**
+	 * Checks a link again: the pages linking to it & the URL itself
+	 */
+	public function recheck(): array
+	{
+		$checker = new Checker();
+		$checker->recheck((string)$this->kirby->request()->get('url'));
+		Checker::dispatch(now: true);
 
 		return $checker->progress();
 	}
@@ -134,10 +124,6 @@ class LinksView extends OverviewView
 	 */
 	public function linkingPages(string $url): array
 	{
-		if (!static::canAccess()) {
-			throw new PermissionException(key: 'access.view');
-		}
-
 		$link = $this->report()->links()[$url] ?? throw new NotFoundException(message: 'Link not found');
 		[$pagination, $visible] = $this->paginate($this->linking($link));
 
@@ -167,7 +153,7 @@ class LinksView extends OverviewView
 	{
 		$entries = [];
 
-		foreach ($link['pages'] as $id => $location) {
+		foreach (Report::pages($link) as $id => $location) {
 			if ($page = $this->kirby->page($id)) {
 				$entries[] = ['page' => $page, 'location' => $location];
 			}
@@ -176,41 +162,9 @@ class LinksView extends OverviewView
 		return $this->sort($entries, fn ($entry) => ($entry['location'] === 'content' ? '0' : '1') . $entry['page']->title()->value(), 'asc');
 	}
 
-	/**
-	 * Checks a link again: the pages linking to it & the URL itself
-	 */
-	public function recheck(): array
-	{
-		if (!static::canAccess()) {
-			throw new PermissionException(key: 'access.view');
-		}
-
-		$checker = new Checker();
-		$checker->recheck((string)$this->kirby->request()->get('url'));
-		Checker::dispatch(now: true);
-
-		return $checker->progress();
-	}
-
 	protected function report(): Report
 	{
 		return $this->report ??= new Report();
-	}
-
-	/**
-	 * Number of links per state
-	 */
-	protected function summary(array $links): array
-	{
-		$summary = array_fill_keys(self::FILTERS, 0);
-
-		foreach ($links as $link) {
-			if (isset($summary[$link['state']])) {
-				$summary[$link['state']]++;
-			}
-		}
-
-		return $summary;
 	}
 
 	/**
@@ -294,8 +248,11 @@ class LinksView extends OverviewView
 	protected function row(array $link): array
 	{
 		// links in the content can be edited, links in the layout (navigation, footer) come from templates
-		$locations = array_values(array_unique($link['pages']));
-		$location = count($locations) > 1 ? 'both' : $locations[0];
+		$location = match (true) {
+			$link['content'] !== '' && $link['layout'] !== '' => 'both',
+			$link['content'] !== '' => 'content',
+			default => 'layout',
+		};
 
 		return [
 			'id' => $link['url'],
@@ -308,8 +265,8 @@ class LinksView extends OverviewView
 			'details' => $this->reason($link),
 			// the first page (preferably linking in the content), all pages are listed in a drawer
 			'pages' => [
-				'text' => $this->title(array_key_first(array_filter($link['pages'], fn ($location) => $location === 'content')) ?? array_key_first($link['pages'])),
-				'total' => count($link['pages']),
+				'text' => $this->title(array_key_first(Report::pages($link))),
+				'total' => $link['total'],
 			],
 			'location' => I18n::translate("seo.overview.links.location.{$location}"),
 		];

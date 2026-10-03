@@ -125,10 +125,6 @@ abstract class EditableOverviewView extends OverviewView
 	 */
 	public function rows(array $ids): array
 	{
-		if (!static::canAccess()) {
-			throw new PermissionException(key: 'access.view');
-		}
-
 		return VersionId::render('changes', function () use ($ids) {
 			$rows = [];
 
@@ -155,10 +151,6 @@ abstract class EditableOverviewView extends OverviewView
 	 */
 	public function save(array $changes): array
 	{
-		if (!static::canAccess()) {
-			throw new PermissionException(key: 'access.view');
-		}
-
 		// one save per row, with all of its changed columns
 		$input = [];
 		foreach ($changes as $change) {
@@ -222,10 +214,6 @@ abstract class EditableOverviewView extends OverviewView
 
 	protected function apply(array $ids, Closure $action): array
 	{
-		if (!static::canAccess()) {
-			throw new PermissionException(key: 'access.view');
-		}
-
 		$ids = array_values(array_filter($ids, 'is_string'));
 		$errors = [];
 

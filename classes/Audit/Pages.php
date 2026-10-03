@@ -2,11 +2,11 @@
 
 namespace tobimori\Seo\Audit;
 
-use Closure;
 use Kirby\Cms\App;
 use Kirby\Cms\Page;
 use Kirby\Cms\Site;
 use Kirby\Toolkit\Str;
+use tobimori\Seo\Meta;
 use tobimori\Seo\Seo;
 
 /**
@@ -52,16 +52,17 @@ class Pages
 	 */
 	public const OWN_SOURCES = ['fields', 'programmatic'];
 
+	/**
+	 * Meta values that are cached as plain text with the checks (see `value()`)
+	 */
+	public const VALUES = ['metaTitle', 'metaDescription', 'ogDescription'];
+
+	protected array|null $entries = null;
 	protected array|null $result = null;
 	protected array $fingerprints = [];
 
-	/**
-	 * @param \Closure(\Kirby\Cms\Page): \tobimori\Seo\Meta $meta
-	 */
-	public function __construct(
-		protected \Kirby\Cms\Pages $pages,
-		protected Closure $meta
-	) {
+	public function __construct(protected \Kirby\Cms\Pages $pages)
+	{
 	}
 
 	/**
@@ -94,6 +95,16 @@ class Pages
 	/**
 	 * Whether the page has an issue of the given type, or of the given kind (any title/description issue)
 	 */
+	/**
+	 * Plain text of the page's title or of a meta value (see `VALUES`), cached until the page changes:
+	 * searching & sorting all pages would otherwise resolve the meta of each of them.
+	 * `null` for other keys & pages that aren't part of the audit
+	 */
+	public function value(Page $page, string $key): string|null
+	{
+		return $this->entries()[$page->id()]['values'][$key] ?? null;
+	}
+
 	public function has(Page $page, string $type): bool
 	{
 		foreach (array_column($this->page($page)['issues'] ?? [], 'type') as $issue) {
@@ -151,10 +162,14 @@ class Pages
 
 	protected function entries(): array
 	{
+		if ($this->entries !== null) {
+			return $this->entries;
+		}
+
 		$kirby = App::instance();
 		$cache = $kirby->cache('tobimori.seo.overview');
 
-		$key = 'audit-v6-' . md5(json_encode([$kirby->language()?->code(), $this->modified($kirby->site()), $this->options()]));
+		$key = 'audit-v7-' . md5(json_encode([$kirby->language()?->code(), $this->modified($kirby->site()), $this->options()]));
 		$cached = $cache->get($key) ?? [];
 		$entries = [];
 		$changed = false;
@@ -175,7 +190,7 @@ class Pages
 			$cache->set($key, [...$cached, ...$entries], 60 * 24);
 		}
 
-		return $entries;
+		return $this->entries = $entries;
 	}
 
 	/**
@@ -213,15 +228,25 @@ class Pages
 
 	protected function entry(Page $page): array
 	{
-		if ($reason = $this->skipped($page)) {
-			return ['skipped' => $reason];
+		// not shared with the rows of the overview: with a warm cache, no meta is resolved
+		// for the audit, and building the cache would keep the meta of all pages in memory
+		/** @var \tobimori\Seo\Meta $meta */
+		$meta = new (Seo::option('components.meta'))($page);
+		$values = ['title' => (string)$page->title()->value()];
+
+		foreach (self::VALUES as $key) {
+			$values[$key] = Str::unhtml((string)$meta->resolve($key)['field']->value());
 		}
 
-		/** @var \tobimori\Seo\Meta $meta */
-		$meta = ($this->meta)($page);
+		// skipped pages are listed (& searched) as well
+		if ($reason = $this->skipped($page, $meta)) {
+			return ['skipped' => $reason, 'values' => $values];
+		}
+
 		$description = $meta->resolve('metaDescription');
 
 		return [
+			'values' => $values,
 			'home' => $page->isHomePage(),
 			// the full title, as rendered with the title template
 			'title' => static::text($meta->metaTitle()->value()),
@@ -360,13 +385,13 @@ class Pages
 	/**
 	 * Why the page isn't checked, if it isn't
 	 */
-	protected function skipped(Page $page): string|null
+	protected function skipped(Page $page, Meta $meta): string|null
 	{
 		return match (true) {
 			$page->isDraft() => 'draft',
 			// pages without a translation show the content of the default language
 			!$page->version('latest')->exists('current') && !$page->version('changes')->exists('current') => 'untranslated',
-			!$this->isIndexable($page) => 'noindex',
+			!$this->isIndexable($page, $meta) => 'noindex',
 			default => null,
 		};
 	}
@@ -375,14 +400,11 @@ class Pages
 	 * Whether search engines may index the page. If the whole site is set to `noindex`
 	 * (e.g. on staging environments), pages are checked as if it wasn't
 	 */
-	protected function isIndexable(Page $page): bool
+	protected function isIndexable(Page $page, Meta $meta): bool
 	{
 		if (!Seo::option('robots.enabled')) {
 			return true;
 		}
-
-		/** @var \tobimori\Seo\Meta $meta */
-		$meta = ($this->meta)($page);
 
 		if (Seo::option('robots.index')) {
 			return !Str::contains($meta->robots(), 'noindex');
