@@ -73,17 +73,19 @@ return [
 		}
 	},
 	'page.render:before' => function (string $contentType, array $data, Page $page) {
-		if (!class_exists('Spatie\SchemaOrg\Schema')) {
+		// schemas are only output in HTML, skip markdown, XML and text representations
+		if ($contentType !== 'html' || !class_exists('Spatie\SchemaOrg\Schema')) {
 			return;
 		}
 
 		if (option('tobimori.seo.generateSchema')) {
+			$meta = $page->metadata();
 			$page->schema('WebSite')
-				->url($page->metadata()->canonicalUrl())
+				->url($meta->canonicalUrl())
 				->copyrightYear(date('Y'))
-				->description($page->metadata()->metaDescription())
-				->name($page->metadata()->metaTitle())
-				->headline($page->metadata()->title());
+				->description($meta->metaDescription())
+				->name($meta->metaTitle())
+				->headline($meta->title());
 		}
 	},
 	'route:after' => function (string $path, string $method, mixed $result, bool $final) {
