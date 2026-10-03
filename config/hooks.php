@@ -7,6 +7,12 @@ use Kirby\Toolkit\Str;
 use tobimori\Seo\Field\AltTextField;
 use tobimori\Seo\Seo;
 
+$indexNow = function (Page $newPage): void {
+	if (Seo::option('indexnow.enabled')) {
+		(new (Seo::option('components.indexnow'))($newPage))->dispatch();
+	}
+};
+
 return [
 	'system.loadPlugins:after' => function () {
 		if (class_exists('tobimori\Queues\Queues')) {
@@ -31,7 +37,7 @@ return [
 
 		return AltTextField::generateForFile($file);
 	},
-	'page.update:after' => function (Page $newPage, Page $oldPage) {
+	'page.update:after' => function (Page $newPage, Page $oldPage) use ($indexNow) {
 		// only inject blueprint defaults if the seo tab is present
 		if ($newPage->blueprint()->tab('seo')) {
 			$updates = A::reduce(
@@ -53,25 +59,12 @@ return [
 			}
 		}
 
-		if (Seo::option('indexnow.enabled')) {
-			$indexNow = new (Seo::option('components.indexnow'))($newPage);
-			$indexNow->dispatch();
-		}
+		$indexNow($newPage);
 
 		return $newPage;
 	},
-	'page.changeStatus:after' => function (Page $newPage, Page $oldPage) {
-		if (Seo::option('indexnow.enabled')) {
-			$indexNow = new (Seo::option('components.indexnow'))($newPage);
-			$indexNow->dispatch();
-		}
-	},
-	'page.changeSlug:after' => function (Page $newPage, Page $oldPage) {
-		if (Seo::option('indexnow.enabled')) {
-			$indexNow = new (Seo::option('components.indexnow'))($newPage);
-			$indexNow->dispatch();
-		}
-	},
+	'page.changeStatus:after' => $indexNow,
+	'page.changeSlug:after' => $indexNow,
 	'page.render:before' => function (string $contentType, array $data, Page $page) {
 		// schemas are only output in HTML, skip markdown, XML and text representations
 		if ($contentType !== 'html' || !class_exists('Spatie\SchemaOrg\Schema')) {
