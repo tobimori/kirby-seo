@@ -5,8 +5,8 @@ use Kirby\Cms\Page;
 use Kirby\Cms\Language;
 use Kirby\Http\Response;
 use Kirby\Data\Json;
+use Kirby\Exception\NotFoundException;
 use tobimori\Seo\Seo;
-use tobimori\Seo\Sitemap\SitemapIndex;
 
 return [
 	[
@@ -171,8 +171,6 @@ return [
 				$this->next();
 			}
 
-			SitemapIndex::instance()->generate();
-			kirby()->response()->type('text/xml');
 			return Page::factory([
 				'slug' => 'sitemap',
 				'template' => 'sitemap',
@@ -215,21 +213,20 @@ return [
 				$this->next();
 			}
 
-			SitemapIndex::instance()->generate();
-			if (!SitemapIndex::instance()->isValidIndex($index)) {
+			// the index is generated lazily on a cache miss and rejected there if invalid
+			try {
+				return Page::factory([
+					'slug' => "sitemap-{$index}",
+					'template' => 'sitemap',
+					'model' => 'sitemap',
+					'content' => [
+						'title' => t('seo.sitemap.title'),
+						'index' => $index,
+					],
+				])->render(contentType: 'xml');
+			} catch (NotFoundException) {
 				$this->next();
 			}
-
-			kirby()->response()->type('text/xml');
-			return Page::factory([
-				'slug' => "sitemap-{$index}",
-				'template' => 'sitemap',
-				'model' => 'sitemap',
-				'content' => [
-					'title' => t('seo.sitemap.title'),
-					'index' => $index,
-				],
-			])->render(contentType: 'xml');
 		}
 	],
 	[
