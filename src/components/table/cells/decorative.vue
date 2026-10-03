@@ -1,7 +1,7 @@
 <script setup>
 import { computed, useHelpers } from "kirbyuse"
 
-import { rowName } from "../../utils/rows.js"
+import { rowName } from "../../../utils/rows.js"
 
 const props = defineProps({
 	column: Object,

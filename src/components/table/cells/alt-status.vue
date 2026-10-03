@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from "kirbyuse"
 
-import { SEVERITY_ICONS } from "../../utils/checks.js"
+import { SEVERITY_ICONS } from "../../../utils/checks.js"
 
 const props = defineProps({
 	column: Object,
@@ -61,7 +61,7 @@ const icon = computed(() =>
 		--icon-color: var(--color-gray-400);
 	}
 
-	/* the span must be the hovered element, see page-cell */
+	/* the span must be the hovered element, see page.vue */
 	.k-icon {
 		pointer-events: none;
 	}

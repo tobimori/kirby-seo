@@ -1,5 +1,5 @@
 <script setup>
-import { rowName } from "../../utils/rows.js"
+import { rowName } from "../../../utils/rows.js"
 
 defineProps({
 	column: Object,

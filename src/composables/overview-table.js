@@ -2,11 +2,6 @@ import { computed, onBeforeUnmount, onMounted, ref, watch, usePanel, useHelpers 
 
 import { fetchSseStream } from "../helpers/ai-stream.js"
 
-const AUTOSAVE_DELAY = 500
-const AI_CONCURRENCY = 2
-
-const isLockError = (error) => error?.key?.startsWith("error.content.lock")
-
 /** Keeps table search, sorting, and pagination in the view query */
 export function useTableQuery(props) {
 	const panel = usePanel()
@@ -155,7 +150,7 @@ export function useOverviewTable(props, { endpoint, storageKey, applyPending, ai
 
 	const notifyErrors = (response) => {
 		const errors = Object.values(response.errors ?? {})
-		const lockError = errors.find(isLockError)
+		const lockError = errors.find((error) => error?.key?.startsWith("error.content.lock"))
 
 		// someone else started editing in the meantime
 		if (lockError) {
@@ -204,7 +199,7 @@ export function useOverviewTable(props, { endpoint, storageKey, applyPending, ai
 		}
 
 		window.clearTimeout(timer)
-		timer = window.setTimeout(flush, AUTOSAVE_DELAY)
+		timer = window.setTimeout(flush, 500)
 	}
 
 	// sends right away, e.g. when a cell is left
@@ -532,7 +527,7 @@ export function useOverviewTable(props, { endpoint, storageKey, applyPending, ai
 			}
 		}
 
-		await Promise.all(Array.from({ length: Math.min(AI_CONCURRENCY, rows.length) }, worker))
+		await Promise.all(Array.from({ length: Math.min(2, rows.length) }, worker))
 		onCommit()
 		generation.value = null
 

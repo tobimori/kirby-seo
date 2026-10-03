@@ -22,8 +22,6 @@ const { settings, isVisible, columnOptions, visibleColumnKeys, onColumns } = use
 )
 
 // Panel requests perform scan steps without queues; otherwise they only poll progress
-const POLL_DELAY = 5000
-
 const progress = ref(props.progress)
 watch(
 	() => props.progress,
@@ -63,7 +61,6 @@ watch(phase, (value) => {
 })
 
 let isActive = false
-const wait = (ms) => new Promise((resolve) => window.setTimeout(resolve, ms))
 
 const run = async () => {
 	if (isActive) {
@@ -96,7 +93,7 @@ const run = async () => {
 
 			// another scan (or the queue worker) is running
 			if (response.queue || response.running) {
-				await wait(POLL_DELAY)
+				await new Promise((resolve) => window.setTimeout(resolve, 5000))
 			}
 		}
 	} catch (error) {

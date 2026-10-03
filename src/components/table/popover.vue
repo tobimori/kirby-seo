@@ -11,8 +11,6 @@ defineProps({
 	button: Object
 })
 
-const HIDE_DELAY = 150
-
 const panel = usePanel()
 
 const group = usePopoverGroup()
@@ -112,7 +110,7 @@ const onEnter = () => {
 const onLeave = () => {
 	if (!isPinned.value) {
 		window.clearTimeout(hideTimer)
-		hideTimer = window.setTimeout(close, HIDE_DELAY)
+		hideTimer = window.setTimeout(close, 150)
 	}
 }
 

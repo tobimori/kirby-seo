@@ -69,7 +69,6 @@ const editableKeys = computed(() =>
 )
 
 const isEditable = (row, key) => row.editable !== false && row[key]?.editable !== false
-const isEditing = (row, key) => editing.value?.row === row.id && editing.value?.column === key
 const rowsByKeys = (keys) => props.rows.filter((row) => keys.includes(row.id))
 
 const remember = (rows, key) => {
@@ -116,16 +115,6 @@ const clearRange = () => {
 }
 
 const inRange = (row, key) => range.value?.column === key && range.value.rows.includes(row.id)
-
-// position within the range, so only the outer edges of the range get a border
-const rangeEdge = (row, key) => {
-	if (!inRange(row, key)) {
-		return null
-	}
-
-	const rows = range.value.rows
-	return { start: rows[0] === row.id, end: rows.at(-1) === row.id }
-}
 
 // selects the given rows as range; if something was typed already,
 // rows that join the range get the value, rows that leave it are restored
@@ -429,12 +418,19 @@ const tableColumns = computed(() => {
 				column = {
 					...column,
 					isEditable: (row) => isEditable(row, key),
-					isEditing: (row) => isEditing(row, key),
+					isEditing: (row) => editing.value?.row === row.id && editing.value?.column === key,
 					startEdit: (row) => startEdit(row, key),
 					cancelEdit: () => cancelEdit(key),
 					commitEdit: (row, value, direction) => commitEdit(row, key, value, direction),
 					inRange: (row) => inRange(row, key),
-					rangeEdge: (row) => rangeEdge(row, key),
+					// position within the range, so only the outer edges of the range get a border
+					rangeEdge: (row) =>
+						inRange(row, key)
+							? {
+									start: range.value.rows[0] === row.id,
+									end: range.value.rows.at(-1) === row.id
+								}
+							: null,
 					extendRange: (row) => extendRange(row, key),
 					selectAll: () => selectAll(key),
 					setDraft: (row, value) => setDraft(row, key, value),

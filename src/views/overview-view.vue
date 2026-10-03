@@ -16,8 +16,6 @@ const props = defineProps({
 const panel = usePanel()
 const helpers = useHelpers()
 
-const toText = (html) => new window.DOMParser().parseFromString(html, "text/html").body.textContent
-
 const {
 	reload,
 	searchterm,
@@ -58,7 +56,9 @@ const {
 	applyPending: (cell, { value }) => ({
 		...cell,
 		value,
-		text: value ? toText(value) : cell.placeholder,
+		text: value
+			? new window.DOMParser().parseFromString(value, "text/html").body.textContent
+			: cell.placeholder,
 		source: value ? "fields" : cell.placeholderSource
 	})
 })
@@ -153,19 +153,11 @@ const checksLabel = computed(() => {
 	return panel.t("seo.overview.checks.filter.all")
 })
 
-// duplicates are sorted by their value, so pages sharing the same one are next to each other
-const DUPLICATE_SORT = {
-	titleDuplicate: "metaTitle",
-	descriptionDuplicate: "metaDescription"
+const setFilter = (issue = "") => {
+	// duplicates are sorted by their value, so pages sharing the same one are next to each other
+	const sort = { titleDuplicate: "metaTitle", descriptionDuplicate: "metaDescription" }[issue]
+	reload({ issue, group: "", page: "1", ...(sort && { sort, dir: "asc" }) })
 }
-
-const setFilter = (issue = "") =>
-	reload({
-		issue,
-		group: "",
-		page: "1",
-		...(DUPLICATE_SORT[issue] ? { sort: DUPLICATE_SORT[issue], dir: "asc" } : {})
-	})
 
 function filterGroup(group) {
 	reload({ group, issue: "", page: "1" })

@@ -10,8 +10,6 @@ const props = defineProps(editableOverviewProps)
 
 const panel = usePanel()
 
-const AI_SOURCES = ["ai", "reviewed"]
-
 const {
 	reload,
 	searchterm,
@@ -60,7 +58,7 @@ const {
 			source ??
 			(value === cell.value
 				? cell.source
-				: AI_SOURCES.includes(cell.source)
+				: ["ai", "reviewed"].includes(cell.source)
 					? "reviewed"
 					: "manual")
 	}),
@@ -69,26 +67,6 @@ const {
 		body: { id: row.id }
 	})
 })
-
-const stateOf = (alt) => {
-	if (alt.decorative) {
-		return "decorative"
-	}
-
-	if (!alt.value?.trim()) {
-		return "missing"
-	}
-
-	return alt.source === "ai" ? "ai" : "ok"
-}
-
-const tagOf = (state) =>
-	state === "ai"
-		? {
-				text: panel.t(`seo.overview.images.tag.${state}`),
-				title: panel.t(`seo.overview.images.status.${state}`)
-			}
-		: null
 
 const canReview = (row) => row.editable && row.alt.source === "ai"
 const canSetDecorative = (row, decorative) => row.editable && row.alt.decorative !== decorative
@@ -144,7 +122,13 @@ const items = computed(() =>
 			item.alt = { ...item.alt, decorative: decorativePending.value[row.id] }
 		}
 
-		const state = stateOf(item.alt)
+		const state = item.alt.decorative
+			? "decorative"
+			: !item.alt.value?.trim()
+				? "missing"
+				: item.alt.source === "ai"
+					? "ai"
+					: "ok"
 
 		return {
 			...item,
@@ -160,7 +144,13 @@ const items = computed(() =>
 				text: item.alt.decorative
 					? panel.t("seo.overview.images.status.decorative")
 					: item.alt.value,
-				tag: tagOf(state),
+				tag:
+					state === "ai"
+						? {
+								text: panel.t("seo.overview.images.tag.ai"),
+								title: panel.t("seo.overview.images.status.ai")
+							}
+						: null,
 				dimmed: item.alt.decorative
 			},
 			options: [

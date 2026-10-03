@@ -1,7 +1,7 @@
 <script setup>
 import { computed, usePanel } from "kirbyuse"
 
-import { SEVERITY_ICONS } from "../../utils/checks.js"
+import { SEVERITY_ICONS } from "../../../utils/checks.js"
 
 const props = defineProps({
 	column: Object,
@@ -12,34 +12,21 @@ const props = defineProps({
 
 const panel = usePanel()
 
-const label = (issue) =>
-	panel.t(
-		issue.variant
-			? `seo.overview.checks.${issue.type}.${issue.variant}`
-			: `seo.overview.checks.${issue.type}`
-	)
-
-const info = (issue) => {
-	if (issue.group) {
-		return panel.t("seo.overview.checks.duplicate.show", { count: issue.count })
-	}
-
-	if (issue.variant) {
-		return panel.t(`seo.overview.checks.length.info.${issue.variant}`, issue)
-	}
-
-	if (issue.source) {
-		return panel.t(`seo.overview.sourceLabel.${issue.source}`)
-	}
-
-	return null
-}
-
 const issues = computed(() =>
 	(props.value.issues ?? []).map((issue) => ({
 		...issue,
-		text: label(issue),
-		info: info(issue)
+		text: panel.t(
+			issue.variant
+				? `seo.overview.checks.${issue.type}.${issue.variant}`
+				: `seo.overview.checks.${issue.type}`
+		),
+		info: issue.group
+			? panel.t("seo.overview.checks.duplicate.show", { count: issue.count })
+			: issue.variant
+				? panel.t(`seo.overview.checks.length.info.${issue.variant}`, issue)
+				: issue.source
+					? panel.t(`seo.overview.sourceLabel.${issue.source}`)
+					: null
 	}))
 )
 
@@ -127,7 +114,7 @@ const onFilter = (issue, close) => {
 	}
 }
 
-/* the span must be the hovered element, see page-cell */
+/* the span must be the hovered element, see page.vue */
 .k-seo-checks-cell-ok,
 .k-seo-checks-cell-skipped {
 	.k-icon {
