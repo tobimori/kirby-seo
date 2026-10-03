@@ -1,12 +1,19 @@
 <script setup>
-import { rowName } from "../../../utils/rows.js"
+import { computed } from "kirbyuse"
 
-defineProps({
+const props = defineProps({
 	column: Object,
 	row: Object,
 	/** Number of the row, counting across table pages */
 	value: Number
 })
+
+// the parent title distinguishes images with the same filename
+const name = computed(() =>
+	props.row.title?.info
+		? `${props.row.title.text} (${props.row.title.info})`
+		: (props.row.title?.text ?? props.value)
+)
 </script>
 
 <template>
@@ -22,7 +29,7 @@ defineProps({
 		<input
 			:checked="column.isSelected(row)"
 			:disabled="row.selectable === false"
-			:aria-label="$t('seo.table.selectRow', { title: rowName(row) ?? value })"
+			:aria-label="$t('seo.table.selectRow', { title: name })"
 			type="checkbox"
 			@click.stop="column.toggle(row, $event)"
 		/>

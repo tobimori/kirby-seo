@@ -1,8 +1,6 @@
 <script setup>
 import { computed, useHelpers } from "kirbyuse"
 
-import { rowName } from "../../../utils/rows.js"
-
 const props = defineProps({
 	column: Object,
 	row: Object,
@@ -12,9 +10,13 @@ const props = defineProps({
 
 const helpers = useHelpers()
 
-// the label of the toggle is HTML & only read by screen readers, e.g. "Decorative: dog.jpg (Team)"
+// the label of the toggle is HTML & only read by screen readers, e.g. "Decorative: dog.jpg (Team)".
+// The parent title distinguishes images with the same filename
 const label = computed(() =>
-	helpers.string.escapeHTML(`${props.column.label}: ${rowName(props.row)}`)
+	helpers.string.escapeHTML(
+		`${props.column.label}: ${props.row.title.text}` +
+			(props.row.title.info ? ` (${props.row.title.info})` : "")
+	)
 )
 </script>
 
