@@ -207,6 +207,7 @@
   "overview.changes.discard.confirm.all": "Tüm sayfaların <strong>kaydedilmemiş değişikliklerini</strong> gerçekten silmek istiyor musun ({count})?",
   "overview.changes.published": "Değişiklikler yayınlandı ({count})",
   "overview.changes.discarded": "Değişiklikler silindi ({count})",
+  "overview.changes.unsaved": "Kaydedilmemiş değişiklikler: {count}",
   "overview.images.empty": "Görsel bulunamadı",
   "overview.images.empty.noImages": "Henüz görsel yok",
   "overview.images.columns.status": "Durum",
@@ -248,7 +249,8 @@
   "overview.links.columns.url": "Bağlantı",
   "overview.links.columns.details": "Ayrıntılar",
   "overview.links.columns.pages": "Bağlantı veren sayfalar",
-  "overview.links.pages.show": "Buraya bağlanan tüm sayfaları göster",
+  "overview.links.pages.show": "Buraya bağlanan tüm sayfaları göster, canım!",
+  "overview.links.pages.more": "{count} sayfa daha",
   "overview.links.columns.location": "Konum",
   "overview.links.location.content": "İçerik",
   "overview.links.location.layout": "Düzen",
@@ -285,6 +287,7 @@
   "overview.links.progress.pages": "Sayfalar kontrol ediliyor {done}/{total}",
   "overview.links.progress.urls": "Harici bağlantılar kontrol ediliyor {done}/{total}",
   "overview.links.progress.queue": "Kuyruk çalışanı bekleniyor",
+  "overview.links.progress.done": "Tüm bağlantılar kontrol edildi",
   "overview.links.rescan": "Tekrar kontrol et",
   "overview.links.rescan.confirm": "Tüm {pages} sayfayı tekrar kontrol edelim mi? Sayfalar yeniden oluşturulacak ve tüm harici bağlantılar yeniden istenecek, bu birkaç dakika sürebilir.",
   "overview.links.recheck": "Bu bağlantıyı tekrar kontrol et",
@@ -292,5 +295,7 @@
   "table.resize": "{column} sütununu yeniden boyutlandır",
   "table.resizeReset": "Yeniden boyutlandırmak için sürükle, sıfırlamak için çift tıkla",
   "table.selectAll": "Bu sayfadaki tüm satırları seç",
-  "table.selectRow": "{title} seçeneğini seç"
+  "table.selectRow": "{title} seçeneğini seç",
+  "table.sorted.asc": "artan sırada sıralandı",
+  "table.sorted.desc": "azalan sırada sıralandı"
 }

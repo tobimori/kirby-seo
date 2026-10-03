@@ -207,6 +207,7 @@
   "overview.changes.discard.confirm.all": "Vill du verkligen <strong>kasta bort de osparade ändringarna</strong> från alla sidor ({count})?",
   "overview.changes.published": "Ändringar publicerade ({count})",
   "overview.changes.discarded": "Ändringar kastade ({count})",
+  "overview.changes.unsaved": "Osparade ändringar: {count}",
   "overview.images.empty": "Inga bilder hittades",
   "overview.images.empty.noImages": "Inga bilder ännu",
   "overview.images.columns.status": "Status",
@@ -248,7 +249,8 @@
   "overview.links.columns.url": "Länk",
   "overview.links.columns.details": "Detaljer",
   "overview.links.columns.pages": "Länkas från",
-  "overview.links.pages.show": "Visa alla sidor som länkar hit",
+  "overview.links.pages.show": "Visa mig alla sidor som länkar hit, så fint!",
+  "overview.links.pages.more": "{count} sidor till",
   "overview.links.columns.location": "Plats",
   "overview.links.location.content": "Innehåll",
   "overview.links.location.layout": "Layout",
@@ -285,6 +287,7 @@
   "overview.links.progress.pages": "Kontrollerar sidor {done}/{total}",
   "overview.links.progress.urls": "Kontrollerar externa länkar {done}/{total}",
   "overview.links.progress.queue": "Väntar på kömotorn",
+  "overview.links.progress.done": "Alla länkar är kontrollerade",
   "overview.links.rescan": "Kolla igen",
   "overview.links.rescan.confirm": "Vill du kolla alla {pages} sidor igen? Då renderas de på nytt och alla externa länkar begärs igen – det kan ta några minuter.",
   "overview.links.recheck": "Kolla den här länken igen",
@@ -292,5 +295,7 @@
   "table.resize": "Ändra storlek på kolumn {column}",
   "table.resizeReset": "Dra för att ändra storlek, dubbelklicka för att återställa",
   "table.selectAll": "Välj alla rader på denna sida",
-  "table.selectRow": "Välj {title}"
+  "table.selectRow": "Välj {title}",
+  "table.sorted.asc": "sorterad i stigande ordning",
+  "table.sorted.desc": "sorterad i fallande ordning"
 }

@@ -207,6 +207,7 @@
   "overview.changes.discard.confirm.all": "Chiar vrei să <strong>renunți la modificările nesalvate</strong> de pe toate paginile ({count})?",
   "overview.changes.published": "Modificări publicate ({count})",
   "overview.changes.discarded": "Modificări anulate ({count})",
+  "overview.changes.unsaved": "Modificări nesalvate: {count}",
   "overview.images.empty": "Nu am găsit nicio imagine",
   "overview.images.empty.noImages": "Încă nu ai imagini",
   "overview.images.columns.status": "Stare",
@@ -248,7 +249,8 @@
   "overview.links.columns.url": "Legătură",
   "overview.links.columns.details": "Detalii",
   "overview.links.columns.pages": "Legată din",
-  "overview.links.pages.show": "Arată toate paginile care trimit aici",
+  "overview.links.pages.show": "Arată-mi toate paginile care trimit aici, dragă!",
+  "overview.links.pages.more": "încă {count} pagini",
   "overview.links.columns.location": "Locație",
   "overview.links.location.content": "Conținut",
   "overview.links.location.layout": "Aspect",
@@ -285,6 +287,7 @@
   "overview.links.progress.pages": "Verificăm paginile {done}/{total}",
   "overview.links.progress.urls": "Verificăm linkurile externe {done}/{total}",
   "overview.links.progress.queue": "Așteptăm procesul de coadă",
+  "overview.links.progress.done": "Toate linkurile au fost verificate",
   "overview.links.rescan": "Verifică din nou",
   "overview.links.rescan.confirm": "Vrei să verifici din nou toate cele {pages} pagini? Ele vor fi redate din nou, iar toate linkurile externe vor fi solicitate încă o dată. Poate dura câteva minute.",
   "overview.links.recheck": "Verifică din nou acest link",
@@ -292,5 +295,7 @@
   "table.resize": "Redimensionează coloana {column}",
   "table.resizeReset": "Trage pentru a redimensiona, dublu-clic pentru a reseta",
   "table.selectAll": "Selectează toate rândurile de pe această pagină",
-  "table.selectRow": "Selectează {title}"
+  "table.selectRow": "Selectează {title}",
+  "table.sorted.asc": "sortat crescător",
+  "table.sorted.desc": "sortat descrescător"
 }

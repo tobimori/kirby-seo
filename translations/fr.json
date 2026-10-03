@@ -207,6 +207,7 @@
   "overview.changes.discard.confirm.all": "Veux-tu vraiment <strong>abandonner les modifications non enregistrées</strong> de toutes les pages ({count}) ?",
   "overview.changes.published": "Modifications publiées ({count})",
   "overview.changes.discarded": "Modifications abandonnées ({count})",
+  "overview.changes.unsaved": "Modifications non enregistrées : {count}",
   "overview.images.empty": "Aucune image trouvée",
   "overview.images.empty.noImages": "Pas encore d'images",
   "overview.images.columns.status": "Statut",
@@ -248,7 +249,8 @@
   "overview.links.columns.url": "Lien",
   "overview.links.columns.details": "Détails",
   "overview.links.columns.pages": "Lié depuis",
-  "overview.links.pages.show": "Afficher toutes les pages qui pointent ici",
+  "overview.links.pages.show": "Montre-moi toutes les pages qui pointent ici, ma belle !",
+  "overview.links.pages.more": "{count} pages de plus",
   "overview.links.columns.location": "Emplacement",
   "overview.links.location.content": "Contenu",
   "overview.links.location.layout": "Mise en page",
@@ -285,6 +287,7 @@
   "overview.links.progress.pages": "Vérification des pages {done}/{total}",
   "overview.links.progress.urls": "Vérification des liens externes {done}/{total}",
   "overview.links.progress.queue": "En attente du worker de la file d'attente",
+  "overview.links.progress.done": "Tous les liens sont vérifiés",
   "overview.links.rescan": "Revérifie tout",
   "overview.links.rescan.confirm": "Revérifier les {pages} pages ? Elles seront regénérées et tous les liens externes seront de nouveau sollicités, ça peut prendre quelques minutes.",
   "overview.links.recheck": "Revérifie ce lien",
@@ -292,5 +295,7 @@
   "table.resize": "Redimensionner la colonne {column}",
   "table.resizeReset": "Fais glisser pour redimensionner, double-clique pour réinitialiser",
   "table.selectAll": "Sélectionner toutes les lignes de cette page",
-  "table.selectRow": "Sélectionner {title}"
+  "table.selectRow": "Sélectionner {title}",
+  "table.sorted.asc": "trié par ordre croissant",
+  "table.sorted.desc": "trié par ordre décroissant"
 }

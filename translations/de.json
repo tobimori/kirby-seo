@@ -207,6 +207,7 @@
   "overview.changes.discard.confirm.all": "Möchtest du wirklich <strong>die ungespeicherten Änderungen</strong> aller Seiten ({count}) verwerfen?",
   "overview.changes.published": "Änderungen veröffentlicht ({count})",
   "overview.changes.discarded": "Änderungen verworfen ({count})",
+  "overview.changes.unsaved": "Ungespeicherte Änderungen: {count}",
   "overview.images.empty": "Keine Bilder gefunden",
   "overview.images.empty.noImages": "Noch keine Bilder",
   "overview.images.columns.status": "Status",
@@ -248,7 +249,8 @@
   "overview.links.columns.url": "Link",
   "overview.links.columns.details": "Details",
   "overview.links.columns.pages": "Verlinkt von",
-  "overview.links.pages.show": "Alle Seiten mit diesem Link anzeigen",
+  "overview.links.pages.show": "Verlinkende Seiten anzeigen",
+  "overview.links.pages.more": "{count} weitere Seiten",
   "overview.links.columns.location": "Bereich",
   "overview.links.location.content": "Inhalt",
   "overview.links.location.layout": "Layout",
@@ -285,6 +287,7 @@
   "overview.links.progress.pages": "Seiten werden geprüft {done}/{total}",
   "overview.links.progress.urls": "Externe Links werden geprüft {done}/{total}",
   "overview.links.progress.queue": "Warten auf den Queue-Worker",
+  "overview.links.progress.done": "Alle Links geprüft",
   "overview.links.rescan": "Erneut prüfen",
   "overview.links.rescan.confirm": "Möchtest du alle {pages} Seiten erneut prüfen? Sie werden neu gerendert und alle externen Links neu abgefragt – das kann ein paar Minuten dauern.",
   "overview.links.recheck": "Diesen Link erneut prüfen",
@@ -292,5 +295,7 @@
   "table.resize": "Spalte {column} anpassen",
   "table.resizeReset": "Ziehen zum Anpassen, Doppelklick zum Zurücksetzen",
   "table.selectAll": "Alle Zeilen auf dieser Seite auswählen",
-  "table.selectRow": "{title} auswählen"
+  "table.selectRow": "{title} auswählen",
+  "table.sorted.asc": "aufsteigend sortiert",
+  "table.sorted.desc": "absteigend sortiert"
 }

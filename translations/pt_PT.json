@@ -207,6 +207,7 @@
   "overview.changes.discard.confirm.all": "Tens a certeza de que queres <strong>descartar as alterações não guardadas</strong> de todas as páginas ({count})?",
   "overview.changes.published": "Alterações publicadas ({count})",
   "overview.changes.discarded": "Alterações descartadas ({count})",
+  "overview.changes.unsaved": "Alterações por guardar: {count}",
   "overview.images.empty": "Nenhuma imagem encontrada",
   "overview.images.empty.noImages": "Ainda sem imagens",
   "overview.images.columns.status": "Estado",
@@ -248,7 +249,8 @@
   "overview.links.columns.url": "Ligação",
   "overview.links.columns.details": "Detalhes",
   "overview.links.columns.pages": "Ligada a partir de",
-  "overview.links.pages.show": "Ver todas as páginas que ligam aqui",
+  "overview.links.pages.show": "Mostra-me todas as páginas que apontam para aqui, querida!",
+  "overview.links.pages.more": "Mais {count} páginas",
   "overview.links.columns.location": "Localização",
   "overview.links.location.content": "Conteúdo",
   "overview.links.location.layout": "Layout",
@@ -285,6 +287,7 @@
   "overview.links.progress.pages": "A verificar páginas {done}/{total}",
   "overview.links.progress.urls": "A verificar links externos {done}/{total}",
   "overview.links.progress.queue": "À espera do processador da fila",
+  "overview.links.progress.done": "Todas as ligações verificadas",
   "overview.links.rescan": "Verificar novamente",
   "overview.links.rescan.confirm": "Queres verificar novamente as {pages} páginas? Vamos renderizá-las outra vez e pedir de novo todos os links externos, o que pode demorar alguns minutos.",
   "overview.links.recheck": "Verificar este link novamente",
@@ -292,5 +295,7 @@
   "table.resize": "Redimensionar coluna {column}",
   "table.resizeReset": "Arrasta para redimensionar, clica duas vezes para repor",
   "table.selectAll": "Selecionar todas as linhas desta página",
-  "table.selectRow": "Selecionar {title}"
+  "table.selectRow": "Selecionar {title}",
+  "table.sorted.asc": "ordenado por ordem crescente",
+  "table.sorted.desc": "ordenado por ordem decrescente"
 }

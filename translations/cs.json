@@ -207,6 +207,7 @@
   "overview.changes.discard.confirm.all": "Opravdu chceš <strong>zahodit neuložené změny</strong> na všech stránkách ({count})?",
   "overview.changes.published": "Změny publikovány ({count})",
   "overview.changes.discarded": "Změny zahozeny ({count})",
+  "overview.changes.unsaved": "Neuložené změny: {count}",
   "overview.images.empty": "Žádné obrázky nenalezeny",
   "overview.images.empty.noImages": "Zatím žádné obrázky",
   "overview.images.columns.status": "Stav",
@@ -248,7 +249,8 @@
   "overview.links.columns.url": "Odkaz",
   "overview.links.columns.details": "Detaily",
   "overview.links.columns.pages": "Odkazováno z",
-  "overview.links.pages.show": "Zobrazit všechny stránky, které sem odkazují",
+  "overview.links.pages.show": "Ukaž mi všechny stránky, které sem odkazují, milá!",
+  "overview.links.pages.more": "{count} dalších stránek",
   "overview.links.columns.location": "Umístění",
   "overview.links.location.content": "Obsah",
   "overview.links.location.layout": "Rozložení",
@@ -285,6 +287,7 @@
   "overview.links.progress.pages": "Kontroluji stránky {done}/{total}",
   "overview.links.progress.urls": "Kontroluji externí odkazy {done}/{total}",
   "overview.links.progress.queue": "Čekáme na zpracování ve frontě",
+  "overview.links.progress.done": "Všechny odkazy zkontrolovány",
   "overview.links.rescan": "Zkontrolovat znovu",
   "overview.links.rescan.confirm": "Chceš znovu zkontrolovat všech {pages} stránek? Vykreslí se znovu a všechny externí odkazy se opět ověří, což může chvilku trvat.",
   "overview.links.recheck": "Zkontrolovat tento odkaz znovu",
@@ -292,5 +295,7 @@
   "table.resize": "Změnit velikost sloupce {column}",
   "table.resizeReset": "Přetáhni pro změnu velikosti, dvojklikni pro obnovení",
   "table.selectAll": "Vybrat všechny řádky na této stránce",
-  "table.selectRow": "Vybrat {title}"
+  "table.selectRow": "Vybrat {title}",
+  "table.sorted.asc": "seřazeno vzestupně",
+  "table.sorted.desc": "seřazeno sestupně"
 }

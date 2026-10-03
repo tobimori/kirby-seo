@@ -209,6 +209,7 @@ checksums:
     overview.changes.discard.confirm.all: 1062c9b3ef694150e9693497d02e2fdd
     overview.changes.published: 45fd314da8acde61d61a4425f526f12b
     overview.changes.discarded: ed0a2fdb5d32fd0421d4215f7b7b61ad
+    overview.changes.unsaved: c2746d8771444922a659ca0316f67d5e
     overview.images.empty: 2ccd4f1843d1809611bb7cb35eac99ca
     overview.images.empty.noImages: ef52ca3b3496c3acc53e520ef18ad113
     overview.images.columns.status: 4e1fcce15854d824919b4a582c697c90
@@ -250,7 +251,8 @@ checksums:
     overview.links.columns.url: 60f0aa33e70ca6df3b6659802b16f433
     overview.links.columns.details: 2a8bbb1bc386c059783f925aca2cc522
     overview.links.columns.pages: 37efef6ca3aaf8095eab9559ea18d449
-    overview.links.pages.show: e70f6d8e426899e64cc316a17e402c42
+    overview.links.pages.show: 49edb8248708f3281b6addadac9b0398
+    overview.links.pages.more: ef1346ca81ec06b99951964be5accc97
     overview.links.columns.location: 036cbdfe32bbe9ad67b5d06ef6a02a16
     overview.links.location.content: 669b337031ef165af577f04f2b7fd54f
     overview.links.location.layout: 8ab849bdcd801c13e7e85474299e4ee8
@@ -287,6 +289,7 @@ checksums:
     overview.links.progress.pages: e63ae0a6f4aacecca45cf5b15b4cbf8f
     overview.links.progress.urls: 7b122578676a30cd1f16c537d6060924
     overview.links.progress.queue: 762d4ccec39cab0cdac1e46cd142023f
+    overview.links.progress.done: cdb97dcd69ee6e2b7aa5b57b3e239e8c
     overview.links.rescan: 6ff1a8ce611ac06d5faaa4facfad215d
     overview.links.rescan.confirm: b563bf9b4f658d772be65e6c3a9554bf
     overview.links.recheck: 28977724f27e4f2b48ca9f26c5455390
@@ -295,3 +298,5 @@ checksums:
     table.resizeReset: 1ba1dc71b090b2dfa0fecbaa7a9e8d88
     table.selectAll: aa08dc308608eacaa9527cd58b963ade
     table.selectRow: 0c4ba6ea0c4beb248861cc5f4dc45de6
+    table.sorted.asc: 576b85d8f7630a1703445006a7289177
+    table.sorted.desc: 9b84ce6ee0b2cf159b7bbdb9a624a975
