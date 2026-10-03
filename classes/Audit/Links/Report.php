@@ -129,7 +129,7 @@ class Report
 		$key = 'stats/' . ($this->language ?? 'default');
 		$cached = $cache->get($key);
 
-		if (($cached['revision'] ?? null) === $this->data['revision']) {
+		if ($cached !== null && $cached['revision'] === $this->data['revision']) {
 			return $cached['stats'];
 		}
 
