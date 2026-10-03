@@ -618,25 +618,7 @@ class Meta
 	 */
 	public function metaTitle()
 	{
-		$title = $this->get('metaTitle');
-		$template = $this->get('metaTemplate');
-
-		$useTemplate = $this->page->useTitleTemplate();
-		$useTemplate = $useTemplate->isEmpty() ? true : $useTemplate->toBool();
-
-		$string = $title->value();
-		if ($useTemplate) {
-			$string = $this->page->toString(
-				$template,
-				['title' => $title]
-			);
-		}
-
-		return new Field(
-			$this->page,
-			'metaTitle',
-			$string
-		);
+		return $this->applyTitleTemplate('metaTitle', 'metaTemplate', $this->page->useTitleTemplate());
 	}
 
 	/**
@@ -644,24 +626,23 @@ class Meta
 	 */
 	public function ogTitle()
 	{
+		return $this->applyTitleTemplate('ogTitle', 'ogTemplate', $this->page->useOgTemplate());
+	}
+
+	/**
+	 * Fills the template with the meta title, unless the page disables the template
+	 */
+	protected function applyTitleTemplate(string $name, string $templateKey, Field $useTemplate): Field
+	{
 		$title = $this->get('metaTitle');
-		$template = $this->get('ogTemplate');
-
-		$useTemplate = $this->page->useOgTemplate();
-		$useTemplate = $useTemplate->isEmpty() ? true : $useTemplate->toBool();
-
-		$string = $title->value();
-		if ($useTemplate) {
-			$string = $this->page->toString(
-				$template,
-				['title' => $title]
-			);
-		}
+		$template = $this->get($templateKey);
 
 		return new Field(
 			$this->page,
-			'ogTitle',
-			$string
+			$name,
+			$useTemplate->isEmpty() || $useTemplate->toBool()
+				? $this->page->toString($template, ['title' => $title])
+				: $title->value()
 		);
 	}
 
@@ -778,21 +759,7 @@ class Meta
 		$path = App::instance()->request()->url()->toString();
 		$matches = Str::match($path, "/pages\/([a-zA-Z0-9-_+]+)\/?/m");
 
-		if (!isset($matches[1])) {
-			return null;
-		}
-
-		$segments = Str::split($matches[1], '+');
-
-		$page = App::instance()->site();
-		foreach ($segments as $segment) {
-			if ($page = $page->findPageOrDraft($segment)) {
-				continue;
-			}
-
-			return null;
-		}
-
-		return $page;
+		// not Find::page(), its permission check loads blueprints that call this method again
+		return isset($matches[1]) ? App::instance()->page(Str::replace($matches[1], '+', '/')) : null;
 	}
 }
