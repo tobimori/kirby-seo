@@ -7,6 +7,46 @@ use Kirby\Data\Json;
 use Kirby\Exception\NotFoundException;
 use tobimori\Seo\Seo;
 
+/**
+ * Answers OPTIONS and rejects other methods for an endpoint,
+ * if the option that enables the endpoint is active
+ */
+$methodRoutes = fn (string $pattern, string $allow, string $option) => [
+	[
+		'pattern' => $pattern,
+		'method' => 'OPTIONS',
+		'action' => function () use ($allow, $option) {
+			if (Seo::option($option)) {
+				return new Response('', 'text/plain', 204, ['Allow' => $allow]);
+			}
+
+			$this->next();
+		}
+	],
+	[
+		'pattern' => $pattern,
+		'method' => 'ALL',
+		'action' => function () use ($allow, $option) {
+			// allowed methods only get here if their route passed on (e.g. unknown sitemap index), which is not a method error
+			if (Seo::option($option) && !in_array(App::instance()->request()->method(), explode(', ', $allow), true)) {
+				return new Response('Method Not Allowed', 'text/plain', 405, ['Allow' => $allow]);
+			}
+
+			$this->next();
+		}
+	],
+];
+
+$sitemapPage = fn (string|null $index = null) => Page::factory([
+	'slug' => $index ? "sitemap-{$index}" : 'sitemap',
+	'template' => 'sitemap',
+	'model' => 'sitemap',
+	'content' => [
+		'title' => t('seo.sitemap.title'),
+		'index' => $index,
+	],
+]);
+
 return [
 	[
 		'pattern' => 'llms.txt',
@@ -51,28 +91,7 @@ return [
 			$this->next();
 		}
 	],
-	[
-		'pattern' => 'robots.txt',
-		'method' => 'OPTIONS',
-		'action' => function () {
-			if (Seo::option('robots.active')) {
-				return new Response('', 'text/plain', 204, ['Allow' => 'GET, HEAD']);
-			}
-
-			$this->next();
-		}
-	],
-	[
-		'pattern' => 'robots.txt',
-		'method' => 'ALL',
-		'action' => function () {
-			if (Seo::option('robots.active')) {
-				return new Response('Method Not Allowed', 'text/plain', 405, ['Allow' => 'GET, HEAD']);
-			}
-
-			$this->next();
-		}
-	],
+	...$methodRoutes('robots.txt', 'GET, HEAD', 'robots.active'),
 
 	[
 		'pattern' => 'sitemap',
@@ -85,165 +104,54 @@ return [
 			go('/sitemap.xml');
 		}
 	],
-	[
-		'pattern' => 'sitemap',
-		'method' => 'OPTIONS',
-		'action' => function () {
-			if (Seo::option('sitemap.active')) {
-				return new Response('', 'text/plain', 204, ['Allow' => 'GET, HEAD']);
-			}
-
-			$this->next();
-		}
-	],
-	[
-		'pattern' => 'sitemap',
-		'method' => 'ALL',
-		'action' => function () {
-			// GET and HEAD only get here if the redirect is off, which is not a method error
-			if (Seo::option('sitemap.active') && !in_array(App::instance()->request()->method(), ['GET', 'HEAD'], true)) {
-				return new Response('Method Not Allowed', 'text/plain', 405, ['Allow' => 'GET, HEAD']);
-			}
-
-			$this->next();
-		}
-	],
+	...$methodRoutes('sitemap', 'GET, HEAD', 'sitemap.active'),
 
 	[
 		'pattern' => 'sitemap.xsl',
 		'method' => 'GET',
-		'action' => function () {
+		'action' => function () use ($sitemapPage) {
 			if (!Seo::option('sitemap.active')) {
 				$this->next();
 			}
 
 			kirby()->response()->type('text/xsl');
+			kirby()->setCurrentTranslation(Seo::option('sitemap.locale', 'en'));
 
-			$lang = Seo::option('sitemap.locale', 'en');
-			kirby()->setCurrentTranslation($lang);
-
-			return Page::factory([
-				'slug' => 'sitemap',
-				'template' => 'sitemap',
-				'model' => 'sitemap',
-				'content' => [
-					'title' => t('seo.sitemap.title'),
-				],
-			])->render(contentType: 'xsl');
+			return $sitemapPage()->render(contentType: 'xsl');
 		}
 	],
-	[
-		'pattern' => 'sitemap.xsl',
-		'method' => 'OPTIONS',
-		'action' => function () {
-			if (Seo::option('sitemap.active')) {
-				return new Response('', 'text/plain', 204, ['Allow' => 'GET']);
-			}
-
-			$this->next();
-		}
-	],
-	[
-		'pattern' => 'sitemap.xsl',
-		'method' => 'ALL',
-		'action' => function () {
-			if (Seo::option('sitemap.active')) {
-				return new Response('Method Not Allowed', 'text/plain', 405, ['Allow' => 'GET']);
-			}
-
-			$this->next();
-		}
-	],
+	...$methodRoutes('sitemap.xsl', 'GET', 'sitemap.active'),
 
 	[
 		'pattern' => 'sitemap.xml',
 		'method' => 'GET|HEAD',
-		'action' => function () {
-			if (!Seo::option('sitemap.active', true)) {
+		'action' => function () use ($sitemapPage) {
+			if (!Seo::option('sitemap.active')) {
 				$this->next();
 			}
 
-			return Page::factory([
-				'slug' => 'sitemap',
-				'template' => 'sitemap',
-				'model' => 'sitemap',
-				'content' => [
-					'title' => t('seo.sitemap.title'),
-					'index' => null,
-				],
-			])->render(contentType: 'xml');
+			return $sitemapPage()->render(contentType: 'xml');
 		}
 	],
-	[
-		'pattern' => 'sitemap.xml',
-		'method' => 'OPTIONS',
-		'action' => function () {
-			if (Seo::option('sitemap.active', true)) {
-				return new Response('', 'text/plain', 204, ['Allow' => 'GET, HEAD']);
-			}
-
-			$this->next();
-		}
-	],
-	[
-		'pattern' => 'sitemap.xml',
-		'method' => 'ALL',
-		'action' => function () {
-			if (Seo::option('sitemap.active', true)) {
-				return new Response('Method Not Allowed', 'text/plain', 405, ['Allow' => 'GET, HEAD']);
-			}
-
-			$this->next();
-		}
-	],
+	...$methodRoutes('sitemap.xml', 'GET, HEAD', 'sitemap.active'),
 
 	[
 		'pattern' => 'sitemap-(:any).xml',
 		'method' => 'GET|HEAD',
-		'action' => function (string $index) {
-			if (!Seo::option('sitemap.active', true)) {
+		'action' => function (string $index) use ($sitemapPage) {
+			if (!Seo::option('sitemap.active')) {
 				$this->next();
 			}
 
 			// the index is generated lazily on a cache miss and rejected there if invalid
 			try {
-				return Page::factory([
-					'slug' => "sitemap-{$index}",
-					'template' => 'sitemap',
-					'model' => 'sitemap',
-					'content' => [
-						'title' => t('seo.sitemap.title'),
-						'index' => $index,
-					],
-				])->render(contentType: 'xml');
+				return $sitemapPage($index)->render(contentType: 'xml');
 			} catch (NotFoundException) {
 				$this->next();
 			}
 		}
 	],
-	[
-		'pattern' => 'sitemap-(:any).xml',
-		'method' => 'OPTIONS',
-		'action' => function () {
-			if (Seo::option('sitemap.active')) {
-				return new Response('', 'text/plain', 204, ['Allow' => 'GET, HEAD']);
-			}
-
-			$this->next();
-		}
-	],
-	[
-		'pattern' => 'sitemap-(:any).xml',
-		'method' => 'ALL',
-		'action' => function () {
-			// GET and HEAD only get here if the index does not exist, which is not a method error
-			if (Seo::option('sitemap.active') && !in_array(App::instance()->request()->method(), ['GET', 'HEAD'], true)) {
-				return new Response('Method Not Allowed', 'text/plain', 405, ['Allow' => 'GET, HEAD']);
-			}
-
-			$this->next();
-		}
-	],
+	...$methodRoutes('sitemap-(:any).xml', 'GET, HEAD', 'sitemap.active'),
 
 	// Google Search Console OAuth
 	[
