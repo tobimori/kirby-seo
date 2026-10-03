@@ -19,7 +19,7 @@ class SeoWriterField extends WriterField
 	 * Writer nodes of the template variables, @see src/index.js
 	 */
 	private const array VARIABLES = [
-		'seoTemplateTitle' => ['title', 'page title'],
+		'seoTemplateTitle' => ['title', 'the meta title, or the page title if it is empty'],
 		'seoTemplateSiteTitle' => ['site.title', 'site title'],
 	];
 
