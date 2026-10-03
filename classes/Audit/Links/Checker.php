@@ -147,6 +147,8 @@ class Checker
 
 		$deadline = microtime(true) + $seconds;
 		$this->data = $this->index->read();
+		// Index compaction can renumber URL IDs between steps
+		$this->lookup = null;
 
 		try {
 			$targets = $this->prepare();
