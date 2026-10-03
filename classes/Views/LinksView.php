@@ -28,10 +28,11 @@ class LinksView extends OverviewView
 	public function load(): array
 	{
 		return VersionId::render('changes', function () {
-			['search' => $search, 'sort' => $sort, 'dir' => $dir, 'issue' => $issue] = $this->query(
+			$query = $this->query(
 				self::SORTABLE,
 				[...Report::FILTERS, 'issues']
 			);
+			['search' => $search, 'sort' => $sort, 'dir' => $dir, 'issue' => $issue] = $query;
 			$links = $this->report()->links();
 
 			$summary = Report::summary($links);
@@ -61,15 +62,12 @@ class LinksView extends OverviewView
 				'title' => I18n::translate('seo.overview.title'),
 				'props' => [
 					...$this->layout('links'),
+					...$query,
 					'columns' => $this->columns(),
 					'rows' => array_map($this->row(...), $visible),
 					'pagination' => $pagination,
 					'severity' => Report::SEVERITY,
 					'summary' => $summary,
-					'issue' => $issue,
-					'search' => $search,
-					'sort' => $sort,
-					'dir' => $dir,
 					'progress' => (new Checker())->progress(),
 					'scanned' => !$this->report()->isEmpty(),
 				]

@@ -2,7 +2,7 @@ import { computed, onBeforeUnmount, onMounted, ref, watch, usePanel, useHelpers 
 
 import { fetchSseStream } from "../helpers/ai-stream.js"
 
-/** Keeps table search, sorting, and pagination in the view query */
+/** Keeps table search, sorting, filters, and pagination in the view query */
 export function useTableQuery(props) {
 	const panel = usePanel()
 	const helpers = useHelpers()
@@ -26,8 +26,9 @@ export function useTableQuery(props) {
 
 	const onSort = ({ sort, dir }) => reload({ sort: sort ?? "", dir, page: "1" })
 	const onPaginate = ({ page }) => reload({ page: String(page) })
+	const onFilter = (issue = "", query = {}) => reload({ issue, page: "1", ...query })
 
-	return { reload, searchterm, isSearching, toggleSearch, onSort, onPaginate }
+	return { reload, searchterm, isSearching, toggleSearch, onSort, onPaginate, onFilter }
 }
 
 /** Stores column visibility and widths per table in local storage */
@@ -53,6 +54,10 @@ export function useColumnSettings(props, storageKey) {
 			.map(([value, column]) => ({ value, text: column.toggle }))
 	)
 
+	const visibleColumns = computed(() =>
+		Object.fromEntries(Object.entries(props.columns).filter(([key]) => isVisible(key)))
+	)
+
 	const visibleColumnKeys = computed(() =>
 		columnOptions.value.filter(({ value }) => isVisible(value)).map(({ value }) => value)
 	)
@@ -65,7 +70,7 @@ export function useColumnSettings(props, storageKey) {
 		settings.value.widths = {}
 	}
 
-	return { settings, isVisible, columnOptions, visibleColumnKeys, onColumns }
+	return { settings, columnOptions, visibleColumns, visibleColumnKeys, onColumns }
 }
 
 /**

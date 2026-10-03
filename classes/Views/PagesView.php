@@ -27,10 +27,11 @@ class PagesView extends EditableOverviewView
 	public function load(): array
 	{
 		return VersionId::render('changes', function () {
-			['search' => $search, 'sort' => $sort, 'dir' => $dir, 'issue' => $issue] = $this->query(
+			$query = $this->query(
 				self::SORTABLE,
 				[...Audit\Pages::TYPES, ...Audit\Pages::KINDS]
 			);
+			['search' => $search, 'sort' => $sort, 'dir' => $dir, 'issue' => $issue] = $query;
 			$group = $this->audit()->group((string)$this->kirby->request()->get('group'));
 			$members = array_flip($group['pages'] ?? []);
 
@@ -54,6 +55,7 @@ class PagesView extends EditableOverviewView
 				'title' => I18n::translate('seo.overview.title'),
 				'props' => [
 					...$this->layout('pages'),
+					...$query,
 					'columns' => $this->columns(),
 					// only the visible rows resolve all of their values
 					'rows' => array_map(fn (Page $page) => $this->row($this->entry($page)), $visible),
@@ -62,16 +64,12 @@ class PagesView extends EditableOverviewView
 					'ids' => array_values(array_map(fn (Page $page) => $page->id(), $pages)),
 					'severity' => Audit\Pages::SEVERITY,
 					'summary' => $this->audit()->summary(),
-					'issue' => $issue,
 					'ai' => $this->canUseAi(),
 					'gsc' => $this->hasSearchConsole(),
 					'group' => $group ? [
 						'kind' => $group['kind'],
 						'text' => $group['text'],
 					] : null,
-					'search' => $search,
-					'sort' => $sort,
-					'dir' => $dir,
 				]
 			];
 		});

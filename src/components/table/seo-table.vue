@@ -1,5 +1,5 @@
 <script setup>
-import { computed, nextTick, onMounted, ref, usePanel, watch } from "kirbyuse"
+import { computed, nextTick, onMounted, ref, useHelpers, usePanel, watch } from "kirbyuse"
 
 import { providePopoverGroup } from "../../composables/popover.js"
 
@@ -38,6 +38,7 @@ const props = defineProps({
 })
 
 const panel = usePanel()
+const helpers = useHelpers()
 
 providePopoverGroup()
 
@@ -199,7 +200,7 @@ const rangeText = computed(() => {
 	}
 
 	// writer values are HTML
-	return new window.DOMParser().parseFromString(rangeDraft.value, "text/html").body.textContent
+	return helpers.string.unescapeHTML(helpers.string.stripHTML(rangeDraft.value))
 })
 
 // moves to the next editable cell: `next`/`prev` within the row (wrapping to the next/previous row), `down`/`up` within the column

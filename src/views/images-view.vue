@@ -11,12 +11,12 @@ const props = defineProps(editableOverviewProps)
 const panel = usePanel()
 
 const {
-	reload,
 	searchterm,
 	isSearching,
 	toggleSearch,
 	onSort,
 	onPaginate,
+	onFilter,
 	selected,
 	isAllSelected,
 	selectAll,
@@ -40,8 +40,8 @@ const {
 	confirmGeneration,
 	cancelGeneration,
 	settings,
-	isVisible,
 	columnOptions,
+	visibleColumns,
 	visibleColumnKeys,
 	onColumns
 } = useOverviewTable(props, {
@@ -201,29 +201,27 @@ const items = computed(() =>
 	})
 )
 
-const visibleColumns = computed(() =>
+const tableColumns = computed(() =>
 	Object.fromEntries(
-		Object.entries(props.columns)
-			.filter(([key]) => isVisible(key))
-			.map(([key, column]) => {
-				if (column.type === "seo-alt-status") {
-					return [key, { ...column, filterIssue: setFilter }]
-				}
+		Object.entries(visibleColumns.value).map(([key, column]) => {
+			if (column.type === "seo-alt-status") {
+				return [key, { ...column, filterIssue: onFilter }]
+			}
 
-				if (column.type === "seo-decorative") {
-					return [key, { ...column, toggle: setDecorative }]
-				}
+			if (column.type === "seo-decorative") {
+				return [key, { ...column, toggle: setDecorative }]
+			}
 
-				// like the alt text field: generating a single text means the editor sees (& reviews) it
-				if (column.editable && props.ai) {
-					return [
-						key,
-						{ ...column, generate: (row) => runGeneration([row], key, { source: "reviewed" }) }
-					]
-				}
+			// like the alt text field: generating a single text means the editor sees (& reviews) it
+			if (column.editable && props.ai) {
+				return [
+					key,
+					{ ...column, generate: (row) => runGeneration([row], key, { source: "reviewed" }) }
+				]
+			}
 
-				return [key, column]
-			})
+			return [key, column]
+		})
 	)
 )
 
@@ -242,8 +240,6 @@ const filterLabel = computed(() =>
 		props.issue ? `seo.overview.images.filter.${props.issue}` : "seo.overview.images.filter.all"
 	)
 )
-
-const setFilter = (issue = "") => reload({ issue, page: "1" })
 
 const onGenerate = async () => {
 	const candidates = (await fetchRows(selected.value)).filter(
@@ -274,7 +270,7 @@ const onGenerate = async () => {
 		:busy="isGenerating"
 		:status="status"
 		class="k-seo-overview-view k-seo-images-view"
-		@filter="setFilter"
+		@filter="onFilter"
 	>
 		<template #buttons>
 			<k-seo-changes-controls
@@ -342,7 +338,7 @@ const onGenerate = async () => {
 					:all="{ text: $t('seo.overview.images.filter.all'), icon: 'image' }"
 					:current="issue"
 					:filters="filters"
-					@filter="setFilter"
+					@filter="onFilter"
 				/>
 				<k-seo-columns :options="columnOptions" :value="visibleColumnKeys" @input="onColumns" />
 			</template>
@@ -354,7 +350,7 @@ const onGenerate = async () => {
 
 		<div v-else :inert="isGenerating">
 			<k-seo-table
-				:columns="visibleColumns"
+				:columns="tableColumns"
 				:rows="items"
 				:pagination="pagination"
 				:sort="sort"

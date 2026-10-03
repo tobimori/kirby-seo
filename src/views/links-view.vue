@@ -15,8 +15,8 @@ const props = defineProps({
 
 const panel = usePanel()
 
-const { reload, searchterm, isSearching, toggleSearch, onSort, onPaginate } = useTableQuery(props)
-const { settings, isVisible, columnOptions, visibleColumnKeys, onColumns } = useColumnSettings(
+const { searchterm, isSearching, toggleSearch, onSort, onPaginate, onFilter } = useTableQuery(props)
+const { settings, columnOptions, visibleColumns, visibleColumnKeys, onColumns } = useColumnSettings(
 	props,
 	"kirby-seo.overview.links.table"
 )
@@ -152,8 +152,6 @@ const filterLabel = computed(() =>
 	)
 )
 
-const setFilter = (issue = "") => reload({ issue, page: "1" })
-
 const items = computed(() =>
 	props.rows.map((row) => ({
 		...row,
@@ -179,10 +177,6 @@ const items = computed(() =>
 		]
 	}))
 )
-
-const visibleColumns = computed(() =>
-	Object.fromEntries(Object.entries(props.columns).filter(([key]) => isVisible(key)))
-)
 </script>
 
 <template>
@@ -193,7 +187,7 @@ const visibleColumns = computed(() =>
 		:tabs="tabs"
 		:status="status"
 		class="k-seo-overview-view k-seo-links-view"
-		@filter="setFilter"
+		@filter="onFilter"
 	>
 		<template #toolbar>
 			<k-button v-if="isScanning" :text="progressText" icon="loader" size="xs" variant="filled" />
@@ -221,14 +215,10 @@ const visibleColumns = computed(() =>
 					:all="{ text: $t('seo.overview.links.filter.all'), icon: 'url' }"
 					:current="issue"
 					:filters="filters"
-					@filter="setFilter"
+					@filter="onFilter"
 				>
 					<template #before>
-						<k-dropdown-item
-							:current="issue === 'issues'"
-							icon="alert"
-							@click="setFilter('issues')"
-						>
+						<k-dropdown-item :current="issue === 'issues'" icon="alert" @click="onFilter('issues')">
 							{{ $t("seo.overview.links.filter.issues") }}
 						</k-dropdown-item>
 					</template>

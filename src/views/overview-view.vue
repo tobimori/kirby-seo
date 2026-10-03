@@ -17,12 +17,12 @@ const panel = usePanel()
 const helpers = useHelpers()
 
 const {
-	reload,
 	searchterm,
 	isSearching,
 	toggleSearch,
 	onSort,
 	onPaginate,
+	onFilter,
 	selected,
 	isAllSelected,
 	selectAll,
@@ -45,8 +45,8 @@ const {
 	confirmGeneration,
 	cancelGeneration,
 	settings,
-	isVisible,
 	columnOptions,
+	visibleColumns,
 	visibleColumnKeys,
 	onColumns
 } = useOverviewTable(props, {
@@ -56,9 +56,7 @@ const {
 	applyPending: (cell, { value }) => ({
 		...cell,
 		value,
-		text: value
-			? new window.DOMParser().parseFromString(value, "text/html").body.textContent
-			: cell.placeholder,
+		text: value ? helpers.string.unescapeHTML(helpers.string.stripHTML(value)) : cell.placeholder,
 		source: value ? "fields" : cell.placeholderSource
 	})
 })
@@ -94,7 +92,7 @@ const items = computed(() =>
 							{
 								icon: "google",
 								text: panel.t("seo.sections.searchConsole.title"),
-								drawer: `seo/gsc/data/${item.link.replace(/^\//, "")}`
+								drawer: `seo/gsc/data/${helpers.string.ltrim(item.link, "/")}`
 							}
 						]
 					: []),
@@ -113,21 +111,19 @@ const items = computed(() =>
 	})
 )
 
-const visibleColumns = computed(() =>
+const tableColumns = computed(() =>
 	Object.fromEntries(
-		Object.entries(props.columns)
-			.filter(([key]) => isVisible(key))
-			.map(([key, column]) => {
-				if (column.type === "seo-checks") {
-					return [key, { ...column, filterGroup, filterIssue: setFilter }]
-				}
+		Object.entries(visibleColumns.value).map(([key, column]) => {
+			if (column.type === "seo-checks") {
+				return [key, { ...column, filterGroup, filterIssue: setFilter }]
+			}
 
-				if (column.editable && props.ai) {
-					return [key, { ...column, generate: (row) => runGeneration([row], key) }]
-				}
+			if (column.editable && props.ai) {
+				return [key, { ...column, generate: (row) => runGeneration([row], key) }]
+			}
 
-				return [key, column]
-			})
+			return [key, column]
+		})
 	)
 )
 
@@ -156,12 +152,10 @@ const checksLabel = computed(() => {
 const setFilter = (issue = "") => {
 	// duplicates are sorted by their value, so pages sharing the same one are next to each other
 	const sort = { titleDuplicate: "metaTitle", descriptionDuplicate: "metaDescription" }[issue]
-	reload({ issue, group: "", page: "1", ...(sort && { sort, dir: "asc" }) })
+	onFilter(issue, { group: "", ...(sort && { sort, dir: "asc" }) })
 }
 
-function filterGroup(group) {
-	reload({ group, issue: "", page: "1" })
-}
+const filterGroup = (group) => onFilter("", { group })
 
 const generateDropdown = ref(null)
 
@@ -265,7 +259,7 @@ const onGenerate = async (column) => {
 
 		<div :inert="isGenerating">
 			<k-seo-table
-				:columns="visibleColumns"
+				:columns="tableColumns"
 				:rows="items"
 				:pagination="pagination"
 				:sort="sort"

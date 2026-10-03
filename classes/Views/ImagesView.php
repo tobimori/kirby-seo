@@ -23,10 +23,11 @@ class ImagesView extends EditableOverviewView
 	public function load(): array
 	{
 		return VersionId::render('changes', function () {
-			['search' => $search, 'sort' => $sort, 'dir' => $dir, 'issue' => $issue] = $this->query(
+			$query = $this->query(
 				self::SORTABLE,
 				[...Audit\Images::FILTERS, 'issues']
 			);
+			['search' => $search, 'sort' => $sort, 'dir' => $dir, 'issue' => $issue] = $query;
 
 			$entries = $this->images()->entries();
 
@@ -47,6 +48,7 @@ class ImagesView extends EditableOverviewView
 				'title' => I18n::translate('seo.overview.title'),
 				'props' => [
 					...$this->layout('images'),
+					...$query,
 					'columns' => $this->columns(),
 					'rows' => array_map($this->row(...), $visible),
 					'changes' => $this->changes(),
@@ -54,11 +56,7 @@ class ImagesView extends EditableOverviewView
 					'ids' => array_column($entries, 'id'),
 					'severity' => Audit\Images::SEVERITY,
 					'summary' => $this->images()->summary(),
-					'issue' => $issue,
 					'ai' => $this->canUseAi(),
-					'search' => $search,
-					'sort' => $sort,
-					'dir' => $dir,
 				]
 			];
 		});
