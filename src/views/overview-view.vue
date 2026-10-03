@@ -63,11 +63,6 @@ const {
 	})
 })
 
-const copyUrl = async (url) => {
-	await window.navigator.clipboard.writeText(url)
-	panel.notification.success(panel.t("copy.success"))
-}
-
 const items = computed(() =>
 	props.rows.map((row) => {
 		const item = withPending(row)
@@ -91,7 +86,7 @@ const items = computed(() =>
 				{
 					icon: "copy",
 					text: panel.t("copy.url"),
-					click: () => copyUrl(item.url)
+					click: { global: "clipboard.write", payload: item.url }
 				},
 				"-",
 				...(props.gsc
@@ -99,7 +94,7 @@ const items = computed(() =>
 							{
 								icon: "google",
 								text: panel.t("seo.sections.searchConsole.title"),
-								click: () => panel.drawer.open(`seo/gsc/data/${item.link.replace(/^\//, "")}`)
+								drawer: `seo/gsc/data/${item.link.replace(/^\//, "")}`
 							}
 						]
 					: []),

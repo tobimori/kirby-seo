@@ -94,14 +94,6 @@ const tagOf = (state) =>
 			}
 		: null
 
-const copyUrl = async (url) => {
-	await window.navigator.clipboard.writeText(url)
-	panel.notification.success(panel.t("copy.success"))
-}
-
-/**
- * Bulk actions: marking AI-generated texts as reviewed & images as decorative (or not)
- */
 const canReview = (row) => row.editable && row.alt.source === "ai"
 const canSetDecorative = (row, decorative) => row.editable && row.alt.decorative !== decorative
 
@@ -186,7 +178,7 @@ const items = computed(() =>
 				{
 					icon: "copy",
 					text: panel.t("copy.url"),
-					click: () => copyUrl(item.url)
+					click: { global: "clipboard.write", payload: item.url }
 				},
 				"-",
 				{

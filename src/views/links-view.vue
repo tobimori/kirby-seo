@@ -161,11 +161,6 @@ const filterLabel = computed(() =>
 
 const setFilter = (issue = "") => reload({ issue, page: "1" })
 
-const copyUrl = async (url) => {
-	await window.navigator.clipboard.writeText(url)
-	panel.notification.success(panel.t("copy.success"))
-}
-
 const items = computed(() =>
 	props.rows.map((row) => ({
 		...row,
@@ -179,7 +174,7 @@ const items = computed(() =>
 			{
 				icon: "copy",
 				text: panel.t("copy.url"),
-				click: () => copyUrl(row.url.href)
+				click: { global: "clipboard.write", payload: row.url.href }
 			},
 			"-",
 			{

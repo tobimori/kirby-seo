@@ -92,8 +92,6 @@ const handleConnect = () => {
 	const returnUrl = encodeURIComponent(window.location.href)
 	window.location.href = `/__seo/gsc/auth?return=${returnUrl}`
 }
-
-const handleSelectProperty = () => panel.dialog.open("seo/gsc/select-property")
 </script>
 
 <template>
@@ -118,7 +116,7 @@ const handleSelectProperty = () => panel.dialog.open("seo/gsc/select-property")
 				</k-button>
 				<k-button icon="dots" size="xs" variant="filled" @click="dropdown.toggle()" />
 				<k-dropdown-content ref="dropdown" align-x="end">
-					<k-dropdown-item icon="list-bullet" @click="handleSelectProperty">
+					<k-dropdown-item icon="list-bullet" dialog="seo/gsc/select-property">
 						{{ $t("seo.sections.searchConsole.selectPropertyButton") }}
 					</k-dropdown-item>
 					<k-dropdown-item icon="refresh" @click="handleConnect">
@@ -161,7 +159,7 @@ const handleSelectProperty = () => panel.dialog.open("seo/gsc/select-property")
 					variant="filled"
 					theme="positive"
 					icon="list-bullet"
-					@click="handleSelectProperty"
+					dialog="seo/gsc/select-property"
 				>
 					{{ $t("seo.sections.searchConsole.selectPropertyButton") }}
 				</k-button>
