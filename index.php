@@ -9,6 +9,7 @@ use Kirby\Toolkit\A;
 use Kirby\Filesystem\Dir;
 use Kirby\Filesystem\F;
 use tobimori\Seo\AltText;
+use tobimori\Seo\Agents;
 
 if (
 	version_compare(App::version() ?? '0.0.0', '5.0.0', '<') === true ||
@@ -34,6 +35,11 @@ App::plugin(
 		],
 		'permissions' => [
 			'ai' => true,
+		],
+		// field classes for Kirby Agents. Without the plugin, Kirby ignores this key and the classes are never loaded
+		'tobimori.agents.fields' => [
+			'alt-text' => Agents\AltTextField::class,
+			'seo-writer' => Agents\SeoWriterField::class,
 		],
 		'snippets' => [
 			'seo/prompts/introduction' => __DIR__ . '/snippets/prompts/introduction.php',
