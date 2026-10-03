@@ -2,7 +2,6 @@
 
 use Kirby\Cms\App;
 use Kirby\Cms\Page;
-use Kirby\Cms\Language;
 use Kirby\Http\Response;
 use Kirby\Data\Json;
 use Kirby\Exception\NotFoundException;
@@ -13,27 +12,19 @@ return [
 		'pattern' => 'llms.txt',
 		'method' => 'GET|HEAD',
 		'language' => '*',
-		'action' => function (...$arguments) {
-			$language = null;
-			foreach ($arguments as $argument) {
-				if ($argument instanceof Language) {
-					$language = $argument;
-				}
-			}
-
-			$kirby = App::instance();
-			$page = $kirby->site()->homePage();
+		'action' => function () {
+			// the language router sets the current language
+			$page = App::instance()->site()->homePage();
 			if ($page === null) {
 				$this->next();
 			}
 
-			$class = Seo::option('components.agentic');
-			$llmContent = new $class($page);
+			$llmContent = new (Seo::option('components.agentic'))($page);
 			if ($llmContent->llmsTxtEnabled() === false) {
 				$this->next();
 			}
 
-			return $llmContent->llmsTxtResponse($language, $kirby->request()->method());
+			return $llmContent->llmsTxtPage()->render(contentType: 'txt');
 		}
 	],
 	[
