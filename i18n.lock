@@ -308,12 +308,15 @@ checksums:
     license.buy: acef0f8f5f57d775b81a0b213b5bfcdc
     license.cta: 99dd9a1c04939f3b6400d7fe9972f6ce
     license.missing: e3872a4fc9f76d7ec0d7dcf68b0d2d75
+    license.enterprise: caf45cfc64b03996da1d56fb52e70b5c
     license.expired: 440ba04e49730c14013b3b783d403887
     license.revoked: 707ab1e44dfd8a0322000f78bf57a266
+    license.status.enterprise: 93403d6857d1cc1f2d803b84a2993184
     license.status.expired: d191561b49c8ae6500b9508fc9cb2976
     license.status.revoked: 9ae37015fa97a754fe7f95ade080c180
     license.error.download: 46d21f58cc7b265c5a7dd42481e3ab3a
     license.error.email: 4157c206eb09e5f58cd1804be8689c55
+    license.error.enterprise: 58742edc4d22eb7278b8ba34261410ff
     license.error.forbidden: a8dcb814b8423ff72ee0cbf134767d9b
     license.error.key: fde573d40110fa098303c60eae974c0a
     license.error.server: c5bf6208369820fdd4bbf2a53eac344c
