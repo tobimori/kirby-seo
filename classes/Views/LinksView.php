@@ -91,9 +91,9 @@ class LinksView extends OverviewView
 
 		$progress = $checker->progress();
 
-		if (!$progress['done'] && !$progress['running'] && Index::cache()->get('dispatched') === null) {
+		if (!$progress['done'] && !$progress['running'] && Index::cache()->get('links/dispatched') === null) {
 			Checker::dispatch(now: true);
-			Index::cache()->set('dispatched', time(), 5);
+			Index::cache()->set('links/dispatched', time(), 5);
 		}
 
 		return $progress;

@@ -13,9 +13,9 @@ use Kirby\Toolkit\Str;
  */
 class Index
 {
-	protected const KEY = 'index';
-	protected const REVISION = 'revision';
-	protected const STATE = 'state';
+	protected const KEY = 'links/index';
+	protected const REVISION = 'links/revision';
+	protected const STATE = 'links/state';
 
 	/**
 	 * @var resource|null
@@ -24,7 +24,7 @@ class Index
 
 	public static function cache(): Cache
 	{
-		return App::instance()->cache('tobimori.seo.links');
+		return App::instance()->cache('tobimori.seo.overview');
 	}
 
 	/**

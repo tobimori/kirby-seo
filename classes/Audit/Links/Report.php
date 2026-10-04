@@ -112,7 +112,7 @@ class Report
 		}
 
 		$cache = Index::cache();
-		$key = 'links/' . ($this->language ?? 'default');
+		$key = 'links/report/' . ($this->language ?? 'default');
 		$cached = $cache->get($key);
 
 		if ($cached !== null && $cached['revision'] === Index::revision()) {
@@ -179,7 +179,7 @@ class Report
 	public function stats(): array
 	{
 		$cache = Index::cache();
-		$key = 'stats/' . ($this->language ?? 'default');
+		$key = 'links/stats/' . ($this->language ?? 'default');
 		$cached = $cache->get($key);
 
 		if ($cached !== null && $cached['revision'] === Index::revision()) {

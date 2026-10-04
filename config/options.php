@@ -41,7 +41,6 @@ return [
 	'cache.searchConsole' => true,
 	'cache.indexnow' => true,
 	'cache.overview' => true,
-	'cache.links' => true,
 	// Link audit for the SEO overview: scans published pages and checks their links
 	'links' => [
 		// run the check in a queue worker if Kirby Queues is installed, otherwise the Panel runs it
