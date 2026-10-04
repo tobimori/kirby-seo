@@ -251,7 +251,12 @@ const onFocusout = (event) => {
 				theme="light"
 				class="k-seo-meta-cell-source"
 			/>
-			<span v-if="value.text">{{ value.text }}</span>
+			<template v-if="value.text">
+				<!-- e.g. the title template, so the cell shows the full title -->
+				<span v-if="value.before" class="k-seo-meta-cell-affix">{{ value.before }}</span>
+				<span>{{ value.text }}</span>
+				<span v-if="value.after" class="k-seo-meta-cell-affix">{{ value.after }}</span>
+			</template>
 			<span v-else-if="!value.tag" class="k-seo-meta-cell-empty">—</span>
 		</span>
 	</component>
@@ -372,6 +377,7 @@ button.k-seo-meta-cell {
 }
 
 .k-seo-meta-cell[data-inherited="true"] .k-seo-meta-cell-text,
+.k-seo-meta-cell-affix,
 .k-seo-meta-cell-empty {
 	color: var(--color-text-dimmed);
 }

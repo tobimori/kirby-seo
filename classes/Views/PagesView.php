@@ -287,6 +287,27 @@ class PagesView extends EditableOverviewView
 			'placeholderSource' => $fallback['source'],
 			'editable' => $editable,
 			'ai' => $editable && $this->canUseAi() && !empty($this->blueprint($page)->field($key)['ai'] ?? false),
+			...($key === 'metaTitle' ? $this->titleTemplate($page) : []),
+		];
+	}
+
+	/**
+	 * Text the title template adds before & after the meta title (e.g. ` | Site`), to show the full title.
+	 * Empty if the template changes the title itself, e.g. `{{ title.upper }}`
+	 */
+	protected function titleTemplate(Page $page): array
+	{
+		$title = $this->value($page, 'metaTitle');
+		$full = Str::unhtml((string)$this->meta($page)->metaTitle()->value());
+		$position = $title !== '' ? mb_strpos($full, $title) : false;
+
+		if ($position === false) {
+			return [];
+		}
+
+		return [
+			'before' => mb_substr($full, 0, $position),
+			'after' => mb_substr($full, $position + mb_strlen($title)),
 		];
 	}
 
