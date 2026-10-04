@@ -44,7 +44,8 @@ class Images
 
 		$this->entries = [];
 		$site = App::instance()->site();
-		$pages = $site->index(true)->filter(fn (Page $page) => $page->isListable());
+		// checking permissions per page is slower
+		$pages = $site->index(true)->filter(fn (Page $page) => $page->images()->isNotEmpty() && $page->isListable());
 
 		foreach ([$site, ...$pages] as $parent) {
 			foreach ($parent->files() as $file) {
@@ -138,16 +139,37 @@ class Images
 	}
 
 	/**
+	 * Cached per role until pages or files change (see `clearStats()`), as every overview tab shows them
+	 * and they need to read all images otherwise
+	 *
 	 * @return array{ok: int, notice: int, negative: int}
 	 */
 	public function stats(): array
 	{
+		$kirby = App::instance();
+		$cache = $kirby->cache('tobimori.seo.overview');
+		$role = $kirby->user()?->role()->id() ?? '';
+		$cached = $cache->get('images-stats') ?? [];
+
+		// entries are loaded anyway in the images view, so its stats are always fresh
+		if ($this->entries === null && isset($cached[$role])) {
+			return $cached[$role];
+		}
+
 		$stats = ['ok' => 0, 'notice' => 0, 'negative' => 0];
 
 		foreach ($this->entries() as $entry) {
 			$stats[self::SEVERITY[$this->state($entry)]]++;
 		}
 
+		// expires as a fallback for changes outside of Kirby, e.g. uploads via SFTP
+		$cache->set('images-stats', [...$cached, $role => $stats], 60);
+
 		return $stats;
+	}
+
+	public static function clearStats(): void
+	{
+		App::instance()->cache('tobimori.seo.overview')->remove('images-stats');
 	}
 }

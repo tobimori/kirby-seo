@@ -6,6 +6,7 @@ use Kirby\Toolkit\A;
 use Kirby\Toolkit\Str;
 use Kirby\Cms\Event;
 use tobimori\Seo\Field\AltTextField;
+use tobimori\Seo\Audit\Images;
 use tobimori\Seo\Audit\Links\Checker;
 use tobimori\Seo\Seo;
 
@@ -14,6 +15,8 @@ $audit = function (Event $event) {
 	if (!in_array($event->action(), ['create', 'duplicate', 'update', 'move', 'changeSlug', 'changeStatus', 'changeTemplate', 'changeName', 'delete'], true)) {
 		return;
 	}
+
+	Images::clearStats();
 
 	// pages that are and were not indexable (e.g. form submissions) don't affect the other audits
 	$pages = array_filter([$event->argument('page'), $event->argument('newPage'), $event->argument('oldPage')]);
