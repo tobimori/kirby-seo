@@ -27,11 +27,11 @@
 
 ## Get started
 
-[Read the documentation](https://plugins.andkindness.com/seo/docs/get-started/feature-overview) to get started with Kirby SEO.
+[Read the documentation](https://www.andkindness.com/seo/docs) to get started with Kirby SEO.
 
 If you're looking to use Kirby SEO with Kirby 5 or newer, please install the Beta version of the plugin:
 
-`composer require tobimori/kirby-seo:^2.0.0-beta.2`
+`composer require tobimori/kirby-seo:^2.0@beta`
 
 ### What does Beta mean for Kirby SEO 2?
 
@@ -44,9 +44,9 @@ Kirby SEO is open to contributors: If you open a pull request that gets merged, 
 ## License
 
 Kirby SEO 2.0 is not free software. In order to run it on a public server, you'll have to purchase a valid Kirby license & a valid SEO license.
-**The plugin is currently free to use while in pre-release state.** You can [pre-order a license](https://plugins.andkindness.com/seo/preorder) with a 20% discount for a limited time.
+You can [buy a license](https://www.andkindness.com/buy?plugin=seo) on our website. Read the [license agreement](https://www.andkindness.com/legal/license-agreement) for the full terms.
 
-Copyright 2023-2025 © Tobias Möritz - Love & Kindness GmbH
+Copyright 2023-2026 © Tobias Möritz - Love & Kindness GmbH
 
 ---
 
