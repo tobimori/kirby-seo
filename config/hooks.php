@@ -1,5 +1,6 @@
 <?php
 
+use Kirby\Cms\App;
 use Kirby\Cms\File;
 use Kirby\Cms\Page;
 use Kirby\Toolkit\A;
@@ -20,8 +21,10 @@ $audit = function (Event $event) {
 
 	// pages that are and were not indexable (e.g. form submissions) don't affect the other audits,
 	// unless children inherit their robots settings or get new URLs with them
+	// robots settings can differ per language
+	$languages = App::instance()->multilang() ? App::instance()->languages()->values() : [null];
 	$pages = array_filter([$event->argument('page'), $event->argument('newPage'), $event->argument('oldPage')]);
-	if ($pages !== [] && !array_filter($pages, fn (Page $page) => Seo::isIndexable($page) || $page->hasChildren())) {
+	if ($pages !== [] && !array_filter($pages, fn (Page $page) => $page->hasChildren() || array_filter($languages, fn ($language) => Seo::isIndexable($page, $language)))) {
 		return;
 	}
 

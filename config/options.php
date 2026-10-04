@@ -40,6 +40,7 @@ return [
 	],
 	'cache.searchConsole' => true,
 	'cache.indexnow' => true,
+	// also stores the link audit, which doesn't work without it
 	'cache.overview' => true,
 	// Link audit for the SEO overview: scans published pages and checks their links
 	'links' => [

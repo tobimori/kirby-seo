@@ -21,7 +21,7 @@ final class Seo
 	/**
 	 * Published pages search engines may index, which the overview audits check.
 	 * Finding them needs to read all pages (e.g. thousands of form submissions), so their IDs are cached
-	 * until an indexable page or the site changes, or for an hour for changes outside of Kirby
+	 * until an indexable page, the site or the options change, or for an hour for changes outside of Kirby
 	 */
 	public static function indexable(Language|null $language = null): Pages
 	{
@@ -31,14 +31,18 @@ final class Seo
 		$cache = $kirby->cache('tobimori.seo.overview');
 		$cached = $cache->get('indexable') ?? [];
 
-		if (!isset($cached[$code])) {
-			$cached[$code] = $kirby->site()->index()->filter(fn (Page $page) => static::isIndexable($page, $language))->keys();
+		if (($cached['options'] ?? null) !== static::auditOptions()) {
+			$cached = ['options' => static::auditOptions(), 'pages' => []];
+		}
+
+		if (!isset($cached['pages'][$code])) {
+			$cached['pages'][$code] = $kirby->site()->index()->filter(fn (Page $page) => static::isIndexable($page, $language))->keys();
 			$cache->set('indexable', $cached, 60);
 		}
 
 		$pages = new Pages([], $kirby->site());
 
-		foreach ($cached[$code] as $id) {
+		foreach ($cached['pages'][$code] as $id) {
 			if ($page = $kirby->page($id)) {
 				$pages->add($page);
 			}
@@ -69,6 +73,20 @@ final class Seo
 
 		// same as the default, without the site-wide switch
 		return static::option('robots.followPageStatus') ? $page->isListed() : true;
+	}
+
+	/**
+	 * Hash of the options the overview audits depend on, e.g. after enabling `debug` (which sets `robots.index` to `false`).
+	 * Closures (e.g. most defaults) are encoded as empty objects, changes of their code aren't detected
+	 */
+	public static function auditOptions(): string
+	{
+		return md5(json_encode([
+			static::option('robots.index'),
+			static::option('robots.followPageStatus'),
+			static::option('cascade'),
+			static::option('default'),
+		]));
 	}
 
 	public static function clearIndexable(): void
