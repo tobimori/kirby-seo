@@ -2,6 +2,7 @@
 
 namespace tobimori\Seo;
 
+use Exception;
 use Kirby\Cms\App;
 use Kirby\Cms\Page;
 use Kirby\Http\Remote;
@@ -103,20 +104,38 @@ class IndexNow
 	 */
 	public static function send(array $urls): bool
 	{
-		if (!Seo::option('indexnow.enabled') || empty($urls)) {
+		if (!static::isActive() || empty($urls)) {
 			return false;
 		}
 
+		try {
+			static::submit($urls);
+			return true;
+		} catch (Exception) {
+			return false;
+		}
+	}
+
+	/**
+	 * Whether requests are sent: not for local development environments
+	 */
+	public static function isActive(): bool
+	{
+		return Seo::option('indexnow.enabled') && !App::instance()->environment()->isLocal();
+	}
+
+	/**
+	 * Sends urls to the indexnow api
+	 *
+	 * @throws \Exception if a request fails, with the HTTP status or the network error
+	 */
+	public static function submit(array $urls): void
+	{
 		$firstUrl = $urls[0];
 		$parsedUrl = parse_url($firstUrl);
 		$host = $parsedUrl['host'];
 		$scheme = $parsedUrl['scheme'] ?? 'https';
 		$path = $parsedUrl['path'] ?? '';
-
-		// don't send requests for local development environments
-		if (App::instance()->environment()->isLocal()) {
-			return false;
-		}
 
 		// get base path (everything before the page path)
 		$basePath = '';
@@ -137,33 +156,26 @@ class IndexNow
 
 		// split into batches of 10,000 (IndexNow limit)
 		$batches = array_chunk(array_values(array_unique($domainUrls)), 10000);
-		$allSuccessful = true;
 		$key = static::key();
 
 		foreach ($batches as $batch) {
-			try {
-				$response = Remote::post($searchEngine, [
-					'headers' => [
-						'Content-Type' => 'application/json; charset=utf-8',
-						'User-Agent' => Seo::userAgent()
-					],
-					'data' => json_encode([
-						'host' => $host,
-						'key' => $key,
-						'keyLocation' => "{$scheme}://{$host}{$basePath}/indexnow-{$key}.txt",
-						'urlList' => $batch
-					])
-				]);
+			$response = Remote::post($searchEngine, [
+				'headers' => [
+					'Content-Type' => 'application/json; charset=utf-8',
+					'User-Agent' => Seo::userAgent()
+				],
+				'data' => json_encode([
+					'host' => $host,
+					'key' => $key,
+					'keyLocation' => "{$scheme}://{$host}{$basePath}/indexnow-{$key}.txt",
+					'urlList' => $batch
+				])
+			]);
 
-				if ($response->code() > 299) {
-					$allSuccessful = false;
-				}
-			} catch (\Exception $e) {
-				$allSuccessful = false;
+			if ($response->code() > 299) {
+				throw new Exception("IndexNow request failed with HTTP {$response->code()}: " . Str::short(trim(strip_tags($response->content())), 200));
 			}
 		}
-
-		return $allSuccessful;
 	}
 
 	/**

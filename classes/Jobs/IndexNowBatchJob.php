@@ -35,12 +35,10 @@ class IndexNowBatchJob extends BatchJob
 			array_merge(...array_column($this->payload(), 'urls'))
 		);
 
-		if (empty($urls)) {
+		if (empty($urls) || !IndexNow::isActive()) {
 			return;
 		}
 
-		if (!IndexNow::send($urls)) {
-			throw new \Exception('IndexNow request failed');
-		}
+		IndexNow::submit($urls);
 	}
 }
