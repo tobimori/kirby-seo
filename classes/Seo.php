@@ -53,10 +53,6 @@ final class Seo
 	 */
 	public static function isIndexable(Page $page, Language|null $language = null): bool
 	{
-		if (!static::option('robots.enabled')) {
-			return true;
-		}
-
 		/** @var \tobimori\Seo\Meta $meta */
 		$meta = new (static::option('components.meta'))($page, $language);
 
