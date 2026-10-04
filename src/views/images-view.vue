@@ -264,6 +264,7 @@ const onGenerate = async () => {
 <template>
 	<k-seo-view
 		:buttons="buttons"
+		:license="license"
 		:stats="serverStats"
 		:tab="tab"
 		:tabs="tabs"

@@ -66,6 +66,10 @@ abstract class OverviewView
 				'images' => $this->images()->stats(),
 				'links' => (new Report())->stats(),
 			],
+			'license' => [
+				'state' => $this->kirby->plugin('tobimori/seo')->license()->state(),
+				'local' => $this->kirby->system()->isLocal(),
+			],
 			'tab' => $tab,
 			'tabs' => array_map(fn ($name, $icon) => [
 				'name' => $name,

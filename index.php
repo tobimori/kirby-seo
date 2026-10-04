@@ -22,7 +22,7 @@ if (
 
 App::plugin(
 	'tobimori/seo',
-	// TODO: license
+	license: fn (\Kirby\Plugin\Plugin $plugin) => new \tobimori\Seo\License($plugin),
 	extends: [
 		'options' => require __DIR__ . '/config/options.php',
 		'sections' => require __DIR__ . '/config/sections.php',

@@ -10,6 +10,8 @@ const props = defineProps({
 		type: Array,
 		default: () => []
 	},
+	/** `{ state, local }`, see `License::state()` */
+	license: Object,
 	/** `{ checked, title, description, images: { ok, notice, negative }, links: { ok, notice, negative, unknown } }` */
 	stats: Object,
 	/** State for screen readers, e.g. the progress of a task, announced when it changes */
@@ -112,6 +114,13 @@ const cards = computed(() => {
 <template>
 	<k-panel-inside class="k-seo-view">
 		<p class="sr-only" role="status">{{ announcement }}</p>
+		<k-seo-license-banner
+			v-if="license && license.state !== 'active'"
+			:state="license.state"
+			:local="license.local"
+			class="k-seo-view-license"
+			@activated="panel.view.reload()"
+		/>
 		<k-header>
 			{{ $t("seo.overview.title") }}
 
@@ -174,6 +183,10 @@ const cards = computed(() => {
 </template>
 
 <style>
+.k-seo-view-license {
+	margin-bottom: var(--spacing-6);
+}
+
 /* stats right below the header (without divider), its title already has a margin below */
 .k-seo-view .k-header:has(+ .k-seo-view-stats) {
 	margin-bottom: 0;

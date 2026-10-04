@@ -1,5 +1,6 @@
 <?php
 
+use Kirby\Cms\App;
 use Kirby\Cms\Page;
 use Kirby\Cms\Site;
 use Kirby\Toolkit\A;
@@ -88,6 +89,12 @@ return [
 
 				return $data;
 			}
+		]
+	],
+	'seo-license' => [
+		'computed' => [
+			'local' => fn () => App::instance()->system()->isLocal(),
+			'state' => fn () => App::instance()->plugin('tobimori/seo')->license()->state(),
 		]
 	],
 	'seo-search-console' => [

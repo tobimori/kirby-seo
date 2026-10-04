@@ -1,6 +1,6 @@
 # Plugin License Agreement
 
-Source: https://plugins.andkindness.com/license-agreement
+Source: https://www.andkindness.com/legal/license-agreement
 
 While most of our plugins source code are publicly available, they are, unless specified otherwise, not free software. To use any plugin in production, you need to purchase a license.
 

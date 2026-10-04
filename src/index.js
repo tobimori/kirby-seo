@@ -7,6 +7,7 @@ import UtmShareDialog from "./components/utm-share-dialog.vue"
 import GscDrawer from "./components/gsc-drawer.vue"
 import { createTemplateVariableNode } from "./nodes/template-variable.js"
 import HeadingStructure from "./sections/heading-structure.vue"
+import License from "./sections/license.vue"
 import SeoPreview from "./sections/seo-preview.vue"
 import SearchConsole from "./sections/search-console.vue"
 import ChangesControls from "./components/changes-controls.vue"
@@ -31,6 +32,7 @@ import ImagesView from "./views/images-view.vue"
 import LinksView from "./views/links-view.vue"
 import OverviewView from "./views/overview-view.vue"
 import SeoView from "./components/seo-view.vue"
+import LicenseBanner from "./components/license-banner.vue"
 
 panel.plugin("tobimori/seo", {
 	icons: {
@@ -40,6 +42,7 @@ panel.plugin("tobimori/seo", {
 	},
 	sections: {
 		"heading-structure": HeadingStructure,
+		"seo-license": License,
 		"seo-preview": SeoPreview,
 		"seo-search-console": SearchConsole
 	},
@@ -56,6 +59,7 @@ panel.plugin("tobimori/seo", {
 		"k-seo-images-view": ImagesView,
 		"k-seo-links-view": LinksView,
 		"k-seo-view": SeoView,
+		"k-seo-license-banner": LicenseBanner,
 		"k-seo-table": SeoTable,
 		"k-seo-search": SeoSearch,
 		"k-seo-columns": SeoColumns,

@@ -182,6 +182,7 @@ const items = computed(() =>
 <template>
 	<k-seo-view
 		:buttons="buttons"
+		:license="license"
 		:stats="stats"
 		:tab="tab"
 		:tabs="tabs"

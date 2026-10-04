@@ -4,6 +4,7 @@ export const overviewProps = {
 		default: () => []
 	},
 	columns: Object,
+	license: Object,
 	rows: Array,
 	pagination: Object,
 	search: String,

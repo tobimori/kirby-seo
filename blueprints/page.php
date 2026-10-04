@@ -1,11 +1,22 @@
 <?php
 
+use Kirby\Cms\App;
 use tobimori\Seo\Seo;
 
 return [
 	'label' => 'seo.tabs.seo',
 	'icon' => 'search',
 	'columns' => [
+		...(App::instance()->plugin('tobimori/seo')->license()->status()->value() !== 'active' ? [
+			'license' => [
+				'width' => '1/1',
+				'sections' => [
+					'seoLicense' => [
+						'type' => 'seo-license'
+					]
+				]
+			]
+		] : []),
 		'main' => [
 			'width' => '7/12',
 			'fields' => [
