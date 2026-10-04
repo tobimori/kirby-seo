@@ -3,6 +3,7 @@
 namespace tobimori\Seo;
 
 use Kirby\Cms\App;
+use Kirby\Cms\LicenseType;
 use Kirby\Data\Json;
 use Kirby\Exception\InvalidArgumentException;
 use Kirby\Filesystem\F;
@@ -44,6 +45,9 @@ final class License extends KirbyLicense
 {
 	// license keys of this plugin start with this prefix, e.g. `KS-BAS-…`
 	private const PREFIX = 'KS-';
+
+	// sites with a Kirby Enterprise license need an Enterprise license of this plugin
+	private const ENTERPRISE_PREFIX = 'KS-ENT-';
 	private const FILE = '.tm-licenses';
 	private const MANUAL_FILE = '.seo-license';
 	private const BASE = 'https://plugins.andkindness.com/licenses/';
@@ -91,17 +95,33 @@ final class License extends KirbyLicense
 	}
 
 	/**
-	 * Returns `active`, `revoked` (moved to another domain or revoked by the license server),
+	 * Returns `active`, `enterprise` (an Enterprise license is required for this Kirby license),
+	 * `revoked` (moved to another domain or revoked by the license server),
 	 * `expired` (could not be reissued in time) or `missing`
 	 */
 	public function state(): string
 	{
 		return match (true) {
-			$this->isValid() => 'active',
+			$this->isValid() => static::requiresEnterprise() && !static::isEnterprise($this->data['license']) ? 'enterprise' : 'active',
 			($this->data['revoked'] ?? false) === true => 'revoked',
 			$this->data !== null && static::isSigned($this->data) => 'expired',
 			default => 'missing',
 		};
+	}
+
+	/**
+	 * Whether the site is registered with a Kirby Enterprise license
+	 */
+	private static function requiresEnterprise(): bool
+	{
+		$license = App::instance()->system()->license();
+
+		return $license->isMissing() === false && $license->type() === LicenseType::Enterprise;
+	}
+
+	private static function isEnterprise(string $license): bool
+	{
+		return str_starts_with(Str::upper(trim($license)), self::ENTERPRISE_PREFIX);
 	}
 
 	/**
@@ -122,6 +142,10 @@ final class License extends KirbyLicense
 	{
 		if (!static::isOwn(['license' => $license])) {
 			throw new InvalidArgumentException(t('seo.license.error.plugin'));
+		}
+
+		if (static::requiresEnterprise() && !static::isEnterprise($license)) {
+			throw new InvalidArgumentException(t('seo.license.error.enterprise'));
 		}
 
 		try {

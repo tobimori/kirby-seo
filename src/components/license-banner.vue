@@ -7,7 +7,8 @@ const props = defineProps({
 })
 
 const message = computed(() => {
-	if (["expired", "revoked"].includes(props.state)) return `seo.license.${props.state}`
+	if (["enterprise", "expired", "revoked"].includes(props.state))
+		return `seo.license.${props.state}`
 	return props.local ? "seo.license.cta" : "seo.license.missing"
 })
 
