@@ -119,7 +119,6 @@ const cards = computed(() => {
 			:state="license.state"
 			:local="license.local"
 			class="k-seo-view-license"
-			@activated="panel.view.reload()"
 		/>
 		<k-header>
 			{{ $t("seo.overview.title") }}

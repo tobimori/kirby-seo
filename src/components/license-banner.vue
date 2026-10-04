@@ -1,12 +1,10 @@
 <script setup>
-import { computed, ref, useApp, usePanel } from "kirbyuse"
+import { computed, ref, usePanel } from "kirbyuse"
 
 const props = defineProps({
 	state: String,
 	local: Boolean
 })
-
-const emit = defineEmits(["activated"])
 
 const message = computed(() => {
 	if (["expired", "revoked"].includes(props.state)) return `seo.license.${props.state}`
@@ -22,19 +20,7 @@ const close = () => {
 	isClosed.value = true
 }
 
-const app = useApp()
 const panel = usePanel()
-const openDialog = () => {
-	app.$dialog("seo/activate", {
-		on: {
-			success(response) {
-				panel.dialog.close()
-				panel.notification.success(response.message)
-				emit("activated")
-			}
-		}
-	})
-}
 </script>
 
 <template>
@@ -57,7 +43,7 @@ const openDialog = () => {
 					variant="filled"
 					icon="key"
 					:text="$t('seo.license.activate')"
-					@click="openDialog()"
+					@click="panel.dialog.open('seo/activate')"
 				/>
 				<k-button
 					v-if="local"
