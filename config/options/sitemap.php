@@ -2,12 +2,10 @@
 
 use tobimori\Seo\Sitemap\SitemapIndex;
 use tobimori\Seo\Meta;
-use tobimori\Seo\Seo;
 
 return function (SitemapIndex $sitemap) {
 	$exclude = option('tobimori.seo.sitemap.excludeTemplates', []);
-	// indexable pages are cached, the filter applies a site-wide `noindex`, e.g. on staging
-	$pages = Seo::indexable()->filter(fn ($page) => $page->metadata()->robotsIndex()->toBool() && !in_array($page->intendedTemplate()->name(), $exclude));
+	$pages = site()->index()->filter(fn ($page) => $page->metadata()->robotsIndex()->toBool() && !in_array($page->intendedTemplate()->name(), $exclude));
 
 	if ($group = option('tobimori.seo.sitemap.groupByTemplate')) {
 		$pages = $pages->group('intendedTemplate');
