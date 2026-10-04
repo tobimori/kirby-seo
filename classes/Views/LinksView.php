@@ -5,6 +5,7 @@ namespace tobimori\Seo\Views;
 use Kirby\Content\VersionId;
 use Kirby\Toolkit\I18n;
 use tobimori\Seo\Audit\Links\Checker;
+use tobimori\Seo\Audit\Links\Index;
 use tobimori\Seo\Audit\Links\Report;
 
 class LinksView extends OverviewView
@@ -76,13 +77,26 @@ class LinksView extends OverviewView
 	}
 
 	/**
-	 * Returns scan progress, running a step only when queue processing is disabled
+	 * Returns scan progress, running a step only when queue processing is disabled.
+	 * With queues, enqueues a scan if results are incomplete and no scan is running,
+	 * e.g. before the first scan. At most every 5 minutes, so failing jobs don't fill the queue
 	 */
 	public function scan(): array
 	{
 		$checker = new Checker();
 
-		return Checker::usesQueue() ? $checker->progress() : $checker->step(self::STEP);
+		if (!Checker::usesQueue()) {
+			return $checker->step(self::STEP);
+		}
+
+		$progress = $checker->progress();
+
+		if (!$progress['done'] && !$progress['running'] && Index::cache()->get('dispatched') === null) {
+			Checker::dispatch(now: true);
+			Index::cache()->set('dispatched', time(), 5);
+		}
+
+		return $progress;
 	}
 
 	/**
