@@ -6,7 +6,7 @@ import { SEVERITY_ICONS } from "../../../utils/checks.js"
 const props = defineProps({
 	column: Object,
 	row: Object,
-	/** `{ issues: [...] }` or `{ skipped: "draft" | "untranslated" | "noindex" }` */
+	/** `{ issues: [...] }` or `{ skipped: "untranslated" }` */
 	value: Object
 })
 

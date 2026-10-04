@@ -85,14 +85,15 @@ abstract class OverviewView
 	 */
 	protected function pages(): Pages
 	{
-		return $this->pages ??= $this->kirby->site()->index(true)->filter($this->isListedPage(...));
+		return $this->pages ??= Seo::indexable()->filter($this->isListedPage(...));
 	}
 
 	protected function isListedPage(Page $page): bool
 	{
-		return $page->isListable()
-			&& $this->blueprint($page)->field('metaTitle') !== null
-			&& $this->blueprint($page)->field('metaDescription') !== null;
+		// blueprints are shared by template, checking permissions per page is slower
+		return $this->blueprint($page)->field('metaTitle') !== null
+			&& $this->blueprint($page)->field('metaDescription') !== null
+			&& $page->isListable();
 	}
 
 	/**

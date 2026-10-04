@@ -260,7 +260,7 @@ class Checker
 	}
 
 	/**
-	 * Returns published pages with an existing template, keyed by `{language}/{page id}`.
+	 * Returns indexable pages (see `Seo::indexable()`), keyed by `{language}/{page id}`.
 	 * Populates `$fingerprints` and `$urls` for all page-language pairs
 	 *
 	 * @return array<string, array{0: \Kirby\Cms\Page, 1: string|null}>
@@ -269,7 +269,6 @@ class Checker
 	{
 		$kirby = App::instance();
 		$languages = $kirby->multilang() ? $kirby->languages()->codes() : [null];
-		$pages = $kirby->site()->index()->filter(fn (Page $page) => $page->template()->exists());
 
 		// Site content can supply shared links, so changes must invalidate every page
 		$site = [$invalidated];
@@ -280,8 +279,8 @@ class Checker
 		$targets = [];
 		$this->urls = [];
 
-		foreach ($pages as $page) {
-			foreach ($languages as $language) {
+		foreach ($languages as $language) {
+			foreach (Seo::indexable($kirby->language($language)) as $page) {
 				$key = ($language ?? '') . '/' . $page->id();
 				$url = $page->url($language);
 				$targets[$key] = [$page, $language];

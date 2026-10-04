@@ -9,10 +9,23 @@ use tobimori\Seo\Field\AltTextField;
 use tobimori\Seo\Audit\Links\Checker;
 use tobimori\Seo\Seo;
 
-$checkLinks = function (Event $event) {
-	if (in_array($event->action(), ['create', 'duplicate', 'update', 'move', 'changeSlug', 'changeStatus', 'changeTemplate', 'changeName', 'delete'], true)) {
-		Checker::dispatch();
+// results of the overview audits depend on content changes
+$audit = function (Event $event) {
+	if (!in_array($event->action(), ['create', 'duplicate', 'update', 'move', 'changeSlug', 'changeStatus', 'changeTemplate', 'changeName', 'delete'], true)) {
+		return;
 	}
+
+	// pages that are and were not indexable (e.g. form submissions) don't affect the other audits
+	$pages = array_filter([$event->argument('page'), $event->argument('newPage'), $event->argument('oldPage')]);
+	if ($pages !== [] && !array_filter($pages, fn (Page $page) => Seo::isIndexable($page))) {
+		return;
+	}
+
+	if ($event->type() !== 'file') {
+		Seo::clearIndexable();
+	}
+
+	Checker::dispatch();
 };
 
 $indexNow = function (Page $newPage): void {
@@ -33,9 +46,9 @@ return [
 	},
 	// Persisted schedules are synchronized when the worker starts
 	'tobimori.queues.worker:before' => fn () => Checker::schedule(),
-	'page.*:after' => $checkLinks,
-	'site.*:after' => $checkLinks,
-	'file.*:after' => $checkLinks,
+	'page.*:after' => $audit,
+	'site.*:after' => $audit,
+	'file.*:after' => $audit,
 	'file.create:after' => function (File $file) {
 		if ($file->type() !== 'image') {
 			return;

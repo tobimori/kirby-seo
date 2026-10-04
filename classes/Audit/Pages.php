@@ -6,7 +6,6 @@ use Kirby\Cms\App;
 use Kirby\Cms\Page;
 use Kirby\Cms\Site;
 use Kirby\Toolkit\Str;
-use tobimori\Seo\Meta;
 use tobimori\Seo\Seo;
 
 /**
@@ -55,7 +54,7 @@ class Pages
 
 	/**
 	 * Checks of a single page: `['issues' => [...]]`, or `['skipped' => 'reason']`
-	 * for pages that aren't checked (drafts, untranslated pages, pages hidden from search engines)
+	 * for untranslated pages
 	 */
 	public function page(Page $page): array|null
 	{
@@ -232,7 +231,7 @@ class Pages
 		}
 
 		// skipped pages are listed (& searched) as well
-		if ($reason = $this->skipped($page, $meta)) {
+		if ($reason = $this->skipped($page)) {
 			return ['skipped' => $reason, 'values' => $values];
 		}
 
@@ -373,38 +372,14 @@ class Pages
 		};
 	}
 
-	protected function skipped(Page $page, Meta $meta): string|null
+	/**
+	 * Pages without a translation show the content of the default language
+	 */
+	protected function skipped(Page $page): string|null
 	{
-		return match (true) {
-			$page->isDraft() => 'draft',
-			// pages without a translation show the content of the default language
-			!$page->version('latest')->exists('current') && !$page->version('changes')->exists('current') => 'untranslated',
-			!$this->isIndexable($page, $meta) => 'noindex',
-			default => null,
-		};
-	}
-
-	protected function isIndexable(Page $page, Meta $meta): bool
-	{
-		if (!Seo::option('robots.enabled')) {
-			return true;
-		}
-
-		if (Seo::option('robots.index')) {
-			return !Str::contains($meta->robots(), 'noindex');
-		}
-
-		// Ignore site-wide noindex (e.g. on staging) so the audit still checks public pages
-		// Page-specific indexing rules still apply
-		['field' => $field, 'source' => $source] = $meta->resolve('robotsIndex');
-
-		// set by editors (or page models) for this page, `null` if the default is `false`
-		if ($source !== null && $source !== 'options') {
-			return $field->toBool();
-		}
-
-		// same as the default, without the site-wide switch
-		return Seo::option('robots.followPageStatus') ? $page->isListed() : true;
+		return !$page->version('latest')->exists('current') && !$page->version('changes')->exists('current')
+			? 'untranslated'
+			: null;
 	}
 
 	protected static function text(mixed $value): string

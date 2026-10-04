@@ -3,6 +3,7 @@
 namespace tobimori\Seo\Audit\Links;
 
 use Kirby\Cms\App;
+use Kirby\Cms\Page;
 use Kirby\Http\Router;
 use Kirby\Uuid\Uuid;
 use Throwable;
@@ -259,13 +260,16 @@ class Report
 			return ['state' => 'ok'];
 		}
 
+		// only indexable pages are scanned, e.g. not an unlisted imprint
+		if ($page = $this->find($path)) {
+			return $page->isDraft()
+				? ['state' => 'broken', 'reason' => 'draft', 'code' => 404]
+				: ['state' => 'ok'];
+		}
+
 		// routes of plugins & the config, e.g. the sitemap
 		if ($this->hasRoute($path) || $this->hasRoute(trim(rawurldecode($file), '/'))) {
 			return ['state' => 'unknown', 'reason' => 'route'];
-		}
-
-		if ($this->isDraft($path)) {
-			return ['state' => 'broken', 'reason' => 'draft', 'code' => 404];
 		}
 
 		return ['state' => 'broken', 'reason' => 'notFound', 'code' => 404];
@@ -372,10 +376,14 @@ class Report
 	}
 
 	/**
-	 * Whether the path leads to a draft (or a page below one), by the slugs of any language
+	 * Page or draft of the path, by the slugs of any language
 	 */
-	protected function isDraft(string $path): bool
+	protected function find(string $path): Page|null
 	{
+		if ($path === '') {
+			return $this->kirby->site()->homePage();
+		}
+
 		$languages = $this->kirby->multilang() ? $this->kirby->languages()->codes() : [null];
 		$model = $this->kirby->site();
 
@@ -385,15 +393,11 @@ class Report
 			)->first();
 
 			if ($model === null) {
-				return false;
-			}
-
-			if ($model->isDraft()) {
-				return true;
+				return null;
 			}
 		}
 
-		return false;
+		return $model;
 	}
 
 	/**
