@@ -18,9 +18,10 @@ $audit = function (Event $event) {
 
 	Images::clearStats();
 
-	// pages that are and were not indexable (e.g. form submissions) don't affect the other audits
+	// pages that are and were not indexable (e.g. form submissions) don't affect the other audits,
+	// unless children inherit their robots settings or get new URLs with them
 	$pages = array_filter([$event->argument('page'), $event->argument('newPage'), $event->argument('oldPage')]);
-	if ($pages !== [] && !array_filter($pages, fn (Page $page) => Seo::isIndexable($page))) {
+	if ($pages !== [] && !array_filter($pages, fn (Page $page) => Seo::isIndexable($page) || $page->hasChildren())) {
 		return;
 	}
 
