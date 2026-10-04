@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bb7e1df18dec1e3c9ef102d47e1e0b70",
+    "content-hash": "86db7f386959c4bfe261604eb150f673",
     "packages": [
         {
             "name": "getkirby/composer-installer",
@@ -2762,30 +2762,30 @@
         },
         {
             "name": "spatie/schema-org",
-            "version": "3.23.2",
+            "version": "5.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/schema-org.git",
-                "reference": "85def9a383ce0da75a44e839bff95f8e5198ffb7"
+                "reference": "8c4fe7ed874a1f8bb4de62c70d41bed0b9e3114a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/schema-org/zipball/85def9a383ce0da75a44e839bff95f8e5198ffb7",
-                "reference": "85def9a383ce0da75a44e839bff95f8e5198ffb7",
+                "url": "https://api.github.com/repos/spatie/schema-org/zipball/8c4fe7ed874a1f8bb4de62c70d41bed0b9e3114a",
+                "reference": "8c4fe7ed874a1f8bb4de62c70d41bed0b9e3114a",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "php": "^8.0"
+                "php": "^8.4"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^3.6",
-                "graham-campbell/analyzer": "^4.2",
-                "illuminate/collections": "^8.62.0",
-                "league/flysystem": "^2.3.0 || ^3.0",
-                "pestphp/pest": "^1.21",
-                "symfony/console": "^5.3.7 || 6.0",
-                "twig/twig": "^3.3.3"
+                "friendsofphp/php-cs-fixer": "^3.88.2",
+                "graham-campbell/analyzer": "^5.0.0",
+                "illuminate/collections": "^10",
+                "league/flysystem": "^3.30",
+                "pestphp/pest": "^5.0.4",
+                "symfony/console": "^6.0 || ^7.3.4",
+                "twig/twig": "^3.21.1"
             },
             "type": "library",
             "autoload": {
@@ -2819,7 +2819,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/schema-org/issues",
-                "source": "https://github.com/spatie/schema-org/tree/3.23.2"
+                "source": "https://github.com/spatie/schema-org/tree/5.0.2"
             },
             "funding": [
                 {
@@ -2831,7 +2831,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-05-29T07:44:19+00:00"
+            "time": "2026-09-30T06:09:48+00:00"
         },
         {
             "name": "symfony/console",

@@ -6,7 +6,7 @@ intro: Add structured data to your pages
 Kirby SEO can output Schema.org structured data as JSON-LD. It uses the [spatie/schema-org](https://github.com/spatie/schema-org) package, which must be installed separately:
 
 ```bash
-composer require spatie/schema-org
+composer require "spatie/schema-org:^5.0"
 ```
 
 Once installed, a `WebSite` schema is generated automatically for every page with the page's title, description, and canonical URL. You can build on top of this or add your own schemas.
