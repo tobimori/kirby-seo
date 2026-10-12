@@ -11,7 +11,7 @@ use tobimori\Seo\Ai\SseStream;
 class Gemini extends Driver
 {
 	protected const string DEFAULT_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta';
-	protected const string DEFAULT_MODEL = 'gemini-3.1-flash-lite-preview';
+	protected const string DEFAULT_MODEL = 'gemini-3.5-flash-lite';
 
 	/**
 	 * @inheritDoc

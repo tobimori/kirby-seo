@@ -11,7 +11,7 @@ use tobimori\Seo\Ai\SseStream;
 class OpenAi extends Driver
 {
 	protected const string DEFAULT_ENDPOINT = 'https://api.openai.com/v1/responses';
-	protected const string DEFAULT_MODEL = 'gpt-5-mini-2025-08-07';
+	protected const string DEFAULT_MODEL = 'gpt-6-luna';
 
 	/**
 	 * @inheritDoc

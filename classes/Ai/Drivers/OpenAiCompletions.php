@@ -19,7 +19,7 @@ use function is_string;
 class OpenAiCompletions extends Driver
 {
 	protected const string DEFAULT_ENDPOINT = 'https://api.openai.com/v1/chat/completions';
-	protected const string DEFAULT_MODEL = 'gpt-5.4-nano';
+	protected const string DEFAULT_MODEL = 'gpt-6-luna';
 
 	/**
 	 * @inheritDoc
