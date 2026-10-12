@@ -117,7 +117,7 @@ Each provider has a `driver` class and a `config` array. The config options depe
 | ------------ | ----------- | ------------------------------- | -------------------------------------------------- |
 | `openai`     | `OpenAi`    | `gpt-6-luna`                   | `https://api.openai.com/v1/responses`              |
 | `anthropic`  | `Anthropic` | `claude-haiku-5-5`              | `https://api.anthropic.com/v1/messages`            |
-| `gemini`     | `Gemini`    | `gemini-3.1-flash-lite-preview` | `https://generativelanguage.googleapis.com/v1beta` |
+| `gemini`     | `Gemini`    | `gemini-3.5-flash-lite`         | `https://generativelanguage.googleapis.com/v1beta` |
 | `openrouter` | `OpenAi`    | `openai/gpt-6-luna`             | `https://openrouter.ai/api/v1/responses`           |
 
 The Gemini driver authenticates via API key as a query parameter (not a header). All providers default to a timeout of 120 seconds. See [customizing AI Assist](2_customization/06_ai-assist) for adding your own provider.

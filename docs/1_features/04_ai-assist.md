@@ -21,6 +21,8 @@ AI Assist needs an API key from an AI provider. Sign up with one of the supporte
 
 AI providers charge based on usage. These costs are separate from your Kirby SEO license. For generating short texts like meta titles and descriptions, costs are typically very low.
 
+Claude Max (5x and 20x) and Team plans include [monthly API credits](https://platform.claude.com/docs/en/about-claude/api-credits-for-subscribers) that can also be used with Kirby SEO. Claim them in your Claude billing settings by linking a Claude Console organization, then create a Console API key and configure it for the `anthropic` provider. These credits apply to the direct Claude API, not OpenRouter, and expire each billing cycle without rolling over. Free, Pro, and Enterprise plans aren't eligible for these included credits.
+
 Here's an example using OpenRouter:
 
 ```php
@@ -33,7 +35,7 @@ return [
         'openrouter' => [
           'config' => [
             'apiKey' => 'sk-or-...',
-            'model' => 'google/gemini-3-flash-preview',
+            'model' => 'google/gemini-3.5-flash-lite',
           ],
         ],
       ],
@@ -42,7 +44,7 @@ return [
 ];
 ```
 
-For generating meta titles and descriptions, you don't need the most powerful model. Small, fast models work well and keep costs low. Our recommendation is **Google Gemini 3 Flash** via the built-in Gemini provider: it's fast, capable, and has a generous free tier.
+For generating meta titles and descriptions, you don't need the most powerful model. Small, fast models work well and keep costs low. Our recommendation for the built-in Gemini provider is [**Google Gemini 3.5 Flash-Lite**](https://ai.google.dev/gemini-api/docs/models/gemini-3.5-flash-lite): it's a stable, low-latency model that supports text and image input.
 
 If you prefer OpenAI or Anthropic, the built-in defaults are [**GPT-6 Luna**](https://developers.openai.com/api/docs/models/gpt-6-luna) and [**Claude Haiku 5.5**](https://platform.claude.com/docs/en/models/haiku-5-5/overview). Both support text and image input for meta text and alt text generation. OpenRouter defaults to `openai/gpt-6-luna`.
 
