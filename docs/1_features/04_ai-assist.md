@@ -44,6 +44,8 @@ return [
 
 For generating meta titles and descriptions, you don't need the most powerful model. Small, fast models work well and keep costs low. Our recommendation is **Google Gemini 3 Flash** via the built-in Gemini provider: it's fast, capable, and has a generous free tier.
 
+If you prefer OpenAI or Anthropic, the built-in defaults are [**GPT-6 Luna**](https://developers.openai.com/api/docs/models/gpt-6-luna) and [**Claude Haiku 5.5**](https://platform.claude.com/docs/en/models/haiku-5-5/overview). Both support text and image input for meta text and alt text generation. OpenRouter defaults to `openai/gpt-6-luna`.
+
 You can change the model for any provider via the `model` key in the config, as shown in the example above.
 
 For config options for all providers, see [Customizing AI Assist](2_customization/06_ai-assist) for details.

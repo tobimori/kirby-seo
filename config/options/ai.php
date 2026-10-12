@@ -31,7 +31,7 @@ return [
 			'driver' => OpenAi::class,
 			'config' => [
 				'apiKey' => '', // needs to be defined
-				'model' => 'openai/gpt-5-nano',
+				'model' => 'openai/gpt-6-luna',
 				'endpoint' => 'https://openrouter.ai/api/v1/responses',
 			],
 		],

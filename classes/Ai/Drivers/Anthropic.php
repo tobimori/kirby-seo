@@ -11,7 +11,7 @@ use tobimori\Seo\Ai\SseStream;
 class Anthropic extends Driver
 {
 	protected const string DEFAULT_ENDPOINT = 'https://api.anthropic.com/v1/messages';
-	protected const string DEFAULT_MODEL = 'claude-4-5-haiku';
+	protected const string DEFAULT_MODEL = 'claude-haiku-5-5';
 
 	/**
 	 * @inheritDoc
