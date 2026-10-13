@@ -120,7 +120,7 @@ Each provider has a `driver` class and a `config` array. The config options depe
 | `gemini`     | `Gemini`    | `gemini-3.5-flash-lite`         | `https://generativelanguage.googleapis.com/v1beta` |
 | `openrouter` | `OpenAi`    | `openai/gpt-6-luna`             | `https://openrouter.ai/api/v1/responses`           |
 
-The Gemini driver authenticates via API key as a query parameter (not a header). All providers default to a timeout of 120 seconds. See [customizing AI Assist](2_customization/06_ai-assist) for adding your own provider.
+The Gemini driver uses the [Interactions API](https://ai.google.dev/gemini-api/docs/interactions) (`/interactions` is appended to the endpoint) and authenticates via the `x-goog-api-key` header. Requests are sent with `store: false`, so Google doesn't retain the interaction. All providers default to a timeout of 120 seconds. See [customizing AI Assist](2_customization/06_ai-assist) for adding your own provider.
 
 ## IndexNow
 

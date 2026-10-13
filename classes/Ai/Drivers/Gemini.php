@@ -23,71 +23,73 @@ class Gemini extends Driver
 		$apiKey = $this->config('apiKey', required: true);
 		$model = $model ?? $this->config('model', static::DEFAULT_MODEL);
 		$baseEndpoint = $this->config('endpoint', static::DEFAULT_ENDPOINT);
-		$endpoint = "{$baseEndpoint}/models/{$model}:streamGenerateContent?alt=sse&key={$apiKey}";
+		$endpoint = "{$baseEndpoint}/interactions";
 
 		$headers = [
 			'Content-Type: application/json',
+			"x-goog-api-key: {$apiKey}",
 		];
 
 		$payload = [
-			'contents' => $this->buildContents($content),
+			'model' => $model,
+			'input' => $this->buildSteps($content),
+			'stream' => true,
+			// keep requests stateless, nothing is retained server-side
+			'store' => false,
 		];
 
 		$systemInstruction = $this->buildSystemInstruction($content);
 		if ($systemInstruction !== null) {
-			$payload['systemInstruction'] = $systemInstruction;
+			$payload['system_instruction'] = $systemInstruction;
 		}
 
 		$stream = new SseStream($endpoint, $headers, $payload, (int)$this->config('timeout', 120));
 		$started = false;
 
 		yield from $stream->stream(function (array $event) use (&$started): Generator {
-			$candidates = $event['candidates'] ?? [];
-			$candidate = $candidates[0] ?? null;
+			switch ($event['event_type'] ?? null) {
+				case 'error':
+					yield Chunk::error($event['error']['message'] ?? 'Unknown Gemini error.', $event);
+					return;
 
-			if ($candidate === null) {
-				$error = $event['error'] ?? null;
-				if ($error) {
-					yield Chunk::error($error['message'] ?? 'Unknown Gemini error.', $event);
-				}
-				return;
-			}
+				case 'interaction.created':
+					if (!$started) {
+						yield Chunk::streamStart($event);
+						yield Chunk::textStart($event);
+						$started = true;
+					}
+					return;
 
-			if (!$started) {
-				yield Chunk::streamStart($event);
-				yield Chunk::textStart($event);
-				$started = true;
-			}
+				case 'step.delta':
+					$delta = $event['delta'] ?? [];
+					$text = ($delta['type'] ?? null) === 'text' ? ($delta['text'] ?? '') : '';
+					if ($text !== '') {
+						yield Chunk::textDelta($text, $event);
+					}
+					return;
 
-			$finishReason = $candidate['finishReason'] ?? null;
-			if ($finishReason === 'SAFETY') {
-				yield Chunk::error('Response blocked by safety filters.', $event);
-				return;
-			}
+				case 'interaction.completed':
+					$status = $event['interaction']['status'] ?? 'completed';
+					if ($status === 'failed' || $status === 'cancelled') {
+						yield Chunk::error("Gemini interaction {$status}.", $event);
+						return;
+					}
 
-			$parts = $candidate['content']['parts'] ?? [];
-			foreach ($parts as $part) {
-				$text = $part['text'] ?? '';
-				if ($text !== '') {
-					yield Chunk::textDelta($text, $event);
-				}
-			}
-
-			if ($finishReason !== null) {
-				yield Chunk::textComplete($event);
-				yield Chunk::streamEnd($event);
+					yield Chunk::textComplete($event);
+					yield Chunk::streamEnd($event);
+					return;
 			}
 		});
 	}
 
 	/**
-	 * Translates an array of Content messages into the Gemini contents format.
+	 * Translates an array of Content messages into Interactions API steps.
 	 *
 	 * @param array<Content> $content
 	 */
-	private function buildContents(array $content): array
+	private function buildSteps(array $content): array
 	{
-		$contents = [];
+		$steps = [];
 
 		foreach ($content as $message) {
 			if ($message->role() === 'system') {
@@ -98,35 +100,35 @@ class Gemini extends Driver
 			foreach ($message->blocks() as $block) {
 				if ($block['type'] === 'image') {
 					$parts[] = [
-						'inline_data' => [
-							'mime_type' => $block['mediaType'],
-							'data' => $block['data'],
-						],
+						'type' => 'image',
+						'mime_type' => $block['mediaType'],
+						'data' => $block['data'],
 					];
 				} elseif ($block['type'] === 'text') {
 					$parts[] = [
+						'type' => 'text',
 						'text' => $block['text'],
 					];
 				}
 			}
 
-			$contents[] = [
-				'role' => $message->role() === 'assistant' ? 'model' : 'user',
-				'parts' => $parts,
+			$steps[] = [
+				'type' => $message->role() === 'assistant' ? 'model_output' : 'user_input',
+				'content' => $parts,
 			];
 		}
 
-		return $contents;
+		return $steps;
 	}
 
 	/**
-	 * Extracts system messages into a Gemini systemInstruction object.
+	 * Joins system messages into a single system instruction string.
 	 *
 	 * @param array<Content> $content
 	 */
-	private function buildSystemInstruction(array $content): array|null
+	private function buildSystemInstruction(array $content): string|null
 	{
-		$parts = [];
+		$texts = [];
 
 		foreach ($content as $message) {
 			if ($message->role() !== 'system') {
@@ -135,15 +137,11 @@ class Gemini extends Driver
 
 			foreach ($message->blocks() as $block) {
 				if ($block['type'] === 'text') {
-					$parts[] = ['text' => $block['text']];
+					$texts[] = $block['text'];
 				}
 			}
 		}
 
-		if ($parts === []) {
-			return null;
-		}
-
-		return ['parts' => $parts];
+		return $texts === [] ? null : implode("\n\n", $texts);
 	}
 }
