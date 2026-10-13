@@ -35,6 +35,11 @@ class Anthropic extends Driver
 			'stream' => true,
 		];
 
+		$system = $this->buildSystem($content);
+		if ($system !== null) {
+			$payload['system'] = $system;
+		}
+
 		$stream = new SseStream($this->config('endpoint', static::DEFAULT_ENDPOINT), $headers, $payload, (int)$this->config('timeout', 120));
 		yield from $stream->stream(function (array $event): Generator {
 			$type = $event['type'] ?? null;
@@ -110,6 +115,10 @@ class Anthropic extends Driver
 		$messages = [];
 
 		foreach ($content as $message) {
+			if ($message->role() === 'system') {
+				continue;
+			}
+
 			$blocks = [];
 			foreach ($message->blocks() as $block) {
 				if ($block['type'] === 'image') {
@@ -136,5 +145,29 @@ class Anthropic extends Driver
 		}
 
 		return $messages;
+	}
+
+	/**
+	 * Joins system messages into the top-level system prompt.
+	 *
+	 * @param array<Content> $content
+	 */
+	private function buildSystem(array $content): string|null
+	{
+		$texts = [];
+
+		foreach ($content as $message) {
+			if ($message->role() !== 'system') {
+				continue;
+			}
+
+			foreach ($message->blocks() as $block) {
+				if ($block['type'] === 'text') {
+					$texts[] = $block['text'];
+				}
+			}
+		}
+
+		return $texts === [] ? null : implode("\n\n", $texts);
 	}
 }
