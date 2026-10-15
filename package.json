@@ -9,7 +9,7 @@
 		"format": "oxfmt",
 		"lint": "eslint \"src/**/*.{js,vue}\"",
 		"lint:fix": "npm run lint -- --fix",
-		"playground": "PHP_CLI_SERVER_WORKERS=4 php -S ${HOST:-localhost}:${PORT:-8000} -t .playground .playground/kirby/router.php",
+		"playground": "PHP_CLI_SERVER_WORKERS=4 php -S ${HOST:-127.0.0.1}:${PORT:-8000} -t .playground .playground/kirby/router.php",
 		"playground:portless": "portless run --name seo pnpm playground"
 	},
 	"dependencies": {
