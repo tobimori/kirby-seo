@@ -39,7 +39,7 @@ class LinksView extends OverviewView
 			$summary = Report::summary($links);
 
 			if ($issue) {
-				$links = array_filter($links, fn ($link) => Report::has($link, $issue));
+				$links = array_filter($links, static fn ($link) => Report::has($link, $issue));
 			}
 
 			$links = $this->search($links, $search, self::SEARCHABLE, fn ($link, $key) => match ($key) {

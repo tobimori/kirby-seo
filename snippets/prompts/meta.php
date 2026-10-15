@@ -5,7 +5,7 @@
  ** @var string|null $currentField */
 
 $meta = $page->metadata();
-$currentField = $currentField ?? null;
+$currentField ??= null;
 
 $metaFields = [
 	'metaTitle' => 'Meta Title',

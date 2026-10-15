@@ -108,7 +108,7 @@ class ImagesView extends EditableOverviewView
 	protected function ids(ModelWithContent $model): array
 	{
 		return array_map(
-			fn ($field) => Audit\Images::id($model, $field),
+			static fn ($field) => Audit\Images::id($model, $field),
 			$this->images()->fields($model)
 		);
 	}

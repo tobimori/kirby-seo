@@ -274,7 +274,7 @@ abstract class EditableOverviewView extends OverviewView
 		$keys = array_map('strtolower', $entry['fields']);
 
 		$changes->update(
-			array_combine($keys, array_map(fn ($key) => $latest[$key] ?? null, $keys)),
+			array_combine($keys, array_map(static fn ($key) => $latest[$key] ?? null, $keys)),
 			$language
 		);
 

@@ -88,7 +88,7 @@ class Ai
 		};
 
 		try {
-			$stream(fn (Chunk $chunk) => $send([
+			$stream(static fn (Chunk $chunk) => $send([
 				'type' => $chunk->type,
 				'text' => $chunk->text,
 				'payload' => $chunk->payload

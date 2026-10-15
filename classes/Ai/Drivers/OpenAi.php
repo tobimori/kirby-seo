@@ -38,7 +38,7 @@ class OpenAi extends Driver
 		];
 
 		$stream = new SseStream($this->config('endpoint', static::DEFAULT_ENDPOINT), $headers, $payload, (int)$this->config('timeout', 120));
-		yield from $stream->stream(function (array $event): Generator {
+		yield from $stream->stream(static function (array $event): Generator {
 			$type = $event['type'] ?? null;
 
 			if ($type === 'response.created') {

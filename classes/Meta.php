@@ -66,9 +66,7 @@ class Meta
 
 		// target both underscores and hyphens
 		$locale = Str::replace($locale, '_', $separator);
-		$locale = Str::replace($locale, '-', $separator);
-
-		return $locale;
+		return Str::replace($locale, '-', $separator);
 	}
 
 	/**
@@ -134,7 +132,7 @@ class Meta
 
 		// LLM-friendly content discovery
 		$llmContent = new (Seo::option('components.agentic'))($this->page);
-		$meta['alternate'][] = function () use ($llmContent) {
+		$meta['alternate'][] = static function () use ($llmContent) {
 			if (!$llmContent->available()) {
 				return null;
 			}
@@ -145,7 +143,7 @@ class Meta
 				'type' => $llmContent::MARKDOWN_TYPE
 			];
 		};
-		$meta['alternate'][] = function () use ($llmContent) {
+		$meta['alternate'][] = static function () use ($llmContent) {
 			if (!$llmContent->available() || !$llmContent->llmsTxtEnabled()) {
 				return null;
 			}
@@ -186,7 +184,7 @@ class Meta
 				};
 
 				if ($lang !== $this->lang) {
-					$meta['og:locale:alternate'][] = fn () => Meta::toOpenGraphLocale($lang);
+					$meta['og:locale:alternate'][] = static fn () => Meta::toOpenGraphLocale($lang);
 				}
 			}
 
@@ -578,7 +576,7 @@ class Meta
 				if ($val === null) {
 					// Remove the key from the consumed array, so it doesn't get filtered out
 					// (we can assume the entry is a custom meta tag that uses different attributes)
-					$this->consumed = array_filter($this->consumed, fn ($item) => $item !== $key);
+					$this->consumed = array_filter($this->consumed, static fn ($item) => $item !== $key);
 					return null;
 				}
 			}

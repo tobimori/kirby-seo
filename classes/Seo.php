@@ -39,7 +39,7 @@ final class Seo
 			$cached['pages'][$code] = $kirby
 				->site()
 				->index()
-				->filter(fn (Page $page) => static::isIndexable($page, $language))
+				->filter(static fn (Page $page) => static::isIndexable($page, $language))
 				->keys();
 			$cache->set('indexable', $cached, 60);
 		}

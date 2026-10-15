@@ -34,7 +34,7 @@ App::plugin(
 		'routes' => require __DIR__ . '/config/routes.php',
 		'fields' => require __DIR__ . '/config/fields.php',
 		'fieldMethods' => [
-			'toAltText' => fn ($field) => AltText::fromField($field)
+			'toAltText' => AltText::fromField(...)
 		],
 		'permissions' => [
 			'ai' => true,

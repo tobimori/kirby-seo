@@ -292,8 +292,8 @@ final class License extends KirbyLicense
 	 */
 	private static function find(string $url): array
 	{
-		$shared = A::find(static::read(self::FILE), fn (array $license) => static::isFor($license, $url));
-		$manual = A::find(static::read(self::MANUAL_FILE), fn (array $license) => static::isFor($license, $url));
+		$shared = A::find(static::read(self::FILE), static fn (array $license) => static::isFor($license, $url));
+		$manual = A::find(static::read(self::MANUAL_FILE), static fn (array $license) => static::isFor($license, $url));
 
 		// a revoked license also blocks its copy in the manual file
 		if (($shared['revoked'] ?? false) === true && ($manual['license'] ?? null) === $shared['license']) {
@@ -316,7 +316,7 @@ final class License extends KirbyLicense
 	{
 		$licenses = array_filter(
 			static::read(self::FILE, strict: true),
-			fn (array $entry) => (
+			static fn (array $entry) => (
 				!static::isFor($entry, $license['assignedUrl']) &&
 				($entry['license'] ?? null) !== $license['license']
 			)

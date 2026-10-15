@@ -148,7 +148,7 @@ class AltTextField extends FieldClass
 		$kirby = $file->kirby();
 		$component = Seo::option('components.ai');
 
-		$component::sendStream(function (Closure $send) use ($kirby, $file, $instructions, $component) {
+		$component::sendStream(static function (Closure $send) use ($kirby, $file, $instructions, $component) {
 			$kirby->data = [
 				'file' => $file,
 				'site' => $kirby->site(),
@@ -274,7 +274,7 @@ class AltTextField extends FieldClass
 			$results[null] = $text;
 		}
 
-		return $kirby->impersonate('kirby', function () use ($file, $results, $autogenerateFields) {
+		return $kirby->impersonate('kirby', static function () use ($file, $results, $autogenerateFields) {
 			foreach ($results as $langCode => $altText) {
 				$updates = [];
 				foreach ($autogenerateFields as $name) {

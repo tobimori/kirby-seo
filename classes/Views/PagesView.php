@@ -63,7 +63,7 @@ class PagesView extends EditableOverviewView
 					'rows' => array_map(fn (Page $page) => $this->row($this->entry($page)), $visible),
 					'changes' => $this->changes(),
 					'pagination' => $pagination,
-					'ids' => array_values(array_map(fn (Page $page) => $page->id(), $pages)),
+					'ids' => array_values(array_map(static fn (Page $page) => $page->id(), $pages)),
 					'severity' => Audit\Pages::SEVERITY,
 					'summary' => $this->audit()->summary(),
 					'ai' => $this->canUseAi(),
@@ -104,7 +104,7 @@ class PagesView extends EditableOverviewView
 	{
 		return array_filter(
 			$columns,
-			fn ($value, $column) => in_array($column, self::EDITABLE, true) && is_string($value),
+			static fn ($value, $column) => in_array($column, self::EDITABLE, true) && is_string($value),
 			ARRAY_FILTER_USE_BOTH
 		);
 	}

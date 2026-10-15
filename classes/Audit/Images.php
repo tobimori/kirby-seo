@@ -45,7 +45,7 @@ class Images
 		$this->entries = [];
 		$site = App::instance()->site();
 		// checking permissions per page is slower
-		$pages = $site->index(true)->filter(fn (Page $page) => $page->images()->isNotEmpty() && $page->isListable());
+		$pages = $site->index(true)->filter(static fn (Page $page) => $page->images()->isNotEmpty() && $page->isListable());
 
 		foreach ([$site, ...$pages] as $parent) {
 			foreach ($parent->files() as $file) {
@@ -90,7 +90,7 @@ class Images
 	{
 		return $this->fields[$file->template() ?? 'default'] ??= array_keys(array_filter(
 			$file->blueprint()->fields(),
-			fn ($field) => ($field['type'] ?? null) === 'alt-text'
+			static fn ($field) => ($field['type'] ?? null) === 'alt-text'
 		));
 	}
 

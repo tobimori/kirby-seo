@@ -3272,20 +3272,8 @@ count = 1
 
 [[issues]]
 file = "classes/Sitemap/SitemapUrl.php"
-code = "less-specific-argument"
-message = "Argument type mismatch for argument #1 of `DOMDocument::createElement`: expected `string`, but provided type `array-key` is less specific."
-count = 1
-
-[[issues]]
-file = "classes/Sitemap/SitemapUrl.php"
 code = "mixed-argument"
 message = "Invalid argument type for argument #1 of `DOMElement::setAttribute`: expected `string`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "classes/Sitemap/SitemapUrl.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `DOMDocument::createElement`: expected `string`, but found `mixed`."
 count = 1
 
 [[issues]]
@@ -4132,7 +4120,7 @@ count = 1
 file = "config/options/sitemap.php"
 code = "mixed-method-access"
 message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 14
+count = 13
 
 [[issues]]
 file = "config/options/sitemap.php"
@@ -4141,10 +4129,10 @@ message = "Attempting to access a method on a non-object type (`truthy-mixed`)."
 count = 1
 
 [[issues]]
-file = "config/options/sitemap.php"
-code = "mixed-operand"
-message = "Left operand in `&&` operation has `mixed` type."
-count = 1
+file = "config/page-methods.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `str_starts_with`: expected `string`, but found `mixed`."
+count = 2
 
 [[issues]]
 file = "config/page-methods.php"
@@ -4155,19 +4143,13 @@ count = 3
 [[issues]]
 file = "config/page-methods.php"
 code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `strpos`: expected `string`, but found `mixed`."
-count = 2
-
-[[issues]]
-file = "config/page-methods.php"
-code = "mixed-argument"
 message = "Invalid argument type for argument #1 of `substr`: expected `string`, but found `mixed`."
 count = 1
 
 [[issues]]
 file = "config/page-methods.php"
 code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `strpos`: expected `string`, but found `mixed`."
+message = "Invalid argument type for argument #2 of `str_starts_with`: expected `string`, but found `mixed`."
 count = 2
 
 [[issues]]
@@ -4378,12 +4360,6 @@ count = 1
 file = "index.php"
 code = "mixed-argument"
 message = 'Invalid argument type for argument #1 of `Kirby\Filesystem\F::name`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "index.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `tobimori\Seo\AltText::fromField`: expected `Kirby\Content\Field`, but found `mixed`.'
 count = 1
 
 [[issues]]
