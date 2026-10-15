@@ -156,7 +156,7 @@ class LinksView extends OverviewView
 		foreach ($pages as $id) {
 			if ($page = $this->kirby->page($id)) {
 				$items[] = [
-					'text' => (string)$page->title()->value(),
+					'text' => $page->title()->toString(),
 					'link' => $page->panel()->url(true)
 				];
 			}

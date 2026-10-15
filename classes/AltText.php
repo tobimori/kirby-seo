@@ -35,7 +35,7 @@ class AltText
 		try {
 			$data = Yaml::decode($value);
 
-			if (is_array($data) && (array_key_exists('text', $data) || array_key_exists('decorative', $data))) {
+			if (array_key_exists('text', $data) || array_key_exists('decorative', $data)) {
 				return new static(
 					text: (string)($data['text'] ?? ''),
 					decorative: (bool)($data['decorative'] ?? false),

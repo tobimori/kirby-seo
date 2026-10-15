@@ -599,9 +599,7 @@ class Meta
 	{
 		if ($this->canInherit($key)) {
 			$this->parentMeta ??= new Meta($this->page->parent(), $this->lang);
-			if ($value = $this->parentMeta->get($key)) {
-				return $value;
-			}
+			return $this->parentMeta->get($key);
 		}
 
 		return null;

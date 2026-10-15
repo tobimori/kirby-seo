@@ -209,10 +209,10 @@ class Pages
 		// Do not retain Meta instances while filling the cache for the entire site
 		/** @var \tobimori\Seo\Meta $meta */
 		$meta = new (Seo::option('components.meta'))($page);
-		$values = ['title' => (string)$page->title()->value()];
+		$values = ['title' => $page->title()->toString()];
 
 		foreach (self::VALUES as $key) {
-			$values[$key] = Str::unhtml((string)$meta->resolve($key)['field']->value());
+			$values[$key] = Str::unhtml($meta->resolve($key)['field']->toString());
 		}
 
 		// skipped pages are listed (& searched) as well

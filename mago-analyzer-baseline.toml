@@ -488,18 +488,6 @@ count = 1
 
 [[issues]]
 file = "classes/AltText.php"
-code = "redundant-logical-operation"
-message = "Redundant `&&` operation: left operand is always truthy and right operand is evaluated."
-count = 1
-
-[[issues]]
-file = "classes/AltText.php"
-code = "redundant-type-comparison"
-message = "Redundant type assertion: `$data` is already `array<array-key, mixed>`."
-count = 1
-
-[[issues]]
-file = "classes/AltText.php"
 code = "unsafe-instantiation"
 message = 'Unsafe `new static()`: constructor of `tobimori\Seo\AltText` is not final and its signature might change in child classes, potentially leading to runtime errors.'
 count = 3
@@ -1904,12 +1892,6 @@ count = 3
 
 [[issues]]
 file = "classes/IndexNow.php"
-code = "falsable-return-statement"
-message = '''Function `tobimori\Seo\IndexNow::matchesUrlPattern` is declared to return `bool` but possibly returns 'false' (inferred as `false|int(0)|int(1)`).'''
-count = 1
-
-[[issues]]
-file = "classes/IndexNow.php"
 code = "invalid-iterator"
 message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
 count = 1
@@ -1919,12 +1901,6 @@ file = "classes/IndexNow.php"
 code = "invalid-iterator"
 message = "The expression provided to `foreach` is not iterable. It resolved to type `nonnull`, which is not iterable."
 count = 2
-
-[[issues]]
-file = "classes/IndexNow.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `tobimori\Seo\IndexNow::matchesUrlPattern`: expected `bool`, but found `false|int(0)|int(1)`.'
-count = 1
 
 [[issues]]
 file = "classes/IndexNow.php"
@@ -2972,12 +2948,6 @@ count = 2
 
 [[issues]]
 file = "classes/Meta.php"
-code = "redundant-condition"
-message = 'This condition (type `Kirby\Content\Field`) will always evaluate to true.'
-count = 1
-
-[[issues]]
-file = "classes/Meta.php"
 code = "string-member-selector"
 message = "This member selector uses a non-literal string type (`string`); its specific value cannot be statically determined."
 count = 1
@@ -3577,12 +3547,6 @@ message = "Argument #1 of function `trim` is possibly `null`, but parameter type
 count = 1
 
 [[issues]]
-file = "classes/Views/ImagesView.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
-count = 2
-
-[[issues]]
 file = "classes/Views/LinksView.php"
 code = "less-specific-nested-argument-type"
 message = 'Argument type mismatch for argument #4 of `tobimori\Seo\Views\OverviewView::search`: expected `(closure(mixed, string): string)`, but provided type `(closure(mixed, mixed): mixed)` is less specific.'
@@ -3766,12 +3730,6 @@ count = 1
 file = "classes/Views/PagesView.php"
 code = "non-documented-method"
 message = 'Ambiguous method call to `url` on class `Kirby\Toolkit\V`.'
-count = 1
-
-[[issues]]
-file = "classes/Views/PagesView.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
 count = 1
 
 [[issues]]
@@ -4498,19 +4456,19 @@ count = 1
 file = "snippets/prompts/introduction.php"
 code = "mixed-argument"
 message = "The first value for `echo` is too general."
-count = 5
-
-[[issues]]
-file = "snippets/prompts/introduction.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`mixed`)."
 count = 3
 
 [[issues]]
 file = "snippets/prompts/introduction.php"
-code = "undefined-variable"
-message = "Undefined variable: `$site`."
-count = 3
+code = "non-documented-method"
+message = 'Ambiguous method call to `lang` on class `Kirby\Cms\Site`.'
+count = 2
+
+[[issues]]
+file = "snippets/prompts/introduction.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `title` on class `Kirby\Cms\Site`.'
+count = 1
 
 [[issues]]
 file = "snippets/prompts/meta.php"
@@ -4563,26 +4521,20 @@ count = 1
 [[issues]]
 file = "snippets/prompts/tasks/alt-text.php"
 code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `implode`: expected `array<array-key, Stringable|null|scalar>|null`, but found `truthy-mixed`."
-count = 1
-
-[[issues]]
-file = "snippets/prompts/tasks/alt-text.php"
-code = "mixed-argument"
 message = "The first value for `echo` is too general."
-count = 4
+count = 3
 
 [[issues]]
 file = "snippets/prompts/tasks/alt-text.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 2
+code = "non-documented-method"
+message = 'Ambiguous method call to `lang` on class `Kirby\Cms\Site`.'
+count = 1
 
 [[issues]]
 file = "snippets/prompts/tasks/alt-text.php"
 code = "non-documented-method"
 message = 'Ambiguous method call to `title` on class `Kirby\Cms\Site`.'
-count = 1
+count = 2
 
 [[issues]]
 file = "snippets/prompts/tasks/alt-text.php"
@@ -4591,12 +4543,6 @@ message = 'Ambiguous method call to `title` on class `Kirby\Cms\User`.'
 count = 1
 
 [[issues]]
-file = "snippets/prompts/tasks/alt-text.php"
-code = "undefined-variable"
-message = "Undefined variable: `$site`."
-count = 2
-
-[[issues]]
 file = "snippets/prompts/tasks/description.php"
 code = "mixed-argument"
 message = "The first value for `echo` is too general."
@@ -4630,12 +4576,12 @@ count = 1
 file = "snippets/prompts/tasks/og-site-description.php"
 code = "mixed-method-access"
 message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 2
+count = 1
 
 [[issues]]
 file = "snippets/prompts/tasks/og-site-description.php"
-code = "undefined-variable"
-message = "Undefined variable: `$site`."
+code = "non-documented-method"
+message = 'Ambiguous method call to `title` on class `Kirby\Cms\Site`.'
 count = 1
 
 [[issues]]
@@ -4648,12 +4594,12 @@ count = 1
 file = "snippets/prompts/tasks/site-description.php"
 code = "mixed-method-access"
 message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 2
+count = 1
 
 [[issues]]
 file = "snippets/prompts/tasks/site-description.php"
-code = "undefined-variable"
-message = "Undefined variable: `$site`."
+code = "non-documented-method"
+message = 'Ambiguous method call to `title` on class `Kirby\Cms\Site`.'
 count = 1
 
 [[issues]]
@@ -4754,20 +4700,14 @@ count = 1
 
 [[issues]]
 file = "snippets/schemas.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 2
-
-[[issues]]
-file = "snippets/schemas.php"
-code = "undefined-variable"
-message = "Undefined variable: `$page`."
+code = "non-documented-method"
+message = 'Ambiguous method call to `schemas` on class `Kirby\Cms\Page`.'
 count = 1
 
 [[issues]]
 file = "snippets/schemas.php"
-code = "undefined-variable"
-message = "Undefined variable: `$site`."
+code = "non-documented-method"
+message = 'Ambiguous method call to `schemas` on class `Kirby\Cms\Site`.'
 count = 1
 
 [[issues]]
@@ -4861,67 +4801,25 @@ message = "Argument type mismatch for argument #1 of `go`: expected `(callable(.
 count = 1
 
 [[issues]]
-file = "templates/sitemap.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 1
-
-[[issues]]
-file = "templates/sitemap.php"
-code = "mixed-operand"
-message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
-count = 1
-
-[[issues]]
-file = "templates/sitemap.php"
-code = "undefined-variable"
-message = "Undefined variable: `$page`."
-count = 1
-
-[[issues]]
-file = "templates/sitemap.xml.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `tobimori\Seo\Sitemap\SitemapIndex::render`: expected `Kirby\Cms\Page`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "templates/sitemap.xml.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 2
-
-[[issues]]
-file = "templates/sitemap.xml.php"
-code = "undefined-variable"
-message = "Undefined variable: `$kirby`."
-count = 1
-
-[[issues]]
-file = "templates/sitemap.xml.php"
-code = "undefined-variable"
-message = "Undefined variable: `$page`."
-count = 1
-
-[[issues]]
 file = "templates/sitemap.xsl.php"
 code = "mixed-argument"
 message = "The first value for `echo` is too general."
-count = 2
+count = 1
 
 [[issues]]
 file = "templates/sitemap.xsl.php"
 code = "mixed-method-access"
 message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 4
+count = 2
+
+[[issues]]
+file = "templates/sitemap.xsl.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `metadata` on class `Kirby\Cms\Page`.'
+count = 1
 
 [[issues]]
 file = "templates/sitemap.xsl.php"
 code = "possibly-invalid-argument"
 message = "The first value for `echo` might have the wrong type."
 count = 9
-
-[[issues]]
-file = "templates/sitemap.xsl.php"
-code = "undefined-variable"
-message = "Undefined variable: `$page`."
-count = 2

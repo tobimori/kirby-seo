@@ -1,7 +1,9 @@
 <?php
 
-/** @var \Kirby\Cms\Site $site
- ** @var string|null $currentField */
+/**
+ * @var \Kirby\Cms\Site $site
+ * @var string|null $currentField
+ */
 
 $currentField ??= null;
 

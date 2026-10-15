@@ -228,7 +228,7 @@ class IndexNow
 			$pattern
 		);
 
-		return preg_match("#^{$pattern}$#", parse_url($url, PHP_URL_PATH));
+		return preg_match("#^{$pattern}$#", parse_url($url, PHP_URL_PATH)) === 1;
 	}
 
 	/**

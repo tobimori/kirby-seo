@@ -139,9 +139,9 @@ class PagesView extends EditableOverviewView
 	{
 		return match ($key) {
 			'id' => $page->id(),
-			'title' => (string)$page->title()->value(),
-			'template' => (string)$this->blueprint($page)->title(),
-			default => Str::unhtml((string)$this->resolve($page, $key)['field']->value())
+			'title' => $page->title()->toString(),
+			'template' => $this->blueprint($page)->title(),
+			default => Str::unhtml($this->resolve($page, $key)['field']->toString())
 		};
 	}
 
@@ -273,7 +273,7 @@ class PagesView extends EditableOverviewView
 		/** @var \Kirby\Cms\Page $page */
 		$page = $entry['model'];
 		$editable = $editable && in_array($key, $entry['fields'], true);
-		$own = (string)$page->content()->get($key)->value();
+		$own = $page->content()->get($key)->toString();
 		// what the page would show without its own value, same as the placeholder in the page form
 		$fallback = $this->resolve($page, $key, ['fields']);
 
@@ -282,7 +282,7 @@ class PagesView extends EditableOverviewView
 			'source' => $this->resolve($page, $key)['source'],
 			// raw value, as writer fields store HTML
 			'value' => in_array($own, Meta::DEFAULT_VALUES, true) ? '' : $own,
-			'placeholder' => Str::unhtml((string)$fallback['field']->value()),
+			'placeholder' => Str::unhtml($fallback['field']->toString()),
 			'placeholderSource' => $fallback['source'],
 			'editable' => $editable,
 			'ai' => $editable && $this->canUseAi() && !empty($this->blueprint($page)->field($key)['ai'] ?? false),

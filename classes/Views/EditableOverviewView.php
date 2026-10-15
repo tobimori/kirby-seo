@@ -292,7 +292,7 @@ abstract class EditableOverviewView extends OverviewView
 		$changes = $model->version('changes');
 		$version = $changes->exists('current') ? $changes : $model->version('latest');
 
-		return (string)$version->content('current')->get($field)->value();
+		return $version->content('current')->get($field)->toString();
 	}
 
 	protected function canUseAi(): bool

@@ -1,3 +1,8 @@
+<?php
+
+/**
+ * @var \Kirby\Cms\Page $page
+ */ ?>
 <?= '<?xml version="1.0" encoding="UTF-8"?>' ?>
 <xsl:stylesheet version="2.0" xmlns:html="http://www.w3.org/TR/REC-html40" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:sitemap="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:output method="html" version="1.0" encoding="UTF-8" indent="yes" />
@@ -149,7 +154,7 @@
 
 		<body>
 			<div class="k-sitemap-body">
-				<h1><?= $page->title() ?></h1>
+				<h1><?= $page->title()->toString() ?></h1>
 				<p><?= t('seo.sitemap.description') ?></p>
 
 				<xsl:if test="count(sitemap:sitemapindex/sitemap:sitemap) > 0">

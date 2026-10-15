@@ -2,8 +2,10 @@
 
 use Kirby\Toolkit\Str;
 
-/** @var \Kirby\Cms\Page $page
- ** @var \Kirby\Cms\Site $site */
+/**
+ * @var \Kirby\Cms\Page $page
+ * @var \Kirby\Cms\Site $site
+ */
 
 $contentHtml = $page->render();
 

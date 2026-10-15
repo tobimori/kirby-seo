@@ -1,9 +1,11 @@
 <?php
 
-/** @var \Kirby\Cms\File $file
- ** @var \Kirby\Cms\Site $site
- ** @var string|null $instructions
- ** @var array<string>|null $languages */ ?>
+/**
+ * @var \Kirby\Cms\File $file
+ * @var \Kirby\Cms\Site $site
+ * @var string|null $instructions
+ * @var array<string>|null $languages
+ */ ?>
 
 <role>
 	You are an accessibility expert writing alt text for images on <?= $site->title() ?>.
@@ -26,7 +28,7 @@
 <?php endif ?>
 </rules>
 
-<?php if (isset($instructions) && $instructions !== null && $instructions !== ''): ?>
+<?php if (isset($instructions) && $instructions !== ''): ?>
 <user-instructions>
 	<?= $instructions ?>
 </user-instructions>
