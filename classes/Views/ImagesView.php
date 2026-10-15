@@ -56,7 +56,7 @@ class ImagesView extends EditableOverviewView
 					'ids' => array_column($entries, 'id'),
 					'severity' => Audit\Images::SEVERITY,
 					'summary' => $this->images()->summary(),
-					'ai' => $this->canUseAi(),
+					'ai' => $this->canUseAi()
 				]
 			];
 		});
@@ -77,7 +77,7 @@ class ImagesView extends EditableOverviewView
 		if (!$this->canGenerate($entry)) {
 			return Response::json([
 				'status' => 'error',
-				'message' => I18n::translate(Content::supportsImage($entry['model']) ? 'seo.ai.error.permission' : 'seo.overview.images.ai.unsupported'),
+				'message' => I18n::translate(Content::supportsImage($entry['model']) ? 'seo.ai.error.permission' : 'seo.overview.images.ai.unsupported')
 			], 403);
 		}
 
@@ -92,10 +92,12 @@ class ImagesView extends EditableOverviewView
 	{
 		$blueprint = $this->blueprint($entry['model'])->field($entry['field']) ?? [];
 
-		return $this->canUseAi()
-			&& $entry['model']->permissions()->can('update')
-			&& ($blueprint['ai'] ?? true) !== false
-			&& Content::supportsImage($entry['model']);
+		return (
+			$this->canUseAi() &&
+				$entry['model']->permissions()->can('update') &&
+				($blueprint['ai'] ?? true) !== false &&
+				Content::supportsImage($entry['model'])
+		);
 	}
 
 	protected function notFound(string $id): NotFoundException
@@ -135,7 +137,7 @@ class ImagesView extends EditableOverviewView
 			$source = match (true) {
 				$text === null || $text === $current->text() => $current->source(),
 				$current->isAiGenerated() || $current->isReviewed() => AltText::SOURCE_REVIEWED,
-				default => AltText::SOURCE_MANUAL,
+				default => AltText::SOURCE_MANUAL
 			};
 		}
 
@@ -148,8 +150,8 @@ class ImagesView extends EditableOverviewView
 			$entry['field'] => (new AltText(
 				text: $text ?? $current->text(),
 				decorative: $decorative,
-				source: $source,
-			))->toArray(),
+				source: $source
+			))->toArray()
 		];
 	}
 
@@ -157,7 +159,7 @@ class ImagesView extends EditableOverviewView
 	{
 		return [
 			'summary' => $this->images()->summary(),
-			'stats' => ['images' => $this->images()->stats()],
+			'stats' => ['images' => $this->images()->stats()]
 		];
 	}
 
@@ -171,7 +173,7 @@ class ImagesView extends EditableOverviewView
 			// decorative images first when sorting ascending
 			'decorative' => $this->images()->altText($entry)->isDecorative() ? '0' : '1',
 			'parent' => (string)$file->parent()->title()->value(),
-			'template' => (string)$this->blueprint($file)->title(),
+			'template' => (string)$this->blueprint($file)->title()
 		};
 	}
 
@@ -237,7 +239,7 @@ class ImagesView extends EditableOverviewView
 				'toggle' => I18n::translate('template'),
 				'type' => 'text',
 				'width' => '10rem'
-			],
+			]
 		];
 	}
 
@@ -264,7 +266,7 @@ class ImagesView extends EditableOverviewView
 			'selectable' => $lock === null,
 			'parent' => [
 				'text' => (string)$parent->title()->value(),
-				'link' => $parent->panel()->url(true),
+				'link' => $parent->panel()->url(true)
 			],
 			'title' => [
 				// files with multiple alt text fields have a row per field
@@ -273,7 +275,7 @@ class ImagesView extends EditableOverviewView
 				'info' => (string)$parent->title()->value(),
 				// the lock already tells that someone else is editing
 				'changes' => $hasChanges && $lock === null,
-				'translated' => $translated,
+				'translated' => $translated
 			],
 			'alt' => [
 				'text' => $alt->text(),
@@ -281,17 +283,17 @@ class ImagesView extends EditableOverviewView
 				'decorative' => $alt->isDecorative(),
 				'source' => $alt->source(),
 				'editable' => $editable,
-				'ai' => $editable && $this->canGenerate($entry),
+				'ai' => $editable && $this->canGenerate($entry)
 			],
 			'image' => ['src' => match (true) {
 				$file->isResizable() => $file->resize(112, 112)->url(),
 				$file->extension() === 'svg' => $file->url(),
-				default => null,
+				default => null
 			}],
 			'template' => (string)$this->blueprint($file)->title(),
 			'dimensions' => $file->isResizable() || $file->extension() === 'svg'
 				? $file->width() . ' × ' . $file->height()
-				: null,
+				: null
 		];
 	}
 }

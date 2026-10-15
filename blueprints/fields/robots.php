@@ -17,7 +17,7 @@ return function (App $kirby) {
 		'_robotsHeadline' => [
 			'label' => 'seo.fields.robots.label',
 			'type' => 'headline',
-			'numbered' => false,
+			'numbered' => false
 		]
 	];
 
@@ -26,21 +26,21 @@ return function (App $kirby) {
 		$upper = Str::ucfirst($robots);
 
 		$fields["robots{$upper}"] = [
-			'label' =>  "seo.fields.robots.{$robots}.label",
+			'label' => "seo.fields.robots.{$robots}.label",
 			'type' => 'toggles',
 			'help' => "seo.fields.robots.{$robots}.help",
 			'width' => '1/2',
 			'default' => 'default',
 			'reset' => false,
 			'options' => [
-				'default' => $page ?
-					A::join([
+				'default' => $page
+					? A::join([
 						t('seo.common.default'),
 						$page->metadata()->get("robots{$upper}", ['fields'])->toBool() ? t('seo.common.yes') : t('seo.common.no')
 					], ' ')
 					: t('seo.common.default'),
 				'true' => t('seo.common.yes'),
-				'false' => t('seo.common.no'),
+				'false' => t('seo.common.no')
 			]
 		];
 	}
@@ -51,6 +51,6 @@ return function (App $kirby) {
 
 	return [
 		'type' => 'group',
-		'fields' => $fields,
+		'fields' => $fields
 	];
 };

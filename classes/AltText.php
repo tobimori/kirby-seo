@@ -18,7 +18,7 @@ class AltText
 	public function __construct(
 		protected string $text = '',
 		protected bool $decorative = false,
-		protected string $source = self::SOURCE_MANUAL,
+		protected string $source = self::SOURCE_MANUAL
 	) {
 	}
 
@@ -39,7 +39,7 @@ class AltText
 				return new static(
 					text: (string)($data['text'] ?? ''),
 					decorative: (bool)($data['decorative'] ?? false),
-					source: (string)($data['source'] ?? self::SOURCE_MANUAL),
+					source: (string)($data['source'] ?? self::SOURCE_MANUAL)
 				);
 			}
 		} catch (\Throwable) {
@@ -90,7 +90,7 @@ class AltText
 		return [
 			'text' => $this->text,
 			'decorative' => $this->decorative,
-			'source' => $this->source,
+			'source' => $this->source
 		];
 	}
 

@@ -16,17 +16,17 @@
 	- DO NOT enumerate individual UI elements, icons, colors, or positions. Focus on the overall subject.
 	- Do not add a trailing period to short noun phrases. Only use periods for full sentences.
 	- NEVER output any formatting. No HTML tags, no quotes, no markdown.
-<?php if (!empty($languages)) : ?>
+<?php if (!empty($languages)): ?>
 	- Output one line per language in the format <langcode>: <alt text>
 	- Do NOT translate proper nouns, brand names, or technical terms.
 	- Output ONLY the language lines. No additional text.
-<?php else : ?>
+<?php else: ?>
 	- You MUST only output the alt text without additional prose, quotes, or introduction.
 	- The output language MUST be <language><?= $site->lang() ?></language>.
 <?php endif ?>
 </rules>
 
-<?php if (isset($instructions) && $instructions !== null && $instructions !== '') : ?>
+<?php if (isset($instructions) && $instructions !== null && $instructions !== ''): ?>
 <user-instructions>
 	<?= $instructions ?>
 </user-instructions>
@@ -37,15 +37,15 @@
 
 	The file is named <filename><?= $file->filename() ?></filename>.
 
-	<?php if ($file->parent() instanceof \Kirby\Cms\Page) : ?>
+	<?php if ($file->parent() instanceof \Kirby\Cms\Page): ?>
 	The image is on a page called <page-title><?= $file->parent()->title() ?></page-title>.
 	<?php endif ?>
 
-	<?php if ($file->template()) : ?>
+	<?php if ($file->template()): ?>
 	This image uses the file template <template><?= $file->template() ?></template>.
 	<?php endif ?>
 
-<?php if (!empty($languages)) : ?>
+<?php if (!empty($languages)): ?>
 	Output alt text in these languages: <?= implode(', ', $languages) ?>
 
 <?php endif ?>

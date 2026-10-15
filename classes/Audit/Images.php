@@ -21,7 +21,7 @@ class Images
 		'missing' => 'negative',
 		'ai' => 'notice',
 		'decorative' => 'ok',
-		'ok' => 'ok',
+		'ok' => 'ok'
 	];
 
 	/**
@@ -59,7 +59,7 @@ class Images
 						'id' => $id,
 						'model' => $file,
 						'fields' => [$name],
-						'field' => $name,
+						'field' => $name
 					];
 				}
 			}
@@ -114,7 +114,7 @@ class Images
 			$alt->isDecorative() => 'decorative',
 			$alt->isMissing() => 'missing',
 			$alt->isAiGenerated() => 'ai',
-			default => 'ok',
+			default => 'ok'
 		};
 	}
 

@@ -105,7 +105,7 @@ final class License extends KirbyLicense
 			$this->isValid() => static::requiresEnterprise() && !static::isEnterprise($this->data['license']) ? 'enterprise' : 'active',
 			($this->data['revoked'] ?? false) === true => 'revoked',
 			$this->data !== null && static::isSigned($this->data) => 'expired',
-			default => 'missing',
+			default => 'missing'
 		};
 	}
 
@@ -153,7 +153,7 @@ final class License extends KirbyLicense
 				'email' => $email,
 				'url' => static::normalizeUrl(App::instance()->system()->indexUrl()),
 				// older plugin versions can't verify licenses with an expiry date
-				'expires' => true,
+				'expires' => true
 			]);
 		} catch (Throwable) {
 			throw new InvalidArgumentException(t('seo.license.error.server'));
@@ -164,7 +164,7 @@ final class License extends KirbyLicense
 			throw new InvalidArgumentException(t(match ($response->code()) {
 				404 => 'seo.license.error.key',
 				403 => 'seo.license.error.forbidden',
-				default => 'seo.license.error.download',
+				default => 'seo.license.error.download'
 			}));
 		}
 
@@ -187,31 +187,32 @@ final class License extends KirbyLicense
 	private function reissue(): void
 	{
 		if (
-			$this->data === null
-			|| ($this->data['revoked'] ?? false) === true
+			$this->data === null ||
+			($this->data['revoked'] ?? false) === true
 			// licenses for sites without internet access are never reissued
-			|| $this->data['allowOfflineUse'] === true
-			|| !static::isSigned($this->data)
+			|| $this->data['allowOfflineUse'] === true ||
+			!static::isSigned($this->data)
 		) {
 			return;
 		}
 
-		if (isset($this->data['expires'])
-			? strtotime($this->data['expires']) - time() > self::REISSUE_BEFORE
-			: $this->manual
+		if (
+			isset($this->data['expires'])
+				? (strtotime($this->data['expires']) - time()) > self::REISSUE_BEFORE
+				: $this->manual
 		) {
 			return;
 		}
 
 		$failures = (int)($this->data['failures'] ?? 0);
 		$backoff = self::REISSUE_BACKOFF[min($failures, count(self::REISSUE_BACKOFF)) - 1] ?? 0;
-		if (time() - strtotime($this->data['checked'] ?? '') < $backoff * 60) {
+		if ((time() - strtotime($this->data['checked'] ?? '')) < ($backoff * 60)) {
 			return;
 		}
 
 		try {
 			$response = static::request(Str::lower($this->data['license']) . '/reissue', [
-				'url' => $this->data['assignedUrl'],
+				'url' => $this->data['assignedUrl']
 			]);
 		} catch (Throwable) {
 			$response = null;
@@ -221,10 +222,11 @@ final class License extends KirbyLicense
 
 		$this->data = match (true) {
 			// the license server issued a new copy of the license
-			is_array($license)
-				&& static::isOwn($license)
-				&& static::isSigned($license)
-				&& $license['license'] === $this->data['license'] => $license,
+			is_array($license) &&
+				static::isOwn($license) &&
+				static::isSigned($license) &&
+				$license['license'] === $this->data['license']
+				=> $license,
 			// the license was moved to another domain or revoked,
 			// keep it marked as revoked so it also blocks its copy in the manual file
 			$response?->code() === 410 => [...$this->data, 'revoked' => true],
@@ -232,8 +234,8 @@ final class License extends KirbyLicense
 			default => [
 				...$this->data,
 				'failures' => $failures + 1,
-				'checked' => date(DATE_ATOM),
-			],
+				'checked' => date(DATE_ATOM)
+			]
 		};
 
 		try {
@@ -248,9 +250,9 @@ final class License extends KirbyLicense
 		return Remote::post(self::BASE . $path, [
 			'headers' => [
 				'Content-Type' => 'application/json',
-				'Accept' => 'application/json',
+				'Accept' => 'application/json'
 			],
-			'data' => Json::encode($data),
+			'data' => Json::encode($data)
 		]);
 	}
 
@@ -298,7 +300,7 @@ final class License extends KirbyLicense
 			return [$shared, false];
 		}
 
-		if ($manual !== null && ($shared === null || (!static::isActive($shared) && static::isActive($manual)))) {
+		if ($manual !== null && ($shared === null || !static::isActive($shared) && static::isActive($manual))) {
 			return [$manual, true];
 		}
 
@@ -314,8 +316,10 @@ final class License extends KirbyLicense
 	{
 		$licenses = array_filter(
 			static::read(self::FILE, strict: true),
-			fn (array $entry) => !static::isFor($entry, $license['assignedUrl'])
-				&& ($entry['license'] ?? null) !== $license['license']
+			fn (array $entry) => (
+				!static::isFor($entry, $license['assignedUrl']) &&
+				($entry['license'] ?? null) !== $license['license']
+			)
 		);
 
 		Json::write(static::path(self::FILE), [...array_values($licenses), $license]);
@@ -326,9 +330,11 @@ final class License extends KirbyLicense
 	 */
 	private static function isActive(array $license): bool
 	{
-		return ($license['revoked'] ?? false) !== true
-			&& static::isSigned($license)
-			&& (!isset($license['expires']) || strtotime($license['expires']) > time());
+		return (
+			($license['revoked'] ?? false) !== true &&
+				static::isSigned($license) &&
+				(!isset($license['expires']) || strtotime($license['expires']) > time())
+		);
 	}
 
 	private static function isOwn(array $license): bool
@@ -338,8 +344,10 @@ final class License extends KirbyLicense
 
 	private static function isFor(array $license, string $url): bool
 	{
-		return static::isOwn($license)
-			&& static::normalizeUrl($license['assignedUrl'] ?? '') === static::normalizeUrl($url);
+		return (
+			static::isOwn($license) &&
+				static::normalizeUrl($license['assignedUrl'] ?? '') === static::normalizeUrl($url)
+		);
 	}
 
 	/**
@@ -355,11 +363,14 @@ final class License extends KirbyLicense
 			}
 		}
 
-		return is_string($signature = $license['signature'] ?? null) && openssl_verify(
-			Json::encode($signed),
-			base64_decode($signature),
-			openssl_pkey_get_public('file://' . dirname(__DIR__) . '/public.pem'),
-			'RSA-SHA256'
-		) === 1;
+		return (
+			is_string($signature = $license['signature'] ?? null) &&
+				openssl_verify(
+					Json::encode($signed),
+					base64_decode($signature),
+					openssl_pkey_get_public('file://' . dirname(__DIR__) . '/public.pem'),
+					'RSA-SHA256'
+				) === 1
+		);
 	}
 }

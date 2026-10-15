@@ -7,7 +7,9 @@ src/ export-ignore
 .gitignore export-ignore
 .nvmrc export-ignore
 .oxfmtrc.json export-ignore
-.php-cs-fixer.dist.php export-ignore
+mago.toml export-ignore
+mago-analyzer-baseline.toml export-ignore
+mago-linter-baseline.toml export-ignore
 composer.lock export-ignore
 eslint.config.mjs export-ignore
 i18n.json export-ignore

@@ -24,7 +24,7 @@ class Report
 		'anchor' => 'notice',
 		'redirect' => 'notice',
 		'unknown' => 'unknown',
-		'ok' => 'ok',
+		'ok' => 'ok'
 	];
 
 	public const FILTERS = ['broken', 'anchor', 'redirect', 'unknown'];
@@ -122,7 +122,7 @@ class Report
 		$this->results = [
 			'revision' => $this->data()['revision'],
 			'scanned' => $this->data()['pages'] !== [],
-			'links' => $this->build(),
+			'links' => $this->build()
 		];
 
 		$cache->set($key, $this->results);
@@ -164,7 +164,7 @@ class Report
 				'code' => null,
 				'target' => null,
 				'reason' => null,
-				...$this->check($url),
+				...$this->check($url)
 			];
 		}
 
@@ -210,9 +210,11 @@ class Report
 		// links to other protocols that can't be checked, other schemes are
 		// most likely errors, e.g. internal links of a previous CMS (`t3://page?uid=1`)
 		if (!preg_match('#^https?://#i', $url)) {
-			return preg_match('#^s?ftps?:#i', $url)
-				? ['state' => 'unknown', 'reason' => 'scheme']
-				: ['state' => 'broken', 'reason' => 'invalid'];
+			return (
+				preg_match('#^s?ftps?:#i', $url)
+					? ['state' => 'unknown', 'reason' => 'scheme']
+					: ['state' => 'broken', 'reason' => 'invalid']
+			);
 		}
 
 		[$url, $fragment] = array_pad(explode('#', $url, 2), 2, null);
@@ -249,9 +251,11 @@ class Report
 		// permalinks redirect to the current URL of the model
 		if (preg_match('#^@/(page|file)/([^/?]+)#', $path, $match)) {
 			$model = Uuid::for("{$match[1]}://{$match[2]}")?->model();
-			return $model
-				? ['state' => 'redirect', 'reason' => 'permalink', 'target' => $model->url()]
-				: ['state' => 'broken', 'reason' => 'uuid'];
+			return (
+				$model
+					? ['state' => 'redirect', 'reason' => 'permalink', 'target' => $model->url()]
+					: ['state' => 'broken', 'reason' => 'uuid']
+			);
 		}
 
 		$file = parse_url($url, PHP_URL_PATH) ?? '/';
@@ -262,9 +266,11 @@ class Report
 
 		// only indexable pages are scanned, e.g. not an unlisted imprint
 		if ($page = $this->find($path)) {
-			return $page->isDraft()
-				? ['state' => 'broken', 'reason' => 'draft', 'code' => 404]
-				: ['state' => 'ok'];
+			return (
+				$page->isDraft()
+					? ['state' => 'broken', 'reason' => 'draft', 'code' => 404]
+					: ['state' => 'ok']
+			);
 		}
 
 		// routes of plugins & the config, e.g. the sitemap
@@ -284,7 +290,7 @@ class Report
 			$status >= 300 && $status < 400 => ['state' => 'redirect', 'reason' => 'redirect', 'code' => $status, 'target' => $entry['location']],
 			$status >= 400 => ['state' => 'broken', 'reason' => 'status', 'code' => $status],
 			!$this->hasAnchor($entry, $fragment) => ['state' => 'anchor', 'reason' => 'anchor', 'target' => $fragment],
-			default => ['state' => 'ok', 'code' => $status],
+			default => ['state' => 'ok', 'code' => $status]
 		};
 	}
 
@@ -297,9 +303,11 @@ class Report
 		$fragment = rawurldecode($fragment);
 
 		// browsers scroll to the top & support text fragments without matching elements
-		return $fragment === 'top'
-			|| str_starts_with($fragment, ':~:')
-			|| in_array($fragment, $entry['ids'], true);
+		return (
+			$fragment === 'top' ||
+				str_starts_with($fragment, ':~:') ||
+				in_array($fragment, $entry['ids'], true)
+		);
 	}
 
 	protected function checkExternal(string $url): array
@@ -317,7 +325,7 @@ class Report
 			$code >= 300 && $code < 400 => ['state' => 'redirect', 'reason' => 'redirect', 'code' => $code, 'target' => $result['location']],
 			in_array($code, [404, 410], true) || $code >= 500 => ['state' => 'broken', 'reason' => 'status', 'code' => $code],
 			// e.g. 403 or 429: the server doesn't answer requests of bots
-			default => ['state' => 'unknown', 'reason' => 'blocked', 'code' => $code],
+			default => ['state' => 'unknown', 'reason' => 'blocked', 'code' => $code]
 		};
 	}
 
@@ -388,9 +396,12 @@ class Report
 		$model = $this->kirby->site();
 
 		foreach (explode('/', $path) as $segment) {
-			$model = $model->childrenAndDrafts()->filter(
-				fn ($page) => in_array($segment, array_map(fn ($language) => $page->slug($language), $languages), true)
-			)->first();
+			$model = $model
+				->childrenAndDrafts()
+				->filter(
+					fn ($page) => in_array($segment, array_map(fn ($language) => $page->slug($language), $languages), true)
+				)
+				->first();
 
 			if ($model === null) {
 				return null;
@@ -420,7 +431,7 @@ class Report
 		$parent = match (array_shift($segments)) {
 			'pages' => $this->kirby->page(implode('/', $segments)),
 			'site' => $this->kirby->site(),
-			default => null,
+			default => null
 		};
 
 		if ($parent === null) {
@@ -450,7 +461,7 @@ class Report
 			$config = $this->kirby->option('routes', []);
 			$routes = [
 				...$this->kirby->extensions('routes'),
-				...(is_callable($config) ? $config($this->kirby) : $config),
+				...(is_callable($config) ? $config($this->kirby) : $config)
 			];
 
 			$this->router = new Router(array_filter($routes, fn ($route) => isset($route['pattern'], $route['action'])));

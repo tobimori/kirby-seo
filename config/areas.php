@@ -22,8 +22,7 @@ use tobimori\Seo\Views\OverviewView;
 use tobimori\Seo\Views\PagesView;
 
 return [
-	'seo' => fn () =>
-	[
+	'seo' => fn () => [
 		'label' => I18n::translate('seo.overview.title'),
 		'icon' => 'search',
 		'link' => 'seo',
@@ -44,7 +43,7 @@ return [
 			'seo.links' => [
 				'pattern' => 'seo/links',
 				'action' => fn () => (new LinksView())->load()
-			],
+			]
 		],
 		'buttons' => [
 			'page.robots' => fn (Page $page) => Seo::option('robots.enabled') ? new RobotsViewButton($page) : null,
@@ -58,9 +57,9 @@ return [
 					$kirby = App::instance();
 					$request = $kirby->request();
 					$metric = $request->get('metric', 'clicks');
-					$asc = (bool) $request->get('asc', in_array($metric, ['position', 'query']) ? 1 : 0);
-					$page = max(1, (int) $request->get('page', 1));
-					$limit = max(1, min(100, (int) $request->get('limit', 20)));
+					$asc = (bool)$request->get('asc', in_array($metric, ['position', 'query']) ? 1 : 0);
+					$page = max(1, (int)$request->get('page', 1));
+					$limit = max(1, min(100, (int)$request->get('limit', 20)));
 
 					try {
 						$model = Find::parent(ltrim($parent, '/'));
@@ -116,7 +115,12 @@ return [
 								'clicks' => ['label' => I18n::translate('seo.sections.searchConsole.clicks'), 'width' => '1/8', 'align' => 'right'],
 								'impressions' => ['label' => I18n::translate('seo.sections.searchConsole.impressions'), 'width' => '1/8', 'align' => 'right'],
 								'ctr' => ['label' => I18n::translate('seo.sections.searchConsole.ctr'), 'width' => '1/8', 'align' => 'right'],
-								'position' => ['label' => I18n::translate('seo.sections.searchConsole.position'), 'width' => '1/8', 'align' => 'right', 'mobile' => true]
+								'position' => [
+									'label' => I18n::translate('seo.sections.searchConsole.position'),
+									'width' => '1/8',
+									'align' => 'right',
+									'mobile' => true
+								]
 							],
 							'rows' => $rows
 						]
@@ -138,7 +142,7 @@ return [
 								'text' => I18n::template(
 									'seo.license.activate.' . ($isLocal ? 'local' : 'domain'),
 									replace: ['domain' => License::normalizeUrl(App::instance()->system()->indexUrl())]
-								),
+								)
 							],
 							'email' => Field::email(['required' => true]),
 							'license' => [
@@ -146,13 +150,13 @@ return [
 								'type' => 'text',
 								'required' => true,
 								'counter' => false,
-								'help' => I18n::translate('seo.license.key.help'),
-							],
+								'help' => I18n::translate('seo.license.key.help')
+							]
 						],
 						'submitButton' => [
 							'icon' => 'key',
 							'text' => I18n::translate('seo.license.activate'),
-							'theme' => 'love',
+							'theme' => 'love'
 						]
 					]
 				],
@@ -169,7 +173,7 @@ return [
 					);
 
 					return [
-						'message' => I18n::translate('seo.license.activated'),
+						'message' => I18n::translate('seo.license.activated')
 					];
 				}
 			],

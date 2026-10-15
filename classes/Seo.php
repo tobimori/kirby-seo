@@ -15,7 +15,7 @@ final class Seo
 	 */
 	public static function userAgent(): string
 	{
-		return "Kirby SEO/" . App::plugin('tobimori/seo')->version() . " (+https://plugins.andkindness.com/seo)";
+		return 'Kirby SEO/' . App::plugin('tobimori/seo')->version() . ' (+https://plugins.andkindness.com/seo)';
 	}
 
 	/**
@@ -36,7 +36,11 @@ final class Seo
 		}
 
 		if (!isset($cached['pages'][$code])) {
-			$cached['pages'][$code] = $kirby->site()->index()->filter(fn (Page $page) => static::isIndexable($page, $language))->keys();
+			$cached['pages'][$code] = $kirby
+				->site()
+				->index()
+				->filter(fn (Page $page) => static::isIndexable($page, $language))
+				->keys();
 			$cache->set('indexable', $cached, 60);
 		}
 
@@ -85,7 +89,7 @@ final class Seo
 			static::option('robots.index'),
 			static::option('robots.followPageStatus'),
 			static::option('cascade'),
-			static::option('default'),
+			static::option('default')
 		]));
 	}
 

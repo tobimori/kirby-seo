@@ -59,7 +59,7 @@ class Content
 			$thumb = $file->thumb([
 				'width' => $maxDimension,
 				'height' => $maxDimension,
-				'format' => 'webp',
+				'format' => 'webp'
 			]);
 
 			$data = base64_encode($thumb->read());
@@ -76,7 +76,7 @@ class Content
 		$this->blocks[] = [
 			'type' => 'image',
 			'data' => $data,
-			'mediaType' => 'image/webp',
+			'mediaType' => 'image/webp'
 		];
 
 		return $this;

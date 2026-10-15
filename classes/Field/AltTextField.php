@@ -34,10 +34,11 @@ class AltTextField extends FieldClass
 	{
 		$component = Seo::option('components.ai');
 
-		$this->ai = $ai
-			&& $component::enabled()
-			&& $component::permitted()
-			&& !($this->model() instanceof File && !Content::supportsImage($this->model()));
+		$this->ai =
+			$ai &&
+			$component::enabled() &&
+			$component::permitted() &&
+			!($this->model() instanceof File && !Content::supportsImage($this->model()));
 	}
 
 	public function ai(): bool
@@ -72,7 +73,7 @@ class AltTextField extends FieldClass
 			$altText = new AltText(
 				text: $this->value['text'] ?? '',
 				decorative: $this->value['decorative'] ?? false,
-				source: $this->value['source'] ?? AltText::SOURCE_MANUAL,
+				source: $this->value['source'] ?? AltText::SOURCE_MANUAL
 			);
 
 			if ($altText->isMissing()) {
@@ -90,7 +91,7 @@ class AltTextField extends FieldClass
 		return [
 			...parent::props(),
 			'ai' => $this->ai(),
-			'autogenerate' => $this->autogenerate(),
+			'autogenerate' => $this->autogenerate()
 		];
 	}
 
@@ -151,18 +152,22 @@ class AltTextField extends FieldClass
 			$kirby->data = [
 				'file' => $file,
 				'site' => $kirby->site(),
-				'kirby' => $kirby,
+				'kirby' => $kirby
 			];
 
-			$prompt = trim(snippet('seo/prompts/tasks/alt-text', [
-				'file' => $file,
-				'instructions' => $instructions,
-			], return: true));
+			$prompt = trim(snippet(
+				'seo/prompts/tasks/alt-text',
+				[
+					'file' => $file,
+					'instructions' => $instructions
+				],
+				return: true
+			));
 
 			$content = [
 				Content::user()
 					->image($file)
-					->text($prompt),
+					->text($prompt)
 			];
 
 			foreach ($component::provider()->stream($content) as $chunk) {
@@ -213,22 +218,26 @@ class AltTextField extends FieldClass
 		$kirby->data = [
 			'file' => $file,
 			'site' => $kirby->site(),
-			'kirby' => $kirby,
+			'kirby' => $kirby
 		];
 
 		$langCodes = $isMultiLang
 			? $languages->pluck('code')
 			: [];
 
-		$prompt = trim(snippet('seo/prompts/tasks/alt-text', [
-			'file' => $file,
-			'languages' => $langCodes,
-		], return: true));
+		$prompt = trim(snippet(
+			'seo/prompts/tasks/alt-text',
+			[
+				'file' => $file,
+				'languages' => $langCodes
+			],
+			return: true
+		));
 
 		$content = [
 			Content::user()
 				->image($file)
-				->text($prompt),
+				->text($prompt)
 		];
 
 		$text = '';

@@ -1,0 +1,56 @@
+#:schema vendor/carthage-software/mago/schema.json
+version = "1"
+php-version = "8.3"
+
+[source]
+paths = ["index.php", "blueprints", "classes", "config", "snippets", "templates"]
+includes = ["vendor"]
+
+[source.glob]
+literal-separator = true
+
+# Follows the php-cs-fixer rules of Kirby CMS
+[formatter]
+use-tabs = true
+tab-width = 4
+print-width = 160
+null-type-hint = "null_pipe_last"
+space-after-cast-unary-prefix-operators = false
+line-before-binary-operator = false
+space-before-arrow-function-parameter-list-parenthesis = true
+trailing-comma = false
+# Keep line breaks as written, like php-cs-fixer
+preserve-breaking-condition-expression = true
+preserve-breaking-argument-list = true
+preserve-breaking-parameter-list = true
+preserve-breaking-member-access-chain = true
+preserve-breaking-conditional-expression = true
+preserve-breaking-binary-expression = true
+break-promoted-properties-list = false
+inline-empty-constructor-braces = false
+
+[linter]
+minimum-fail-level = "warning"
+baseline = "mago-linter-baseline.toml"
+
+[linter.rules]
+# Kirby code style uses these constructs
+strict-types = { enabled = false }
+no-isset = { enabled = false }
+no-empty = { enabled = false }
+no-shorthand-ternary = { enabled = false }
+no-assign-in-condition = { enabled = false }
+literal-named-argument = { enabled = false }
+readable-literal = { enabled = false }
+cyclomatic-complexity = { enabled = false }
+excessive-parameter-list = { enabled = false }
+kan-defect = { enabled = false }
+too-many-methods = { enabled = false }
+halstead = { enabled = false }
+# Kirby binds `$this` to route, hook, and area closures
+prefer-static-closure = { exclude = ["config/"] }
+prefer-first-class-callable = { exclude = ["config/"] }
+
+[analyzer]
+baseline = "mago-analyzer-baseline.toml"
+ignore = ["mixed-assignment"]

@@ -22,7 +22,7 @@ final class Chunk
 	private function __construct(
 		public readonly string $type,
 		public readonly mixed $payload = null,
-		public readonly ?string $text = null
+		public readonly string|null $text = null
 	) {
 	}
 
@@ -80,7 +80,7 @@ final class Chunk
 	{
 		return new self(self::TYPE_ERROR, [
 			'message' => $message,
-			'data' => $payload,
+			'data' => $payload
 		]);
 	}
 

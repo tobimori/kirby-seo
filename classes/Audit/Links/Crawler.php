@@ -23,8 +23,25 @@ class Crawler
 	 * Schemes that aren't checked: no page to load, or opened by other apps
 	 */
 	public const IGNORED_SCHEMES = [
-		'mailto', 'tel', 'fax', 'sms', 'callto', 'sip', 'javascript', 'data', 'blob',
-		'geo', 'maps', 'webcal', 'skype', 'whatsapp', 'tg', 'signal', 'facetime', 'msteams', 'zoommtg',
+		'mailto',
+		'tel',
+		'fax',
+		'sms',
+		'callto',
+		'sip',
+		'javascript',
+		'data',
+		'blob',
+		'geo',
+		'maps',
+		'webcal',
+		'skype',
+		'whatsapp',
+		'tg',
+		'signal',
+		'facetime',
+		'msteams',
+		'zoommtg'
 	];
 
 	protected static bool $guarded = false;
@@ -54,7 +71,7 @@ class Crawler
 			return false;
 		}
 
-		return $option === true || (PHP_SAPI === 'cli' && preg_match('#^https?://#i', App::instance()->url()) === 1);
+		return $option === true || PHP_SAPI === 'cli' && preg_match('#^https?://#i', App::instance()->url()) === 1;
 	}
 
 	/**
@@ -118,7 +135,7 @@ class Crawler
 				CURLOPT_TIMEOUT => static::timeout(),
 				CURLOPT_ENCODING => '',
 				CURLOPT_USERAGENT => static::userAgent(),
-				CURLOPT_HTTPHEADER => ['Accept: text/html,application/xhtml+xml,*/*;q=0.8'],
+				CURLOPT_HTTPHEADER => ['Accept: text/html,application/xhtml+xml,*/*;q=0.8']
 			]);
 			curl_multi_add_handle($multi, $handle);
 			$handles[$key] = $handle;
@@ -140,7 +157,7 @@ class Crawler
 					location: curl_getinfo($handle, CURLINFO_REDIRECT_URL) ?: null,
 					html: (string)curl_multi_getcontent($handle),
 					url: $urls[$key],
-					isHtml: str_contains((string)curl_getinfo($handle, CURLINFO_CONTENT_TYPE), 'html'),
+					isHtml: str_contains((string)curl_getinfo($handle, CURLINFO_CONTENT_TYPE), 'html')
 				);
 			}
 
@@ -186,7 +203,7 @@ class Crawler
 			'status' => $status,
 			'location' => $location,
 			'error' => null,
-			...($status >= 200 && $status < 300 && $isHtml ? static::extract($html, $url) : ['links' => [], 'ids' => []]),
+			...($status >= 200 && $status < 300 && $isHtml ? static::extract($html, $url) : ['links' => [], 'ids' => []])
 		];
 	}
 
@@ -207,7 +224,7 @@ class Crawler
 		$_GET = $_POST = $_REQUEST = $_FILES = $_COOKIE = [];
 
 		(function () use ($url) {
-			$this->request = new class (['method' => 'GET', 'url' => $url, 'query' => [], 'body' => [], 'files' => []]) extends Request {
+			$this->request = new class(['method' => 'GET', 'url' => $url, 'query' => [], 'body' => [], 'files' => []]) extends Request {
 				// none of the headers of the current request, e.g. its cookies or referer
 				public function headers(): array
 				{
@@ -262,7 +279,7 @@ class Crawler
 
 		return [
 			'links' => array_keys($links),
-			'ids' => array_keys($ids),
+			'ids' => array_keys($ids)
 		];
 	}
 
@@ -291,14 +308,16 @@ class Crawler
 			str_starts_with($href, '#') => $origin . $path . $query . $href,
 			str_starts_with($href, '?') => $origin . $path . $href,
 			str_starts_with($href, '/') => $origin . static::normalizePath($href),
-			default => $origin . static::normalizePath(preg_replace('#[^/]*$#', '', $path) . $href),
+			default => $origin . static::normalizePath(preg_replace('#[^/]*$#', '', $path) . $href)
 		};
 	}
 
 	public static function isIgnored(string $url): bool
 	{
-		return preg_match('/^([a-z][a-z0-9+.-]*):/i', $url, $match) === 1
-			&& in_array(strtolower($match[1]), self::IGNORED_SCHEMES, true);
+		return (
+			preg_match('/^([a-z][a-z0-9+.-]*):/i', $url, $match) === 1 &&
+				in_array(strtolower($match[1]), self::IGNORED_SCHEMES, true)
+		);
 	}
 
 	protected static function normalizePath(string $path): string
@@ -314,7 +333,7 @@ class Crawler
 			match ($segment) {
 				'.' => null,
 				'..' => array_pop($segments),
-				default => $segments[] = $segment,
+				default => $segments[] = $segment
 			};
 		}
 
@@ -341,7 +360,7 @@ class Crawler
 			}
 		}
 
-		(static::$current['onExit'])(static::$current['key'], is_int($code) ? $code : 200, $location);
+		static::$current['onExit'](static::$current['key'], is_int($code) ? $code : 200, $location);
 
 		if (PHP_SAPI !== 'cli' && !headers_sent()) {
 			while (ob_get_level() > 0) {

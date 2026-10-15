@@ -12,8 +12,8 @@ use tobimori\Seo\Ai\Chunk;
 use tobimori\Seo\Ai\Content;
 use tobimori\Seo\Ai\Driver;
 
-use function is_string;
 use function is_array;
+use function is_string;
 
 /**
  * Ai facade
@@ -43,7 +43,7 @@ class Ai
 		$error = match (true) {
 			!static::enabled() => 'seo.ai.error.disabled',
 			!static::permitted() => 'seo.ai.error.permission',
-			default => null,
+			default => null
 		};
 
 		return $error ? Response::json(['status' => 'error', 'message' => t($error)], 404) : null;
@@ -72,10 +72,13 @@ class Ai
 		flush();
 
 		$send = static function (array $event): void {
-			echo 'data: ' . json_encode(
-				$event,
-				JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
-			) . "\n\n";
+			echo
+				'data: ' .
+					json_encode(
+						$event,
+						JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+					) .
+					"\n\n";
 
 			if (ob_get_level() > 0) {
 				ob_flush();
@@ -88,14 +91,14 @@ class Ai
 			$stream(fn (Chunk $chunk) => $send([
 				'type' => $chunk->type,
 				'text' => $chunk->text,
-				'payload' => $chunk->payload,
+				'payload' => $chunk->payload
 			]));
 		} catch (Throwable $exception) {
 			$send([
 				'type' => 'error',
 				'payload' => [
-					'message' => $exception->getMessage(),
-				],
+					'message' => $exception->getMessage()
+				]
 			]);
 		}
 

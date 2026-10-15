@@ -78,7 +78,7 @@ class IndexNow
 
 		if (class_exists('tobimori\Queues\Queues')) {
 			\tobimori\Queues\Queues::push('seo:indexnow', [
-				'urls' => $urls,
+				'urls' => $urls
 			]);
 
 			return true;
@@ -184,7 +184,9 @@ class IndexNow
 	 */
 	public static function key(): string
 	{
-		return static::$key ??= App::instance()->cache('tobimori.seo.indexnow')->getOrSet('key', fn () => Str::random(32, 'hexLower'), 0);
+		return static::$key ??= App::instance()
+			->cache('tobimori.seo.indexnow')
+			->getOrSet('key', fn () => Str::random(32, 'hexLower'), 0);
 	}
 
 	/**
@@ -329,7 +331,9 @@ class IndexNow
 	{
 		$language = App::instance()->language();
 
-		$pages = $this->page->site()->index()
+		$pages = $this->page
+			->site()
+			->index()
 			->filterBy('intendedTemplate', 'in', $templates)
 			->filter($this->isIndexable(...));
 
@@ -343,7 +347,7 @@ class IndexNow
 	 */
 	protected function isIndexable(Page $page): bool
 	{
-		return $page->isListed()
-			&& !Str::contains($page->robots(), 'noindex');
+		return $page->isListed() &&
+			!Str::contains($page->robots(), 'noindex');
 	}
 }

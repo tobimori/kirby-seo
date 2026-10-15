@@ -39,7 +39,6 @@ if ($content = Seo::option('robots.content')) {
 }
 
 if (($sitemap = Seo::option('robots.sitemap')) || ($sitemapModule = Seo::option('sitemap.active'))) {
-
 	// Use default sitemap if none is set
 	if (!$sitemap && $sitemapModule) {
 		$sitemap = site()->canonicalFor('/sitemap.xml', true);

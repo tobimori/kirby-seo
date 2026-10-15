@@ -2,9 +2,9 @@
 
 use Kirby\Cms\App;
 use Kirby\Cms\Page;
-use Kirby\Http\Response;
 use Kirby\Data\Json;
 use Kirby\Exception\NotFoundException;
+use Kirby\Http\Response;
 use tobimori\Seo\Seo;
 
 /**
@@ -34,7 +34,7 @@ $methodRoutes = fn (string $pattern, string $allow, string $option) => [
 
 			$this->next();
 		}
-	],
+	]
 ];
 
 $sitemapPage = fn (string|null $index = null) => Page::factory([
@@ -43,8 +43,8 @@ $sitemapPage = fn (string|null $index = null) => Page::factory([
 	'model' => 'sitemap',
 	'content' => [
 		'title' => t('seo.sitemap.title'),
-		'index' => $index,
-	],
+		'index' => $index
+	]
 ]);
 
 return [
@@ -203,5 +203,5 @@ return [
 			$return = $state['return'] ?? $kirby->site()->panel()->url();
 			go($return);
 		}
-	],
+	]
 ];

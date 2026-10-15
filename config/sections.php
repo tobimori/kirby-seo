@@ -43,7 +43,7 @@ return [
 						'ogDescription' => Str::unhtml($meta->ogDescription()->value()),
 						'ogImage' => $meta->ogImage(),
 						'cropOgImage' => $meta->cropOgImage()->toBool(),
-						'panelUrl' => method_exists($model, 'panel') ? "{$model->panel()?->url()}?tab=seo" : null,
+						'panelUrl' => method_exists($model, 'panel') ? "{$model->panel()?->url()}?tab=seo" : null
 					];
 				}
 
@@ -56,7 +56,7 @@ return [
 		'computed' => [
 			'data' => function () {
 				$model = $this->model();
-				if (!($model instanceof Page)) {
+				if (!$model instanceof Page) {
 					// only works for pages (not site, files, etc.)
 					return [];
 				}
@@ -83,7 +83,7 @@ return [
 				foreach ($headings as $heading) {
 					$data[] = [
 						'level' => (int)str_replace('h', '', $heading->nodeName),
-						'text' => $heading->textContent,
+						'text' => $heading->textContent
 					];
 				}
 
@@ -94,7 +94,7 @@ return [
 	'seo-license' => [
 		'computed' => [
 			'local' => fn () => App::instance()->system()->isLocal(),
-			'state' => fn () => App::instance()->plugin('tobimori/seo')->license()->state(),
+			'state' => fn () => App::instance()->plugin('tobimori/seo')->license()->state()
 		]
 	],
 	'seo-search-console' => [
@@ -106,7 +106,7 @@ return [
 					!$gsc::hasCredentials() => 'NO_CREDENTIALS',
 					!$gsc::isConnected() => 'NOT_CONNECTED',
 					!$gsc::property() => 'SELECT_PROPERTY',
-					default => 'CONNECTED',
+					default => 'CONNECTED'
 				};
 			},
 			'property' => fn () => Seo::option('components.gsc')::property(),
@@ -124,7 +124,7 @@ return [
 				}
 
 				$metric = kirby()->request()->get('metric', 'clicks');
-				$limit = (int) kirby()->request()->get('limit', 10);
+				$limit = (int)kirby()->request()->get('limit', 10);
 				$asc = in_array($metric, ['position', 'query']);
 
 				try {

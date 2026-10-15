@@ -12,7 +12,7 @@ class RobotsViewButton extends ViewButton
 	public const THEMES = [
 		'index' => 'positive-icon',
 		'any' => 'notice-icon',
-		'noindex' => 'negative-icon',
+		'noindex' => 'negative-icon'
 	];
 
 	public function __construct(Page $model)
@@ -37,14 +37,14 @@ class RobotsViewButton extends ViewButton
 		$state = match (true) {
 			Str::contains($robots, 'noindex') => 'noindex',
 			Str::contains($robots, 'no') => 'any',
-			default => 'index',
+			default => 'index'
 		};
 
 		return [
 			'state' => $state,
 			'icon' => $state === 'index' ? 'robots' : 'robots-off',
 			'text' => I18n::translate("seo.fields.robots.indicator.{$state}"),
-			'theme' => self::THEMES[$state],
+			'theme' => self::THEMES[$state]
 		];
 	}
 }

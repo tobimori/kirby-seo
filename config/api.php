@@ -1,9 +1,9 @@
 <?php
 
 use Kirby\Cms\App;
+use tobimori\Seo\Views\EditableOverviewView;
 use tobimori\Seo\Views\ImagesView;
 use tobimori\Seo\Views\LinksView;
-use tobimori\Seo\Views\EditableOverviewView;
 
 return [
 	'routes' => [
@@ -16,7 +16,7 @@ return [
 
 				return match ($action) {
 					'save' => $view->save((array)$request->get('changes', [])),
-					default => $view->$action((array)$request->get('ids', [])),
+					default => $view->$action((array)$request->get('ids', []))
 				};
 			}
 		],
@@ -29,6 +29,6 @@ return [
 			'pattern' => 'seo/overview/links/(scan|rescan|recheck)',
 			'method' => 'POST',
 			'action' => fn (string $action) => (new LinksView())->$action()
-		],
+		]
 	]
 ];

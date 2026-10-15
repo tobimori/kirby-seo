@@ -8,7 +8,7 @@
 $clean = fn (string $value) => preg_replace('/\s+/', ' ', strip_tags($value));
 $lines = [
 	'# ' . $site->title()->value(),
-	'',
+	''
 ];
 
 if ($description = $site->description()->value()) {

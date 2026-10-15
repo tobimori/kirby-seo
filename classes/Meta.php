@@ -5,19 +5,19 @@ namespace tobimori\Seo;
 use Kirby\Cms\App;
 use Kirby\Cms\File;
 use Kirby\Cms\FileVersion;
+use Kirby\Cms\Language;
 use Kirby\Cms\Page;
 use Kirby\Content\Field;
 use Kirby\Exception\InvalidArgumentException;
 use Kirby\Filesystem\Asset;
 use Kirby\Toolkit\A;
 use Kirby\Toolkit\Str;
-use Kirby\Cms\Language;
 
+use function array_key_exists;
+use function count;
+use function in_array;
 use function is_array;
 use function is_string;
-use function count;
-use function array_key_exists;
-use function in_array;
 
 /**
  * The Meta class is responsible for handling the meta data & cascading
@@ -30,19 +30,19 @@ class Meta
 	public const DEFAULT_VALUES = ['[]', 'default'];
 
 	protected Page $page;
-	protected ?Language $lang;
+	protected Language|null $lang;
 	protected array $consumed = [];
 	protected array $metaDefaults = [];
 	protected array $metaArray = [];
-	protected ?array $cascade = null;
-	protected ?string $robots = null;
-	protected ?Meta $parentMeta = null;
+	protected array|null $cascade = null;
+	protected string|null $robots = null;
+	protected Meta|null $parentMeta = null;
 	protected FileVersion|File|Asset|false|null $ogImageThumb = false;
 
 	/**
 	 * Creates a new Meta instance
 	 */
-	public function __construct(Page $page, ?Language $lang = null)
+	public function __construct(Page $page, Language|null $lang = null)
 	{
 		$this->page = $page;
 		$this->lang = $lang ?? kirby()->language();
@@ -104,21 +104,19 @@ class Meta
 
 		// We have to specify field names and resolve them later, so we can use this
 		// function to resolve meta tags from field names in the programmatic function
-		$meta =
-			[
-				'title' => 'metaTitle',
-				'description' => 'metaDescription',
-				'date' => fn () => $this->page->modified($this->dateFormat()),
-				'og:title' => 'ogTitle',
-				'og:description' => 'ogDescription',
-				'og:site_name' => 'ogSiteName',
-				'og:image' => 'ogImage',
-				'og:image:width' => fn () => $this->ogImageThumb()?->width() ?? null,
-				'og:image:height' => fn () => $this->ogImageThumb()?->height() ?? null,
-				'og:image:alt' => fn () => $this->get('ogImage')->toFile()?->alt() ?? null,
-				'og:type' => 'ogType',
-			];
-
+		$meta = [
+			'title' => 'metaTitle',
+			'description' => 'metaDescription',
+			'date' => fn () => $this->page->modified($this->dateFormat()),
+			'og:title' => 'ogTitle',
+			'og:description' => 'ogDescription',
+			'og:site_name' => 'ogSiteName',
+			'og:image' => 'ogImage',
+			'og:image:width' => fn () => $this->ogImageThumb()?->width() ?? null,
+			'og:image:height' => fn () => $this->ogImageThumb()?->height() ?? null,
+			'og:image:alt' => fn () => $this->get('ogImage')->toFile()?->alt() ?? null,
+			'og:type' => 'ogType'
+		];
 
 		// Robots
 		if ($robotsActive = Seo::option('robots.active')) {
@@ -144,7 +142,7 @@ class Meta
 			return [
 				'href' => $llmContent->markdownUrl(),
 				'rel' => 'alternate',
-				'type' => $llmContent::MARKDOWN_TYPE,
+				'type' => $llmContent::MARKDOWN_TYPE
 			];
 		};
 		$meta['alternate'][] = function () use ($llmContent) {
@@ -154,7 +152,7 @@ class Meta
 
 			return [
 				'href' => $llmContent->llmsTxtUrl(),
-				'rel' => 'describedby',
+				'rel' => 'describedby'
 			];
 		};
 
@@ -183,7 +181,7 @@ class Meta
 					return [
 						'hreflang' => Meta::toBCP47($lang),
 						'href' => $this->page->url($lang->code()),
-						'rel' => 'alternate',
+						'rel' => 'alternate'
 					];
 				};
 
@@ -203,7 +201,7 @@ class Meta
 				return [
 					'hreflang' => 'x-default',
 					'href' => $this->page->indexUrl(),
-					'rel' => 'alternate',
+					'rel' => 'alternate'
 				];
 			};
 			$meta['og:locale'] = fn () => Meta::toOpenGraphLocale($this->lang);
@@ -217,10 +215,10 @@ class Meta
 			unset($meta['og:locale:alternate']);
 		}
 
-		$meta['me'] = fn () => (
-			($socialMedia = $this->site('socialMediaAccounts')?->toObject())
-			&& ($mastodon = $socialMedia->mastodon()->value())
-		) ? $mastodon : null;
+		$meta['me'] = fn () => ($socialMedia = $this->site('socialMediaAccounts')?->toObject()) &&
+		($mastodon = $socialMedia->mastodon()->value())
+				? $mastodon
+				: null;
 
 		// This array will be normalized for use in the snippet in $this->snippetData()
 		return $this->metaArray = $meta;
@@ -242,19 +240,19 @@ class Meta
 			'tag' => 'link',
 			'attributes' => [
 				'name' => 'rel',
-				'content' => 'href',
+				'content' => 'href'
 			],
 			'tags' => [
 				'me',
 				'canonical',
-				'alternate',
+				'alternate'
 			]
 		],
 		[
 			'tag' => 'meta',
 			'attributes' => [
 				'name' => 'property',
-				'content' => 'content',
+				'content' => 'content'
 			],
 			'tags' => [
 				'/og:.+/'
@@ -284,7 +282,7 @@ class Meta
 	 * Normalize the meta array and remaining meta defaults to be used in the snippet,
 	 * also resolve the content, if necessary
 	 */
-	public function snippetData(?array $raw = null): array
+	public function snippetData(array|null $raw = null): array
 	{
 		$mergeWithDefaults = !isset($raw);
 		$raw ??= $this->metaArray();
@@ -295,7 +293,9 @@ class Meta
 			if (is_numeric($name)) {
 				// but we still check if the array is valid
 				if (!is_array($value) || count(array_intersect(['tag', 'content', 'attributes'], array_keys($value))) !== count($value)) {
-					throw new InvalidArgumentException("[Kirby SEO] Invalid array structure found in programmatic content for page {$this->slug()}. Please check your metaDefaults method for template {$this->template()->name()}.");
+					throw new InvalidArgumentException(
+						"[Kirby SEO] Invalid array structure found in programmatic content for page {$this->slug()}. Please check your metaDefaults method for template {$this->template()->name()}."
+					);
 				}
 
 				$tags[] = $value;
@@ -320,7 +320,7 @@ class Meta
 			}
 
 			// if the value is empty, we don't want to output it
-			if ((is_a($value, Field::class) && $value->isEmpty()) || !$value) {
+			if (is_a($value, Field::class) && $value->isEmpty() || !$value) {
 				continue;
 			}
 
@@ -353,7 +353,7 @@ class Meta
 					'tag' => $tag['tag'],
 					'attributes' => $value,
 					'content' => null,
-					'priority' => $tag['priority'] ?? false,
+					'priority' => $tag['priority'] ?? false
 				];
 				continue;
 			}
@@ -368,7 +368,7 @@ class Meta
 			if (isset($tag['attributes'])) {
 				$attributes = [
 					$tag['attributes']['name'] => $name,
-					$tag['attributes']['content'] => $value,
+					$tag['attributes']['content'] => $value
 				];
 			}
 
@@ -376,7 +376,7 @@ class Meta
 				'tag' => $tag['tag'],
 				'attributes' => $attributes,
 				'content' => $attributes === null ? $value : null,
-				'priority' => $tag['priority'] ?? false,
+				'priority' => $tag['priority'] ?? false
 			];
 		}
 
@@ -396,8 +396,10 @@ class Meta
 		foreach (self::TAG_TYPE_MAP as $type) {
 			foreach ($type['tags'] as $regexOrString) {
 				// Check if the supplied tag is a regex or a normal tag name
-				if (Str::startsWith($regexOrString, '/') && Str::endsWith($regexOrString, '/') ?
-					Str::match($tag, $regexOrString) : $tag === $regexOrString
+				if (
+					Str::startsWith($regexOrString, '/') && Str::endsWith($regexOrString, '/')
+						? Str::match($tag, $regexOrString)
+						: $tag === $regexOrString
 				) {
 					return $type;
 				}
@@ -408,7 +410,7 @@ class Meta
 			'tag' => 'meta',
 			'attributes' => [
 				'name' => 'name',
-				'content' => 'content',
+				'content' => 'content'
 			]
 		];
 	}
@@ -434,10 +436,12 @@ class Meta
 		// (skip without meta defaults, the lookup would build the full meta array)
 		$toBeConsumed = $key;
 		if (
-			$this->metaDefaults
-			&& (array_key_exists($toBeConsumed, $this->metaDefaults)
-				|| array_key_exists($toBeConsumed = $this->findTagForField($toBeConsumed), $this->metaDefaults))
-			&& !in_array($toBeConsumed, $this->consumed)
+			$this->metaDefaults &&
+			(
+				array_key_exists($toBeConsumed, $this->metaDefaults) ||
+				array_key_exists($toBeConsumed = $this->findTagForField($toBeConsumed), $this->metaDefaults)
+			) &&
+			!in_array($toBeConsumed, $this->consumed)
 		) {
 			$this->consumed[] = $toBeConsumed;
 		}
@@ -464,8 +468,8 @@ class Meta
 		foreach (array_diff($this->cascade, $exclude) as $method) {
 			if ($field = $this->$method($key)) {
 				if (
-					is_string($value = $field->value())
-					&& Str::contains($value, 'data-seo-template-variable')
+					is_string($value = $field->value()) &&
+					Str::contains($value, 'data-seo-template-variable')
 				) {
 					$field = new Field($this->page, $key, Str::unhtml($value));
 				}
@@ -482,7 +486,7 @@ class Meta
 	 */
 	protected function fields(string $key): Field|null
 	{
-		if (($field = $this->page->content($this->lang?->code())->get($key))) {
+		if ($field = $this->page->content($this->lang?->code())->get($key)) {
 			if (Str::contains($key, 'robots') && !Seo::option('robots.pageSettings')) {
 				return null;
 			}
@@ -500,7 +504,7 @@ class Meta
 	 * cascade method
 	 */
 	public const FALLBACK_MAP = [
-		'ogDescription' => 'metaDescription',
+		'ogDescription' => 'metaDescription'
 	];
 
 	/**
@@ -512,7 +516,7 @@ class Meta
 	public const FALLBACK_CASCADE = [
 		'fields',
 		'programmatic',
-		'parent',
+		'parent'
 	];
 
 	/**
@@ -756,14 +760,14 @@ class Meta
 				return $this->ogImageThumb = $file->thumb([
 					'width' => 1200,
 					'height' => 630,
-					'crop' => true,
+					'crop' => true
 				]);
 			} else {
 				// Resize to max 1500px on the longest side
 				return $this->ogImageThumb = $file->thumb([
 					'width' => 1500,
 					'height' => 1500,
-					'upscale' => false,
+					'upscale' => false
 				]);
 			}
 		}

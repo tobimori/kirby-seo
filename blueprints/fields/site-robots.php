@@ -14,14 +14,14 @@ return function (App $kirby) {
 		'_robotsHeadline' => [
 			'label' => 'seo.fields.robots.label',
 			'type' => 'headline',
-			'numbered' => false,
+			'numbered' => false
 		]
 	];
 
 	$index = Seo::option('robots.index');
 	foreach ($kirby->option('tobimori.seo.robots.types') as $robots) {
 		$fields["robots{$robots}"] = [
-			'label' =>  "seo.fields.robots.{$robots}.label",
+			'label' => "seo.fields.robots.{$robots}.label",
 			'type' => 'toggles',
 			'help' => "seo.fields.robots.{$robots}.help",
 			'width' => '1/2',
@@ -30,7 +30,7 @@ return function (App $kirby) {
 			'options' => [
 				'default' => t('seo.common.default') . ' ' . ($index ? t('seo.common.yes') : t('seo.common.no')),
 				'true' => t('seo.common.yes'),
-				'false' => t('seo.common.no'),
+				'false' => t('seo.common.no')
 			]
 		];
 	}
@@ -41,6 +41,6 @@ return function (App $kirby) {
 
 	return [
 		'type' => 'group',
-		'fields' => $fields,
+		'fields' => $fields
 	];
 };

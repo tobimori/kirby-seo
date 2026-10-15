@@ -64,19 +64,23 @@ abstract class OverviewView
 			'stats' => [
 				...$this->audit()->stats(),
 				'images' => $this->images()->stats(),
-				'links' => (new Report())->stats(),
+				'links' => (new Report())->stats()
 			],
 			'license' => [
 				'state' => $this->kirby->plugin('tobimori/seo')->license()->state(),
-				'local' => $this->kirby->system()->isLocal(),
+				'local' => $this->kirby->system()->isLocal()
 			],
 			'tab' => $tab,
-			'tabs' => array_map(fn ($name, $icon) => [
-				'name' => $name,
-				'label' => I18n::translate("seo.overview.tabs.{$name}"),
-				'icon' => $icon,
-				'link' => "seo/{$name}",
-			], array_keys(self::TABS), self::TABS),
+			'tabs' => array_map(
+				fn ($name, $icon) => [
+					'name' => $name,
+					'label' => I18n::translate("seo.overview.tabs.{$name}"),
+					'icon' => $icon,
+					'link' => "seo/{$name}"
+				],
+				array_keys(self::TABS),
+				self::TABS
+			)
 		];
 	}
 
@@ -91,9 +95,11 @@ abstract class OverviewView
 	protected function isListedPage(Page $page): bool
 	{
 		// blueprints are shared by template, checking permissions per page is slower
-		return $this->blueprint($page)->field('metaTitle') !== null
-			&& $this->blueprint($page)->field('metaDescription') !== null
-			&& $page->isListable();
+		return (
+			$this->blueprint($page)->field('metaTitle') !== null &&
+				$this->blueprint($page)->field('metaDescription') !== null &&
+				$page->isListable()
+		);
 	}
 
 	/**
@@ -164,7 +170,7 @@ abstract class OverviewView
 			'search' => trim((string)$request->get('search', '')),
 			'sort' => in_array($sort, $sortable, true) ? $sort : null,
 			'dir' => $request->get('dir') === 'desc' ? 'desc' : 'asc',
-			'issue' => in_array($issue, $issues, true) ? $issue : null,
+			'issue' => in_array($issue, $issues, true) ? $issue : null
 		];
 	}
 
@@ -213,7 +219,7 @@ abstract class OverviewView
 
 		return [
 			['page' => $page, 'limit' => self::LIMIT, 'total' => count($entries)],
-			array_values(array_slice($entries, ($page - 1) * self::LIMIT, self::LIMIT)),
+			array_values(array_slice($entries, ($page - 1) * self::LIMIT, self::LIMIT))
 		];
 	}
 }

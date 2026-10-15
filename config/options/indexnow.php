@@ -26,5 +26,5 @@ return [
 		// '/blog/*' => ['parent' => true],
 		// 'article' => ['parent' => 2, 'urls' => ['/blog', '/']],
 		// 'product' => ['parent' => true, 'siblings' => true, 'templates' => ['category']],
-	],
+	]
 ];

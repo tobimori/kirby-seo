@@ -1,14 +1,14 @@
 <?php
 
 use Kirby\Cms\App;
+use Kirby\Cms\Event;
 use Kirby\Cms\File;
 use Kirby\Cms\Page;
 use Kirby\Toolkit\A;
 use Kirby\Toolkit\Str;
-use Kirby\Cms\Event;
-use tobimori\Seo\Field\AltTextField;
 use tobimori\Seo\Audit\Images;
 use tobimori\Seo\Audit\Links\Checker;
+use tobimori\Seo\Field\AltTextField;
 use tobimori\Seo\Seo;
 
 // results of the overview audits depend on content changes
@@ -24,7 +24,10 @@ $audit = function (Event $event) {
 	// robots settings can differ per language
 	$languages = App::instance()->multilang() ? App::instance()->languages()->values() : [null];
 	$pages = array_filter([$event->argument('page'), $event->argument('newPage'), $event->argument('oldPage')]);
-	if ($pages !== [] && !array_filter($pages, fn (Page $page) => $page->hasChildren() || array_filter($languages, fn ($language) => Seo::isIndexable($page, $language)))) {
+	if (
+		$pages !== [] &&
+		!array_filter($pages, fn (Page $page) => $page->hasChildren() || array_filter($languages, fn ($language) => Seo::isIndexable($page, $language)))
+	) {
 		return;
 	}
 
@@ -47,7 +50,7 @@ return [
 			\tobimori\Queues\Queues::register([
 				\tobimori\Seo\Jobs\CheckLinksJob::class,
 				\tobimori\Seo\Jobs\GenerateAltTextJob::class,
-				\tobimori\Seo\Jobs\IndexNowBatchJob::class,
+				\tobimori\Seo\Jobs\IndexNowBatchJob::class
 			]);
 		}
 	},
@@ -63,7 +66,7 @@ return [
 
 		if (class_exists('tobimori\Queues\Queues')) {
 			\tobimori\Queues\Queues::push('seo:generate-alt-text', [
-				'fileId' => $file->id(),
+				'fileId' => $file->id()
 			]);
 
 			return $file;
@@ -107,7 +110,8 @@ return [
 
 		if (option('tobimori.seo.generateSchema')) {
 			$meta = $page->metadata();
-			$page->schema('WebSite')
+			$page
+				->schema('WebSite')
 				->url($meta->canonicalUrl())
 				->copyrightYear(date('Y'))
 				->description($meta->metaDescription())
@@ -144,8 +148,9 @@ return [
 			return $result;
 		}
 
-		$wantsMarkdown = $isMarkdownPath
-			|| $llmContent->prefersMarkdown(kirby()->request()->header('Accept'));
+		$wantsMarkdown =
+			$isMarkdownPath ||
+			$llmContent->prefersMarkdown(kirby()->request()->header('Accept'));
 
 		if ($result instanceof Page) {
 			if ($wantsMarkdown) {
@@ -162,5 +167,5 @@ return [
 		return $wantsMarkdown
 			? $llmContent->notFoundResponse(kirby()->language(), $method)
 			: $result;
-	},
+	}
 ];

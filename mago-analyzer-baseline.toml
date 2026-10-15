@@ -1,0 +1,4951 @@
+variant = "loose"
+
+[[issues]]
+file = "blueprints/fields/robots.php"
+code = "invalid-iterator"
+message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
+count = 1
+
+[[issues]]
+file = "blueprints/fields/robots.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `Kirby\Toolkit\Str::ucfirst`: expected `null|string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "blueprints/fields/robots.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 2
+
+[[issues]]
+file = "blueprints/fields/robots.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `metadata` on class `Kirby\Cms\Page`.'
+count = 1
+
+[[issues]]
+file = "blueprints/fields/site-robots.php"
+code = "invalid-iterator"
+message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
+count = 1
+
+[[issues]]
+file = "blueprints/fields/site-robots.php"
+code = "invalid-operand"
+message = "Invalid type `(closure(...mixed=): mixed)` for left operand in string concatenation."
+count = 1
+
+[[issues]]
+file = "blueprints/fields/site-robots.php"
+code = "invalid-operand"
+message = "Invalid type `(closure(...mixed=): mixed)` for right operand in string concatenation."
+count = 1
+
+[[issues]]
+file = "blueprints/fields/site-robots.php"
+code = "possibly-null-operand"
+message = "Possibly null left operand used in string concatenation (type `(closure(...mixed=): mixed)|array<array-key, mixed>|null|string`)."
+count = 1
+
+[[issues]]
+file = "blueprints/fields/site-robots.php"
+code = "possibly-null-operand"
+message = "Possibly null right operand used in string concatenation (type `(closure(...mixed=): mixed)|array<array-key, mixed>|null|string`)."
+count = 1
+
+[[issues]]
+file = "blueprints/fields/social-media.php"
+code = "invalid-iterator"
+message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
+count = 1
+
+[[issues]]
+file = "blueprints/fields/social-media.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `strtolower`: expected `string`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "blueprints/fields/social-media.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `ucfirst`: expected `string`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "blueprints/page.php"
+code = "possible-method-access-on-null"
+message = "Attempting to call a method on `null`."
+count = 1
+
+[[issues]]
+file = "blueprints/site.php"
+code = "possible-method-access-on-null"
+message = "Attempting to call a method on `null`."
+count = 1
+
+[[issues]]
+file = "classes/Agents/AltTextField.php"
+code = "invalid-method-access"
+message = 'Attempting to access a method on a non-object type (`unknown-ref(tobimori\Agents\Content\InputCheck)`).'
+count = 3
+
+[[issues]]
+file = "classes/Agents/AltTextField.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\Agents\AltTextField::summary`. Saw type `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Agents/AltTextField.php"
+code = "non-existent-class-like"
+message = 'Cannot find class, interface, enum, or type alias `tobimori\Agents\Content\InputCheck`.'
+count = 1
+
+[[issues]]
+file = "classes/Agents/AltTextField.php"
+code = "non-existent-class-like"
+message = 'Cannot find class, interface, enum, or type alias `tobimori\Agents\Content\Presenter`.'
+count = 1
+
+[[issues]]
+file = "classes/Agents/AltTextField.php"
+code = "non-existent-class-like"
+message = 'Cannot find class, interface, enum, or type alias `tobimori\Agents\Schema\Compiler`.'
+count = 1
+
+[[issues]]
+file = "classes/Agents/AltTextField.php"
+code = "non-existent-class-like"
+message = 'Class `tobimori\Seo\Agents\AltTextField` cannot extend unknown type `Field`'
+count = 1
+
+[[issues]]
+file = "classes/Agents/SeoWriterField.php"
+code = "mixed-operand"
+message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
+count = 1
+
+[[issues]]
+file = "classes/Agents/SeoWriterField.php"
+code = "non-existent-class-like"
+message = 'Cannot find class, interface, enum, or type alias `tobimori\Agents\Content\InputCheck`.'
+count = 1
+
+[[issues]]
+file = "classes/Agents/SeoWriterField.php"
+code = "non-existent-class-like"
+message = 'Cannot find class, interface, enum, or type alias `tobimori\Agents\Content\Presenter`.'
+count = 1
+
+[[issues]]
+file = "classes/Agents/SeoWriterField.php"
+code = "non-existent-class-like"
+message = 'Cannot find class, interface, enum, or type alias `tobimori\Agents\Schema\Compiler`.'
+count = 1
+
+[[issues]]
+file = "classes/Agents/SeoWriterField.php"
+code = "non-existent-class-like"
+message = 'Class `tobimori\Seo\Agents\SeoWriterField` cannot extend unknown type `WriterField`'
+count = 1
+
+[[issues]]
+file = "classes/Agents/SeoWriterField.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `tobimori\Seo\Agents\SeoWriterField::placeholders` is possibly `null`, but parameter type `string` does not accept it.'
+count = 1
+
+[[issues]]
+file = "classes/Ai.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Ai\Driver::__construct`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Ai.php"
+code = "mixed-operand"
+message = "Casting `mixed` to `bool`."
+count = 1
+
+[[issues]]
+file = "classes/Ai.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\Ai::provider`. Saw type `nonnull`.'
+count = 1
+
+[[issues]]
+file = "classes/Ai.php"
+code = "possibly-false-operand"
+message = "Possibly false middle operand used in string concatenation (type `false|non-empty-string`)."
+count = 1
+
+[[issues]]
+file = "classes/Ai.php"
+code = "possibly-invalid-argument"
+message = 'Possible argument type mismatch for argument #1 of `trim`: expected `string`, but possibly received `Kirby\Template\Snippet|null|string`.'
+count = 1
+
+[[issues]]
+file = "classes/Ai.php"
+code = "possibly-null-argument"
+message = "Argument #1 of function `trim` is possibly `null`, but parameter type `string` does not accept it."
+count = 1
+
+[[issues]]
+file = "classes/Ai.php"
+code = "unsafe-instantiation"
+message = 'Unsafe `new $class_name`: constructor of `tobimori\Seo\Ai\Driver` is not final and its signature might change in child classes, potentially leading to runtime errors.'
+count = 1
+
+[[issues]]
+file = "classes/Ai/Content.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `base64_encode`: expected `string`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Ai/Content.php"
+code = "mixed-operand"
+message = "Left operand in `||` operation has `mixed` type."
+count = 1
+
+[[issues]]
+file = "classes/Ai/Content.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `isResizable` on class `Kirby\Cms\File`.'
+count = 2
+
+[[issues]]
+file = "classes/Ai/Content.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `read` on class `Kirby\Cms\FileVersion`.'
+count = 1
+
+[[issues]]
+file = "classes/Ai/Content.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `read` on class `Kirby\Cms\File`.'
+count = 1
+
+[[issues]]
+file = "classes/Ai/Content.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `read` on class `Kirby\Filesystem\Asset`.'
+count = 1
+
+[[issues]]
+file = "classes/Ai/Content.php"
+code = "possibly-null-argument"
+message = "Argument #1 of method `Imagick::readImage` is possibly `null`, but parameter type `string` does not accept it."
+count = 1
+
+[[issues]]
+file = "classes/Ai/Content.php"
+code = "unsafe-instantiation"
+message = 'Unsafe `new static()`: constructor of `tobimori\Seo\Ai\Content` is not final and its signature might change in child classes, potentially leading to runtime errors.'
+count = 3
+
+[[issues]]
+file = "classes/Ai/Drivers/Anthropic.php"
+code = "less-specific-nested-argument-type"
+message = "Argument type mismatch for argument #2 of `implode`: expected `array<array-key, Stringable|null|scalar>|null`, but provided type `non-empty-list<mixed>` is less specific."
+count = 1
+
+[[issues]]
+file = "classes/Ai/Drivers/Anthropic.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Ai\Chunk::error`: expected `string`, but found `nonnull`.'
+count = 1
+
+[[issues]]
+file = "classes/Ai/Drivers/Anthropic.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Ai\Chunk::textDelta`: expected `string`, but found `nonnull`.'
+count = 1
+
+[[issues]]
+file = "classes/Ai/Drivers/Anthropic.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Ai\SseStream::__construct`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Ai/Drivers/Anthropic.php"
+code = "mixed-array-access"
+message = "Unsafe array access on type `mixed`."
+count = 2
+
+[[issues]]
+file = "classes/Ai/Drivers/Anthropic.php"
+code = "yield-from-invalid-key-type"
+message = "Invalid key type from `yield from`: current generator expects to yield keys of type `int`, but the inner iterable yields keys of type `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Ai/Drivers/Gemini.php"
+code = "less-specific-nested-argument-type"
+message = "Argument type mismatch for argument #2 of `implode`: expected `array<array-key, Stringable|null|scalar>|null`, but provided type `non-empty-list<mixed>` is less specific."
+count = 1
+
+[[issues]]
+file = "classes/Ai/Drivers/Gemini.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Ai\Chunk::error`: expected `string`, but found `nonnull`.'
+count = 1
+
+[[issues]]
+file = "classes/Ai/Drivers/Gemini.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Ai\Chunk::textDelta`: expected `string`, but found `nonnull`.'
+count = 1
+
+[[issues]]
+file = "classes/Ai/Drivers/Gemini.php"
+code = "mixed-array-access"
+message = "Unsafe array access on type `mixed`."
+count = 2
+
+[[issues]]
+file = "classes/Ai/Drivers/Gemini.php"
+code = "yield-from-invalid-key-type"
+message = "Invalid key type from `yield from`: current generator expects to yield keys of type `int`, but the inner iterable yields keys of type `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Ai/Drivers/OpenAi.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Ai\Chunk::error`: expected `string`, but found `nonnull`.'
+count = 1
+
+[[issues]]
+file = "classes/Ai/Drivers/OpenAi.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Ai\Chunk::textDelta`: expected `string`, but found `nonnull`.'
+count = 1
+
+[[issues]]
+file = "classes/Ai/Drivers/OpenAi.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Ai\SseStream::__construct`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Ai/Drivers/OpenAi.php"
+code = "mixed-array-access"
+message = "Unsafe array access on type `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Ai/Drivers/OpenAi.php"
+code = "yield-from-invalid-key-type"
+message = "Invalid key type from `yield from`: current generator expects to yield keys of type `int`, but the inner iterable yields keys of type `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Ai/Drivers/OpenAiCompletions.php"
+code = "invalid-type-cast"
+message = "Casting `mixed` to `array`."
+count = 1
+
+[[issues]]
+file = "classes/Ai/Drivers/OpenAiCompletions.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Ai\Chunk::error`: expected `string`, but found `nonnull`.'
+count = 1
+
+[[issues]]
+file = "classes/Ai/Drivers/OpenAiCompletions.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Ai\SseStream::__construct`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Ai/Drivers/OpenAiCompletions.php"
+code = "mixed-array-access"
+message = "Unsafe array access on type `mixed`."
+count = 3
+
+[[issues]]
+file = "classes/Ai/Drivers/OpenAiCompletions.php"
+code = "mixed-operand"
+message = "Invalid right operand: type `mixed` cannot be reliably used in string concatenation."
+count = 1
+
+[[issues]]
+file = "classes/Ai/Drivers/OpenAiCompletions.php"
+code = "yield-from-invalid-key-type"
+message = "Invalid key type from `yield from`: current generator expects to yield keys of type `int`, but the inner iterable yields keys of type `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Ai/SseStream.php"
+code = "array-to-string-conversion"
+message = "Potential array in right operand of string concatenation."
+count = 1
+
+[[issues]]
+file = "classes/Ai/SseStream.php"
+code = "invalid-argument"
+message = 'Invalid argument type for argument #2 of `Kirby\Exception\Exception::__construct`: expected `null|string`, but found `int`.'
+count = 1
+
+[[issues]]
+file = "classes/Ai/SseStream.php"
+code = "invalid-argument"
+message = "Invalid argument type for argument #3 of `substr`: expected `int|null`, but found `string`."
+count = 1
+
+[[issues]]
+file = "classes/Ai/SseStream.php"
+code = "invalid-operand"
+message = "Invalid type for left operand."
+count = 1
+
+[[issues]]
+file = "classes/Ai/SseStream.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `strlen`: expected `string`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Ai/SseStream.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `strlen`: expected `string`, but found `nonnull`."
+count = 1
+
+[[issues]]
+file = "classes/Ai/SseStream.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `substr`: expected `string`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Ai/SseStream.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `substr`: expected `string`, but found `nonnull`."
+count = 1
+
+[[issues]]
+file = "classes/Ai/SseStream.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #2 of `sprintf`: expected `Stringable|null|scalar`, but found `nonnull`."
+count = 1
+
+[[issues]]
+file = "classes/Ai/SseStream.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #2 of `substr`: expected `int`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Ai/SseStream.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #3 of `preg_replace`: expected `array<('K.preg_replace() extends array-key), string>|string`, but found `nonnull`."
+count = 1
+
+[[issues]]
+file = "classes/Ai/SseStream.php"
+code = "mixed-operand"
+message = "Invalid right operand: type `mixed` cannot be reliably used in string concatenation."
+count = 1
+
+[[issues]]
+file = "classes/Ai/SseStream.php"
+code = "mixed-operand"
+message = "Left operand in `>=` comparison has `mixed` type."
+count = 1
+
+[[issues]]
+file = "classes/Ai/SseStream.php"
+code = "possibly-false-iterator"
+message = "Expression being iterated (type `false|list<non-empty-string>`) might be `false` at runtime."
+count = 1
+
+[[issues]]
+file = "classes/Ai/SseStream.php"
+code = "possibly-null-operand"
+message = "Possibly null right operand used in string concatenation (type `array<array-key, string>|null|string`)."
+count = 1
+
+[[issues]]
+file = "classes/Ai/SseStream.php"
+code = "possibly-undefined-variable"
+message = "Variable `$match` might not have been defined on all execution paths leading to this point."
+count = 1
+
+[[issues]]
+file = "classes/AltText.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\AltText::parse`: expected `null|string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/AltText.php"
+code = "mixed-operand"
+message = "Casting `mixed` to `bool`."
+count = 1
+
+[[issues]]
+file = "classes/AltText.php"
+code = "redundant-logical-operation"
+message = "Redundant `&&` operation: left operand is always truthy and right operand is evaluated."
+count = 1
+
+[[issues]]
+file = "classes/AltText.php"
+code = "redundant-type-comparison"
+message = "Redundant type assertion: `$data` is already `array<array-key, mixed>`."
+count = 1
+
+[[issues]]
+file = "classes/AltText.php"
+code = "unsafe-instantiation"
+message = 'Unsafe `new static()`: constructor of `tobimori\Seo\AltText` is not final and its signature might change in child classes, potentially leading to runtime errors.'
+count = 3
+
+[[issues]]
+file = "classes/Audit/Images.php"
+code = "invalid-array-element"
+message = "Cannot use spread operator on non-iterable type `nonnull`."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Images.php"
+code = "invalid-return-statement"
+message = '''Invalid return type for function `tobimori\Seo\Audit\Images::entries`: expected `array<string, array{'field': string, 'fields': array<array-key, string>, 'id': string, 'model': Kirby\Cms\File}>`, but found `array<string, array{'field': string, 'fields': array<array-key, string>, 'id': string, 'model': Kirby\Cms\File}>|null`.'''
+count = 1
+
+[[issues]]
+file = "classes/Audit/Images.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\AltText::parse`: expected `null|string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Images.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 3
+
+[[issues]]
+file = "classes/Audit/Images.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\Audit\Images::fields`. Saw type `nonnull`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Images.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\Audit\Images::state`. Saw type `nonnull`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Images.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\Audit\Images::stats`. Saw type `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Images.php"
+code = "nullable-return-statement"
+message = '''Function `tobimori\Seo\Audit\Images::entries` is declared to return `array<string, array{'field': string, 'fields': array<array-key, string>, 'id': string, 'model': Kirby\Cms\File}>` but possibly returns a nullable value (inferred as `array<string, array{'field': string, 'fields': array<array-key, string>, 'id': string, 'model': Kirby\Cms\File}>|null`).'''
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "invalid-array-element"
+message = "Cannot use spread operator on non-iterable type `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "invalid-destructuring-source"
+message = "Invalid destructuring assignment: Cannot unpack type `mixed` into variables."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "invalid-iterator"
+message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
+count = 5
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "invalid-operand"
+message = "Right operand in `&&` operation is an `array`."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "less-specific-argument"
+message = "Argument type mismatch for argument #1 of `curl_init`: expected `null|string`, but provided type `array-key` is less specific."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "less-specific-nested-argument-type"
+message = "Argument type mismatch for argument #1 of `array_column`: expected `array<array-key, array<string('ipv6'), ('V.array_column() extends mixed)>|object>|list<array<string('ipv6'), ('V.array_column() extends mixed)>|object>`, but provided type `array<array-key, mixed>` is less specific."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "less-specific-nested-argument-type"
+message = "Argument type mismatch for argument #1 of `array_diff`: expected `array<array-key, array-key>`, but provided type `array<array-key, mixed>` is less specific."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "less-specific-nested-argument-type"
+message = "Argument type mismatch for argument #1 of `array_fill_keys`: expected `array<array-key, ('K.array_fill_keys() extends array-key)>`, but provided type `array<array-key, mixed>` is less specific."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "less-specific-nested-return-statement"
+message = '''Returned type `array<truthy-string, list{Kirby\Cms\Page, mixed}>` is less specific than the declared return type `array<string, array{0: Kirby\Cms\Page, 1: null|string}>` for function `tobimori\Seo\Audit\Links\Checker::targets` due to nested 'mixed'.'''
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "less-specific-return-statement"
+message = '''Returned type `array<array-key, array{'checked': int, 'code': int(0), 'error': string('curl'), 'location': null}>` is less specific than the declared return type `array<string, array{'checked': int, 'code': int, 'error': null|string, 'location': null|string}>` for function `tobimori\Seo\Audit\Links\Checker::request`.'''
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "less-specific-return-statement"
+message = '''Returned type `array<array-key, array{'checked': int, 'code': int, 'error': null|string('connection')|string('dns')|string('private')|string('timeout'), 'location': mixed}>` is less specific than the declared return type `array<string, array{'checked': int, 'code': int, 'error': null|string, 'location': null|string}>` for function `tobimori\Seo\Audit\Links\Checker::request`.'''
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `Kirby\Cms\App::language`: expected `null|string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `Kirby\Cms\Page::url`: expected `array<array-key, mixed>|null|string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `Kirby\Content\Version::modified`: expected `Kirby\Cms\Language|string`, but found `nonnull`.'
+count = 2
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `array_filter`: expected `array<('K.array_filter() extends array-key), ('V.array_filter() extends mixed)>`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `array_flip`: expected `array<('K.array_flip() extends array-key), ('V.array_flip() extends array-key)>`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `array_intersect_key`: expected `array<('K.array_intersect_key() extends array-key), ('V.array_intersect_key() extends mixed)>`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `count`: expected `Countable|array<array-key, mixed>`, but found `mixed`."
+count = 3
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `parse_url`: expected `string`, but found `mixed`."
+count = 2
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `strtolower`: expected `string`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Audit\Links\Checker::dueUrls`: expected `array<string, int>`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Audit\Links\Checker::intern`: expected `array<array-key, mixed>`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Audit\Links\Checker::targets`: expected `int`, but found `mixed`.'
+count = 2
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Audit\Links\Index::write`: expected `array<array-key, mixed>`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Audit\Links\Report::isInternal`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Audit\Links\Report::normalize`: expected `string`, but found `mixed`.'
+count = 2
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #2 of `array_search`: expected `array<('K.array_search() extends array-key), string>`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #2 of `in_array`: expected `array<array-key, ('V.in_array() extends mixed)>`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #2 of `tobimori\Seo\Audit\Links\Checker::dueUrls`: expected `int`, but found `mixed`.'
+count = 2
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "mixed-array-access"
+message = "Unsafe array access on type `mixed`."
+count = 5
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "mixed-array-assignment"
+message = "Unsafe array assignment on type `mixed`."
+count = 5
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 3
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "mixed-operand"
+message = "Invalid left operand: type `nonnull` cannot be reliably used in string concatenation."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "mixed-operand"
+message = "Left operand in `&&` operation has `mixed` type."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\Audit\Links\Checker::address`. Saw type `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "non-existent-method"
+message = 'Method `later` does not exist on type `tobimori\Queues\Queues`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "non-existent-method"
+message = 'Method `push` does not exist on type `tobimori\Queues\Queues`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "non-existent-method"
+message = 'Method `scheduler` does not exist on type `tobimori\Queues\Queues`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "possibly-false-argument"
+message = "Argument #1 of function `md5` is possibly `false`, but parameter type `string` does not accept it."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "possibly-invalid-argument"
+message = 'Possible argument type mismatch for argument #1 of `Kirby\Exception\Exception::__construct`: expected `null|string`, but possibly received `(closure(...mixed=): mixed)|array<array-key, mixed>|null|string`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `tobimori\Seo\Audit\Links\Index::external` is possibly `null`, but parameter type `array<array-key, mixed>` does not accept it.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `tobimori\Seo\Audit\Links\Index::summarize` is possibly `null`, but parameter type `array<array-key, mixed>` does not accept it.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `tobimori\Seo\Audit\Links\Index::write` is possibly `null`, but parameter type `array<array-key, mixed>` does not accept it.'
+count = 2
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "possibly-null-array-access"
+message = "Cannot perform array access on possibly `null` value."
+count = 7
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "possibly-undefined-string-array-index"
+message = "Possibly undefined array key accessed on `array{'pages': array<array-key, mixed>, 'targets': list<array-key>, ...}|array{'pages': array<array-key, mixed>, 'targets': list<array-key>}`."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "template-constraint-violation"
+message = "Argument type mismatch for template `K`."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "template-constraint-violation"
+message = "Argument type mismatch for template `V`."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Crawler.php"
+code = "impossible-type-comparison"
+message = "Impossible condition: variable `$message` can never be `false`."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Crawler.php"
+code = "invalid-callable"
+message = "Expression of type `mixed` cannot be called as a function or method."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Crawler.php"
+code = "invalid-destructuring-source"
+message = "Invalid destructuring assignment: Cannot unpack type `mixed` into variables."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Crawler.php"
+code = "invalid-iterator"
+message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
+count = 2
+
+[[issues]]
+file = "classes/Audit/Links/Crawler.php"
+code = "invalid-return-statement"
+message = '''Invalid return type for function `tobimori\Seo\Audit\Links\Crawler::fetch`: expected `array<string, array{'error': null|string, 'ids': array<array-key, string>, 'links': array<array-key, string>, 'location': null|string, 'status': int}>`, but found `array<string, array<array-key, mixed>>`.'''
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Crawler.php"
+code = "invalid-return-statement"
+message = '''Invalid return type for function `tobimori\Seo\Audit\Links\Crawler::render`: expected `array{'error': null|string, 'ids': array<array-key, string>, 'links': array<array-key, string>, 'location': null|string, 'status': int}`, but found `array<array-key, mixed>`.'''
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Crawler.php"
+code = "invalid-return-statement"
+message = '''Invalid return type for function `tobimori\Seo\Audit\Links\Crawler::render`: expected `array{'error': null|string, 'ids': array<array-key, string>, 'links': array<array-key, string>, 'location': null|string, 'status': int}`, but found `array{'error': string}`.'''
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Crawler.php"
+code = "less-specific-nested-argument-type"
+message = "Argument type mismatch for argument #2 of `implode`: expected `array<array-key, Stringable|null|scalar>|null`, but provided type `list<mixed>` is less specific."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Crawler.php"
+code = "less-specific-return-statement"
+message = '''Returned type `array{'ids': list<array-key>, 'links': list<truthy-string>}` is less specific than the declared return type `array{'ids': array<array-key, string>, 'links': array<array-key, string>}` for function `tobimori\Seo\Audit\Links\Crawler::extract`.'''
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Crawler.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Audit\Links\Crawler::resolve`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Crawler.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #2 of `tobimori\Seo\Audit\Links\Crawler::result`: expected `null|string`, but found `nonnull`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Crawler.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #3 of `tobimori\Seo\Audit\Links\Crawler::result`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Crawler.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 4
+
+[[issues]]
+file = "classes/Audit/Links/Crawler.php"
+code = "mixed-property-access"
+message = "Attempting to access a property on a non-object type (`mixed`)."
+count = 10
+
+[[issues]]
+file = "classes/Audit/Links/Crawler.php"
+code = "possibly-invalid-argument"
+message = 'Possible argument type mismatch for argument #1 of `tobimori\Seo\Audit\Links\Crawler::result`: expected `int`, but possibly received `$this(Kirby\Cms\Responder)|int`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Crawler.php"
+code = "possibly-invalid-argument"
+message = 'Possible argument type mismatch for argument #2 of `tobimori\Seo\Audit\Links\Crawler::result`: expected `null|string`, but possibly received `$this(Kirby\Cms\Responder)|null|string`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Crawler.php"
+code = "possibly-null-argument"
+message = "Argument #2 of function `preg_match` is possibly `null`, but parameter type `string` does not accept it."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Crawler.php"
+code = "possibly-null-operand"
+message = "Possibly null left operand used in string concatenation (type `null|string`)."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Crawler.php"
+code = "possibly-null-operand"
+message = "Possibly null middle operand used in string concatenation (type `null|string`)."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Crawler.php"
+code = "reference-to-undefined-variable"
+message = "Reference created from a previously undefined variable `$match`."
+count = 2
+
+[[issues]]
+file = "classes/Audit/Links/Crawler.php"
+code = "reference-to-undefined-variable"
+message = "Reference created from a previously undefined variable `$running`."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Crawler.php"
+code = "undefined-variable"
+message = "Undefined variable: `$this`."
+count = 10
+
+[[issues]]
+file = "classes/Audit/Links/Index.php"
+code = "invalid-array-element"
+message = "Cannot use spread operator on non-iterable type `nonnull`."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Index.php"
+code = "invalid-iterator"
+message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
+count = 3
+
+[[issues]]
+file = "classes/Audit/Links/Index.php"
+code = "invalid-return-statement"
+message = 'Invalid return type for function `tobimori\Seo\Audit\Links\Index::external`: expected `array<string, int>`, but found `array<false|string, nonnull>`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Index.php"
+code = "less-specific-nested-return-statement"
+message = '''Returned type `array{'external': array<string, int>, 'invalidated': mixed, 'pages': array<array-key, list{mixed, string}>|list<list{mixed, string}>}` is less specific than the declared return type `array{'external': array<string, int>, 'invalidated': int, 'pages': array<string, array{0: null|string, 1: string}>}` for function `tobimori\Seo\Audit\Links\Index::summarize` due to nested 'mixed'.'''
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Index.php"
+code = "mismatched-array-index"
+message = "Invalid array key type: `false|string` is not a valid key for this array."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Index.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `array_flip`: expected `array<('K.array_flip() extends array-key), ('V.array_flip() extends array-key)>`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Index.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `array_intersect_key`: expected `array<('K.array_intersect_key() extends array-key), ('V.array_intersect_key() extends mixed)>`, but found `mixed`."
+count = 2
+
+[[issues]]
+file = "classes/Audit/Links/Index.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `count`: expected `Countable|array<array-key, mixed>`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Index.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `strtok`: expected `string`, but found `mixed`."
+count = 2
+
+[[issues]]
+file = "classes/Audit/Links/Index.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Audit\Links\Report::isInternal`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Index.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Audit\Links\Report::normalize`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Index.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #2 of `array_map`: expected `array<('K.array_map() extends array-key), ('V.array_map() extends mixed)>`, but found `mixed`."
+count = 2
+
+[[issues]]
+file = "classes/Audit/Links/Index.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #2 of `preg_match`: expected `string`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Index.php"
+code = "mixed-array-access"
+message = "Unsafe array access on type `mixed`."
+count = 4
+
+[[issues]]
+file = "classes/Audit/Links/Index.php"
+code = "mixed-array-assignment"
+message = "Unsafe array assignment on type `mixed`."
+count = 2
+
+[[issues]]
+file = "classes/Audit/Links/Index.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\Audit\Links\Index::revision`. Saw type `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Index.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\Audit\Links\Index::state`. Saw type `nonnull`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Index.php"
+code = "possibly-invalid-argument"
+message = "Possible argument type mismatch for argument #1 of `array_flip`: expected `array<non-negative-int, ('V.array_flip() extends array-key)>`, but possibly received `list<false|string>`."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Index.php"
+code = "possibly-null-argument"
+message = "Argument #1 of function `md5` is possibly `null`, but parameter type `string` does not accept it."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Index.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `Kirby\Filesystem\Dir::make` is possibly `null`, but parameter type `string` does not accept it.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Index.php"
+code = "possibly-null-operand"
+message = "Possibly null left operand used in string concatenation (type `null|string`)."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Index.php"
+code = "template-constraint-violation"
+message = "Argument type mismatch for template `V`."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Index.php"
+code = "unsafe-instantiation"
+message = 'Unsafe `new static()`: constructor of `tobimori\Seo\Audit\Links\Index` is not final and its signature might change in child classes, potentially leading to runtime errors.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "invalid-array-element"
+message = "Cannot use spread operator on non-iterable type `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "invalid-array-element"
+message = "Cannot use spread operator on non-iterable type `nonnull`."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "invalid-iterator"
+message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
+count = 3
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "less-specific-nested-argument-type"
+message = "Argument type mismatch for argument #1 of `array_keys`: expected `array<('K.array_keys() extends array-key), true>`, but provided type `non-empty-array<mixed, true>` is less specific."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "less-specific-nested-argument-type"
+message = "Argument type mismatch for argument #1 of `count`: expected `Countable|array<array-key, mixed>`, but provided type `non-empty-array<mixed, true>` is less specific."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `Kirby\Cms\App::page`: expected `null|string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `array_flip`: expected `array<('K.array_flip() extends array-key), ('V.array_flip() extends array-key)>`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `parse_url`: expected `string`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Audit\Links\Crawler::isIgnored`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Audit\Links\Report::checkPage`: expected `array<array-key, mixed>`, but found `truthy-mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Audit\Links\Report::check`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Audit\Links\Report::isInternal`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Audit\Links\Report::normalize`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #2 of `in_array`: expected `array<array-key, ('V.in_array() extends mixed)>`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "mixed-array-access"
+message = "Unsafe array access on type `mixed`."
+count = 7
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "mixed-array-access"
+message = "Unsafe array access on type `nonnull`."
+count = 4
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "mixed-array-access"
+message = "Unsafe array access on type `truthy-mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 2
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "mixed-operand"
+message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "mixed-operand"
+message = "Left operand in `<` comparison has `mixed` type."
+count = 3
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "mixed-operand"
+message = "Left operand in `>=` comparison has `mixed` type."
+count = 5
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "mixed-operand"
+message = "Right operand in `&&` operation has `mixed` type."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "mixed-property-type-coercion"
+message = "A value with a less specific type `nonnull` is being assigned to property `$results` (array<array-key, mixed>|null)."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\Audit\Links\Report::links`. Saw type `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\Audit\Links\Report::results`. Saw type `nonnull`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\Audit\Links\Report::stats`. Saw type `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `name` on class `Kirby\Cms\File`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "non-existent-method"
+message = 'Method `url` does not exist on type `Kirby\Uuid\Identifiable`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "possibly-false-argument"
+message = "Argument #1 of function `rawurldecode` is possibly `false`, but parameter type `string` does not accept it."
+count = 3
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "possibly-false-argument"
+message = "Argument #1 of function `strtolower` is possibly `false`, but parameter type `string` does not accept it."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "possibly-false-argument"
+message = "Argument #1 of function `substr` is possibly `false`, but parameter type `string` does not accept it."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "possibly-false-argument"
+message = "Argument #1 of function `trim` is possibly `false`, but parameter type `string` does not accept it."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "possibly-false-argument"
+message = 'Argument #1 of method `tobimori\Seo\Audit\Links\Report::isStatic` is possibly `false`, but parameter type `string` does not accept it.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "possibly-false-argument"
+message = "Argument #2 of function `preg_match` is possibly `false`, but parameter type `string` does not accept it."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "possibly-false-operand"
+message = "Possibly false left operand used in string concatenation (type `false|string`)."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "possibly-null-argument"
+message = "Argument #1 of function `realpath` is possibly `null`, but parameter type `string` does not accept it."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "possibly-null-argument"
+message = "Argument #1 of function `rtrim` is possibly `null`, but parameter type `string` does not accept it."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "possibly-null-argument"
+message = "Argument #1 of function `trim` is possibly `null`, but parameter type `string` does not accept it."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `tobimori\Seo\Audit\Links\Report::checkExternal` is possibly `null`, but parameter type `string` does not accept it.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `tobimori\Seo\Audit\Links\Report::checkInternal` is possibly `null`, but parameter type `string` does not accept it.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `tobimori\Seo\Audit\Links\Report::isInternal` is possibly `null`, but parameter type `string` does not accept it.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "reference-to-undefined-variable"
+message = "Reference created from a previously undefined variable `$match`."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
+code = "template-constraint-violation"
+message = "Argument type mismatch for template `K`."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Pages.php"
+code = "invalid-array-element"
+message = "Cannot use spread operator on non-iterable type `nonnull`."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Pages.php"
+code = "invalid-destructuring-source"
+message = "Invalid destructuring assignment: Cannot unpack type `nonnull` into variables."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Pages.php"
+code = "invalid-iterator"
+message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
+count = 2
+
+[[issues]]
+file = "classes/Audit/Pages.php"
+code = "invalid-iterator"
+message = "The expression provided to `foreach` is not iterable. It resolved to type `nonnull`, which is not iterable."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Pages.php"
+code = "less-specific-nested-argument-type"
+message = "Argument type mismatch for argument #1 of `array_column`: expected `array<array-key, array<string('type'), ('V.array_column() extends mixed)>|object>|list<array<string('type'), ('V.array_column() extends mixed)>|object>`, but provided type `array<array-key, mixed>` is less specific."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Pages.php"
+code = "less-specific-nested-argument-type"
+message = 'Argument type mismatch for argument #2 of `tobimori\Seo\Audit\Pages::issues`: expected `array<array-key, mixed>`, but provided type `array<mixed, array-key>` is less specific.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Pages.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `array_column`: expected `array<array-key, array<int(0), ('V.array_column() extends mixed)>|object>|list<array<int(0), ('V.array_column() extends mixed)>|object>`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Pages.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `array_column`: expected `array<array-key, array<string('type'), ('V.array_column() extends mixed)>|object>|list<array<string('type'), ('V.array_column() extends mixed)>|object>`, but found `nonnull`."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Pages.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `count`: expected `Countable|array<array-key, mixed>`, but found `mixed`."
+count = 3
+
+[[issues]]
+file = "classes/Audit/Pages.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `str_starts_with`: expected `string`, but found `mixed`."
+count = 2
+
+[[issues]]
+file = "classes/Audit/Pages.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Audit\Pages::issues`: expected `array<array-key, mixed>`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Pages.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Audit\Pages::normalize`: expected `string`, but found `mixed`.'
+count = 2
+
+[[issues]]
+file = "classes/Audit/Pages.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #2 of `tobimori\Seo\Audit\Pages::length`: expected `string`, but found `mixed`.'
+count = 2
+
+[[issues]]
+file = "classes/Audit/Pages.php"
+code = "mixed-array-access"
+message = "Unsafe array access on type `mixed`."
+count = 9
+
+[[issues]]
+file = "classes/Audit/Pages.php"
+code = "mixed-array-access"
+message = "Unsafe array access on type `nonnull`."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Pages.php"
+code = "mixed-array-assignment"
+message = "Unsafe array assignment on type `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Pages.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Pages.php"
+code = "mixed-operand"
+message = "Right operand in `<` comparison has `mixed` type."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Pages.php"
+code = "mixed-operand"
+message = "Right operand in `>` comparison has `mixed` type."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Pages.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\Audit\Pages::fingerprint`. Saw type `nonnull`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Pages.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\Audit\Pages::group`. Saw type `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Pages.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\Audit\Pages::page`. Saw type `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Pages.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\Audit\Pages::summary`. Saw type `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Pages.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\Audit\Pages::value`. Saw type `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Pages.php"
+code = "possibly-false-argument"
+message = "Argument #1 of function `md5` is possibly `false`, but parameter type `string` does not accept it."
+count = 2
+
+[[issues]]
+file = "classes/Audit/Pages.php"
+code = "possibly-false-operand"
+message = "Left operand in spaceship comparison (`<=>`) might be `false` (type `false|non-negative-int`)."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Pages.php"
+code = "possibly-false-operand"
+message = "Right operand in spaceship comparison (`<=>`) might be `false` (type `false|non-negative-int`)."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Pages.php"
+code = "possibly-null-argument"
+message = "Argument #1 of function `trim` is possibly `null`, but parameter type `string` does not accept it."
+count = 1
+
+[[issues]]
+file = "classes/Audit/Pages.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `tobimori\Seo\Audit\Pages::fingerprint` is possibly `null`, but parameter type `Kirby\Cms\Page` does not accept it.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Pages.php"
+code = "unknown-class-instantiation"
+message = "Cannot determine the concrete class for instantiation."
+count = 1
+
+[[issues]]
+file = "classes/Buttons/OverviewLanguagesButton.php"
+code = "mixed-array-access"
+message = "Unsafe array access on type `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Buttons/RobotsViewButton.php"
+code = "invalid-return-statement"
+message = '''Invalid return type for function `tobimori\Seo\Buttons\RobotsViewButton::indicator`: expected `array{'icon': string, 'state': string, 'text': string, 'theme': string}`, but found `array{'icon': string('robots')|string('robots-off'), 'state': string('any')|string('index')|string('noindex'), 'text': (closure(...mixed=): mixed)|array<array-key, mixed>|null|string, 'theme': string('negative-icon')|string('notice-icon')|string('positive-icon')}`.'''
+count = 1
+
+[[issues]]
+file = "classes/Buttons/RobotsViewButton.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Buttons\RobotsViewButton::indicator`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Buttons/RobotsViewButton.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `robots` on class `Kirby\Cms\Page`.'
+count = 1
+
+[[issues]]
+file = "classes/Buttons/UtmShareViewButton.php"
+code = "possibly-invalid-argument"
+message = 'Possible argument type mismatch for argument #4 of `Kirby\Panel\Ui\Buttons\ViewButton::__construct`: expected `array<array-key, mixed>|null|string`, but possibly received `(closure(...mixed=): mixed)|array<array-key, mixed>|null|string`.'
+count = 1
+
+[[issues]]
+file = "classes/Dialogs/UtmShareDialog.php"
+code = "invalid-property-assignment-value"
+message = 'Invalid type for property `$model`: expected `Kirby\Cms\Page|Kirby\Cms\Site`, but got `Kirby\Cms\Page|null`.'
+count = 1
+
+[[issues]]
+file = "classes/Dialogs/UtmShareDialog.php"
+code = "possible-method-access-on-null"
+message = "Attempting to call a method on `null`."
+count = 1
+
+[[issues]]
+file = "classes/Dialogs/UtmShareDialog.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `Kirby\Cms\Find::page` is possibly `null`, but parameter type `string` does not accept it.'
+count = 1
+
+[[issues]]
+file = "classes/Field/AltTextField.php"
+code = "invalid-iterator"
+message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
+count = 2
+
+[[issues]]
+file = "classes/Field/AltTextField.php"
+code = "less-specific-argument"
+message = 'Argument type mismatch for argument #1 of `tobimori\Seo\Ai\Content::supportsImage`: expected `Kirby\Cms\File`, but provided type `Kirby\Cms\ModelWithContent` is less specific.'
+count = 1
+
+[[issues]]
+file = "classes/Field/AltTextField.php"
+code = "missing-return-statement"
+message = "Missing return statement in function `stream`"
+count = 1
+
+[[issues]]
+file = "classes/Field/AltTextField.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `is_a`: expected `object|string`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Field/AltTextField.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\AltText::__construct`: expected `string`, but found `nonnull`.'
+count = 1
+
+[[issues]]
+file = "classes/Field/AltTextField.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\AltText::parse`: expected `null|string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Field/AltTextField.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Field\AltTextField::setAi`: expected `bool`, but found `nonnull`.'
+count = 1
+
+[[issues]]
+file = "classes/Field/AltTextField.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #2 of `tobimori\Seo\AltText::__construct`: expected `bool`, but found `nonnull`.'
+count = 1
+
+[[issues]]
+file = "classes/Field/AltTextField.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #2 of `tobimori\Seo\Field\AltTextField::stream`: expected `null|string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Field/AltTextField.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #3 of `tobimori\Seo\AltText::__construct`: expected `string`, but found `nonnull`.'
+count = 1
+
+[[issues]]
+file = "classes/Field/AltTextField.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 2
+
+[[issues]]
+file = "classes/Field/AltTextField.php"
+code = "mixed-operand"
+message = "Invalid right operand: type `mixed` cannot be reliably used in string concatenation."
+count = 1
+
+[[issues]]
+file = "classes/Field/AltTextField.php"
+code = "mixed-property-access"
+message = "Attempting to access a property on a non-object type (`mixed`)."
+count = 2
+
+[[issues]]
+file = "classes/Field/AltTextField.php"
+code = "mixed-property-type-coercion"
+message = "A value with a less specific type `nonnull` is being assigned to property `$autogenerate` (bool)."
+count = 1
+
+[[issues]]
+file = "classes/Field/AltTextField.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\Field\AltTextField::generateForFile`. Saw type `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Field/AltTextField.php"
+code = "null-array-index"
+message = "Cannot use `null` as an array index to access element."
+count = 1
+
+[[issues]]
+file = "classes/Field/AltTextField.php"
+code = "possibly-false-argument"
+message = "Argument #3 of function `substr` is possibly `false`, but parameter type `int|null` does not accept it."
+count = 1
+
+[[issues]]
+file = "classes/Field/AltTextField.php"
+code = "possibly-false-operand"
+message = "Left operand in arithmetic operation might be `false` (type `false|non-negative-int`)."
+count = 1
+
+[[issues]]
+file = "classes/Field/AltTextField.php"
+code = "possibly-invalid-argument"
+message = 'Possible argument type mismatch for argument #1 of `trim`: expected `string`, but possibly received `Kirby\Template\Snippet|null|string`.'
+count = 2
+
+[[issues]]
+file = "classes/Field/AltTextField.php"
+code = "possibly-null-argument"
+message = "Argument #1 of function `trim` is possibly `null`, but parameter type `string` does not accept it."
+count = 2
+
+[[issues]]
+file = "classes/GoogleSearchConsole.php"
+code = "invalid-return-statement"
+message = 'Invalid return type for function `tobimori\Seo\GoogleSearchConsole::tokenRequest`: expected `array<array-key, mixed>`, but found `array<array-key, mixed>|null`.'
+count = 1
+
+[[issues]]
+file = "classes/GoogleSearchConsole.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `Exception::__construct`: expected `string`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/GoogleSearchConsole.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `Exception::__construct`: expected `string`, but found `nonnull`."
+count = 2
+
+[[issues]]
+file = "classes/GoogleSearchConsole.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `str_starts_with`: expected `string`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/GoogleSearchConsole.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `strcasecmp`: expected `string`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/GoogleSearchConsole.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `substr`: expected `string`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/GoogleSearchConsole.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #2 of `str_starts_with`: expected `string`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/GoogleSearchConsole.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #2 of `strcasecmp`: expected `string`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/GoogleSearchConsole.php"
+code = "mixed-array-access"
+message = "Unsafe array access on type `mixed`."
+count = 7
+
+[[issues]]
+file = "classes/GoogleSearchConsole.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 1
+
+[[issues]]
+file = "classes/GoogleSearchConsole.php"
+code = "mixed-operand"
+message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
+count = 1
+
+[[issues]]
+file = "classes/GoogleSearchConsole.php"
+code = "mixed-operand"
+message = "Left operand in `<` comparison has `mixed` type."
+count = 1
+
+[[issues]]
+file = "classes/GoogleSearchConsole.php"
+code = "mixed-operand"
+message = "Left operand in spaceship comparison (`<=>`) has `mixed` type."
+count = 1
+
+[[issues]]
+file = "classes/GoogleSearchConsole.php"
+code = "mixed-operand"
+message = "Right operand in binary operation has type `mixed`."
+count = 2
+
+[[issues]]
+file = "classes/GoogleSearchConsole.php"
+code = "mixed-operand"
+message = "Right operand in spaceship comparison (`<=>`) has `mixed` type."
+count = 1
+
+[[issues]]
+file = "classes/GoogleSearchConsole.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\GoogleSearchConsole::accessToken`. Saw type `truthy-mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/GoogleSearchConsole.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\GoogleSearchConsole::credentials`. Saw type `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/GoogleSearchConsole.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\GoogleSearchConsole::findMatchingProperty`. Saw type `mixed`.'
+count = 3
+
+[[issues]]
+file = "classes/GoogleSearchConsole.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\GoogleSearchConsole::listProperties`. Saw type `nonnull`.'
+count = 1
+
+[[issues]]
+file = "classes/GoogleSearchConsole.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\GoogleSearchConsole::property`. Saw type `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/GoogleSearchConsole.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\GoogleSearchConsole::query`. Saw type `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/GoogleSearchConsole.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\GoogleSearchConsole::refreshToken`. Saw type `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/GoogleSearchConsole.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\GoogleSearchConsole::tokenPath`. Saw type `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/GoogleSearchConsole.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `path` on class `Kirby\Http\Uri`.'
+count = 1
+
+[[issues]]
+file = "classes/GoogleSearchConsole.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `post` on class `Kirby\Http\Remote`.'
+count = 1
+
+[[issues]]
+file = "classes/GoogleSearchConsole.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `query` on class `Kirby\Http\Uri`.'
+count = 1
+
+[[issues]]
+file = "classes/GoogleSearchConsole.php"
+code = "nullable-return-statement"
+message = 'Function `tobimori\Seo\GoogleSearchConsole::tokenRequest` is declared to return `array<array-key, mixed>` but possibly returns a nullable value (inferred as `array<array-key, mixed>|null`).'
+count = 1
+
+[[issues]]
+file = "classes/GoogleSearchConsole.php"
+code = "possibly-false-argument"
+message = "Argument #1 of function `str_ends_with` is possibly `false`, but parameter type `string` does not accept it."
+count = 1
+
+[[issues]]
+file = "classes/GoogleSearchConsole.php"
+code = "possibly-false-argument"
+message = "Argument #2 of function `date` is possibly `false`, but parameter type `int|null` does not accept it."
+count = 2
+
+[[issues]]
+file = "classes/GoogleSearchConsole.php"
+code = "possibly-false-operand"
+message = "Possibly false right operand used in string concatenation (type `false|string`)."
+count = 1
+
+[[issues]]
+file = "classes/GoogleSearchConsole.php"
+code = "possibly-null-argument"
+message = "Argument #1 of function `str_ends_with` is possibly `null`, but parameter type `string` does not accept it."
+count = 1
+
+[[issues]]
+file = "classes/GoogleSearchConsole.php"
+code = "possibly-null-array-access"
+message = "Cannot perform array access on possibly `null` value."
+count = 3
+
+[[issues]]
+file = "classes/IndexNow.php"
+code = "falsable-return-statement"
+message = '''Function `tobimori\Seo\IndexNow::matchesUrlPattern` is declared to return `bool` but possibly returns 'false' (inferred as `false|int(0)|int(1)`).'''
+count = 1
+
+[[issues]]
+file = "classes/IndexNow.php"
+code = "invalid-iterator"
+message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
+count = 1
+
+[[issues]]
+file = "classes/IndexNow.php"
+code = "invalid-iterator"
+message = "The expression provided to `foreach` is not iterable. It resolved to type `nonnull`, which is not iterable."
+count = 2
+
+[[issues]]
+file = "classes/IndexNow.php"
+code = "invalid-return-statement"
+message = 'Invalid return type for function `tobimori\Seo\IndexNow::matchesUrlPattern`: expected `bool`, but found `false|int(0)|int(1)`.'
+count = 1
+
+[[issues]]
+file = "classes/IndexNow.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `Kirby\Toolkit\Str::contains`: expected `null|string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/IndexNow.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `parse_url`: expected `string`, but found `mixed`."
+count = 2
+
+[[issues]]
+file = "classes/IndexNow.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `rtrim`: expected `string`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/IndexNow.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\IndexNow::collectByTemplates`: expected `array<array-key, mixed>`, but found `nonnull`.'
+count = 1
+
+[[issues]]
+file = "classes/IndexNow.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\IndexNow::collectFromRule`: expected `array<array-key, mixed>`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/IndexNow.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\IndexNow::isIndexable`: expected `Kirby\Cms\Page`, but found `mixed`.'
+count = 2
+
+[[issues]]
+file = "classes/IndexNow.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\IndexNow::matchesPattern`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/IndexNow.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `url`: expected `null|string`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/IndexNow.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 3
+
+[[issues]]
+file = "classes/IndexNow.php"
+code = "mixed-operand"
+message = "Cannot reliably decrement a `mixed` operand."
+count = 1
+
+[[issues]]
+file = "classes/IndexNow.php"
+code = "mixed-operand"
+message = "Left operand in `&&` operation has `mixed` type."
+count = 1
+
+[[issues]]
+file = "classes/IndexNow.php"
+code = "mixed-operand"
+message = "Left operand in `>=` comparison has `mixed` type."
+count = 1
+
+[[issues]]
+file = "classes/IndexNow.php"
+code = "mixed-operand"
+message = "Left operand in `>` comparison has `mixed` type."
+count = 1
+
+[[issues]]
+file = "classes/IndexNow.php"
+code = "mixed-operand"
+message = "Left operand in binary operation has type `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/IndexNow.php"
+code = "mixed-operand"
+message = "Right operand in `>=` comparison has `mixed` type."
+count = 1
+
+[[issues]]
+file = "classes/IndexNow.php"
+code = "mixed-property-type-coercion"
+message = "Mixed property type coercion"
+count = 1
+
+[[issues]]
+file = "classes/IndexNow.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\IndexNow::key`. Saw type `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/IndexNow.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `post` on class `Kirby\Http\Remote`.'
+count = 1
+
+[[issues]]
+file = "classes/IndexNow.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `robots` on class `Kirby\Cms\Page`.'
+count = 1
+
+[[issues]]
+file = "classes/IndexNow.php"
+code = "non-existent-method"
+message = 'Method `push` does not exist on type `tobimori\Queues\Queues`.'
+count = 1
+
+[[issues]]
+file = "classes/IndexNow.php"
+code = "possibly-false-argument"
+message = "Argument #2 of function `preg_match` is possibly `false`, but parameter type `string` does not accept it."
+count = 1
+
+[[issues]]
+file = "classes/IndexNow.php"
+code = "possibly-false-array-access"
+message = "Cannot perform array access on possibly `false` value."
+count = 1
+
+[[issues]]
+file = "classes/IndexNow.php"
+code = "possibly-null-argument"
+message = "Argument #1 of function `strip_tags` is possibly `null`, but parameter type `string` does not accept it."
+count = 1
+
+[[issues]]
+file = "classes/IndexNow.php"
+code = "possibly-null-argument"
+message = "Argument #2 of function `preg_match` is possibly `null`, but parameter type `string` does not accept it."
+count = 1
+
+[[issues]]
+file = "classes/IndexNow.php"
+code = "possibly-null-operand"
+message = "Left operand in `>` comparison might be `null` (type `int|null`)."
+count = 1
+
+[[issues]]
+file = "classes/IndexNow.php"
+code = "possibly-undefined-string-array-index"
+message = "Possibly undefined array key 'host' accessed on `array{'fragment'?: non-empty-string, 'host'?: non-empty-string, 'pass'?: non-empty-string, 'path'?: non-empty-string, 'port'?: int<0, 65535>, 'query'?: non-empty-string, 'scheme'?: non-empty-string, 'user'?: non-empty-string}`."
+count = 1
+
+[[issues]]
+file = "classes/Jobs/CheckLinksJob.php"
+code = "invalid-return-statement"
+message = 'Invalid return type for function `tobimori\Seo\Jobs\CheckLinksJob::name`: expected `string`, but found `(closure(...mixed=): mixed)|array<array-key, mixed>|null|string`.'
+count = 1
+
+[[issues]]
+file = "classes/Jobs/CheckLinksJob.php"
+code = "less-specific-nested-argument-type"
+message = "Argument type mismatch for argument #1 of `array_column`: expected `array<array-key, array<string('full'), ('V.array_column() extends mixed)>|object>|list<array<string('full'), ('V.array_column() extends mixed)>|object>`, but provided type `list<mixed>|list{mixed}` is less specific."
+count = 1
+
+[[issues]]
+file = "classes/Jobs/CheckLinksJob.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `array_is_list`: expected `array<array-key, ('V.array_is_list() extends mixed)>`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Jobs/CheckLinksJob.php"
+code = "non-existent-class-like"
+message = 'Class `tobimori\Seo\Jobs\CheckLinksJob` cannot extend unknown type `BatchJob`'
+count = 1
+
+[[issues]]
+file = "classes/Jobs/CheckLinksJob.php"
+code = "nullable-return-statement"
+message = 'Function `tobimori\Seo\Jobs\CheckLinksJob::name` is declared to return `string` but possibly returns a nullable value (inferred as `(closure(...mixed=): mixed)|array<array-key, mixed>|null|string`).'
+count = 1
+
+[[issues]]
+file = "classes/Jobs/CheckLinksJob.php"
+code = "redundant-condition"
+message = "This condition (type `true`) will always evaluate to true."
+count = 1
+
+[[issues]]
+file = "classes/Jobs/CheckLinksJob.php"
+code = "redundant-logical-operation"
+message = "Redundant `&&` operation: left operand is always truthy and right operand is evaluated."
+count = 1
+
+[[issues]]
+file = "classes/Jobs/CheckLinksJob.php"
+code = "redundant-logical-operation"
+message = "Redundant `&&` operation: left operand is evaluated and right operand is always truthy."
+count = 1
+
+[[issues]]
+file = "classes/Jobs/GenerateAltTextJob.php"
+code = "invalid-return-statement"
+message = 'Invalid return type for function `tobimori\Seo\Jobs\GenerateAltTextJob::name`: expected `string`, but found `(closure(...mixed=): mixed)|array<array-key, mixed>|null|string`.'
+count = 1
+
+[[issues]]
+file = "classes/Jobs/GenerateAltTextJob.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `Kirby\Cms\App::file`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Jobs/GenerateAltTextJob.php"
+code = "mixed-array-access"
+message = "Unsafe array access on type `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Jobs/GenerateAltTextJob.php"
+code = "non-existent-class-like"
+message = 'Class `tobimori\Seo\Jobs\GenerateAltTextJob` cannot extend unknown type `Job`'
+count = 1
+
+[[issues]]
+file = "classes/Jobs/GenerateAltTextJob.php"
+code = "nullable-return-statement"
+message = 'Function `tobimori\Seo\Jobs\GenerateAltTextJob::name` is declared to return `string` but possibly returns a nullable value (inferred as `(closure(...mixed=): mixed)|array<array-key, mixed>|null|string`).'
+count = 1
+
+[[issues]]
+file = "classes/Jobs/IndexNowBatchJob.php"
+code = "invalid-return-statement"
+message = 'Invalid return type for function `tobimori\Seo\Jobs\IndexNowBatchJob::name`: expected `string`, but found `(closure(...mixed=): mixed)|array<array-key, mixed>|null|string`.'
+count = 1
+
+[[issues]]
+file = "classes/Jobs/IndexNowBatchJob.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `array_column`: expected `array<array-key, array<string('urls'), ('V.array_column() extends mixed)>|object>|list<array<string('urls'), ('V.array_column() extends mixed)>|object>`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Jobs/IndexNowBatchJob.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `array_merge`: expected `array<array-key, mixed>`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Jobs/IndexNowBatchJob.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\Jobs\IndexNowBatchJob::batchWindow`. Saw type `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Jobs/IndexNowBatchJob.php"
+code = "non-existent-class-like"
+message = 'Class `tobimori\Seo\Jobs\IndexNowBatchJob` cannot extend unknown type `BatchJob`'
+count = 1
+
+[[issues]]
+file = "classes/Jobs/IndexNowBatchJob.php"
+code = "nullable-return-statement"
+message = 'Function `tobimori\Seo\Jobs\IndexNowBatchJob::name` is declared to return `string` but possibly returns a nullable value (inferred as `(closure(...mixed=): mixed)|array<array-key, mixed>|null|string`).'
+count = 1
+
+[[issues]]
+file = "classes/License.php"
+code = "invalid-return-statement"
+message = 'Invalid return type for function `tobimori\Seo\License::normalizeUrl`: expected `string`, but found `null|string`.'
+count = 1
+
+[[issues]]
+file = "classes/License.php"
+code = "less-specific-nested-return-statement"
+message = '''Returned type `list{mixed, false}` is less specific than the declared return type `array{0: array<array-key, mixed>|null, 1: bool}` for function `tobimori\Seo\License::find` due to nested 'mixed'.'''
+count = 2
+
+[[issues]]
+file = "classes/License.php"
+code = "less-specific-nested-return-statement"
+message = '''Returned type `list{nonnull, true}` is less specific than the declared return type `array{0: array<array-key, mixed>|null, 1: bool}` for function `tobimori\Seo\License::find` due to nested 'mixed'.'''
+count = 1
+
+[[issues]]
+file = "classes/License.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `Kirby\Toolkit\Str::lower`: expected `null|string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/License.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `strtotime`: expected `string`, but found `nonnull`."
+count = 3
+
+[[issues]]
+file = "classes/License.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\License::isActive`: expected `array<array-key, mixed>`, but found `nonnull`.'
+count = 2
+
+[[issues]]
+file = "classes/License.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\License::isEnterprise`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/License.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\License::normalizeUrl`: expected `string`, but found `nonnull`.'
+count = 1
+
+[[issues]]
+file = "classes/License.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #2 of `tobimori\Seo\License::isFor`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/License.php"
+code = "mixed-array-access"
+message = "Unsafe array access on type `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/License.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `post` on class `Kirby\Http\Remote`.'
+count = 1
+
+[[issues]]
+file = "classes/License.php"
+code = "nullable-return-statement"
+message = 'Function `tobimori\Seo\License::normalizeUrl` is declared to return `string` but possibly returns a nullable value (inferred as `null|string`).'
+count = 1
+
+[[issues]]
+file = "classes/License.php"
+code = "possibly-false-argument"
+message = "Argument #3 of function `openssl_verify` is possibly `false`, but parameter type `OpenSSLAsymmetricKey|OpenSSLCertificate|array<array-key, mixed>|string` does not accept it."
+count = 1
+
+[[issues]]
+file = "classes/License.php"
+code = "possibly-false-operand"
+message = "Left operand in `>` comparison might be `false` (type `false|int`)."
+count = 1
+
+[[issues]]
+file = "classes/License.php"
+code = "possibly-false-operand"
+message = "Left operand in arithmetic operation might be `false` (type `false|int`)."
+count = 1
+
+[[issues]]
+file = "classes/License.php"
+code = "possibly-false-operand"
+message = "Right operand in arithmetic operation might be `false` (type `false|int`)."
+count = 1
+
+[[issues]]
+file = "classes/License.php"
+code = "possibly-invalid-argument"
+message = 'Possible argument type mismatch for argument #1 of `Kirby\Exception\Exception::__construct`: expected `array<array-key, mixed>|string`, but possibly received `(closure(...mixed=): mixed)|array<array-key, mixed>|null|string`.'
+count = 6
+
+[[issues]]
+file = "classes/License.php"
+code = "possibly-invalid-argument"
+message = 'Possible argument type mismatch for argument #3 of `Kirby\Plugin\LicenseStatus::__construct`: expected `string`, but possibly received `(closure(...mixed=): mixed)|array<array-key, mixed>|null|string`.'
+count = 1
+
+[[issues]]
+file = "classes/License.php"
+code = "possibly-null-argument"
+message = "Argument #1 of function `dirname` is possibly `null`, but parameter type `string` does not accept it."
+count = 1
+
+[[issues]]
+file = "classes/License.php"
+code = "possibly-null-argument"
+message = "Argument #1 of function `rtrim` is possibly `null`, but parameter type `string` does not accept it."
+count = 1
+
+[[issues]]
+file = "classes/License.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `Kirby\Exception\Exception::__construct` is possibly `null`, but parameter type `array<array-key, mixed>|string` does not accept it.'
+count = 6
+
+[[issues]]
+file = "classes/License.php"
+code = "possibly-null-argument"
+message = 'Argument #3 of method `Kirby\Plugin\LicenseStatus::__construct` is possibly `null`, but parameter type `string` does not accept it.'
+count = 1
+
+[[issues]]
+file = "classes/License.php"
+code = "possibly-null-array-access"
+message = "Cannot perform array access on possibly `null` value."
+count = 1
+
+[[issues]]
+file = "classes/LlmContent.php"
+code = "implicit-to-string-cast"
+message = 'Implicit conversion to `string` for left operand via `Kirby\Cms\Responder::__toString()`.'
+count = 1
+
+[[issues]]
+file = "classes/LlmContent.php"
+code = "invalid-type-cast"
+message = "Casting `mixed` to `array`."
+count = 1
+
+[[issues]]
+file = "classes/LlmContent.php"
+code = "less-specific-nested-return-statement"
+message = '''Returned type `Kirby\Cms\Pages<Kirby\Cms\Page>&static|Kirby\Cms\Pages<mixed>&static` is less specific than the declared return type `Kirby\Cms\Pages<Kirby\Cms\Page>` for function `tobimori\Seo\LlmContent::llmsTxtPages` due to nested 'mixed'.'''
+count = 1
+
+[[issues]]
+file = "classes/LlmContent.php"
+code = "less-specific-return-statement"
+message = 'Returned type `object` is less specific than the declared return type `tobimori\Seo\LlmContent` for function `tobimori\Seo\LlmContent::contentFor`.'
+count = 1
+
+[[issues]]
+file = "classes/LlmContent.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `Kirby\Filesystem\F::dirname`: expected `string`, but found `truthy-mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/LlmContent.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `Kirby\Toolkit\Str::lower`: expected `null|string`, but found `mixed`.'
+count = 3
+
+[[issues]]
+file = "classes/LlmContent.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\LlmContent::normalizePath`: expected `string`, but found `nonnull`.'
+count = 1
+
+[[issues]]
+file = "classes/LlmContent.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\LlmContent::normalizePath`: expected `string`, but found `truthy-mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/LlmContent.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\LlmContent::selectorToXPath`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/LlmContent.php"
+code = "mixed-array-access"
+message = "Unsafe array access on type `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/LlmContent.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 14
+
+[[issues]]
+file = "classes/LlmContent.php"
+code = "mixed-operand"
+message = "Invalid left operand: type `truthy-mixed` cannot be reliably used in string concatenation."
+count = 1
+
+[[issues]]
+file = "classes/LlmContent.php"
+code = "mixed-operand"
+message = "Invalid right operand: type `mixed` cannot be reliably used in string concatenation."
+count = 3
+
+[[issues]]
+file = "classes/LlmContent.php"
+code = "mixed-operand"
+message = "Left operand in `>` comparison has `mixed` type."
+count = 1
+
+[[issues]]
+file = "classes/LlmContent.php"
+code = "mixed-operand"
+message = "Right operand in `>` comparison has `mixed` type."
+count = 1
+
+[[issues]]
+file = "classes/LlmContent.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\LlmContent::canonicalUrl`. Saw type `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/LlmContent.php"
+code = "never-return"
+message = "Cannot return value with type 'never' from this function."
+count = 1
+
+[[issues]]
+file = "classes/LlmContent.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `host` on class `Kirby\Http\Uri`.'
+count = 3
+
+[[issues]]
+file = "classes/LlmContent.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `metadata` on class `Kirby\Cms\Page`.'
+count = 4
+
+[[issues]]
+file = "classes/LlmContent.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `path` on class `Kirby\Http\Uri`.'
+count = 4
+
+[[issues]]
+file = "classes/LlmContent.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `port` on class `Kirby\Http\Uri`.'
+count = 3
+
+[[issues]]
+file = "classes/LlmContent.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `query` on class `Kirby\Http\Uri`.'
+count = 1
+
+[[issues]]
+file = "classes/LlmContent.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `scheme` on class `Kirby\Http\Uri`.'
+count = 1
+
+[[issues]]
+file = "classes/LlmContent.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `slash` on class `Kirby\Http\Uri`.'
+count = 1
+
+[[issues]]
+file = "classes/LlmContent.php"
+code = "non-existent-class"
+message = 'Class `League\HTMLToMarkdown\HtmlConverter` not found.'
+count = 1
+
+[[issues]]
+file = "classes/LlmContent.php"
+code = "possibly-invalid-argument"
+message = 'Possible argument type mismatch for argument #1 of `Kirby\Toolkit\Str::contains`: expected `null|string`, but possibly received `$this(Kirby\Cms\Responder)|string`.'
+count = 1
+
+[[issues]]
+file = "classes/LlmContent.php"
+code = "possibly-invalid-argument"
+message = 'Possible argument type mismatch for argument #1 of `Kirby\Toolkit\Str::split`: expected `array<array-key, mixed>|null|string`, but possibly received `$this(Kirby\Cms\Responder)|null|string`.'
+count = 1
+
+[[issues]]
+file = "classes/LlmContent.php"
+code = "possibly-invalid-argument"
+message = 'Possible argument type mismatch for argument #2 of `Kirby\Cms\Responder::header`: expected `false|null|string`, but possibly received `$this(Kirby\Cms\Responder)|string`.'
+count = 1
+
+[[issues]]
+file = "classes/LlmContent.php"
+code = "possibly-null-argument"
+message = 'Argument #2 of method `Kirby\Toolkit\Str::after` is possibly `null`, but parameter type `string` does not accept it.'
+count = 1
+
+[[issues]]
+file = "classes/LlmContent.php"
+code = "possibly-null-operand"
+message = "Possibly null right operand used in string concatenation (type `null|string`)."
+count = 1
+
+[[issues]]
+file = "classes/LlmContent.php"
+code = "reference-to-undefined-variable"
+message = "Reference created from a previously undefined variable `$match`."
+count = 1
+
+[[issues]]
+file = "classes/LlmContent.php"
+code = "unknown-class-instantiation"
+message = "Cannot determine the concrete class for instantiation."
+count = 2
+
+[[issues]]
+file = "classes/Meta.php"
+code = "ambiguous-class-like-constant-access"
+message = "Cannot reliably determine class for constant access due to an ambiguous type."
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "ambiguous-object-method-access"
+message = "Cannot statically verify method call on a generic `object` type."
+count = 5
+
+[[issues]]
+file = "classes/Meta.php"
+code = "falsable-return-statement"
+message = '''Function `tobimori\Seo\Meta::findTagForField` is declared to return `null|string` but possibly returns 'false' (inferred as `array-key|false`).'''
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "invalid-argument"
+message = 'Invalid argument type for argument #1 of `Kirby\Cms\ModelWithContent::toString`: expected `null|string`, but found `Kirby\Content\Field`.'
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "invalid-array-element-key"
+message = "Invalid array key type."
+count = 2
+
+[[issues]]
+file = "classes/Meta.php"
+code = "invalid-iterator"
+message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "invalid-member-selector"
+message = "Invalid type `Stringable` used as a member selector; a string is expected."
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "invalid-member-selector"
+message = "Invalid type `mixed` used as a member selector; a string is expected."
+count = 2
+
+[[issues]]
+file = "classes/Meta.php"
+code = "invalid-member-selector"
+message = "Invalid type `null` used as a member selector; a string is expected."
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "invalid-member-selector"
+message = "Invalid type `resource` used as a member selector; a string is expected."
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "invalid-member-selector"
+message = "Invalid type `scalar` used as a member selector; a string is expected."
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "invalid-method-access"
+message = "Attempting to access a method on a non-object type (`non-empty-array<array-key, mixed>`)."
+count = 3
+
+[[issues]]
+file = "classes/Meta.php"
+code = "invalid-operand"
+message = "Left operand in `&&` operation is an `array`."
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "invalid-property-access"
+message = "Attempting to access a property on a non-object type (`non-empty-array<array-key, mixed>`)."
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "invalid-return-statement"
+message = 'Invalid return type for function `tobimori\Seo\Meta::fields`: expected `Kirby\Content\Field|null`, but found `Kirby\Content\Field|non-empty-array<array-key, mixed>`.'
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "invalid-return-statement"
+message = 'Invalid return type for function `tobimori\Seo\Meta::site`: expected `Kirby\Content\Field|null`, but found `Kirby\Content\Field|non-empty-array<array-key, mixed>`.'
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "less-specific-nested-argument-type"
+message = "Argument type mismatch for argument #1 of `array_diff`: expected `array<array-key, ('V.array_diff() extends Stringable|null|resource|scalar)>`, but provided type `array<array-key, mixed>|null` is less specific."
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "less-specific-nested-argument-type"
+message = "Argument type mismatch for argument #1 of `array_flip`: expected `array<array-key, ('V.array_flip() extends array-key)>`, but provided type `array<array-key, mixed>` is less specific."
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "less-specific-nested-argument-type"
+message = "Argument type mismatch for argument #2 of `array_diff`: expected `array<array-key, ('V.array_diff() extends Stringable|null|resource|scalar)>`, but provided type `array<array-key, mixed>` is less specific."
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "less-specific-nested-return-statement"
+message = '''Returned type `array{'field': truthy-mixed, 'source': Stringable|null|resource|scalar}` is less specific than the declared return type `array{'field': Kirby\Content\Field, 'source': null|string}` for function `tobimori\Seo\Meta::resolve` due to nested 'mixed'.'''
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "less-specific-return-statement"
+message = 'Returned type `array-key|false` is less specific than the declared return type `null|string` for function `tobimori\Seo\Meta::findTagForField`.'
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `Kirby\Toolkit\A::has`: expected `array<array-key, mixed>`, but found `mixed`.'
+count = 2
+
+[[issues]]
+file = "classes/Meta.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `Kirby\Toolkit\Str::contains`: expected `null|string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `Kirby\Toolkit\Str::lower`: expected `null|string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `Kirby\Toolkit\Str::replace`: expected `Kirby\Toolkit\Collection<mixed>|array<array-key, mixed>|string`, but found `nonnull`.'
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `Kirby\Toolkit\Str::ucfirst`: expected `null|string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `array_intersect`: expected `array<('K.array_intersect() extends array-key), ('V.array_intersect() extends mixed)>`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `count`: expected `Countable|array<array-key, mixed>`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `html_entity_decode`: expected `string`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `is_a`: expected `object|string`, but found `mixed`."
+count = 3
+
+[[issues]]
+file = "classes/Meta.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `is_a`: expected `object|string`, but found `truthy-mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `rtrim`: expected `string`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Meta::get`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Meta::normalizeLocale`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #2 of `array_intersect`: expected `array<array-key, mixed>`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #2 of `method_exists`: expected `string`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #3 of `tobimori\Seo\Meta::applyTitleTemplate`: expected `Kirby\Content\Field`, but found `mixed`.'
+count = 2
+
+[[issues]]
+file = "classes/Meta.php"
+code = "mixed-array-access"
+message = "Unsafe array access on type `nonnull`."
+count = 2
+
+[[issues]]
+file = "classes/Meta.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 4
+
+[[issues]]
+file = "classes/Meta.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`truthy-mixed`)."
+count = 4
+
+[[issues]]
+file = "classes/Meta.php"
+code = "mixed-operand"
+message = "Left operand in `&&` operation has `mixed` type."
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "mixed-operand"
+message = "Right operand in `&&` operation has `mixed` type."
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "mixed-operand"
+message = "Right operand in `||` operation has `mixed` type."
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "mixed-property-type-coercion"
+message = "A value with a less specific type `mixed` is being assigned to property `$cascade` (array<array-key, mixed>|null)."
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "mixed-property-type-coercion"
+message = "A value with a less specific type `mixed` is being assigned to property `$metaDefaults` (array<array-key, mixed>)."
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "mixed-property-type-coercion"
+message = 'A value with a less specific type `mixed` is being assigned to property `$ogImageThumb` (Kirby\Cms\File|Kirby\Cms\FileVersion|Kirby\Filesystem\Asset|false|null).'
+count = 2
+
+[[issues]]
+file = "classes/Meta.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\Meta::dateFormat`. Saw type `truthy-mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\Meta::fallbackFields`. Saw type `truthy-mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\Meta::ogImageThumb`. Saw type `mixed`.'
+count = 2
+
+[[issues]]
+file = "classes/Meta.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\Meta::ogImage`. Saw type `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `canonicalFor` on class `Kirby\Cms\Site`.'
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `height` on class `Kirby\Cms\FileVersion`.'
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `height` on class `Kirby\Cms\File`.'
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `height` on class `Kirby\Filesystem\Asset`.'
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `indexUrl` on class `Kirby\Cms\Page`.'
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `metaInherit` on class `Kirby\Cms\Page`.'
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `slug` on class `tobimori\Seo\Meta`.'
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `template` on class `tobimori\Seo\Meta`.'
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `toBool` on class `Kirby\Content\Field`.'
+count = 3
+
+[[issues]]
+file = "classes/Meta.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `toFile` on class `Kirby\Content\Field`.'
+count = 2
+
+[[issues]]
+file = "classes/Meta.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `toObject` on class `Kirby\Content\Field`.'
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `useOgTemplate` on class `Kirby\Cms\Page`.'
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `useTitleTemplate` on class `Kirby\Cms\Page`.'
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `width` on class `Kirby\Cms\FileVersion`.'
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `width` on class `Kirby\Cms\File`.'
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `width` on class `Kirby\Filesystem\Asset`.'
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "possibly-invalid-argument"
+message = 'Possible argument type mismatch for argument #1 of `Kirby\Cms\App::page`: expected `null|string`, but possibly received `array<array-key, mixed>|string`.'
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "possibly-invalid-argument"
+message = 'Possible argument type mismatch for argument #1 of `tobimori\Seo\Meta::normalizeLocale`: expected `string`, but possibly received `array<array-key, mixed>|null|string`.'
+count = 2
+
+[[issues]]
+file = "classes/Meta.php"
+code = "possibly-null-argument"
+message = "Argument #1 of function `array_diff` is possibly `null`, but parameter type `array<array-key, ('V.array_diff() extends Stringable|null|resource|scalar)>` does not accept it."
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "possibly-null-argument"
+message = "Argument #1 of function `array_key_exists` is possibly `null`, but parameter type `bool|float|int|string` does not accept it."
+count = 2
+
+[[issues]]
+file = "classes/Meta.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `tobimori\Seo\Meta::__construct` is possibly `null`, but parameter type `Kirby\Cms\Page` does not accept it.'
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `tobimori\Seo\Meta::normalizeLocale` is possibly `null`, but parameter type `string` does not accept it.'
+count = 2
+
+[[issues]]
+file = "classes/Meta.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `tobimori\Seo\Meta::toOpenGraphLocale` is possibly `null`, but parameter type `Kirby\Cms\Language` does not accept it.'
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "possibly-undefined-variable"
+message = "Variable `$val` might not have been defined on all execution paths leading to this point."
+count = 2
+
+[[issues]]
+file = "classes/Meta.php"
+code = "redundant-condition"
+message = 'This condition (type `Kirby\Content\Field`) will always evaluate to true.'
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "string-member-selector"
+message = "This member selector uses a non-literal string type (`string`); its specific value cannot be statically determined."
+count = 1
+
+[[issues]]
+file = "classes/Meta.php"
+code = "template-constraint-violation"
+message = "Argument type mismatch for template `V`."
+count = 3
+
+[[issues]]
+file = "classes/Meta.php"
+code = "unknown-class-instantiation"
+message = "Cannot determine the concrete class for instantiation."
+count = 1
+
+[[issues]]
+file = "classes/SchemaSingleton.php"
+code = "mixed-array-access"
+message = "Unsafe array access on type `mixed`."
+count = 2
+
+[[issues]]
+file = "classes/SchemaSingleton.php"
+code = "mixed-array-assignment"
+message = "Unsafe array assignment on type `mixed`."
+count = 2
+
+[[issues]]
+file = "classes/SchemaSingleton.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\SchemaSingleton::getInstances`. Saw type `nonnull`.'
+count = 1
+
+[[issues]]
+file = "classes/SchemaSingleton.php"
+code = "string-member-selector"
+message = "This member selector uses a non-literal string type (`string`); its specific value cannot be statically determined."
+count = 1
+
+[[issues]]
+file = "classes/Seo.php"
+code = "invalid-iterator"
+message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
+count = 1
+
+[[issues]]
+file = "classes/Seo.php"
+code = "mixed-argument"
+message = "Cannot unpack argument of type `mixed` because it is not guaranteed to be iterable."
+count = 1
+
+[[issues]]
+file = "classes/Seo.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `Kirby\Cms\App::page`: expected `null|string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Seo.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `Kirby\Toolkit\Str::contains`: expected `null|string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Seo.php"
+code = "mixed-array-access"
+message = "Unsafe array access on type `nonnull`."
+count = 1
+
+[[issues]]
+file = "classes/Seo.php"
+code = "mixed-array-assignment"
+message = "Unsafe array assignment on type `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Seo.php"
+code = "mixed-array-assignment"
+message = "Unsafe array assignment on type `nonnull`."
+count = 1
+
+[[issues]]
+file = "classes/Seo.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\Seo::isIndexable`. Saw type `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Seo.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `toBool` on class `Kirby\Content\Field`.'
+count = 1
+
+[[issues]]
+file = "classes/Seo.php"
+code = "possible-method-access-on-null"
+message = "Attempting to call a method on `null`."
+count = 1
+
+[[issues]]
+file = "classes/Seo.php"
+code = "possibly-false-argument"
+message = "Argument #1 of function `md5` is possibly `false`, but parameter type `string` does not accept it."
+count = 1
+
+[[issues]]
+file = "classes/Seo.php"
+code = "possibly-null-operand"
+message = "Possibly null middle operand used in string concatenation (type `null|string`)."
+count = 1
+
+[[issues]]
+file = "classes/Seo.php"
+code = "unknown-class-instantiation"
+message = "Cannot determine the concrete class for instantiation."
+count = 1
+
+[[issues]]
+file = "classes/Sitemap/Sitemap.php"
+code = "falsable-return-statement"
+message = '''Function `tobimori\Seo\Sitemap\Sitemap::toXml` is declared to return `string` but possibly returns 'false' (inferred as `false|string`).'''
+count = 1
+
+[[issues]]
+file = "classes/Sitemap/Sitemap.php"
+code = "invalid-method-access"
+message = "Attempting to access a method on a non-object type (`false`)."
+count = 4
+
+[[issues]]
+file = "classes/Sitemap/Sitemap.php"
+code = "invalid-return-statement"
+message = 'Invalid return type for function `tobimori\Seo\Sitemap\Sitemap::toXml`: expected `string`, but found `false|string`.'
+count = 1
+
+[[issues]]
+file = "classes/Sitemap/Sitemap.php"
+code = "less-specific-argument"
+message = 'Argument type mismatch for argument #1 of `Kirby\Toolkit\Collection::__construct`: expected `array<string, mixed>`, but provided type `array<array-key, mixed>` is less specific.'
+count = 1
+
+[[issues]]
+file = "classes/Sitemap/Sitemap.php"
+code = "missing-template-parameter"
+message = 'Too few template arguments for `Kirby\Toolkit\Collection`: expected at least 1, but found 0.'
+count = 1
+
+[[issues]]
+file = "classes/Sitemap/Sitemap.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `DOMNode::appendChild`: expected `DOMNode`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Sitemap/Sitemap.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `strtotime`: expected `string`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Sitemap/Sitemap.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 2
+
+[[issues]]
+file = "classes/Sitemap/Sitemap.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\Sitemap\Sitemap::loc`. Saw type `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Sitemap/Sitemap.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `canonicalFor` on class `Kirby\Cms\Site`.'
+count = 1
+
+[[issues]]
+file = "classes/Sitemap/Sitemap.php"
+code = "possible-method-access-on-null"
+message = "Attempting to call a method on `null`."
+count = 1
+
+[[issues]]
+file = "classes/Sitemap/Sitemap.php"
+code = "possibly-false-argument"
+message = "Argument #1 of method `DOMNode::appendChild` is possibly `false`, but parameter type `DOMNode` does not accept it."
+count = 3
+
+[[issues]]
+file = "classes/Sitemap/Sitemap.php"
+code = "possibly-false-operand"
+message = "Left operand in `>` comparison might be `false` (type `false|int`)."
+count = 1
+
+[[issues]]
+file = "classes/Sitemap/Sitemap.php"
+code = "possibly-null-operand"
+message = "Possibly null left operand used in string concatenation (type `null|string`)."
+count = 1
+
+[[issues]]
+file = "classes/Sitemap/SitemapIndex.php"
+code = "invalid-method-access"
+message = "Attempting to access a method on a non-object type (`array<array-key, mixed>`)."
+count = 4
+
+[[issues]]
+file = "classes/Sitemap/SitemapIndex.php"
+code = "missing-template-parameter"
+message = 'Too few template arguments for `Kirby\Toolkit\Collection`: expected at least 1, but found 0.'
+count = 1
+
+[[issues]]
+file = "classes/Sitemap/SitemapIndex.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Sitemap\SitemapIndex::isValidIndex`: expected `null|string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Sitemap/SitemapIndex.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 2
+
+[[issues]]
+file = "classes/Sitemap/SitemapIndex.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\Sitemap\SitemapIndex::instance`. Saw type `nonnull`.'
+count = 1
+
+[[issues]]
+file = "classes/Sitemap/SitemapIndex.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\Sitemap\SitemapIndex::render`. Saw type `mixed`.'
+count = 2
+
+[[issues]]
+file = "classes/Sitemap/SitemapIndex.php"
+code = "unsafe-instantiation"
+message = 'Unsafe `new static()`: constructor of `tobimori\Seo\Sitemap\SitemapIndex` is not final and its signature might change in child classes, potentially leading to runtime errors.'
+count = 1
+
+[[issues]]
+file = "classes/Sitemap/SitemapUrl.php"
+code = "falsable-return-statement"
+message = '''Function `tobimori\Seo\Sitemap\SitemapUrl::toDOMNode` is declared to return `DOMNode` but possibly returns 'false' (inferred as `DOMElement|false`).'''
+count = 1
+
+[[issues]]
+file = "classes/Sitemap/SitemapUrl.php"
+code = "falsable-return-statement"
+message = '''Function `tobimori\Seo\Sitemap\SitemapUrl::toString` is declared to return `string` but possibly returns 'false' (inferred as `false|string`).'''
+count = 1
+
+[[issues]]
+file = "classes/Sitemap/SitemapUrl.php"
+code = "invalid-argument"
+message = "Invalid argument type for argument #2 of `date`: expected `int|null`, but found `string`."
+count = 1
+
+[[issues]]
+file = "classes/Sitemap/SitemapUrl.php"
+code = "invalid-iterator"
+message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
+count = 1
+
+[[issues]]
+file = "classes/Sitemap/SitemapUrl.php"
+code = "invalid-method-access"
+message = "Attempting to access a method on a non-object type (`false`)."
+count = 3
+
+[[issues]]
+file = "classes/Sitemap/SitemapUrl.php"
+code = "invalid-return-statement"
+message = 'Invalid return type for function `tobimori\Seo\Sitemap\SitemapUrl::toDOMNode`: expected `DOMNode`, but found `DOMElement|false`.'
+count = 1
+
+[[issues]]
+file = "classes/Sitemap/SitemapUrl.php"
+code = "invalid-return-statement"
+message = 'Invalid return type for function `tobimori\Seo\Sitemap\SitemapUrl::toString`: expected `string`, but found `false|string`.'
+count = 1
+
+[[issues]]
+file = "classes/Sitemap/SitemapUrl.php"
+code = "invalid-type-cast"
+message = 'Cannot cast object of type `tobimori\Seo\Sitemap\SitemapUrl` to `string` because it does not implement `Stringable`.'
+count = 1
+
+[[issues]]
+file = "classes/Sitemap/SitemapUrl.php"
+code = "less-specific-argument"
+message = "Argument type mismatch for argument #1 of `DOMDocument::createElement`: expected `string`, but provided type `array-key` is less specific."
+count = 1
+
+[[issues]]
+file = "classes/Sitemap/SitemapUrl.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `DOMElement::setAttribute`: expected `string`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Sitemap/SitemapUrl.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #2 of `DOMDocument::createElement`: expected `string`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Sitemap/SitemapUrl.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #2 of `DOMElement::setAttribute`: expected `string`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Sitemap/SitemapUrl.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #2 of `array_key_exists`: expected `array<array-key, mixed>`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Sitemap/SitemapUrl.php"
+code = "non-iterable-object-iteration"
+message = 'Iterating over object of type `tobimori\Seo\Sitemap\SitemapUrl` which does not implement `Iterator` or `IteratorAggregate`.'
+count = 1
+
+[[issues]]
+file = "classes/Sitemap/SitemapUrl.php"
+code = "possibly-false-argument"
+message = "Argument #1 of method `DOMNode::appendChild` is possibly `false`, but parameter type `DOMNode` does not accept it."
+count = 2
+
+[[issues]]
+file = "classes/Views/EditableOverviewView.php"
+code = "invalid-iterator"
+message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
+count = 1
+
+[[issues]]
+file = "classes/Views/EditableOverviewView.php"
+code = "invalid-method-access"
+message = "Attempting to access a method on a non-object type (`array<array-key, mixed>`)."
+count = 1
+
+[[issues]]
+file = "classes/Views/EditableOverviewView.php"
+code = "less-specific-argument"
+message = 'Argument type mismatch for argument #1 of `tobimori\Seo\Views\EditableOverviewView::find`: expected `string`, but provided type `array-key` is less specific.'
+count = 2
+
+[[issues]]
+file = "classes/Views/EditableOverviewView.php"
+code = "less-specific-argument"
+message = 'Argument type mismatch for argument #1 of `tobimori\Seo\Views\EditableOverviewView::notFound`: expected `string`, but provided type `array-key` is less specific.'
+count = 1
+
+[[issues]]
+file = "classes/Views/EditableOverviewView.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `strtolower`: expected `string`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Views/EditableOverviewView.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Views\EditableOverviewView::find`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Views/EditableOverviewView.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Views\EditableOverviewView::ids`: expected `Kirby\Cms\ModelWithContent`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Views/EditableOverviewView.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #2 of `array_key_exists`: expected `array<array-key, mixed>`, but found `nonnull`."
+count = 1
+
+[[issues]]
+file = "classes/Views/EditableOverviewView.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #2 of `array_map`: expected `array<('K.array_map() extends array-key), string>`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Views/EditableOverviewView.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 23
+
+[[issues]]
+file = "classes/Views/EditableOverviewView.php"
+code = "mixed-operand"
+message = "Left operand in `||` operation has `mixed` type."
+count = 1
+
+[[issues]]
+file = "classes/Views/EditableOverviewView.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\Views\EditableOverviewView::rows`. Saw type `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Views/ImagesView.php"
+code = "array-to-string-conversion"
+message = "Potentially casting `array` to `string`."
+count = 1
+
+[[issues]]
+file = "classes/Views/ImagesView.php"
+code = "invalid-array-element-key"
+message = "Invalid array key type."
+count = 1
+
+[[issues]]
+file = "classes/Views/ImagesView.php"
+code = "invalid-return-statement"
+message = '''Invalid return type for function `tobimori\Seo\Views\ImagesView::find`: expected `array{'fields': array<array-key, string>, 'id': string, 'model': Kirby\Cms\ModelWithContent}|null`, but found `array<array-key, mixed>|null`.'''
+count = 1
+
+[[issues]]
+file = "classes/Views/ImagesView.php"
+code = "invalid-type-cast"
+message = "Cannot cast type `Closure` to `string`."
+count = 1
+
+[[issues]]
+file = "classes/Views/ImagesView.php"
+code = "less-specific-argument"
+message = 'Argument type mismatch for argument #1 of `tobimori\Seo\Ai\Content::supportsImage`: expected `Kirby\Cms\File`, but provided type `Kirby\Cms\ModelWithContent` is less specific.'
+count = 1
+
+[[issues]]
+file = "classes/Views/ImagesView.php"
+code = "less-specific-argument"
+message = 'Argument type mismatch for argument #1 of `tobimori\Seo\Audit\Images::fields`: expected `Kirby\Cms\File`, but provided type `Kirby\Cms\ModelWithContent` is less specific.'
+count = 1
+
+[[issues]]
+file = "classes/Views/ImagesView.php"
+code = "less-specific-argument"
+message = 'Argument type mismatch for argument #1 of `tobimori\Seo\Audit\Images::id`: expected `Kirby\Cms\File`, but provided type `Kirby\Cms\ModelWithContent` is less specific.'
+count = 1
+
+[[issues]]
+file = "classes/Views/ImagesView.php"
+code = "less-specific-argument"
+message = 'Argument type mismatch for argument #1 of `tobimori\Seo\Field\AltTextField::stream`: expected `Kirby\Cms\File`, but provided type `Kirby\Cms\ModelWithContent` is less specific.'
+count = 1
+
+[[issues]]
+file = "classes/Views/ImagesView.php"
+code = "less-specific-nested-argument-type"
+message = "Argument type mismatch for argument #1 of `array_column`: expected `array<array-key, array<string('id'), ('V.array_column() extends mixed)>|object>|list<array<string('id'), ('V.array_column() extends mixed)>|object>`, but provided type `array<array-key, mixed>` is less specific."
+count = 1
+
+[[issues]]
+file = "classes/Views/ImagesView.php"
+code = "match-not-exhaustive"
+message = "Non-exhaustive `match` expression: subject of type `string` is not fully handled."
+count = 1
+
+[[issues]]
+file = "classes/Views/ImagesView.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `Kirby\Cms\Blueprint::field`: expected `string`, but found `mixed`.'
+count = 2
+
+[[issues]]
+file = "classes/Views/ImagesView.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `Kirby\Toolkit\I18n::translate`: expected `array<array-key, mixed>|null|string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Views/ImagesView.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Ai\Content::supportsImage`: expected `Kirby\Cms\File`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Views/ImagesView.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Views\EditableOverviewView::current`: expected `Kirby\Cms\ModelWithContent`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Views/ImagesView.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Views\ImagesView::value`: expected `array<array-key, mixed>`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Views/ImagesView.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Views\OverviewView::blueprint`: expected `Kirby\Cms\File|Kirby\Cms\Page`, but found `mixed`.'
+count = 2
+
+[[issues]]
+file = "classes/Views/ImagesView.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #2 of `Kirby\Toolkit\I18n::translate`: expected `array<array-key, mixed>|null|string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Views/ImagesView.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #2 of `tobimori\Seo\Field\AltTextField::stream`: expected `null|string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Views/ImagesView.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #2 of `tobimori\Seo\Views\EditableOverviewView::current`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Views/ImagesView.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 9
+
+[[issues]]
+file = "classes/Views/ImagesView.php"
+code = "mixed-operand"
+message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
+count = 1
+
+[[issues]]
+file = "classes/Views/ImagesView.php"
+code = "mixed-operand"
+message = "Invalid right operand: type `mixed` cannot be reliably used in string concatenation."
+count = 1
+
+[[issues]]
+file = "classes/Views/ImagesView.php"
+code = "mixed-operand"
+message = "Left operand in `||` operation has `mixed` type."
+count = 1
+
+[[issues]]
+file = "classes/Views/ImagesView.php"
+code = "mixed-operand"
+message = "Right operand in `&&` operation has `mixed` type."
+count = 1
+
+[[issues]]
+file = "classes/Views/ImagesView.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\Views\ImagesView::label`. Saw type `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Views/ImagesView.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\Views\ImagesView::load`. Saw type `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Views/ImagesView.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\Views\ImagesView::value`. Saw type `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Views/ImagesView.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `extension` on class `Kirby\Cms\File`.'
+count = 2
+
+[[issues]]
+file = "classes/Views/ImagesView.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `height` on class `Kirby\Cms\File`.'
+count = 1
+
+[[issues]]
+file = "classes/Views/ImagesView.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `isResizable` on class `Kirby\Cms\File`.'
+count = 2
+
+[[issues]]
+file = "classes/Views/ImagesView.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `title` on class `Kirby\Cms\Site`.'
+count = 2
+
+[[issues]]
+file = "classes/Views/ImagesView.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `title` on class `Kirby\Cms\User`.'
+count = 2
+
+[[issues]]
+file = "classes/Views/ImagesView.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `width` on class `Kirby\Cms\File`.'
+count = 1
+
+[[issues]]
+file = "classes/Views/ImagesView.php"
+code = "possibly-null-argument"
+message = "Argument #1 of function `trim` is possibly `null`, but parameter type `string` does not accept it."
+count = 1
+
+[[issues]]
+file = "classes/Views/ImagesView.php"
+code = "redundant-cast"
+message = "Redundant cast to `(string)`: the expression already has this type."
+count = 2
+
+[[issues]]
+file = "classes/Views/LinksView.php"
+code = "less-specific-nested-argument-type"
+message = 'Argument type mismatch for argument #4 of `tobimori\Seo\Views\OverviewView::search`: expected `(closure(mixed, string): string)`, but provided type `(closure(mixed, mixed): mixed)` is less specific.'
+count = 1
+
+[[issues]]
+file = "classes/Views/LinksView.php"
+code = "match-not-exhaustive"
+message = "Non-exhaustive `match` expression: subject of type `string` is not fully handled."
+count = 1
+
+[[issues]]
+file = "classes/Views/LinksView.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `Kirby\Cms\App::page`: expected `null|string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Views/LinksView.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Views\LinksView::display`: expected `string`, but found `mixed`.'
+count = 3
+
+[[issues]]
+file = "classes/Views/LinksView.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Views\LinksView::display`: expected `string`, but found `truthy-mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Views/LinksView.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Views\LinksView::reason`: expected `array<array-key, mixed>`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Views/LinksView.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #2 of `explode`: expected `string`, but found `mixed`."
+count = 2
+
+[[issues]]
+file = "classes/Views/LinksView.php"
+code = "mixed-array-access"
+message = "Unsafe array access on type `mixed`."
+count = 6
+
+[[issues]]
+file = "classes/Views/LinksView.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\Views\LinksView::load`. Saw type `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Views/LinksView.php"
+code = "possibly-false-operand"
+message = "Possibly false left operand used in string concatenation (type `false|non-negative-int`)."
+count = 1
+
+[[issues]]
+file = "classes/Views/OverviewView.php"
+code = "less-specific-nested-argument-type"
+message = "Argument type mismatch for argument #2 of `usort`: expected `(callable(mixed, mixed): int)`, but provided type `(closure(mixed, mixed): mixed)` is less specific."
+count = 1
+
+[[issues]]
+file = "classes/Views/OverviewView.php"
+code = "less-specific-nested-return-statement"
+message = '''Returned type `array{'dir': string('asc')|string('desc'), 'issue': mixed, 'search': string, 'sort': mixed}` is less specific than the declared return type `array{'dir': string, 'issue': null|string, 'search': string, 'sort': null|string}` for function `tobimori\Seo\Views\OverviewView::query` due to nested 'mixed'.'''
+count = 1
+
+[[issues]]
+file = "classes/Views/OverviewView.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #2 of `Closure`: expected `string`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Views/OverviewView.php"
+code = "mixed-operand"
+message = "Left operand in binary operation has type `mixed`."
+count = 2
+
+[[issues]]
+file = "classes/Views/OverviewView.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\Views\OverviewView::blueprint`. Saw type `nonnull`.'
+count = 1
+
+[[issues]]
+file = "classes/Views/OverviewView.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\Views\OverviewView::meta`. Saw type `nonnull`.'
+count = 1
+
+[[issues]]
+file = "classes/Views/OverviewView.php"
+code = "non-existent-method"
+message = 'Method `state` does not exist on type `Kirby\Plugin\License`.'
+count = 1
+
+[[issues]]
+file = "classes/Views/OverviewView.php"
+code = "possible-method-access-on-null"
+message = "Attempting to call a method on `null`."
+count = 1
+
+[[issues]]
+file = "classes/Views/OverviewView.php"
+code = "unknown-class-instantiation"
+message = "Cannot determine the concrete class for instantiation."
+count = 1
+
+[[issues]]
+file = "classes/Views/PagesView.php"
+code = "invalid-method-access"
+message = "Attempting to access a method on a non-object type (`array<array-key, mixed>`)."
+count = 1
+
+[[issues]]
+file = "classes/Views/PagesView.php"
+code = "invalid-return-statement"
+message = '''Invalid return type for function `tobimori\Seo\Views\PagesView::find`: expected `array{'fields': array<array-key, string>, 'id': string, 'model': Kirby\Cms\ModelWithContent}|null`, but found `array<array-key, mixed>|null`.'''
+count = 1
+
+[[issues]]
+file = "classes/Views/PagesView.php"
+code = "less-specific-nested-argument-type"
+message = "Argument type mismatch for argument #2 of `implode`: expected `array<array-key, Stringable|null|scalar>|null`, but provided type `array<array-key, mixed>` is less specific."
+count = 1
+
+[[issues]]
+file = "classes/Views/PagesView.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Buttons\RobotsViewButton::indicator`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Views/PagesView.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #2 of `in_array`: expected `array<array-key, ('V.in_array() extends mixed)>`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Views/PagesView.php"
+code = "mixed-array-assignment"
+message = "Unsafe array assignment on type `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/Views/PagesView.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 3
+
+[[issues]]
+file = "classes/Views/PagesView.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`nonnull`)."
+count = 2
+
+[[issues]]
+file = "classes/Views/PagesView.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\Views\PagesView::load`. Saw type `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Views/PagesView.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `tobimori\Seo\Views\PagesView::resolve`. Saw type `nonnull`.'
+count = 1
+
+[[issues]]
+file = "classes/Views/PagesView.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `toFile` on class `Kirby\Content\Field`.'
+count = 1
+
+[[issues]]
+file = "classes/Views/PagesView.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `url` on class `Kirby\Toolkit\V`.'
+count = 1
+
+[[issues]]
+file = "classes/Views/PagesView.php"
+code = "redundant-cast"
+message = "Redundant cast to `(string)`: the expression already has this type."
+count = 1
+
+[[issues]]
+file = "config/api.php"
+code = "invalid-type-cast"
+message = "Casting `mixed` to `array`."
+count = 2
+
+[[issues]]
+file = "config/api.php"
+code = "string-member-selector"
+message = "This member selector uses a non-literal string type (`string`); its specific value cannot be statically determined."
+count = 2
+
+[[issues]]
+file = "config/areas.php"
+code = "invalid-operand"
+message = "Invalid type `(closure(...mixed=): mixed)` for left operand in string concatenation."
+count = 1
+
+[[issues]]
+file = "config/areas.php"
+code = "invalid-operand"
+message = "Invalid type `(closure(...mixed=): mixed)` for middle operand in string concatenation."
+count = 1
+
+[[issues]]
+file = "config/areas.php"
+code = "less-specific-argument"
+message = 'Argument type mismatch for argument #1 of `tobimori\Seo\Buttons\UtmShareViewButton::__construct`: expected `Kirby\Cms\Page|Kirby\Cms\Site`, but provided type `Kirby\Cms\ModelWithContent` is less specific.'
+count = 1
+
+[[issues]]
+file = "config/areas.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `NumberFormatter::format`: expected `float|int`, but found `mixed`."
+count = 4
+
+[[issues]]
+file = "config/areas.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `array_slice`: expected `array<('K.array_slice() extends array-key), ('V.array_slice() extends mixed)>`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "config/areas.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `count`: expected `Countable|array<array-key, mixed>`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "config/areas.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `str_starts_with`: expected `string`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "config/areas.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `substr`: expected `string`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "config/areas.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\License::activate`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "config/areas.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `trim`: expected `string`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "config/areas.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #2 of `array_map`: expected `array<('K.array_map() extends array-key), ('V.array_map() extends mixed)>`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "config/areas.php"
+code = "mixed-array-access"
+message = "Unsafe array access on type `mixed`."
+count = 10
+
+[[issues]]
+file = "config/areas.php"
+code = "mixed-operand"
+message = "Casting `mixed` to `bool`."
+count = 1
+
+[[issues]]
+file = "config/areas.php"
+code = "mixed-operand"
+message = "Invalid right operand: type `mixed` cannot be reliably used in string concatenation."
+count = 1
+
+[[issues]]
+file = "config/areas.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `email` on class `Kirby\Toolkit\V`.'
+count = 1
+
+[[issues]]
+file = "config/areas.php"
+code = "possibly-invalid-argument"
+message = 'Possible argument type mismatch for argument #1 of `Kirby\Exception\Exception::__construct`: expected `array<array-key, mixed>|string`, but possibly received `(closure(...mixed=): mixed)|array<array-key, mixed>|null|string`.'
+count = 1
+
+[[issues]]
+file = "config/areas.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `Kirby\Exception\Exception::__construct` is possibly `null`, but parameter type `array<array-key, mixed>|string` does not accept it.'
+count = 1
+
+[[issues]]
+file = "config/areas.php"
+code = "possibly-null-operand"
+message = "Possibly null left operand used in string concatenation (type `(closure(...mixed=): mixed)|array<array-key, mixed>|null|string`)."
+count = 1
+
+[[issues]]
+file = "config/areas.php"
+code = "possibly-null-operand"
+message = "Possibly null middle operand used in string concatenation (type `(closure(...mixed=): mixed)|array<array-key, mixed>|null|string`)."
+count = 1
+
+[[issues]]
+file = "config/fields.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `Kirby\Toolkit\Str::contains`: expected `null|string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "config/fields.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `Kirby\Toolkit\Str::unhtml`: expected `null|string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "config/fields.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #3 of `str_replace`: expected `array<array-key, string>|string`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "config/fields.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 17
+
+[[issues]]
+file = "config/fields.php"
+code = "mixed-property-access"
+message = "Attempting to access a property on a non-object type (`mixed`)."
+count = 2
+
+[[issues]]
+file = "config/fields.php"
+code = "possibly-invalid-argument"
+message = "Possible argument type mismatch for argument #2 of `str_replace`: expected `array<array-key, string>|string`, but possibly received `list{(closure(...mixed=): mixed)|array<array-key, mixed>|null|string, (closure(...mixed=): mixed)|array<array-key, mixed>|null|string}`."
+count = 1
+
+[[issues]]
+file = "config/fields.php"
+code = "undefined-variable"
+message = "Undefined variable: `$this`."
+count = 5
+
+[[issues]]
+file = "config/fields.php"
+code = "unknown-iterator-type"
+message = "Cannot determine the type of the expression provided to `foreach`."
+count = 1
+
+[[issues]]
+file = "config/hooks.php"
+code = "ambiguous-object-method-access"
+message = "Cannot statically verify method call on a generic `object` type."
+count = 7
+
+[[issues]]
+file = "config/hooks.php"
+code = "invalid-method-access"
+message = "Attempting to access a method on a non-object type (`array<array-key, mixed>`)."
+count = 1
+
+[[issues]]
+file = "config/hooks.php"
+code = "invalid-operand"
+message = "Right operand in `||` operation is an `array`."
+count = 1
+
+[[issues]]
+file = "config/hooks.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `Kirby\Cms\PageActions::update`: expected `array<array-key, mixed>|null`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "config/hooks.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `Kirby\Toolkit\A::count`: expected `array<array-key, mixed>`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "config/hooks.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `Kirby\Toolkit\A::reduce`: expected `array<array-key, mixed>`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "config/hooks.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `Kirby\Toolkit\Str::ucfirst`: expected `null|string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "config/hooks.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #2 of `tobimori\Seo\Seo::isIndexable`: expected `Kirby\Cms\Language|null`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "config/hooks.php"
+code = "mixed-array-assignment"
+message = "Unsafe array assignment on type `mixed`."
+count = 1
+
+[[issues]]
+file = "config/hooks.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 9
+
+[[issues]]
+file = "config/hooks.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `metadata` on class `Kirby\Cms\Page`.'
+count = 1
+
+[[issues]]
+file = "config/hooks.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `schema` on class `Kirby\Cms\Page`.'
+count = 1
+
+[[issues]]
+file = "config/hooks.php"
+code = "non-existent-method"
+message = 'Method `push` does not exist on type `tobimori\Queues\Queues`.'
+count = 1
+
+[[issues]]
+file = "config/hooks.php"
+code = "non-existent-method"
+message = 'Method `register` does not exist on type `tobimori\Queues\Queues`.'
+count = 1
+
+[[issues]]
+file = "config/hooks.php"
+code = "unknown-class-instantiation"
+message = "Cannot determine the concrete class for instantiation."
+count = 2
+
+[[issues]]
+file = "config/options.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 1
+
+[[issues]]
+file = "config/options.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `metadata` on class `Kirby\Cms\Page`.'
+count = 1
+
+[[issues]]
+file = "config/options.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `title` on class `Kirby\Cms\Site`.'
+count = 1
+
+[[issues]]
+file = "config/options.php"
+code = "possibly-null-operand"
+message = "Possibly null left operand used in string concatenation (type `null|string`)."
+count = 1
+
+[[issues]]
+file = "config/options/sitemap.php"
+code = "invalid-iterator"
+message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
+count = 1
+
+[[issues]]
+file = "config/options/sitemap.php"
+code = "invalid-method-access"
+message = "Attempting to access a method on a non-object type (`string`)."
+count = 3
+
+[[issues]]
+file = "config/options/sitemap.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `is_a`: expected `object|string`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "config/options/sitemap.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Sitemap\Sitemap::createUrl`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "config/options/sitemap.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Sitemap\SitemapIndex::create`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "config/options/sitemap.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Sitemap\SitemapUrl::changefreq`: expected `null|string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "config/options/sitemap.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Sitemap\SitemapUrl::lastmod`: expected `null|string`, but found `nonnull`.'
+count = 1
+
+[[issues]]
+file = "config/options/sitemap.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Sitemap\SitemapUrl::priority`: expected `null|string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "config/options/sitemap.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #2 of `in_array`: expected `array<array-key, ('V.in_array() extends mixed)>`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "config/options/sitemap.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 14
+
+[[issues]]
+file = "config/options/sitemap.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`truthy-mixed`)."
+count = 1
+
+[[issues]]
+file = "config/options/sitemap.php"
+code = "mixed-operand"
+message = "Left operand in `&&` operation has `mixed` type."
+count = 1
+
+[[issues]]
+file = "config/page-methods.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `strlen`: expected `string`, but found `mixed`."
+count = 3
+
+[[issues]]
+file = "config/page-methods.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `strpos`: expected `string`, but found `mixed`."
+count = 2
+
+[[issues]]
+file = "config/page-methods.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `substr`: expected `string`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "config/page-methods.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #2 of `strpos`: expected `string`, but found `mixed`."
+count = 2
+
+[[issues]]
+file = "config/page-methods.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 10
+
+[[issues]]
+file = "config/page-methods.php"
+code = "undefined-variable"
+message = "Undefined variable: `$this`."
+count = 8
+
+[[issues]]
+file = "config/page-methods.php"
+code = "unknown-class-instantiation"
+message = "Cannot determine the concrete class for instantiation."
+count = 1
+
+[[issues]]
+file = "config/routes.php"
+code = "ambiguous-object-method-access"
+message = "Cannot statically verify method call on a generic `object` type."
+count = 2
+
+[[issues]]
+file = "config/routes.php"
+code = "less-specific-nested-argument-type"
+message = "Argument type mismatch for argument #1 of `go`: expected `(callable(...mixed=): mixed)`, but provided type `string` is less specific."
+count = 2
+
+[[issues]]
+file = "config/routes.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `Kirby\Cms\AppTranslations::setCurrentTranslation`: expected `null|string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "config/routes.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `base64_decode`: expected `string`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "config/routes.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `go`: expected `(callable(...mixed=): mixed)`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "config/routes.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `go`: expected `(callable(...mixed=): mixed)`, but found `nonnull`."
+count = 1
+
+[[issues]]
+file = "config/routes.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 12
+
+[[issues]]
+file = "config/routes.php"
+code = "mixed-operand"
+message = "Left operand in `&&` operation has `mixed` type."
+count = 2
+
+[[issues]]
+file = "config/routes.php"
+code = "possibly-invalid-argument"
+message = 'Possible argument type mismatch for argument #1 of `Kirby\Http\Response::__construct`: expected `array<array-key, mixed>|string`, but possibly received `Kirby\Template\Snippet|null|string`.'
+count = 1
+
+[[issues]]
+file = "config/routes.php"
+code = "possibly-invalid-argument"
+message = "Possible argument type mismatch for argument #1 of `go`: expected `(callable(...mixed=): mixed)`, but possibly received `string('/sitemap.xml')`."
+count = 1
+
+[[issues]]
+file = "config/routes.php"
+code = "possibly-null-argument"
+message = "Argument #1 of function `rtrim` is possibly `null`, but parameter type `string` does not accept it."
+count = 2
+
+[[issues]]
+file = "config/routes.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `Kirby\Http\Response::__construct` is possibly `null`, but parameter type `array<array-key, mixed>|string` does not accept it.'
+count = 1
+
+[[issues]]
+file = "config/routes.php"
+code = "undefined-variable"
+message = "Undefined variable: `$this`."
+count = 11
+
+[[issues]]
+file = "config/routes.php"
+code = "unknown-class-instantiation"
+message = "Cannot determine the concrete class for instantiation."
+count = 1
+
+[[issues]]
+file = "config/sections.php"
+code = "invalid-iterator"
+message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
+count = 1
+
+[[issues]]
+file = "config/sections.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `Kirby\Toolkit\A::map`: expected `array<array-key, mixed>`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "config/sections.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `Kirby\Toolkit\Str::unhtml`: expected `null|string`, but found `mixed`.'
+count = 6
+
+[[issues]]
+file = "config/sections.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #3 of `str_replace`: expected `array<array-key, string>|string`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "config/sections.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 18
+
+[[issues]]
+file = "config/sections.php"
+code = "mixed-property-access"
+message = "Attempting to access a property on a non-object type (`mixed`)."
+count = 2
+
+[[issues]]
+file = "config/sections.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `metadata` on class `Kirby\Cms\Page`.'
+count = 2
+
+[[issues]]
+file = "config/sections.php"
+code = "non-existent-method"
+message = 'Method `state` does not exist on type `Kirby\Plugin\License`.'
+count = 1
+
+[[issues]]
+file = "config/sections.php"
+code = "possible-method-access-on-null"
+message = "Attempting to call a method on `null`."
+count = 1
+
+[[issues]]
+file = "config/sections.php"
+code = "undefined-variable"
+message = "Undefined variable: `$this`."
+count = 4
+
+[[issues]]
+file = "config/site-methods.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #2 of `Kirby\Toolkit\Str::startsWith`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "config/site-methods.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 2
+
+[[issues]]
+file = "config/site-methods.php"
+code = "mixed-operand"
+message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
+count = 1
+
+[[issues]]
+file = "config/site-methods.php"
+code = "possibly-false-argument"
+message = "Argument #1 of function `pathinfo` is possibly `false`, but parameter type `string` does not accept it."
+count = 1
+
+[[issues]]
+file = "config/site-methods.php"
+code = "undefined-variable"
+message = "Undefined variable: `$this`."
+count = 2
+
+[[issues]]
+file = "index.php"
+code = "ambiguous-object-method-access"
+message = "Cannot statically verify method call on a generic `object` type."
+count = 1
+
+[[issues]]
+file = "index.php"
+code = "invalid-member-selector"
+message = "Invalid type `mixed` used as a member selector; a string is expected."
+count = 1
+
+[[issues]]
+file = "index.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `Kirby\Filesystem\F::name`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "index.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\AltText::fromField`: expected `Kirby\Content\Field`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "index.php"
+code = "mixed-operand"
+message = "Invalid right operand: type `mixed` cannot be reliably used in string concatenation."
+count = 1
+
+[[issues]]
+file = "index.php"
+code = "unknown-class-instantiation"
+message = "Cannot determine the concrete class for instantiation."
+count = 1
+
+[[issues]]
+file = "snippets/head.php"
+code = "invalid-iterator"
+message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
+count = 1
+
+[[issues]]
+file = "snippets/head.php"
+code = "less-specific-nested-argument-type"
+message = "Argument type mismatch for argument #2 of `array_filter`: expected `(callable(('K.array_filter() extends array-key)): bool)|(callable(('V.array_filter() extends mixed)): bool)|(callable(('V.array_filter() extends mixed), ('K.array_filter() extends array-key)): bool)|null`, but provided type `(closure(mixed): mixed)` is less specific."
+count = 1
+
+[[issues]]
+file = "snippets/head.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `Kirby\Toolkit\Html::tag`: expected `string`, but found `mixed`.'
+count = 2
+
+[[issues]]
+file = "snippets/head.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `array_filter`: expected `array<('K.array_filter() extends array-key), ('V.array_filter() extends mixed)>`, but found `mixed`."
+count = 2
+
+[[issues]]
+file = "snippets/head.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #2 of `Kirby\Toolkit\Html::tag`: expected `array<array-key, mixed>|null|string`, but found `mixed`.'
+count = 2
+
+[[issues]]
+file = "snippets/head.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #3 of `Kirby\Toolkit\Html::tag`: expected `array<array-key, mixed>`, but found `nonnull`.'
+count = 2
+
+[[issues]]
+file = "snippets/head.php"
+code = "mixed-argument"
+message = "The first value for `echo` is too general."
+count = 1
+
+[[issues]]
+file = "snippets/head.php"
+code = "mixed-array-access"
+message = "Unsafe array access on type `mixed`."
+count = 4
+
+[[issues]]
+file = "snippets/head.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 1
+
+[[issues]]
+file = "snippets/head.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `metadata` on class `Kirby\Cms\Page`.'
+count = 1
+
+[[issues]]
+file = "snippets/prompts/content.php"
+code = "invalid-iterator"
+message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
+count = 1
+
+[[issues]]
+file = "snippets/prompts/content.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`nonnull`)."
+count = 1
+
+[[issues]]
+file = "snippets/prompts/content.php"
+code = "mixed-property-access"
+message = "Attempting to access a property on a non-object type (`mixed`)."
+count = 1
+
+[[issues]]
+file = "snippets/prompts/content.php"
+code = "possibly-false-operand"
+message = "Possibly false right operand used in string concatenation (type `false|string`)."
+count = 1
+
+[[issues]]
+file = "snippets/prompts/content.php"
+code = "possibly-invalid-argument"
+message = "Possible argument type mismatch for argument #1 of `DOMDocument::saveHTML`: expected `DOMNode|null`, but possibly received `DOMNameSpaceNode|DOMNode`."
+count = 1
+
+[[issues]]
+file = "snippets/prompts/content.php"
+code = "possibly-invalid-argument"
+message = 'Possible argument type mismatch for argument #1 of `Kirby\Toolkit\Str::unhtml`: expected `null|string`, but possibly received `array<array-key, string>|null|string`.'
+count = 1
+
+[[issues]]
+file = "snippets/prompts/content.php"
+code = "possibly-invalid-argument"
+message = "Possible argument type mismatch for argument #1 of `trim`: expected `string`, but possibly received `array<array-key, string>|null|string`."
+count = 1
+
+[[issues]]
+file = "snippets/prompts/content.php"
+code = "possibly-null-argument"
+message = "Argument #1 of function `trim` is possibly `null`, but parameter type `string` does not accept it."
+count = 1
+
+[[issues]]
+file = "snippets/prompts/content.php"
+code = "possibly-null-argument"
+message = "Argument #3 of function `preg_replace` is possibly `null`, but parameter type `array<('K.preg_replace() extends array-key), string>|string` does not accept it."
+count = 2
+
+[[issues]]
+file = "snippets/prompts/content.php"
+code = "possibly-null-argument"
+message = "Argument #3 of function `preg_replace` is possibly `null`, but parameter type `array<array-key, string>|string` does not accept it."
+count = 1
+
+[[issues]]
+file = "snippets/prompts/introduction.php"
+code = "mixed-argument"
+message = "The first value for `echo` is too general."
+count = 5
+
+[[issues]]
+file = "snippets/prompts/introduction.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 3
+
+[[issues]]
+file = "snippets/prompts/introduction.php"
+code = "undefined-variable"
+message = "Undefined variable: `$site`."
+count = 3
+
+[[issues]]
+file = "snippets/prompts/meta.php"
+code = "mixed-argument"
+message = "The first value for `echo` is too general."
+count = 1
+
+[[issues]]
+file = "snippets/prompts/meta.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 1
+
+[[issues]]
+file = "snippets/prompts/meta.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `metadata` on class `Kirby\Cms\Page`.'
+count = 1
+
+[[issues]]
+file = "snippets/prompts/site-meta.php"
+code = "mixed-argument"
+message = "The first value for `echo` is too general."
+count = 1
+
+[[issues]]
+file = "snippets/prompts/site-meta.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 1
+
+[[issues]]
+file = "snippets/prompts/site-meta.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `metaDescription` on class `Kirby\Cms\Site`.'
+count = 1
+
+[[issues]]
+file = "snippets/prompts/site-meta.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `ogDescription` on class `Kirby\Cms\Site`.'
+count = 1
+
+[[issues]]
+file = "snippets/prompts/site-meta.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `ogSiteName` on class `Kirby\Cms\Site`.'
+count = 1
+
+[[issues]]
+file = "snippets/prompts/tasks/alt-text.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #2 of `implode`: expected `array<array-key, Stringable|null|scalar>|null`, but found `truthy-mixed`."
+count = 1
+
+[[issues]]
+file = "snippets/prompts/tasks/alt-text.php"
+code = "mixed-argument"
+message = "The first value for `echo` is too general."
+count = 4
+
+[[issues]]
+file = "snippets/prompts/tasks/alt-text.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 2
+
+[[issues]]
+file = "snippets/prompts/tasks/alt-text.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `title` on class `Kirby\Cms\Site`.'
+count = 1
+
+[[issues]]
+file = "snippets/prompts/tasks/alt-text.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `title` on class `Kirby\Cms\User`.'
+count = 1
+
+[[issues]]
+file = "snippets/prompts/tasks/alt-text.php"
+code = "undefined-variable"
+message = "Undefined variable: `$site`."
+count = 2
+
+[[issues]]
+file = "snippets/prompts/tasks/description.php"
+code = "mixed-argument"
+message = "The first value for `echo` is too general."
+count = 1
+
+[[issues]]
+file = "snippets/prompts/tasks/description.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `metadata` on class `Kirby\Cms\Page`.'
+count = 1
+
+[[issues]]
+file = "snippets/prompts/tasks/og-description.php"
+code = "mixed-argument"
+message = "The first value for `echo` is too general."
+count = 1
+
+[[issues]]
+file = "snippets/prompts/tasks/og-description.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `metadata` on class `Kirby\Cms\Page`.'
+count = 1
+
+[[issues]]
+file = "snippets/prompts/tasks/og-site-description.php"
+code = "mixed-argument"
+message = "The first value for `echo` is too general."
+count = 1
+
+[[issues]]
+file = "snippets/prompts/tasks/og-site-description.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 2
+
+[[issues]]
+file = "snippets/prompts/tasks/og-site-description.php"
+code = "undefined-variable"
+message = "Undefined variable: `$site`."
+count = 1
+
+[[issues]]
+file = "snippets/prompts/tasks/site-description.php"
+code = "mixed-argument"
+message = "The first value for `echo` is too general."
+count = 1
+
+[[issues]]
+file = "snippets/prompts/tasks/site-description.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 2
+
+[[issues]]
+file = "snippets/prompts/tasks/site-description.php"
+code = "undefined-variable"
+message = "Undefined variable: `$site`."
+count = 1
+
+[[issues]]
+file = "snippets/prompts/tasks/title.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `Kirby\Cms\ModelWithContent::toString`: expected `null|string`, but found `mixed`.'
+count = 2
+
+[[issues]]
+file = "snippets/prompts/tasks/title.php"
+code = "mixed-argument"
+message = "The first value for `echo` is too general."
+count = 1
+
+[[issues]]
+file = "snippets/prompts/tasks/title.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 3
+
+[[issues]]
+file = "snippets/prompts/tasks/title.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `metadata` on class `Kirby\Cms\Page`.'
+count = 1
+
+[[issues]]
+file = "snippets/prompts/tasks/title.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `useTitleTemplate` on class `Kirby\Cms\Page`.'
+count = 2
+
+[[issues]]
+file = "snippets/robots.txt.php"
+code = "invalid-iterator"
+message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
+count = 2
+
+[[issues]]
+file = "snippets/robots.txt.php"
+code = "mixed-argument"
+message = "The first value for `echo` is too general."
+count = 1
+
+[[issues]]
+file = "snippets/robots.txt.php"
+code = "mixed-operand"
+message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
+count = 1
+
+[[issues]]
+file = "snippets/robots.txt.php"
+code = "mixed-operand"
+message = "Invalid right operand: type `mixed` cannot be reliably used in string concatenation."
+count = 1
+
+[[issues]]
+file = "snippets/robots.txt.php"
+code = "mixed-operand"
+message = "Left operand in `||` operation has `mixed` type."
+count = 1
+
+[[issues]]
+file = "snippets/robots.txt.php"
+code = "mixed-operand"
+message = "Right operand in `&&` operation has `mixed` type."
+count = 1
+
+[[issues]]
+file = "snippets/robots.txt.php"
+code = "mixed-operand"
+message = "Right operand in `||` operation has `mixed` type."
+count = 1
+
+[[issues]]
+file = "snippets/robots.txt.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `canonicalFor` on class `Kirby\Cms\Site`.'
+count = 1
+
+[[issues]]
+file = "snippets/schemas.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `array_merge`: expected `array<('K.array_merge() extends array-key), ('V.array_merge() extends mixed)>`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "snippets/schemas.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #2 of `array_merge`: expected `array<('K.array_merge() extends array-key), ('V.array_merge() extends mixed)>`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "snippets/schemas.php"
+code = "mixed-argument"
+message = "The first value for `echo` is too general."
+count = 1
+
+[[issues]]
+file = "snippets/schemas.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 2
+
+[[issues]]
+file = "snippets/schemas.php"
+code = "undefined-variable"
+message = "Undefined variable: `$page`."
+count = 1
+
+[[issues]]
+file = "snippets/schemas.php"
+code = "undefined-variable"
+message = "Undefined variable: `$site`."
+count = 1
+
+[[issues]]
+file = "templates/error.md.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `trim`: expected `string`, but found `nonnull`."
+count = 2
+
+[[issues]]
+file = "templates/error.md.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 1
+
+[[issues]]
+file = "templates/error.md.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `text` on class `Kirby\Cms\Page`.'
+count = 1
+
+[[issues]]
+file = "templates/llms.txt.php"
+code = "array-to-string-conversion"
+message = "Potential array in middle operand of string concatenation."
+count = 1
+
+[[issues]]
+file = "templates/llms.txt.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `{closure:templates/llms.txt.php:8:10}`: expected `string`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "templates/llms.txt.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `{closure:templates/llms.txt.php:8:10}`: expected `string`, but found `truthy-mixed`."
+count = 1
+
+[[issues]]
+file = "templates/llms.txt.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #3 of `str_replace`: expected `array<array-key, string>|string`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "templates/llms.txt.php"
+code = "mixed-array-access"
+message = "Unsafe array access on type `mixed`."
+count = 3
+
+[[issues]]
+file = "templates/llms.txt.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 2
+
+[[issues]]
+file = "templates/llms.txt.php"
+code = "mixed-operand"
+message = "Invalid middle operand: type `mixed` cannot be reliably used in string concatenation."
+count = 1
+
+[[issues]]
+file = "templates/llms.txt.php"
+code = "mixed-operand"
+message = "Invalid right operand: type `mixed` cannot be reliably used in string concatenation."
+count = 1
+
+[[issues]]
+file = "templates/llms.txt.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `description` on class `Kirby\Cms\Site`.'
+count = 1
+
+[[issues]]
+file = "templates/llms.txt.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `title` on class `Kirby\Cms\Site`.'
+count = 1
+
+[[issues]]
+file = "templates/llms.txt.php"
+code = "possibly-null-operand"
+message = "Possibly null right operand used in string concatenation (type `null|string`)."
+count = 2
+
+[[issues]]
+file = "templates/sitemap.php"
+code = "less-specific-nested-argument-type"
+message = "Argument type mismatch for argument #1 of `go`: expected `(callable(...mixed=): mixed)`, but provided type `truthy-string` is less specific."
+count = 1
+
+[[issues]]
+file = "templates/sitemap.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 1
+
+[[issues]]
+file = "templates/sitemap.php"
+code = "mixed-operand"
+message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
+count = 1
+
+[[issues]]
+file = "templates/sitemap.php"
+code = "undefined-variable"
+message = "Undefined variable: `$page`."
+count = 1
+
+[[issues]]
+file = "templates/sitemap.xml.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Sitemap\SitemapIndex::render`: expected `Kirby\Cms\Page`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "templates/sitemap.xml.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 2
+
+[[issues]]
+file = "templates/sitemap.xml.php"
+code = "undefined-variable"
+message = "Undefined variable: `$kirby`."
+count = 1
+
+[[issues]]
+file = "templates/sitemap.xml.php"
+code = "undefined-variable"
+message = "Undefined variable: `$page`."
+count = 1
+
+[[issues]]
+file = "templates/sitemap.xsl.php"
+code = "mixed-argument"
+message = "The first value for `echo` is too general."
+count = 2
+
+[[issues]]
+file = "templates/sitemap.xsl.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 4
+
+[[issues]]
+file = "templates/sitemap.xsl.php"
+code = "possibly-invalid-argument"
+message = "The first value for `echo` might have the wrong type."
+count = 9
+
+[[issues]]
+file = "templates/sitemap.xsl.php"
+code = "undefined-variable"
+message = "Undefined variable: `$page`."
+count = 2

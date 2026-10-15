@@ -46,7 +46,7 @@ class Index
 			'targets' => [],
 			'invalidated' => 0,
 			'revision' => null,
-			...(static::cache()->get(self::KEY) ?? []),
+			...(static::cache()->get(self::KEY) ?? [])
 		];
 	}
 
@@ -84,7 +84,7 @@ class Index
 		return [
 			'invalidated' => $data['invalidated'],
 			'pages' => array_map(fn ($entry) => [$entry['fingerprint'], Report::normalize($entry['url'])], $data['pages']),
-			'external' => static::external($data),
+			'external' => static::external($data)
 		];
 	}
 

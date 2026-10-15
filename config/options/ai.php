@@ -12,28 +12,28 @@ return [
 		'openai' => [
 			'driver' => OpenAi::class,
 			'config' => [
-				'apiKey' => '', // needs to be defined
-			],
+				'apiKey' => '' // needs to be defined
+			]
 		],
 		'anthropic' => [
 			'driver' => Anthropic::class,
 			'config' => [
-				'apiKey' => '', // needs to be defined
-			],
+				'apiKey' => '' // needs to be defined
+			]
 		],
 		'gemini' => [
 			'driver' => Gemini::class,
 			'config' => [
-				'apiKey' => '', // needs to be defined
-			],
+				'apiKey' => '' // needs to be defined
+			]
 		],
 		'openrouter' => [
 			'driver' => OpenAi::class,
 			'config' => [
 				'apiKey' => '', // needs to be defined
 				'model' => 'openai/gpt-6-luna',
-				'endpoint' => 'https://openrouter.ai/api/v1/responses',
-			],
-		],
-	],
+				'endpoint' => 'https://openrouter.ai/api/v1/responses'
+			]
+		]
+	]
 ];

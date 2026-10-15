@@ -18,21 +18,21 @@ class Anthropic extends Driver
 	 */
 	public function stream(
 		array $content,
-		string|null $model = null,
+		string|null $model = null
 	): Generator {
 		$apiKey = $this->config('apiKey', required: true);
 		$headers = [
 			'Content-Type: application/json',
 			'Accept: text/event-stream',
 			"x-api-key: {$apiKey}",
-			'anthropic-version: 2023-06-01',
+			'anthropic-version: 2023-06-01'
 		];
 
 		$payload = [
 			'model' => $model ?? $this->config('model', static::DEFAULT_MODEL),
 			'messages' => $this->buildMessages($content),
 			'max_tokens' => 4096,
-			'stream' => true,
+			'stream' => true
 		];
 
 		$system = $this->buildSystem($content);
@@ -127,20 +127,20 @@ class Anthropic extends Driver
 						'source' => [
 							'type' => 'base64',
 							'media_type' => $block['mediaType'],
-							'data' => $block['data'],
-						],
+							'data' => $block['data']
+						]
 					];
 				} elseif ($block['type'] === 'text') {
 					$blocks[] = [
 						'type' => 'text',
-						'text' => $block['text'],
+						'text' => $block['text']
 					];
 				}
 			}
 
 			$messages[] = [
 				'role' => $message->role(),
-				'content' => $blocks,
+				'content' => $blocks
 			];
 		}
 

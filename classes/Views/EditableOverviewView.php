@@ -26,7 +26,7 @@ abstract class EditableOverviewView extends OverviewView
 		return match ($tab) {
 			'pages' => new PagesView(),
 			'images' => new ImagesView(),
-			default => throw new NotFoundException(key: 'view.notFound'),
+			default => throw new NotFoundException(key: 'view.notFound')
 		};
 	}
 
@@ -95,7 +95,7 @@ abstract class EditableOverviewView extends OverviewView
 					$changes[] = [
 						'id' => $id,
 						'link' => $model->panel()->url(true),
-						'text' => $this->label($entry),
+						'text' => $this->label($entry)
 					];
 				}
 			}
@@ -123,7 +123,7 @@ abstract class EditableOverviewView extends OverviewView
 				'rows' => $rows,
 				'changes' => $this->changes(),
 				// edits might fix (or cause) issues of other rows, e.g. duplicates
-				...$this->live(),
+				...$this->live()
 			];
 		});
 	}
@@ -162,7 +162,7 @@ abstract class EditableOverviewView extends OverviewView
 
 		return [
 			...$this->rows(array_keys($input)),
-			'errors' => $errors,
+			'errors' => $errors
 		];
 	}
 
@@ -217,7 +217,7 @@ abstract class EditableOverviewView extends OverviewView
 
 		return [
 			...$this->rows($ids),
-			'errors' => $errors,
+			'errors' => $errors
 		];
 	}
 
@@ -226,7 +226,7 @@ abstract class EditableOverviewView extends OverviewView
 		return [
 			'key' => $e->getKey(),
 			'message' => $e->getMessage(),
-			'details' => $e->getDetails(),
+			'details' => $e->getDetails()
 		];
 	}
 
@@ -315,7 +315,7 @@ abstract class EditableOverviewView extends OverviewView
 			'lock' => $lock,
 			'editable' => $model->permissions()->can('update') && $lock === null,
 			// Either version can supply the current translation
-			'translated' => $version->exists('current') || $model->version('latest')->exists('current'),
+			'translated' => $version->exists('current') || $model->version('latest')->exists('current')
 		];
 	}
 }

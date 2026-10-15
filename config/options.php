@@ -2,13 +2,13 @@
 
 use Kirby\Cms\App;
 use Kirby\Cms\Page;
-use tobimori\Seo\Meta;
-use tobimori\Seo\Seo;
 use tobimori\Seo\Ai;
-use tobimori\Seo\IndexNow;
-use tobimori\Seo\SchemaSingleton;
 use tobimori\Seo\GoogleSearchConsole;
+use tobimori\Seo\IndexNow;
 use tobimori\Seo\LlmContent;
+use tobimori\Seo\Meta;
+use tobimori\Seo\SchemaSingleton;
+use tobimori\Seo\Seo;
 
 return [
 	// if you want to extend some of the built-in classes, you can overwrite them using the components config option
@@ -19,7 +19,7 @@ return [
 		'indexnow' => IndexNow::class,
 		'schema' => SchemaSingleton::class,
 		'gsc' => GoogleSearchConsole::class,
-		'agentic' => LlmContent::class,
+		'agentic' => LlmContent::class
 	],
 	'agentic' => [
 		'enabled' => true,
@@ -29,14 +29,14 @@ return [
 			'selectors' => [
 				'[data-agentic-content]',
 				'main',
-				'article',
+				'article'
 			],
-			'converter' => null,
+			'converter' => null
 		],
 		'llmsTxt' => [
 			'enabled' => true,
-			'pages' => null,
-		],
+			'pages' => null
+		]
 	],
 	'cache.searchConsole' => true,
 	'cache.indexnow' => true,
@@ -59,15 +59,15 @@ return [
 		// Maximum parallel HTTP page requests; external URL checks use twice this limit
 		'concurrency' => 5,
 		// other hosts of the site (besides the site & language URLs), e.g. `['www.example.com']`
-		'hosts' => [],
+		'hosts' => []
 	],
 	'overview' => [
 		// recommended lengths (in characters) for the checks in the SEO overview, as [min, max].
 		// search engines don't have hard limits, they truncate snippets to fit the screen
 		'lengths' => [
 			'title' => [30, 60], // the full title, including the title template
-			'description' => [70, 160],
-		],
+			'description' => [70, 160]
+		]
 	],
 	'cascade' => [
 		'fields',
@@ -98,7 +98,7 @@ return [
 		'robotsFollow' => fn (Page $page) => Seo::option('default.robotsIndex', args: [$page]),
 		'robotsArchive' => fn (Page $page) => Seo::option('default.robotsIndex', args: [$page]),
 		'robotsImageindex' => fn (Page $page) => Seo::option('default.robotsIndex', args: [$page]),
-		'robotsSnippet' => fn (Page $page) => Seo::option('default.robotsIndex', args: [$page]),
+		'robotsSnippet' => fn (Page $page) => Seo::option('default.robotsIndex', args: [$page])
 	],
 	'socialMedia' => [ // default fields for social media links, format is [field => placeholder]
 		'twitter' => 'https://twitter.com/my-company',
@@ -136,15 +136,15 @@ return [
 		'changefreq' => 'weekly',
 		'groupByTemplate' => false,
 		'excludeTemplates' => ['error'],
-		'priority' => fn (Page $page) => number_format(($page->isHomePage()) ? 1 : max(1 - 0.2 * $page->depth(), 0.2), 1),
+		'priority' => fn (Page $page) => number_format($page->isHomePage() ? 1 : max(1 - (0.2 * $page->depth()), 0.2), 1)
 	],
 	'files' => [
 		'parent' => null,
-		'template' => null,
+		'template' => null
 	],
 	'canonical' => [
 		'base' => null, // base url for canonical links
-		'trailingSlash' => false, // whether to add trailing slashes to canonical URLs (except for files)
+		'trailingSlash' => false // whether to add trailing slashes to canonical URLs (except for files)
 	],
 	'ai' => require __DIR__ . '/options/ai.php',
 	'indexnow' => require __DIR__ . '/options/indexnow.php',
@@ -155,5 +155,5 @@ return [
 	],
 	'generateSchema' => true, // whether to generate default schema.org data
 	'locale' => 'en_US', // default locale, used for single-language sites
-	'dateFormat' => null, // custom date format
+	'dateFormat' => null // custom date format
 ];

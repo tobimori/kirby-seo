@@ -46,15 +46,19 @@ class LinksView extends OverviewView
 				'url' => $link['url'],
 				'details' => $this->reason($link),
 				// line breaks between the titles, so a search can't match across two of them
-				'pages' => implode("\n", array_map($this->title(...), explode("\n", $link['pages']))),
+				'pages' => implode("\n", array_map($this->title(...), explode("\n", $link['pages'])))
 			});
 
-			$links = $this->sort($links, fn ($link) => match ($sort) {
-				'pages' => (string)$link['total'],
-				'url' => $this->display($link['url']),
-				// the status & the default order: most severe first
-				default => array_search($link['state'], Report::STATES, true) . $this->display($link['url']),
-			}, $dir);
+			$links = $this->sort(
+				$links,
+				fn ($link) => match ($sort) {
+					'pages' => (string)$link['total'],
+					'url' => $this->display($link['url']),
+					// the status & the default order: most severe first
+					default => array_search($link['state'], Report::STATES, true) . $this->display($link['url'])
+				},
+				$dir
+			);
 
 			[$pagination, $visible] = $this->paginate($links);
 
@@ -70,7 +74,7 @@ class LinksView extends OverviewView
 					'severity' => Report::SEVERITY,
 					'summary' => $summary,
 					'progress' => (new Checker())->progress(),
-					'scanned' => !$this->report()->isEmpty(),
+					'scanned' => !$this->report()->isEmpty()
 				]
 			];
 		});
@@ -138,9 +142,11 @@ class LinksView extends OverviewView
 
 		$parts = parse_url($url);
 
-		return ($parts['path'] ?? '/')
-			. (isset($parts['query']) ? "?{$parts['query']}" : '')
-			. (isset($parts['fragment']) ? "#{$parts['fragment']}" : '');
+		return (
+			($parts['path'] ?? '/') .
+				(isset($parts['query']) ? "?{$parts['query']}" : '') .
+				(isset($parts['fragment']) ? "#{$parts['fragment']}" : '')
+		);
 	}
 
 	protected function linking(array $pages): array
@@ -151,7 +157,7 @@ class LinksView extends OverviewView
 			if ($page = $this->kirby->page($id)) {
 				$items[] = [
 					'text' => (string)$page->title()->value(),
-					'link' => $page->panel()->url(true),
+					'link' => $page->panel()->url(true)
 				];
 			}
 		}
@@ -172,7 +178,7 @@ class LinksView extends OverviewView
 
 		return I18n::template("seo.overview.links.reason.{$link['reason']}", replace: [
 			'code' => $link['code'],
-			'target' => $link['target'] ? $this->display($link['target']) : null,
+			'target' => $link['target'] ? $this->display($link['target']) : null
 		]);
 	}
 
@@ -191,7 +197,7 @@ class LinksView extends OverviewView
 				'label' => I18n::translate('seo.overview.links.columns.url'),
 				'mobile' => true,
 				'sortable' => true,
-				'type' => 'seo-page',
+				'type' => 'seo-page'
 			],
 			'details' => [
 				'label' => I18n::translate('seo.overview.links.columns.details'),
@@ -206,7 +212,7 @@ class LinksView extends OverviewView
 				'toggle' => I18n::translate('seo.overview.links.columns.pages'),
 				'type' => 'seo-link-pages',
 				'width' => '1/4'
-			],
+			]
 		];
 	}
 
@@ -220,14 +226,14 @@ class LinksView extends OverviewView
 			'url' => [
 				'text' => $this->display($link['url']),
 				'href' => $link['url'],
-				'target' => '_blank',
+				'target' => '_blank'
 			],
 			'details' => $this->reason($link),
 			'pages' => [
 				'text' => $this->title($pages[0]),
 				'total' => $link['total'],
-				'items' => $this->linking(array_slice($pages, 0, self::PAGES)),
-			],
+				'items' => $this->linking(array_slice($pages, 0, self::PAGES))
+			]
 		];
 	}
 }

@@ -38,8 +38,10 @@ class PagesView extends EditableOverviewView
 			// pages with the given issue type (or any title/description issue), or sharing the same title/description
 			$pages = array_filter(
 				$this->pages()->values(),
-				fn (Page $page) => ($issue === null || $this->audit()->has($page, $issue))
-					&& ($group === null || isset($members[$page->id()]))
+				fn (Page $page) => (
+					($issue === null || $this->audit()->has($page, $issue)) &&
+					($group === null || isset($members[$page->id()]))
+				)
 			);
 
 			$pages = $this->search($pages, $search, self::SEARCHABLE, $this->indexed(...));
@@ -66,7 +68,7 @@ class PagesView extends EditableOverviewView
 					'summary' => $this->audit()->summary(),
 					'ai' => $this->canUseAi(),
 					'gsc' => $this->hasSearchConsole(),
-					'group' => $group ? ['kind' => $group['kind'], 'text' => $group['text']] : null,
+					'group' => $group ? ['kind' => $group['kind'], 'text' => $group['text']] : null
 				]
 			];
 		});
@@ -84,7 +86,7 @@ class PagesView extends EditableOverviewView
 		return [
 			'id' => $page->id(),
 			'model' => $page,
-			'fields' => array_values(array_filter(self::EDITABLE, fn ($key) => $this->blueprint($page)->field($key) !== null)),
+			'fields' => array_values(array_filter(self::EDITABLE, fn ($key) => $this->blueprint($page)->field($key) !== null))
 		];
 	}
 
@@ -111,7 +113,7 @@ class PagesView extends EditableOverviewView
 	{
 		return [
 			'summary' => $this->audit()->summary(),
-			'stats' => $this->audit()->stats(),
+			'stats' => $this->audit()->stats()
 		];
 	}
 
@@ -139,7 +141,7 @@ class PagesView extends EditableOverviewView
 			'id' => $page->id(),
 			'title' => (string)$page->title()->value(),
 			'template' => (string)$this->blueprint($page)->title(),
-			default => Str::unhtml((string)$this->resolve($page, $key)['field']->value()),
+			default => Str::unhtml((string)$this->resolve($page, $key)['field']->value())
 		};
 	}
 
@@ -206,7 +208,7 @@ class PagesView extends EditableOverviewView
 				'toggle' => I18n::translate('template'),
 				'type' => 'text',
 				'width' => '10rem'
-			],
+			]
 		];
 
 		if (Seo::option('robots.enabled')) {
@@ -253,13 +255,13 @@ class PagesView extends EditableOverviewView
 				'path' => '/' . $page->uri(),
 				// the lock already tells that someone else is editing
 				'changes' => $hasChanges && $lock === null,
-				'translated' => $translated,
+				'translated' => $translated
 			],
 			...array_combine(self::EDITABLE, array_map(fn ($key) => $this->metaField($entry, $key, $editable), self::EDITABLE)),
 			'ogImage' => $this->ogImage($page),
 			'checks' => $this->audit()->page($page),
 			'template' => $this->value($page, 'template'),
-			'robots' => Seo::option('robots.enabled') ? $this->robots($this->meta($page)) : null,
+			'robots' => Seo::option('robots.enabled') ? $this->robots($this->meta($page)) : null
 		];
 	}
 
@@ -284,7 +286,7 @@ class PagesView extends EditableOverviewView
 			'placeholderSource' => $fallback['source'],
 			'editable' => $editable,
 			'ai' => $editable && $this->canUseAi() && !empty($this->blueprint($page)->field($key)['ai'] ?? false),
-			...($key === 'metaTitle' ? $this->titleTemplate($page) : []),
+			...($key === 'metaTitle' ? $this->titleTemplate($page) : [])
 		];
 	}
 
@@ -304,7 +306,7 @@ class PagesView extends EditableOverviewView
 
 		return [
 			'before' => mb_substr($full, 0, $position),
-			'after' => mb_substr($full, $position + mb_strlen($title)),
+			'after' => mb_substr($full, $position + mb_strlen($title))
 		];
 	}
 
@@ -329,7 +331,7 @@ class PagesView extends EditableOverviewView
 			$file !== null => $file->url(),
 			// custom URL, anything else (e.g. a reference to a deleted file) can't be shown
 			V::url($field->value()) => $field->value(),
-			default => null,
+			default => null
 		};
 
 		return $src ? ['src' => $src, 'source' => $source] : null;

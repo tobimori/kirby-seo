@@ -18,7 +18,7 @@ class Gemini extends Driver
 	 */
 	public function stream(
 		array $content,
-		string|null $model = null,
+		string|null $model = null
 	): Generator {
 		$apiKey = $this->config('apiKey', required: true);
 		$model = $model ?? $this->config('model', static::DEFAULT_MODEL);
@@ -27,7 +27,7 @@ class Gemini extends Driver
 
 		$headers = [
 			'Content-Type: application/json',
-			"x-goog-api-key: {$apiKey}",
+			"x-goog-api-key: {$apiKey}"
 		];
 
 		$payload = [
@@ -35,7 +35,7 @@ class Gemini extends Driver
 			'input' => $this->buildSteps($content),
 			'stream' => true,
 			// keep requests stateless, nothing is retained server-side
-			'store' => false,
+			'store' => false
 		];
 
 		$systemInstruction = $this->buildSystemInstruction($content);
@@ -62,7 +62,7 @@ class Gemini extends Driver
 
 				case 'step.delta':
 					$delta = $event['delta'] ?? [];
-					$text = ($delta['type'] ?? null) === 'text' ? ($delta['text'] ?? '') : '';
+					$text = ($delta['type'] ?? null) === 'text' ? $delta['text'] ?? '' : '';
 					if ($text !== '') {
 						yield Chunk::textDelta($text, $event);
 					}
@@ -102,19 +102,19 @@ class Gemini extends Driver
 					$parts[] = [
 						'type' => 'image',
 						'mime_type' => $block['mediaType'],
-						'data' => $block['data'],
+						'data' => $block['data']
 					];
 				} elseif ($block['type'] === 'text') {
 					$parts[] = [
 						'type' => 'text',
-						'text' => $block['text'],
+						'text' => $block['text']
 					];
 				}
 			}
 
 			$steps[] = [
 				'type' => $message->role() === 'assistant' ? 'model_output' : 'user_input',
-				'content' => $parts,
+				'content' => $parts
 			];
 		}
 

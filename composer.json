@@ -32,19 +32,27 @@
 		"spatie/schema-org": "<5.0"
 	},
 	"require-dev": {
+		"carthage-software/mago": "^1.57.0",
 		"getkirby/cli": "^1.8.0",
 		"tobimori/kirby-queues": "^1.0.0-beta.1",
-		"friendsofphp/php-cs-fixer": "^3.48",
 		"spatie/schema-org": "^5.0",
 		"getkirby/cms": "^5.0.0"
 	},
 	"scripts": {
+		"analyze": "mago analyze",
 		"dist": "composer install --no-dev --optimize-autoloader",
-		"fix": "php-cs-fixer fix"
+		"fix": [
+			"mago lint --fix",
+			"mago fmt"
+		],
+		"fmt": "mago fmt",
+		"fmt:check": "mago fmt --check",
+		"lint": "mago lint"
 	},
 	"config": {
 		"optimize-autoloader": true,
 		"allow-plugins": {
+			"carthage-software/mago": true,
 			"getkirby/composer-installer": true
 		}
 	},

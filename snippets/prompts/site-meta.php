@@ -13,13 +13,14 @@ $metaFields = [
 ?>
 
 <existing-site-metadata>
-<?php foreach ($metaFields as $key => $label) : ?>
+<?php foreach ($metaFields as $key => $label): ?>
 <?php
-	$value = $site->$key()->value();
-	if ($currentField === $key || !$value || $value === '') {
-		continue;
-	}
-	?>
+
+$value = $site->$key()->value();
+if ($currentField === $key || !$value || $value === '') {
+	continue;
+}
+?>
 	<<?= $key ?>><?= $value ?></<?= $key ?>>
 <?php endforeach ?>
 </existing-site-metadata>

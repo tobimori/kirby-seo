@@ -21,4 +21,4 @@ snippet('seo/prompts/introduction', [
 </task>
 
 <?php snippet('seo/prompts/site-meta', ['currentField' => 'metaDescription']);
-snippet('seo/prompts/content'); ?>
+snippet('seo/prompts/content');

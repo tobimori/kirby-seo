@@ -19,7 +19,7 @@
 	- NEVER output duplicate content in the same answer.
 </rules>
 
-<?php if (isset($edit) && $edit !== null && $edit !== '') : ?>
+<?php if (isset($edit) && $edit !== null && $edit !== ''): ?>
 <primary-editing-task>
 	YOU ARE EDITING EXISTING CONTENT - NOT CREATING NEW CONTENT.
 
@@ -34,11 +34,11 @@
 </primary-editing-task>
 <?php endif ?>
 
-<?php if (isset($instructions) && $instructions !== null && $instructions !== '') : ?>
+<?php if (isset($instructions) && $instructions !== null && $instructions !== ''): ?>
 <user-instructions>
-	<?php if (isset($edit) && $edit !== null && $edit !== '') : ?>
+	<?php if (isset($edit) && $edit !== null && $edit !== ''): ?>
 	Apply ONLY these changes to the text above:
-	<?php else : ?>
+	<?php else: ?>
 	The user has provided these specific instructions:
 	<?php endif ?>
 	<?= $instructions ?>

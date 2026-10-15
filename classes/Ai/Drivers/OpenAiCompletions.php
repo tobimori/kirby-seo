@@ -26,13 +26,13 @@ class OpenAiCompletions extends Driver
 	 */
 	public function stream(
 		array $content,
-		string|null $model = null,
+		string|null $model = null
 	): Generator {
 		$apiKey = $this->config('apiKey', required: true);
 		$headers = [
 			'Content-Type: application/json',
 			'Accept: text/event-stream',
-			"Authorization: Bearer {$apiKey}",
+			"Authorization: Bearer {$apiKey}"
 		];
 
 		if ($organization = $this->config('organization')) {
@@ -46,7 +46,7 @@ class OpenAiCompletions extends Driver
 		$payload = [
 			'model' => $model ?? $this->config('model', static::DEFAULT_MODEL),
 			'messages' => $this->buildMessages($content),
-			'stream' => true,
+			'stream' => true
 		];
 
 		if ($maxTokens = $this->config('maxTokens')) {
@@ -61,7 +61,7 @@ class OpenAiCompletions extends Driver
 		yield from $stream->stream(function (array $event) use (&$started, &$textStarted): Generator {
 			if (isset($event['error'])) {
 				$error = $event['error'];
-				$message = is_array($error) ? ($error['message'] ?? 'Unknown Chat Completions streaming error.') : (string)$error;
+				$message = is_array($error) ? $error['message'] ?? 'Unknown Chat Completions streaming error.' : (string)$error;
 				yield Chunk::error($message, $event);
 				return;
 			}
@@ -136,7 +136,7 @@ class OpenAiCompletions extends Driver
 
 				$messages[] = [
 					'role' => $message->role(),
-					'content' => $text,
+					'content' => $text
 				];
 				continue;
 			}
@@ -147,20 +147,20 @@ class OpenAiCompletions extends Driver
 					$parts[] = [
 						'type' => 'image_url',
 						'image_url' => [
-							'url' => "data:{$block['mediaType']};base64,{$block['data']}",
-						],
+							'url' => "data:{$block['mediaType']};base64,{$block['data']}"
+						]
 					];
 				} elseif ($block['type'] === 'text') {
 					$parts[] = [
 						'type' => 'text',
-						'text' => $block['text'],
+						'text' => $block['text']
 					];
 				}
 			}
 
 			$messages[] = [
 				'role' => $message->role(),
-				'content' => $parts,
+				'content' => $parts
 			];
 		}
 

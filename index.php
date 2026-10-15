@@ -5,12 +5,12 @@
 use Kirby\Cms\App;
 use Kirby\Cms\Site;
 use Kirby\Data\Json;
-use Spatie\SchemaOrg\Schema;
-use Kirby\Toolkit\A;
 use Kirby\Filesystem\Dir;
 use Kirby\Filesystem\F;
-use tobimori\Seo\AltText;
+use Kirby\Toolkit\A;
+use Spatie\SchemaOrg\Schema;
 use tobimori\Seo\Agents;
+use tobimori\Seo\AltText;
 use tobimori\Seo\Seo;
 
 if (
@@ -34,16 +34,16 @@ App::plugin(
 		'routes' => require __DIR__ . '/config/routes.php',
 		'fields' => require __DIR__ . '/config/fields.php',
 		'fieldMethods' => [
-			'toAltText' => fn ($field) => AltText::fromField($field),
+			'toAltText' => fn ($field) => AltText::fromField($field)
 		],
 		'permissions' => [
 			'ai' => true,
-			'overview' => true,
+			'overview' => true
 		],
 		// field classes for Kirby Agents. Without the plugin, Kirby ignores this key and the classes are never loaded
 		'tobimori.agents.fields' => [
 			'alt-text' => Agents\AltTextField::class,
-			'seo-writer' => Agents\SeoWriterField::class,
+			'seo-writer' => Agents\SeoWriterField::class
 		],
 		'snippets' => [
 			'seo/prompts/introduction' => __DIR__ . '/snippets/prompts/introduction.php',
@@ -58,10 +58,10 @@ App::plugin(
 			'seo/prompts/tasks/alt-text' => __DIR__ . '/snippets/prompts/tasks/alt-text.php',
 			'seo/schemas' => __DIR__ . '/snippets/schemas.php',
 			'seo/head' => __DIR__ . '/snippets/head.php',
-			'seo/robots.txt' => __DIR__ . '/snippets/robots.txt.php',
+			'seo/robots.txt' => __DIR__ . '/snippets/robots.txt.php'
 		],
 		'controllers' => [
-			'llms.txt' => fn (Site $site) => (new (Seo::option('components.agentic'))($site->homePage()))->llmsTxtData(),
+			'llms.txt' => fn (Site $site) => (new (Seo::option('components.agentic'))($site->homePage()))->llmsTxtData()
 		],
 		'templates' => [
 			'error.md' => __DIR__ . '/templates/error.md.php',
@@ -69,7 +69,7 @@ App::plugin(
 			'llms.txt' => __DIR__ . '/templates/llms.txt.php',
 			'sitemap' => __DIR__ . '/templates/sitemap.php',
 			'sitemap.xml' => __DIR__ . '/templates/sitemap.xml.php',
-			'sitemap.xsl' => __DIR__ . '/templates/sitemap.xsl.php',
+			'sitemap.xsl' => __DIR__ . '/templates/sitemap.xsl.php'
 		],
 		'blueprints' => [
 			'seo' => require __DIR__ . '/blueprints/seo.php',
@@ -81,7 +81,7 @@ App::plugin(
 			'seo/fields/title-template' => __DIR__ . '/blueprints/fields/title-template.yml',
 			'seo/fields/robots' => require __DIR__ . '/blueprints/fields/robots.php',
 			'seo/fields/site-robots' => require __DIR__ . '/blueprints/fields/site-robots.php',
-			'seo/fields/social-media' => require __DIR__ . '/blueprints/fields/social-media.php',
+			'seo/fields/social-media' => require __DIR__ . '/blueprints/fields/social-media.php'
 		],
 		// get all files from /translations and register them as language files
 		'translations' => A::keyBy(
@@ -100,7 +100,7 @@ App::plugin(
 				}
 			),
 			'lang'
-		),
+		)
 	]
 );
 

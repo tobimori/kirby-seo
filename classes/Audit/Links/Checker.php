@@ -216,7 +216,7 @@ class Checker
 			'urls' => ['done' => count($state['external']) - $due, 'total' => count($state['external'])],
 			'done' => $done === count($targets) && $due === 0,
 			'running' => $this->index->isLocked(),
-			'queue' => static::usesQueue(),
+			'queue' => static::usesQueue()
 		];
 	}
 
@@ -273,7 +273,10 @@ class Checker
 		// Site content can supply shared links, so changes must invalidate every page
 		$site = [$invalidated];
 		foreach ($languages as $language) {
-			$site[] = $kirby->site()->version('latest')->modified($language ?? 'default');
+			$site[] = $kirby
+				->site()
+				->version('latest')
+				->modified($language ?? 'default');
 		}
 
 		$targets = [];
@@ -290,7 +293,7 @@ class Checker
 					$url,
 					$page->status(),
 					$page->intendedTemplate()->name(),
-					$page->version('latest')->modified($language ?? 'default'),
+					$page->version('latest')->modified($language ?? 'default')
 				]));
 			}
 		}
@@ -314,7 +317,7 @@ class Checker
 			'location' => $result['location'],
 			'error' => $result['error'],
 			'links' => $this->intern($result['links']),
-			'ids' => $result['ids'],
+			'ids' => $result['ids']
 		];
 	}
 
@@ -333,7 +336,7 @@ class Checker
 				'location' => $location,
 				'error' => null,
 				'links' => [],
-				'ids' => [],
+				'ids' => []
 			]);
 			$this->index->write($this->data);
 		}
@@ -369,7 +372,7 @@ class Checker
 	 */
 	protected function dueUrls(array $external, int $invalidated): array
 	{
-		$since = max(time() - (int)Seo::option('links.ttl') * 3600, $invalidated);
+		$since = max(time() - ((int)Seo::option('links.ttl') * 3600), $invalidated);
 
 		return array_keys(array_filter($external, fn ($checked) => $checked < $since));
 	}
@@ -427,7 +430,7 @@ class Checker
 					CURLOPT_USERAGENT => Crawler::userAgent(),
 					CURLOPT_HTTPHEADER => ['Accept: text/html,application/xhtml+xml,*/*;q=0.8'],
 					// only the status is needed: stop at the first bytes of the body
-					CURLOPT_WRITEFUNCTION => fn () => 0,
+					CURLOPT_WRITEFUNCTION => fn () => 0
 				]);
 				curl_multi_add_handle($multi, $handle);
 				$handles[$url] = $handle;
@@ -446,14 +449,14 @@ class Checker
 					$code !== 0 || $error === 0 => null,
 					$error === CURLE_OPERATION_TIMEDOUT => 'timeout',
 					$error === CURLE_COULDNT_RESOLVE_HOST => 'dns',
-					default => 'connection',
+					default => 'connection'
 				};
 
 				$results[$url] = [
 					'code' => $code,
 					'location' => curl_getinfo($handle, CURLINFO_REDIRECT_URL) ?: null,
 					'error' => $errorType,
-					'checked' => time(),
+					'checked' => time()
 				];
 
 				// servers that don't (properly) support HEAD requests

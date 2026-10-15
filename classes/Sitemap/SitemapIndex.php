@@ -41,7 +41,7 @@ class SitemapIndex extends Collection
 		return Sitemap::toXml('sitemapindex', $this);
 	}
 
-	public function isValidIndex(?string $key = null): bool
+	public function isValidIndex(string|null $key = null): bool
 	{
 		if ($key === null) {
 			return $this->count() > 1;

@@ -15,7 +15,7 @@ snippet('seo/prompts/introduction', [
 ]); ?>
 
 <task>
-	Create a useful meta title for this page called <page-title><?= $page->title()->value() ?></page-title>. <?php if ($page->isHomePage()) : ?>This page is the homepage of the website. AVOID an overly generic title such as 'Home'.<?php endif ?>
+	Create a useful meta title for this page called <page-title><?= $page->title()->value() ?></page-title>. <?php if ($page->isHomePage()): ?>This page is the homepage of the website. AVOID an overly generic title such as 'Home'.<?php endif ?>
 
 	<?php if ($page->useTitleTemplate()->isEmpty() ? true : $page->useTitleTemplate()->toBool()):
 		$template = $meta->get('metaTemplate');
@@ -26,7 +26,10 @@ snippet('seo/prompts/introduction', [
 
 		<template><?= $templatePreview ?></template>
 
-		Where {{ title }} is your page title. The entire title SHOULD be between <?= max(0, 50 - $templateBaseLength) ?>-<?= max(max(0, 50 - $templateBaseLength), 60 - $templateBaseLength) ?> characters long.
+		Where {{ title }} is your page title. The entire title SHOULD be between <?= max(0, 50 - $templateBaseLength) ?>-<?= max(
+			max(0, 50 - $templateBaseLength),
+			60 - $templateBaseLength
+		) ?> characters long.
 		DO NOT output the Title Template. ONLY output what should be placed inside {{ title }}. DO NOT repeat ANYTHING that exists in the template. You MUST NOT repeat the name of the site.
 	<?php else: ?>
 		Your response will be set as title without any changes. The entire title SHOULD be between 50-60 characters long.

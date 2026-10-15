@@ -16,9 +16,11 @@ class AltTextField extends Field
 {
 	public function describe(Compiler $schema): string
 	{
-		return 'alt text, object {"text": string, "decorative": boolean}, or only the text as a string. '
-			. 'Set `decorative: true` with an empty text for images without meaning, or null to remove the alt text. '
-			. '`source` (manual, ai or reviewed) is set automatically';
+		return (
+			'alt text, object {"text": string, "decorative": boolean}, or only the text as a string. ' .
+				'Set `decorative: true` with an empty text for images without meaning, or null to remove the alt text. ' .
+				'`source` (manual, ai or reviewed) is set automatically'
+		);
 	}
 
 	public function input(mixed $value, mixed $current): mixed
@@ -35,17 +37,18 @@ class AltTextField extends Field
 
 		$value = [
 			'text' => $value['text'] ?? '',
-			'decorative' => $value['decorative'] ?? false,
+			'decorative' => $value['decorative'] ?? false
 		];
 
 		// keep the source of an unchanged value, so a reviewed alt text stays reviewed
 		$current = is_array($current) ? $current : [];
-		$unchanged = $value['text'] === ($current['text'] ?? '')
-			&& $value['decorative'] === ($current['decorative'] ?? false);
+		$unchanged =
+			$value['text'] === ($current['text'] ?? '') &&
+			$value['decorative'] === ($current['decorative'] ?? false);
 
 		return [
 			...$value,
-			'source' => $unchanged ? ($current['source'] ?? AltText::SOURCE_MANUAL) : AltText::SOURCE_AI,
+			'source' => $unchanged ? $current['source'] ?? AltText::SOURCE_MANUAL : AltText::SOURCE_AI
 		];
 	}
 
@@ -73,6 +76,6 @@ class AltTextField extends Field
 			return '(decorative)';
 		}
 
-		return Presenter::short(is_array($value) ? ($value['text'] ?? '') : '');
+		return Presenter::short(is_array($value) ? $value['text'] ?? '' : '');
 	}
 }

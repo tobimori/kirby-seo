@@ -6,7 +6,7 @@ on:
 
 jobs:
   lint-and-format:
-    name: lint and format
+    name: lint, format, and analyze
     runs-on: ubuntu-latest
 
     steps:
@@ -17,7 +17,11 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: "8.3"
-          tools: php-cs-fixer
+          coverage: none
+          tools: composer
+
+      - name: install php dependencies
+        run: composer install --no-interaction --no-progress --prefer-dist
 
       - name: setup node
         uses: actions/setup-node@v4
@@ -36,5 +40,13 @@ jobs:
       - name: check oxfmt formatting
         run: pnpm exec oxfmt
 
-      - name: run php cs fixer
-        run: php-cs-fixer fix --dry-run --diff --verbose
+      - name: check mago formatting
+        run: vendor/bin/mago fmt --check
+
+      - name: run mago lint
+        if: success() || failure()
+        run: vendor/bin/mago lint
+
+      - name: run mago analyze
+        if: success() || failure()
+        run: vendor/bin/mago analyze

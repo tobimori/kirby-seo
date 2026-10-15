@@ -19,34 +19,32 @@ if ($contentHtml !== '' && class_exists('DOMDocument')) {
 	libxml_use_internal_errors($previousLibxmlState);
 
 	if ($loaded !== false) {
-		foreach (
-			[
-				'script',
-				'style',
-				'noscript',
-				'template',
-				'svg',
-				'canvas',
-				'iframe',
-				'video',
-				'audio',
-				'object',
-				'embed',
-				'source',
-				'track',
-				'nav',
-				'footer',
-				'aside',
-				'form',
-				'button',
-				'input',
-				'select',
-				'textarea',
-				'label',
-				'menu',
-				'header',
-			] as $tag
-		) {
+		foreach ([
+			'script',
+			'style',
+			'noscript',
+			'template',
+			'svg',
+			'canvas',
+			'iframe',
+			'video',
+			'audio',
+			'object',
+			'embed',
+			'source',
+			'track',
+			'nav',
+			'footer',
+			'aside',
+			'form',
+			'button',
+			'input',
+			'select',
+			'textarea',
+			'label',
+			'menu',
+			'header'
+		] as $tag) {
 			$nodes = $dom->getElementsByTagName($tag);
 			for ($i = $nodes->length - 1; $i >= 0; $i--) {
 				$node = $nodes->item($i);
@@ -57,18 +55,16 @@ if ($contentHtml !== '' && class_exists('DOMDocument')) {
 		}
 
 		$xpath = new \DOMXPath($dom);
-		foreach (
-			[
-				'navigation',
-				'banner',
-				'contentinfo',
-				'complementary',
-				'search',
-				'menu',
-				'menubar',
-				'toolbar',
-			] as $role
-		) {
+		foreach ([
+			'navigation',
+			'banner',
+			'contentinfo',
+			'complementary',
+			'search',
+			'menu',
+			'menubar',
+			'toolbar'
+		] as $role) {
 			$nodes = $xpath->query("//*[@role='{$role}']");
 			if ($nodes === false) {
 				continue;

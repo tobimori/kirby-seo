@@ -23,7 +23,7 @@ class LlmContent
 {
 	public const MARKDOWN_TYPE = 'text/markdown';
 
-	protected ?bool $available = null;
+	protected bool|null $available = null;
 
 	public function __construct(protected Page $page)
 	{
@@ -31,14 +31,18 @@ class LlmContent
 
 	public function enabled(): bool
 	{
-		return Seo::option('agentic.enabled', true) === true
-			&& Seo::option('agentic.markdown.enabled', true) === true;
+		return (
+			Seo::option('agentic.enabled', true) === true &&
+				Seo::option('agentic.markdown.enabled', true) === true
+		);
 	}
 
 	public function llmsTxtEnabled(): bool
 	{
-		return Seo::option('agentic.enabled', true) === true
-			&& Seo::option('agentic.llmsTxt.enabled', true) === true;
+		return (
+			Seo::option('agentic.enabled', true) === true &&
+				Seo::option('agentic.llmsTxt.enabled', true) === true
+		);
 	}
 
 	/**
@@ -70,9 +74,10 @@ class LlmContent
 
 	public function available(): bool
 	{
-		return $this->available ??= $this->enabled()
-			&& $this->page->isPublished()
-			&& ($this->hasExplicitRepresentation() || ($this->automaticConversionEnabled() && $this->converter() !== null));
+		return $this->available ??=
+			$this->enabled() &&
+			$this->page->isPublished() &&
+			($this->hasExplicitRepresentation() || $this->automaticConversionEnabled() && $this->converter() !== null);
 	}
 
 	/**
@@ -131,7 +136,7 @@ class LlmContent
 			'Link' => $link,
 			'Vary' => 'Accept',
 			'X-Content-Type-Options' => 'nosniff',
-			'X-Robots-Tag' => 'noindex',
+			'X-Robots-Tag' => 'noindex'
 		];
 		if ($language !== null) {
 			$headers['Content-Language'] = $language->code();
@@ -149,16 +154,19 @@ class LlmContent
 	{
 		$markdown = $this->render();
 		if ($markdown === null) {
-			$markdown = trim($this->page->kirby()->template('error', 'md')->render([
-				'page' => $this->page,
-				'site' => $this->page->site(),
-			])) . "\n";
+			$markdown = trim($this->page
+				->kirby()
+				->template('error', 'md')
+				->render([
+					'page' => $this->page,
+					'site' => $this->page->site()
+				])) . "\n";
 		}
 
 		$headers = [
 			'Vary' => 'Accept',
 			'X-Content-Type-Options' => 'nosniff',
-			'X-Robots-Tag' => 'noindex',
+			'X-Robots-Tag' => 'noindex'
 		];
 		if ($language !== null) {
 			$headers['Content-Language'] = $language->code();
@@ -197,7 +205,7 @@ class LlmContent
 			'slug' => 'llms',
 			'template' => 'llms',
 			'parent' => $parent,
-			'content' => ['title' => 'llms.txt'],
+			'content' => ['title' => 'llms.txt']
 		]);
 	}
 
@@ -220,7 +228,7 @@ class LlmContent
 
 		return [
 			'entries' => $this->llmsTxtEntries($pages, $language?->code()),
-			'pages' => $pages,
+			'pages' => $pages
 		];
 	}
 
@@ -361,7 +369,9 @@ class LlmContent
 			}
 		}
 
-		$node = (new DOMXPath($document))->query('/html/body/*[1]')?->item(0);
+		$node = (new DOMXPath($document))
+			->query('/html/body/*[1]')
+			?->item(0);
 		return $node instanceof DOMElement ? ($document->saveHTML($node) ?: $html) : $html;
 	}
 
@@ -474,7 +484,7 @@ class LlmContent
 				'description' => $page->metadata()->metaDescription()->value(),
 				'page' => $page,
 				'title' => $page->title()->value(),
-				'url' => $this->contentFor($page)->markdownUrl($languageCode),
+				'url' => $this->contentFor($page)->markdownUrl($languageCode)
 			];
 		}
 
@@ -511,7 +521,7 @@ class LlmContent
 		$selectors = Seo::option('agentic.markdown.selectors', [
 			'[data-agentic-content]',
 			'main',
-			'article',
+			'article'
 		]);
 
 		return array_values(array_filter((array)$selectors, 'is_string'));

@@ -22,7 +22,7 @@ class Pages
 		'titleDuplicate',
 		'descriptionFallback',
 		'titleLength',
-		'descriptionLength',
+		'descriptionLength'
 	];
 
 	public const SEVERITY = [
@@ -32,7 +32,7 @@ class Pages
 		// Fallback descriptions need review even when no duplicate is found
 		'descriptionFallback' => 'negative',
 		'titleLength' => 'notice',
-		'descriptionLength' => 'notice',
+		'descriptionLength' => 'notice'
 	];
 
 	public const KINDS = ['title', 'description'];
@@ -91,7 +91,7 @@ class Pages
 	public function has(Page $page, string $type): bool
 	{
 		foreach (array_column($this->page($page)['issues'] ?? [], 'type') as $issue) {
-			if ($issue === $type || (in_array($type, self::KINDS, true) && str_starts_with($issue, $type))) {
+			if ($issue === $type || in_array($type, self::KINDS, true) && str_starts_with($issue, $type)) {
 				return true;
 			}
 		}
@@ -192,7 +192,7 @@ class Pages
 			$page->status(),
 			$page->intendedTemplate()->name(),
 			$this->modified($page),
-			$page->parent() ? $this->fingerprint($page->parent()) : null,
+			$page->parent() ? $this->fingerprint($page->parent()) : null
 		]));
 	}
 
@@ -200,7 +200,7 @@ class Pages
 	{
 		return [
 			$model->version('latest')->modified('current'),
-			$model->version('changes')->modified('current'),
+			$model->version('changes')->modified('current')
 		];
 	}
 
@@ -228,7 +228,7 @@ class Pages
 			// the full title, as rendered with the title template
 			'title' => static::text($meta->metaTitle()->value()),
 			'description' => static::text($description['field']->value()),
-			'source' => $description['source'],
+			'source' => $description['source']
 		];
 	}
 
@@ -267,7 +267,7 @@ class Pages
 		return [
 			'pages' => $pages,
 			'summary' => $summary,
-			'groups' => $groups,
+			'groups' => $groups
 		];
 	}
 
@@ -332,7 +332,7 @@ class Pages
 					$groups[substr(md5($kind . ':' . $normalized), 0, 12)] = [
 						'kind' => $kind,
 						'text' => $members[0][1],
-						'pages' => array_column($members, 0),
+						'pages' => array_column($members, 0)
 					];
 				}
 			}
@@ -353,7 +353,7 @@ class Pages
 			$text === '' => null,
 			$length > $max => ['variant' => 'long', 'length' => $length, 'min' => $min, 'max' => $max],
 			$length < $min => ['variant' => 'short', 'length' => $length, 'min' => $min, 'max' => $max],
-			default => null,
+			default => null
 		};
 	}
 

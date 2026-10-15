@@ -16,18 +16,18 @@ use function curl_multi_init;
 use function curl_multi_remove_handle;
 use function curl_multi_select;
 use function curl_setopt_array;
-use function strlen;
-use function sprintf;
 use function is_array;
+use function sprintf;
+use function strlen;
 
+use const CURLINFO_HTTP_CODE;
+use const CURLM_CALL_MULTI_PERFORM;
 use const CURLOPT_HTTPHEADER;
 use const CURLOPT_POST;
 use const CURLOPT_POSTFIELDS;
 use const CURLOPT_RETURNTRANSFER;
 use const CURLOPT_TIMEOUT;
 use const CURLOPT_WRITEFUNCTION;
-use const CURLINFO_HTTP_CODE;
-use const CURLM_CALL_MULTI_PERFORM;
 
 final class SseStream
 {
@@ -69,7 +69,7 @@ final class SseStream
 				}
 
 				return strlen($data);
-			},
+			}
 		]);
 
 		$multi = curl_multi_init();

@@ -19,7 +19,7 @@ class GoogleSearchConsole
 	protected const SCOPES = 'email https://www.googleapis.com/auth/webmasters.readonly';
 	protected const CACHE_DURATION = 60 * 24; // 24 hours in minutes
 
-	protected static ?array $tokens = null;
+	protected static array|null $tokens = null;
 
 	protected static function cache(): Cache
 	{
@@ -29,7 +29,7 @@ class GoogleSearchConsole
 	/**
 	 * Get OAuth credentials from config
 	 */
-	public static function credentials(): ?array
+	public static function credentials(): array|null
 	{
 		return Seo::option('searchConsole.credentials.web');
 	}
@@ -54,7 +54,7 @@ class GoogleSearchConsole
 	/**
 	 * Load tokens from file
 	 */
-	public static function tokens(): ?array
+	public static function tokens(): array|null
 	{
 		if (static::$tokens !== null) {
 			return static::$tokens;
@@ -198,7 +198,7 @@ class GoogleSearchConsole
 		}
 
 		// refresh if expired or expiring soon (within 5 min)
-		if ($tokens['expires_at'] < time() + 300) {
+		if ($tokens['expires_at'] < (time() + 300)) {
 			return static::refreshToken();
 		}
 
@@ -208,7 +208,7 @@ class GoogleSearchConsole
 	/**
 	 * Get the connected property URL
 	 */
-	public static function property(): ?string
+	public static function property(): string|null
 	{
 		$tokens = static::tokens();
 		return $tokens['property'] ?? null;
@@ -217,7 +217,7 @@ class GoogleSearchConsole
 	/**
 	 * Find the best matching property for a site URL
 	 */
-	public static function findMatchingProperty(string $siteUrl): ?string
+	public static function findMatchingProperty(string $siteUrl): string|null
 	{
 		$properties = static::listProperties();
 		if (empty($properties)) {
@@ -317,27 +317,32 @@ class GoogleSearchConsole
 			]];
 		}
 
-		return static::cache()->getOrSet(md5($property . json_encode($body)), function () use ($property, $body) {
-			$uri = new Uri('https://www.googleapis.com/webmasters/v3/sites');
-			$uri->setPath($uri->path() . '/' . urlencode($property) . '/searchAnalytics/query');
+		return static::cache()
+			->getOrSet(
+				md5($property . json_encode($body)),
+				function () use ($property, $body) {
+					$uri = new Uri('https://www.googleapis.com/webmasters/v3/sites');
+					$uri->setPath($uri->path() . '/' . urlencode($property) . '/searchAnalytics/query');
 
-			$response = Remote::request($uri->toString(), [
-				'method' => 'POST',
-				'headers' => [
-					'Authorization' => 'Bearer ' . static::accessToken(),
-					'Content-Type' => 'application/json'
-				],
-				'data' => json_encode($body)
-			]);
+					$response = Remote::request($uri->toString(), [
+						'method' => 'POST',
+						'headers' => [
+							'Authorization' => 'Bearer ' . static::accessToken(),
+							'Content-Type' => 'application/json'
+						],
+						'data' => json_encode($body)
+					]);
 
-			$data = $response->json();
+					$data = $response->json();
 
-			if (isset($data['error'])) {
-				throw new \Exception($data['error']['message'] ?? 'Failed to query search analytics');
-			}
+					if (isset($data['error'])) {
+						throw new \Exception($data['error']['message'] ?? 'Failed to query search analytics');
+					}
 
-			return $data['rows'] ?? [];
-		}, static::CACHE_DURATION);
+					return $data['rows'] ?? [];
+				},
+				static::CACHE_DURATION
+			);
 	}
 
 	/**

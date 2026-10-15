@@ -19,7 +19,7 @@ class SitemapUrl
 	{
 	}
 
-	public function loc(?string $url = null): SitemapUrl|string
+	public function loc(string|null $url = null): SitemapUrl|string
 	{
 		if ($url === null) {
 			return $this->loc;
@@ -29,7 +29,7 @@ class SitemapUrl
 		return $this;
 	}
 
-	public function lastmod(?string $lastmod = null): SitemapUrl|string
+	public function lastmod(string|null $lastmod = null): SitemapUrl|string
 	{
 		if ($lastmod === null) {
 			return $this->lastmod;
@@ -39,7 +39,7 @@ class SitemapUrl
 		return $this;
 	}
 
-	public function changefreq(?string $changefreq = null): SitemapUrl|string
+	public function changefreq(string|null $changefreq = null): SitemapUrl|string
 	{
 		if ($changefreq === null) {
 			return $this->changefreq;
@@ -49,7 +49,7 @@ class SitemapUrl
 		return $this;
 	}
 
-	public function priority(?string $priority = null): SitemapUrl|string
+	public function priority(string|null $priority = null): SitemapUrl|string
 	{
 		if ($priority === null) {
 			return $this->priority;
@@ -72,7 +72,6 @@ class SitemapUrl
 				}
 			}
 		}
-
 
 		$this->alternates = $alternates;
 		return $this;

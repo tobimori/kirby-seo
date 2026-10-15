@@ -18,13 +18,13 @@ class OpenAi extends Driver
 	 */
 	public function stream(
 		array $content,
-		string|null $model = null,
+		string|null $model = null
 	): Generator {
 		$apiKey = $this->config('apiKey', required: true);
 		$headers = [
 			'Content-Type: application/json',
 			'Accept: text/event-stream',
-			"Authorization: Bearer {$apiKey}",
+			"Authorization: Bearer {$apiKey}"
 		];
 		if ($organization = $this->config('organization')) {
 			$headers[] = "OpenAI-Organization: {$organization}";
@@ -34,7 +34,7 @@ class OpenAi extends Driver
 			'model' => $model ?? $this->config('model', static::DEFAULT_MODEL),
 			'input' => $this->buildInput($content),
 			// instructions does not work for e.g. openrouter so let's just put everything in user prompt
-			'stream' => true,
+			'stream' => true
 		];
 
 		$stream = new SseStream($this->config('endpoint', static::DEFAULT_ENDPOINT), $headers, $payload, (int)$this->config('timeout', 120));
@@ -97,19 +97,19 @@ class OpenAi extends Driver
 				if ($block['type'] === 'image') {
 					$blocks[] = [
 						'type' => 'input_image',
-						'image_url' => "data:{$block['mediaType']};base64,{$block['data']}",
+						'image_url' => "data:{$block['mediaType']};base64,{$block['data']}"
 					];
 				} elseif ($block['type'] === 'text') {
 					$blocks[] = [
 						'type' => 'input_text',
-						'text' => $block['text'],
+						'text' => $block['text']
 					];
 				}
 			}
 
 			$input[] = [
 				'role' => $message->role(),
-				'content' => $blocks,
+				'content' => $blocks
 			];
 		}
 

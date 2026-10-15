@@ -42,7 +42,7 @@ return [
 			'counter' => fn (bool $counter = false) => $counter, // we have to disable the counter because its at the same place as our ai button
 			'inline' => fn (bool $inline = true) => $inline,
 			'marks' => fn (array|bool|null $marks = false) => $marks,
-			'nodes' => fn (array|bool|null $nodes = false) => $nodes,
+			'nodes' => fn (array|bool|null $nodes = false) => $nodes
 		],
 		'api' => fn () => [
 			[
@@ -77,12 +77,10 @@ return [
 					// use the unsaved Panel changes (if any) for rendering & reading content,
 					// falls back to the latest version if no changes exist
 					$component::sendStream(fn (Closure $send) => VersionId::render('changes', function () use ($component, $data, $send) {
-						foreach (
-							$component::streamTask($this->field()->ai(), [
-								'instructions' => $data['instructions'] ?? null,
-								'edit' => $data['edit'] ?? null
-							]) as $chunk
-						) {
+						foreach ($component::streamTask($this->field()->ai(), [
+							'instructions' => $data['instructions'] ?? null,
+							'edit' => $data['edit'] ?? null
+						]) as $chunk) {
 							$send($chunk);
 						}
 					}));
@@ -90,5 +88,5 @@ return [
 			]
 		]
 	],
-	'alt-text' => AltTextField::class,
+	'alt-text' => AltTextField::class
 ];

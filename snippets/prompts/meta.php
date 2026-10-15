@@ -16,13 +16,14 @@ $metaFields = [
 ?>
 
 <existing-metadata>
-<?php foreach ($metaFields as $key => $label) : ?>
+<?php foreach ($metaFields as $key => $label): ?>
 <?php
-	$value = $meta->get($key);
-	if ($currentField === $key || !$value || $value === '') {
-		continue;
-	}
-	?>
+
+$value = $meta->get($key);
+if ($currentField === $key || !$value || $value === '') {
+	continue;
+}
+?>
 	<<?= $key ?>><?= $value ?></<?= $key ?>>
 <?php endforeach ?>
 </existing-metadata>

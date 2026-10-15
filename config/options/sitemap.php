@@ -1,7 +1,7 @@
 <?php
 
-use tobimori\Seo\Sitemap\SitemapIndex;
 use tobimori\Seo\Meta;
+use tobimori\Seo\Sitemap\SitemapIndex;
 
 return function (SitemapIndex $sitemap) {
 	$exclude = option('tobimori.seo.sitemap.excludeTemplates', []);
@@ -19,8 +19,9 @@ return function (SitemapIndex $sitemap) {
 		$index = $sitemap->create($group ? $group->first()->intendedTemplate()->name() : 'pages');
 
 		foreach ($group as $page) {
-			$url = $index->createUrl($page->metadata()->canonicalUrl())
-				->lastmod($page->modified() ?? (int)(date('c')))
+			$url = $index
+				->createUrl($page->metadata()->canonicalUrl())
+				->lastmod($page->modified() ?? (int)date('c'))
 				->changefreq(is_callable($changefreq = option('tobimori.seo.sitemap.changefreq')) ? $changefreq($page) : $changefreq)
 				->priority(is_callable($priority = option('tobimori.seo.sitemap.priority')) ? $priority($page) : $priority);
 
@@ -33,20 +34,18 @@ return function (SitemapIndex $sitemap) {
 						 * Specification: "lists every alternate version of the page, including itself."
 						 * https://developers.google.com/search/docs/specialty/international/localized-versions#sitemap
 						 */
-						$alternates[] =
-							[
-								'hreflang' => Meta::toBCP47($language),
-								'href' => $page->url($language->code()),
-							];
+						$alternates[] = [
+							'hreflang' => Meta::toBCP47($language),
+							'href' => $page->url($language->code())
+						];
 					}
 				}
 
 				// add x-default
-				$alternates[] =
-					[
-						'hreflang' => 'x-default',
-						'href' => $page->indexUrl(),
-					];
+				$alternates[] = [
+					'hreflang' => 'x-default',
+					'href' => $page->indexUrl()
+				];
 
 				$url->alternates($alternates);
 			}

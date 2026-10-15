@@ -20,7 +20,7 @@ class SeoWriterField extends WriterField
 	 */
 	private const array VARIABLES = [
 		'seoTemplateTitle' => ['title', 'the meta title, or the page title if it is empty'],
-		'seoTemplateSiteTitle' => ['site.title', 'site title'],
+		'seoTemplateSiteTitle' => ['site.title', 'site title']
 	];
 
 	public function describe(Compiler $schema): string
@@ -30,9 +30,11 @@ class SeoWriterField extends WriterField
 			$this->variables()
 		);
 
-		return parent::describe($schema)
-			. ', no line breaks'
-			. ($variables !== [] ? ', placeholders: ' . implode(', ', $variables) : '');
+		return (
+			parent::describe($schema) .
+				', no line breaks' .
+				($variables !== [] ? ', placeholders: ' . implode(', ', $variables) : '')
+		);
 	}
 
 	public function input(mixed $value, mixed $current): mixed
@@ -86,10 +88,12 @@ class SeoWriterField extends WriterField
 	 */
 	private static function placeholders(string $value): string
 	{
-		return preg_replace(
-			'/<span data-seo-template-variable="([^"]+)">.*?<\/span>/s',
-			'{{ $1 }}',
-			$value
-		) ?? $value;
+		return (
+			preg_replace(
+				'/<span data-seo-template-variable="([^"]+)">.*?<\/span>/s',
+				'{{ $1 }}',
+				$value
+			) ?? $value
+		);
 	}
 }
