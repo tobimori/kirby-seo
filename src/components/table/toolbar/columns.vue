@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "kirbyuse"
+import { ref } from "vue"
 
 defineProps({
 	/** `[{ value, text }]` of the columns that can be toggled */

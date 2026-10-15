@@ -7,7 +7,7 @@ export const overviewProps = {
 	license: Object,
 	rows: Array,
 	pagination: Object,
-	search: String,
+	term: String,
 	sort: String,
 	dir: String,
 	severity: Object,

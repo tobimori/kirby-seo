@@ -4,7 +4,7 @@ import vue from "eslint-plugin-vue"
 
 export default [
 	js.configs.recommended,
-	...vue.configs["flat/vue2-recommended"],
+	...vue.configs["flat/recommended"],
 	prettier,
 	{
 		rules: {

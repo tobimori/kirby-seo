@@ -7,7 +7,7 @@ use Kirby\Cms\Page;
 use Kirby\Content\Changes;
 use Kirby\Content\VersionId;
 use Kirby\Panel\Ui\Item\PageItem;
-use Kirby\Toolkit\I18n;
+use Kirby\Panel\Ui\View;
 use Kirby\Toolkit\Str;
 use Kirby\Toolkit\V;
 use tobimori\Seo\Audit;
@@ -24,15 +24,15 @@ class PagesView extends EditableOverviewView
 
 	protected array $resolved = [];
 
-	public function load(): array
+	public function load(): View
 	{
 		return VersionId::render('changes', function () {
 			$query = $this->query(
 				self::SORTABLE,
 				[...Audit\Pages::TYPES, ...Audit\Pages::KINDS]
 			);
-			['search' => $search, 'sort' => $sort, 'dir' => $dir, 'issue' => $issue] = $query;
-			$group = $this->audit()->group((string)$this->kirby->request()->get('group'));
+			['term' => $search, 'sort' => $sort, 'dir' => $dir, 'issue' => $issue] = $query;
+			$group = $this->audit()->group((string)$this->request->get('group'));
 			$members = array_flip($group['pages'] ?? []);
 
 			// pages with the given issue type (or any title/description issue), or sharing the same title/description
@@ -52,25 +52,20 @@ class PagesView extends EditableOverviewView
 
 			[$pagination, $visible] = $this->paginate($pages);
 
-			return [
-				'component' => 'k-seo-overview-view',
-				'title' => I18n::translate('seo.overview.title'),
-				'props' => [
-					...$this->layout('pages'),
-					...$query,
-					'columns' => $this->columns(),
-					// only the visible rows resolve all of their values
-					'rows' => array_map(fn (Page $page) => $this->row($this->entry($page)), $visible),
-					'changes' => $this->changes(),
-					'pagination' => $pagination,
-					'ids' => array_values(array_map(fn (Page $page) => $page->id(), $pages)),
-					'severity' => Audit\Pages::SEVERITY,
-					'summary' => $this->audit()->summary(),
-					'ai' => $this->canUseAi(),
-					'gsc' => $this->hasSearchConsole(),
-					'group' => $group ? ['kind' => $group['kind'], 'text' => $group['text']] : null
-				]
-			];
+			return $this->view('pages', 'k-seo-overview-view', [
+				...$query,
+				'columns' => $this->columns(),
+				// only the visible rows resolve all of their values
+				'rows' => array_map(fn (Page $page) => $this->row($this->entry($page)), $visible),
+				'changes' => $this->changes(),
+				'pagination' => $pagination,
+				'ids' => array_values(array_map(fn (Page $page) => $page->id(), $pages)),
+				'severity' => Audit\Pages::SEVERITY,
+				'summary' => $this->audit()->summary(),
+				'ai' => $this->canUseAi(),
+				'gsc' => $this->hasSearchConsole(),
+				'group' => $group ? ['kind' => $group['kind'], 'text' => $group['text']] : null
+			]);
 		});
 	}
 
@@ -150,62 +145,62 @@ class PagesView extends EditableOverviewView
 		$columns = [
 			'checks' => [
 				'hideLabel' => true,
-				'label' => I18n::translate('seo.overview.columns.checks'),
+				'label' => $this->i18n('seo.overview.columns.checks'),
 				'mobile' => true,
 				'resizable' => false,
-				'toggle' => I18n::translate('seo.overview.columns.checks'),
+				'toggle' => $this->i18n('seo.overview.columns.checks'),
 				'type' => 'seo-checks',
 				'width' => 'var(--table-row-height)'
 			],
 			'image' => [
 				'hidden' => true,
 				'hideLabel' => true,
-				'label' => I18n::translate('seo.overview.columns.image'),
+				'label' => $this->i18n('seo.overview.columns.image'),
 				'mobile' => true,
 				'resizable' => false,
-				'toggle' => I18n::translate('seo.overview.columns.image'),
+				'toggle' => $this->i18n('seo.overview.columns.image'),
 				'type' => 'image',
 				'width' => 'var(--table-row-height)'
 			],
 			'title' => [
-				'label' => I18n::translate('title'),
+				'label' => $this->i18n('title'),
 				'mobile' => true,
 				'sortable' => true,
 				'type' => 'seo-page'
 			],
 			'metaTitle' => [
 				'editable' => true,
-				'label' => I18n::translate('seo.overview.columns.metaTitle'),
+				'label' => $this->i18n('seo.overview.columns.metaTitle'),
 				'sortable' => true,
-				'toggle' => I18n::translate('seo.overview.columns.metaTitle'),
+				'toggle' => $this->i18n('seo.overview.columns.metaTitle'),
 				'type' => 'seo-meta'
 			],
 			'metaDescription' => [
 				'editable' => true,
-				'label' => I18n::translate('seo.overview.columns.metaDescription'),
+				'label' => $this->i18n('seo.overview.columns.metaDescription'),
 				'sortable' => true,
-				'toggle' => I18n::translate('seo.overview.columns.metaDescription'),
+				'toggle' => $this->i18n('seo.overview.columns.metaDescription'),
 				'type' => 'seo-meta'
 			],
 			'ogDescription' => [
 				'editable' => true,
 				'hidden' => true,
-				'label' => I18n::translate('seo.overview.columns.ogDescription'),
+				'label' => $this->i18n('seo.overview.columns.ogDescription'),
 				'sortable' => true,
-				'toggle' => I18n::translate('seo.overview.columns.ogDescription'),
+				'toggle' => $this->i18n('seo.overview.columns.ogDescription'),
 				'type' => 'seo-meta'
 			],
 			'ogImage' => [
-				'label' => I18n::translate('seo.overview.columns.ogImage'),
-				'toggle' => I18n::translate('seo.overview.columns.ogImage'),
+				'label' => $this->i18n('seo.overview.columns.ogImage'),
+				'toggle' => $this->i18n('seo.overview.columns.ogImage'),
 				'type' => 'seo-image',
 				'width' => '7rem'
 			],
 			'template' => [
 				'hidden' => true,
-				'label' => I18n::translate('template'),
+				'label' => $this->i18n('template'),
 				'sortable' => true,
-				'toggle' => I18n::translate('template'),
+				'toggle' => $this->i18n('template'),
 				'type' => 'text',
 				'width' => '10rem'
 			]
@@ -214,10 +209,10 @@ class PagesView extends EditableOverviewView
 		if (Seo::option('robots.enabled')) {
 			$columns['robots'] = [
 				'hideLabel' => true,
-				'label' => I18n::translate('seo.overview.columns.robots'),
+				'label' => $this->i18n('seo.overview.columns.robots'),
 				'mobile' => true,
 				'resizable' => false,
-				'toggle' => I18n::translate('seo.overview.columns.robots'),
+				'toggle' => $this->i18n('seo.overview.columns.robots'),
 				'type' => 'seo-robots',
 				'width' => 'var(--table-row-height)'
 			];
@@ -225,7 +220,7 @@ class PagesView extends EditableOverviewView
 
 		$columns['flag'] = [
 			'hideLabel' => true,
-			'label' => I18n::translate('page.status'),
+			'label' => $this->i18n('page.status'),
 			'mobile' => true,
 			'resizable' => false,
 			'type' => 'flag',

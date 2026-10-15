@@ -244,7 +244,7 @@ class GoogleSearchConsole
 		}
 
 		// fallback to first property
-		return $properties[0]['siteUrl'] ?? null;
+		return $properties === [] ? null : $properties[0]['siteUrl'];
 	}
 
 	/**
@@ -271,6 +271,8 @@ class GoogleSearchConsole
 
 	/**
 	 * List available GSC properties
+	 *
+	 * @return list<array{siteUrl: string, permissionLevel: string}>
 	 */
 	public static function listProperties(): array
 	{
@@ -292,6 +294,8 @@ class GoogleSearchConsole
 
 	/**
 	 * Query search analytics data (fetches max 25k rows from Google, cached for 24h)
+	 *
+	 * @return list<array{keys: list<string>, clicks: int, impressions: int, ctr: float, position: float}>
 	 */
 	public static function query(array $options = []): array
 	{
@@ -347,6 +351,8 @@ class GoogleSearchConsole
 
 	/**
 	 * Query search data for a Kirby model (page or site), sorted by metric
+	 *
+	 * @return list<array{keys: list<string>, clicks: int, impressions: int, ctr: float, position: float}>
 	 */
 	public static function queryForModel($model, string $metric = 'clicks', int $limit = 10, bool $asc = false): array
 	{

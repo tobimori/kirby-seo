@@ -1,5 +1,6 @@
 <script setup>
-import { computed, nextTick, onMounted, ref, useHelpers, usePanel, watch } from "kirbyuse"
+import { useHelpers, usePanel } from "kirbyuse"
+import { computed, nextTick, onMounted, ref, watch } from "vue"
 
 import { providePopoverGroup } from "../../composables/popover.js"
 
@@ -23,14 +24,14 @@ const props = defineProps({
 		default: "asc"
 	},
 	selectable: Boolean,
-	/** Ids of the selected rows, use with `.sync` */
+	/** Ids of the selected rows, use with `v-model:selected` */
 	selected: {
 		type: Array,
 		default: () => []
 	},
 	/** Whether columns can be resized, unless they set `resizable: false` */
 	resizable: Boolean,
-	/** Custom column widths as `{ [column]: "25%" }`, use with `.sync` */
+	/** Custom column widths as `{ [column]: "25%" }`, use with `v-model:widths` */
 	widths: {
 		type: Object,
 		default: () => ({})

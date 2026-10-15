@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "kirbyuse"
+import { ref } from "vue"
 
 defineProps({
 	label: String,

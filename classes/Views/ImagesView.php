@@ -8,7 +8,7 @@ use Kirby\Content\VersionId;
 use Kirby\Exception\NotFoundException;
 use Kirby\Http\Response;
 use Kirby\Panel\Ui\Item\FileItem;
-use Kirby\Toolkit\I18n;
+use Kirby\Panel\Ui\View;
 use tobimori\Seo\Ai\Content;
 use tobimori\Seo\AltText;
 use tobimori\Seo\Audit;
@@ -20,14 +20,14 @@ class ImagesView extends EditableOverviewView
 	public const SEARCHABLE = ['id', 'alt', 'parent', 'template'];
 	public const SOURCES = [AltText::SOURCE_AI, AltText::SOURCE_MANUAL, AltText::SOURCE_REVIEWED];
 
-	public function load(): array
+	public function load(): View
 	{
 		return VersionId::render('changes', function () {
 			$query = $this->query(
 				self::SORTABLE,
 				[...Audit\Images::FILTERS, 'issues']
 			);
-			['search' => $search, 'sort' => $sort, 'dir' => $dir, 'issue' => $issue] = $query;
+			['term' => $search, 'sort' => $sort, 'dir' => $dir, 'issue' => $issue] = $query;
 
 			$entries = $this->images()->entries();
 
@@ -43,22 +43,17 @@ class ImagesView extends EditableOverviewView
 
 			[$pagination, $visible] = $this->paginate($entries);
 
-			return [
-				'component' => 'k-seo-images-view',
-				'title' => I18n::translate('seo.overview.title'),
-				'props' => [
-					...$this->layout('images'),
-					...$query,
-					'columns' => $this->columns(),
-					'rows' => array_map($this->row(...), $visible),
-					'changes' => $this->changes(),
-					'pagination' => $pagination,
-					'ids' => array_column($entries, 'id'),
-					'severity' => Audit\Images::SEVERITY,
-					'summary' => $this->images()->summary(),
-					'ai' => $this->canUseAi()
-				]
-			];
+			return $this->view('images', 'k-seo-images-view', [
+				...$query,
+				'columns' => $this->columns(),
+				'rows' => array_map($this->row(...), $visible),
+				'changes' => $this->changes(),
+				'pagination' => $pagination,
+				'ids' => array_column($entries, 'id'),
+				'severity' => Audit\Images::SEVERITY,
+				'summary' => $this->images()->summary(),
+				'ai' => $this->canUseAi()
+			]);
 		});
 	}
 
@@ -77,11 +72,11 @@ class ImagesView extends EditableOverviewView
 		if (!$this->canGenerate($entry)) {
 			return Response::json([
 				'status' => 'error',
-				'message' => I18n::translate(Content::supportsImage($entry['model']) ? 'seo.ai.error.permission' : 'seo.overview.images.ai.unsupported')
+				'message' => $this->i18n(Content::supportsImage($entry['model']) ? 'seo.ai.error.permission' : 'seo.overview.images.ai.unsupported')
 			], 403);
 		}
 
-		AltTextField::stream($entry['model'], $this->kirby->request()->body()->data()['instructions'] ?? null);
+		AltTextField::stream($entry['model'], $this->request->body()->data()['instructions'] ?? null);
 	}
 
 	/**
@@ -94,7 +89,7 @@ class ImagesView extends EditableOverviewView
 
 		return (
 			$this->canUseAi() &&
-				$entry['model']->permissions()->can('update') &&
+				$entry['model']->guards()->isAvailable('update') &&
 				($blueprint['ai'] ?? true) !== false &&
 				Content::supportsImage($entry['model'])
 		);
@@ -182,28 +177,28 @@ class ImagesView extends EditableOverviewView
 		return [
 			'status' => [
 				'hideLabel' => true,
-				'label' => I18n::translate('seo.overview.images.columns.status'),
+				'label' => $this->i18n('seo.overview.images.columns.status'),
 				'mobile' => true,
 				'resizable' => false,
-				'toggle' => I18n::translate('seo.overview.images.columns.status'),
+				'toggle' => $this->i18n('seo.overview.images.columns.status'),
 				'type' => 'seo-alt-status',
 				'width' => 'var(--table-row-height)'
 			],
 			'image' => [
 				'hideLabel' => true,
-				'label' => I18n::translate('seo.overview.images.columns.image'),
+				'label' => $this->i18n('seo.overview.images.columns.image'),
 				'mobile' => true,
 				'resizable' => false,
 				'ratio' => '1/1',
 				// the whole image, to judge its alt text
 				'cover' => false,
 				'back' => 'white',
-				'toggle' => I18n::translate('seo.overview.images.columns.image'),
+				'toggle' => $this->i18n('seo.overview.images.columns.image'),
 				'type' => 'seo-image',
 				'width' => '4rem'
 			],
 			'title' => [
-				'label' => I18n::translate('file'),
+				'label' => $this->i18n('file'),
 				'mobile' => true,
 				'sortable' => true,
 				'type' => 'seo-page',
@@ -211,32 +206,32 @@ class ImagesView extends EditableOverviewView
 			],
 			'alt' => [
 				'editable' => true,
-				'label' => I18n::translate('seo.overview.images.columns.alt'),
+				'label' => $this->i18n('seo.overview.images.columns.alt'),
 				'mobile' => true,
 				'plain' => true,
 				'sortable' => true,
 				'type' => 'seo-meta'
 			],
 			'decorative' => [
-				'label' => I18n::translate('seo.overview.images.columns.decorative'),
+				'label' => $this->i18n('seo.overview.images.columns.decorative'),
 				'sortable' => true,
-				'toggle' => I18n::translate('seo.overview.images.columns.decorative'),
+				'toggle' => $this->i18n('seo.overview.images.columns.decorative'),
 				'type' => 'seo-decorative',
 				'width' => '7.5rem'
 			],
 			'dimensions' => [
 				'align' => 'right',
 				'hidden' => true,
-				'label' => I18n::translate('dimensions'),
-				'toggle' => I18n::translate('dimensions'),
+				'label' => $this->i18n('dimensions'),
+				'toggle' => $this->i18n('dimensions'),
 				'type' => 'text',
 				'width' => '8rem'
 			],
 			'template' => [
 				'hidden' => true,
-				'label' => I18n::translate('template'),
+				'label' => $this->i18n('template'),
 				'sortable' => true,
-				'toggle' => I18n::translate('template'),
+				'toggle' => $this->i18n('template'),
 				'type' => 'text',
 				'width' => '10rem'
 			]
@@ -253,7 +248,7 @@ class ImagesView extends EditableOverviewView
 		$blueprint = $this->blueprint($file)->field($entry['field']) ?? [];
 		$parent = $file->parent();
 		$label = count($this->images()->fields($file)) > 1
-			? I18n::translate($blueprint['label'] ?? null, $blueprint['label'] ?? $entry['field'])
+			? $this->i18n($blueprint['label'] ?? $entry['field'])
 			: null;
 
 		return [

@@ -1,4 +1,4 @@
-import { inject, provide, ref } from "kirbyuse"
+import { inject, provide, ref } from "vue"
 
 const KEY = "k-seo-popover"
 

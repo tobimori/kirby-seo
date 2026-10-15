@@ -21,6 +21,11 @@ use function is_string;
 
 /**
  * The Meta class is responsible for handling the meta data & cascading
+ *
+ * @method Field metaDescription()
+ * @method Field ogSiteName()
+ * @method Field ogDescription()
+ * @method Field cropOgImage()
  */
 class Meta
 {
@@ -658,6 +663,8 @@ class Meta
 
 	/**
 	 * Applies the title template, and returns the correct title
+	 *
+	 * @return Field
 	 */
 	public function metaTitle()
 	{
@@ -666,6 +673,8 @@ class Meta
 
 	/**
 	 * Applies the OG title template, and returns the OG Title
+	 *
+	 * @return Field
 	 */
 	public function ogTitle()
 	{

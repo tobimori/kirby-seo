@@ -47,8 +47,8 @@ excessive-parameter-list = { enabled = false }
 kan-defect = { enabled = false }
 too-many-methods = { enabled = false }
 halstead = { enabled = false }
-# Kirby binds `$this` to route, hook, and area closures
-prefer-static-closure = { exclude = ["config/"] }
+# Kirby binds `$this` to route, hook, area, and field API closures
+prefer-static-closure = { exclude = ["config/", "classes/Field/"] }
 prefer-first-class-callable = { exclude = ["config/"] }
 
 [analyzer]

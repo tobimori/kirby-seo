@@ -4,7 +4,7 @@ namespace tobimori\Seo\Buttons;
 
 use Kirby\Cms\Page;
 use Kirby\Cms\Site;
-use Kirby\Panel\Ui\Buttons\ViewButton;
+use Kirby\Panel\Ui\Button\ViewButton;
 use Kirby\Toolkit\I18n;
 
 class UtmShareViewButton extends ViewButton

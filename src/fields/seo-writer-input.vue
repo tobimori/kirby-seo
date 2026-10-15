@@ -29,13 +29,11 @@
 </template>
 
 <script>
+// extends `k-writer-input` (async component), @see src/index.js
 export default {
-	extends: "k-writer-input",
 	methods: {
 		createNodes() {
-			const data =
-				// eslint-disable-next-line no-undef
-				Vue.component("k-writer-input").options.methods.createNodes.call(this)
+			const data = this.$options.extends.methods.createNodes.call(this)
 			return data.filter((ext) => ext.name !== "hardBreak")
 		}
 	}
@@ -59,7 +57,7 @@ export default {
 	}
 
 	.k-writer-input .k-toolbar-button {
-		padding-inline: var(--spacing-5);
+		padding-inline: 1.25rem;
 		--button-width: auto;
 		flex-basis: max-content;
 

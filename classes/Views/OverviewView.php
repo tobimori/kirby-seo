@@ -4,26 +4,26 @@ namespace tobimori\Seo\Views;
 
 use Closure;
 use Collator;
+use Kirby\Blueprint\Blueprint;
 use Kirby\Cms\App;
-use Kirby\Cms\Blueprint;
 use Kirby\Cms\File;
 use Kirby\Cms\Page;
 use Kirby\Cms\Pages;
 use Kirby\Exception\PermissionException;
-use Kirby\Panel\Ui\Buttons\ViewButtons;
-use Kirby\Toolkit\I18n;
+use Kirby\Panel\Controller\ViewController;
+use Kirby\Panel\Ui\Button\ViewButtons;
+use Kirby\Panel\Ui\View;
 use Kirby\Toolkit\Str;
 use tobimori\Seo\Audit;
 use tobimori\Seo\Audit\Links\Report;
+use tobimori\Seo\License;
 use tobimori\Seo\Meta;
 use tobimori\Seo\Seo;
 
-abstract class OverviewView
+abstract class OverviewView extends ViewController
 {
 	public const LIMIT = 50;
 	public const TABS = ['pages' => 'page', 'images' => 'image', 'links' => 'url'];
-
-	protected App $kirby;
 
 	protected array $metas = [];
 
@@ -38,7 +38,7 @@ abstract class OverviewView
 			throw new PermissionException(key: 'access.view');
 		}
 
-		$this->kirby = App::instance();
+		parent::__construct();
 	}
 
 	public static function canAccess(): bool
@@ -46,42 +46,48 @@ abstract class OverviewView
 		return App::instance()->user()?->role()->permissions()->for('tobimori.seo', 'overview') === true;
 	}
 
-	abstract public function load(): array;
+	abstract public function load(): View;
 
-	protected function layout(string $tab): array
+	/**
+	 * The view of a tab, with the props that all tabs share
+	 */
+	protected function view(string $tab, string $component, array $props): View
 	{
-		return [
-			// Language buttons use `panel.content` to unlock `{api}/changes/unlock` before switching
-			// The buttons are bound to the site, so they need site model-view props here
-			// The overview has no content of its own; edits and locks are managed per row model
-			'api' => 'site',
-			'lock' => ['isLocked' => false],
-			'versions' => ['latest' => [], 'changes' => []],
-			// configurable via `panel.viewButtons.seo.overview`, like the views of Kirby itself
-			'buttons' => fn () => ViewButtons::view('seo.overview', model: $this->kirby->site())
-				->defaults('languages')
-				->render(),
-			'stats' => [
-				...$this->audit()->stats(),
-				'images' => $this->images()->stats(),
-				'links' => (new Report())->stats()
-			],
-			'license' => [
-				'state' => $this->kirby->plugin('tobimori/seo')->license()->state(),
-				'local' => $this->kirby->system()->isLocal()
-			],
-			'tab' => $tab,
-			'tabs' => array_map(
-				fn ($name, $icon) => [
-					'name' => $name,
-					'label' => I18n::translate("seo.overview.tabs.{$name}"),
-					'icon' => $icon,
-					'link' => "seo/{$name}"
+		return new View(
+			...[
+				// Language buttons use `panel.content` to unlock `{api}/changes/unlock` before switching
+				// The buttons are bound to the site, so they need site model-view props here
+				// The overview has no content of its own; edits and locks are managed per row model
+				'api' => 'site',
+				'lock' => ['isLocked' => false],
+				'versions' => ['latest' => [], 'changes' => []],
+				'stats' => [
+					...$this->audit()->stats(),
+					'images' => $this->images()->stats(),
+					'links' => (new Report())->stats()
 				],
-				array_keys(self::TABS),
-				self::TABS
-			)
-		];
+				'license' => [
+					'state' => License::current()->state(),
+					'local' => $this->kirby->system()->isLocal()
+				],
+				'tab' => $tab,
+				'tabs' => array_map(
+					fn ($name, $icon) => [
+						'name' => $name,
+						'label' => $this->i18n("seo.overview.tabs.{$name}"),
+						'icon' => $icon,
+						'link' => "seo/{$name}"
+					],
+					array_keys(self::TABS),
+					self::TABS
+				),
+				...$props
+			],
+			component: $component,
+			title: $this->i18n('seo.overview.title'),
+			// configurable via `panel.viewButtons.seo.overview`, like the views of Kirby itself
+			buttons: ViewButtons::view('seo.overview', model: $this->kirby->site())->defaults('languages')
+		);
 	}
 
 	/**
@@ -158,19 +164,18 @@ abstract class OverviewView
 	/**
 	 * Search, sorting & filter of the table from the query of the view, unknown values are ignored
 	 *
-	 * @return array{search: string, sort: string|null, dir: string, issue: string|null}
+	 * @return array{term: string, sort: string|null, dir: string, issue: string|null}
 	 */
 	protected function query(array $sortable, array $issues): array
 	{
-		$request = $this->kirby->request();
-		$sort = $request->get('sort');
-		$issue = $request->get('issue');
+		$sort = $this->request->get('sort');
+		$issue = $this->request->get('issue');
 
 		return [
-			'search' => trim((string)$request->get('search', '')),
-			'sort' => in_array($sort, $sortable, true) ? $sort : null,
-			'dir' => $request->get('dir') === 'desc' ? 'desc' : 'asc',
-			'issue' => in_array($issue, $issues, true) ? $issue : null
+			'term' => trim((string)$this->request->get('search', '')),
+			'sort' => is_string($sort) && in_array($sort, $sortable, true) ? $sort : null,
+			'dir' => $this->request->get('dir') === 'desc' ? 'desc' : 'asc',
+			'issue' => is_string($issue) && in_array($issue, $issues, true) ? $issue : null
 		];
 	}
 
@@ -215,7 +220,7 @@ abstract class OverviewView
 	{
 		// clamp the page, as the number of results might have changed (e.g. after deleting pages)
 		$lastPage = max(1, (int)ceil(count($entries) / self::LIMIT));
-		$page = min($lastPage, max(1, (int)$this->kirby->request()->get('page', 1)));
+		$page = min($lastPage, max(1, (int)$this->request->get('page', 1)));
 
 		return [
 			['page' => $page, 'limit' => self::LIMIT, 'total' => count($entries)],

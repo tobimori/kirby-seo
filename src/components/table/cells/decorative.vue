@@ -1,5 +1,6 @@
 <script setup>
-import { computed, useHelpers } from "kirbyuse"
+import { useHelpers } from "kirbyuse"
+import { computed } from "vue"
 
 const props = defineProps({
 	column: Object,

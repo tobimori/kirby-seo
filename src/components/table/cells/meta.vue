@@ -1,5 +1,6 @@
 <script setup>
-import { computed, nextTick, onBeforeUnmount, ref, watch, useLibrary, usePanel } from "kirbyuse"
+import { useLibrary, usePanel } from "kirbyuse"
+import { computed, nextTick, onBeforeUnmount, ref, watch } from "vue"
 
 const props = defineProps({
 	column: Object,
@@ -220,7 +221,7 @@ const onFocusout = (event) => {
 			size="xs"
 			variant="filled"
 			class="k-seo-meta-cell-ai"
-			@mousedown.native.prevent
+			@mousedown.prevent
 			@click="generate"
 		/>
 	</div>

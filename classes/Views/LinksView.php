@@ -3,7 +3,7 @@
 namespace tobimori\Seo\Views;
 
 use Kirby\Content\VersionId;
-use Kirby\Toolkit\I18n;
+use Kirby\Panel\Ui\View;
 use tobimori\Seo\Audit\Links\Checker;
 use tobimori\Seo\Audit\Links\Index;
 use tobimori\Seo\Audit\Links\Report;
@@ -26,14 +26,14 @@ class LinksView extends OverviewView
 
 	protected Report|null $report = null;
 
-	public function load(): array
+	public function load(): View
 	{
 		return VersionId::render('changes', function () {
 			$query = $this->query(
 				self::SORTABLE,
 				[...Report::FILTERS, 'issues']
 			);
-			['search' => $search, 'sort' => $sort, 'dir' => $dir, 'issue' => $issue] = $query;
+			['term' => $search, 'sort' => $sort, 'dir' => $dir, 'issue' => $issue] = $query;
 			$links = $this->report()->links();
 
 			$summary = Report::summary($links);
@@ -62,21 +62,16 @@ class LinksView extends OverviewView
 
 			[$pagination, $visible] = $this->paginate($links);
 
-			return [
-				'component' => 'k-seo-links-view',
-				'title' => I18n::translate('seo.overview.title'),
-				'props' => [
-					...$this->layout('links'),
-					...$query,
-					'columns' => $this->columns(),
-					'rows' => array_map($this->row(...), $visible),
-					'pagination' => $pagination,
-					'severity' => Report::SEVERITY,
-					'summary' => $summary,
-					'progress' => (new Checker())->progress(),
-					'scanned' => !$this->report()->isEmpty()
-				]
-			];
+			return $this->view('links', 'k-seo-links-view', [
+				...$query,
+				'columns' => $this->columns(),
+				'rows' => array_map($this->row(...), $visible),
+				'pagination' => $pagination,
+				'severity' => Report::SEVERITY,
+				'summary' => $summary,
+				'progress' => (new Checker())->progress(),
+				'scanned' => !$this->report()->isEmpty()
+			]);
 		});
 	}
 
@@ -123,7 +118,7 @@ class LinksView extends OverviewView
 	public function recheck(): array
 	{
 		$checker = new Checker();
-		$checker->recheck((string)$this->kirby->request()->get('url'));
+		$checker->recheck((string)$this->request->get('url'));
 		Checker::dispatch(now: true);
 
 		return $checker->progress();
@@ -176,7 +171,7 @@ class LinksView extends OverviewView
 			return '';
 		}
 
-		return I18n::template("seo.overview.links.reason.{$link['reason']}", replace: [
+		return $this->i18n("seo.overview.links.reason.{$link['reason']}", [
 			'code' => $link['code'],
 			'target' => $link['target'] ? $this->display($link['target']) : null
 		]);
@@ -186,30 +181,30 @@ class LinksView extends OverviewView
 	{
 		return [
 			'status' => [
-				'label' => I18n::translate('seo.overview.links.columns.status'),
+				'label' => $this->i18n('seo.overview.links.columns.status'),
 				'mobile' => true,
 				'sortable' => true,
-				'toggle' => I18n::translate('seo.overview.links.columns.status'),
+				'toggle' => $this->i18n('seo.overview.links.columns.status'),
 				'type' => 'seo-link-status',
 				'width' => '7rem'
 			],
 			'url' => [
-				'label' => I18n::translate('seo.overview.links.columns.url'),
+				'label' => $this->i18n('seo.overview.links.columns.url'),
 				'mobile' => true,
 				'sortable' => true,
 				'type' => 'seo-page'
 			],
 			'details' => [
-				'label' => I18n::translate('seo.overview.links.columns.details'),
-				'toggle' => I18n::translate('seo.overview.links.columns.details'),
+				'label' => $this->i18n('seo.overview.links.columns.details'),
+				'toggle' => $this->i18n('seo.overview.links.columns.details'),
 				'type' => 'text',
 				'width' => '1/4'
 			],
 			'pages' => [
-				'label' => I18n::translate('seo.overview.links.columns.pages'),
+				'label' => $this->i18n('seo.overview.links.columns.pages'),
 				'mobile' => true,
 				'sortable' => true,
-				'toggle' => I18n::translate('seo.overview.links.columns.pages'),
+				'toggle' => $this->i18n('seo.overview.links.columns.pages'),
 				'type' => 'seo-link-pages',
 				'width' => '1/4'
 			]

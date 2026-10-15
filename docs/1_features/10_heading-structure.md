@@ -9,11 +9,11 @@ When headings skip levels (e.g. H2 followed by H4) or when there are multiple H1
 
 Most Kirby sites tie heading levels to visual styles: H1 is the largest text, H2 is smaller, and so on. Editors often pick a heading level based on how big they want the text to look, not based on what it means semantically. An H3 after an H1 might look fine on the page, but it tells search engines and screen readers that something is missing.
 
-Kirby SEO has a Panel section that extracts all headings from the current page and displays them as a nested tree. You see the full hierarchy at a glance, and headings that break the structure are highlighted. The section updates as the page content changes, so editors can fix issues while they write.
+Kirby SEO has a Panel field that extracts all headings from the current page and displays them as a nested tree. You see the full hierarchy at a glance, and headings that break the structure are highlighted. The field updates as the page content changes, so editors can fix issues while they write.
 
-## Adding the section to your blueprint
+## Adding the field to your blueprint
 
-Place the section next to your content editor, for example in a sidebar column beside your blocks or layout field:
+Place the field next to your content editor, for example in a sidebar column beside your blocks or layout field:
 
 ```yaml
 # site/blueprints/pages/default.yml
@@ -25,7 +25,8 @@ tabs:
           blocks:
             type: blocks
       - width: 1/3
-        sections:
+        fields:
           headingStructure:
+            label: Heading Structure
             type: heading-structure
 ```

@@ -3,7 +3,7 @@
 namespace tobimori\Seo\Buttons;
 
 use Kirby\Cms\Site;
-use Kirby\Panel\Ui\Buttons\ViewButton;
+use Kirby\Panel\Ui\Button\ViewButton;
 
 /**
  * Uses the site's registered language button, including plugin replacements.

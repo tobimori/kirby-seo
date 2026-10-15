@@ -1,5 +1,6 @@
 <script setup>
-import { computed, usePanel } from "kirbyuse"
+import { usePanel } from "kirbyuse"
+import { computed } from "vue"
 
 import { SEVERITY_ICONS } from "../../../utils/checks.js"
 
@@ -123,7 +124,7 @@ const onFilter = (issue, close) => {
 }
 
 .k-seo-checks-cell-ok {
-	--icon-color: var(--color-positive);
+	--icon-color: var(--color-green-700);
 }
 
 .k-seo-checks-cell-skipped {

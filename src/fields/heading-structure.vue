@@ -1,11 +1,20 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted, usePanel, useSection } from "kirbyuse"
-import { section } from "kirbyuse/props"
+import { usePanel, useApi } from "kirbyuse"
+import { ref, computed, onMounted, onUnmounted } from "vue"
 
-const props = defineProps(section)
+defineOptions({ inheritAttrs: false })
+
+const props = defineProps({
+	label: String,
+	name: String,
+	endpoints: Object
+})
+
+// display fields store nothing, declaring the events keeps native events from bubbling into the form
+defineEmits(["input", "focus", "submit"])
 
 const panel = usePanel()
-const { load } = useSection()
+const api = useApi()
 
 // State
 const data = ref(null)
@@ -19,13 +28,14 @@ const multipleH1 = computed(() => data.value?.filter((item) => item.level === 1)
 const noH1 = computed(() => data.value?.filter((item) => item.level === 1).length === 0)
 
 // Methods
-const handleLoad = () =>
-	load({
-		parent: props.parent,
-		name: props.name
-	}).then((response) => {
-		data.value = response.data
-	})
+const handleLoad = async () => {
+	if (!props.endpoints?.field) {
+		return
+	}
+
+	const response = await api.get(props.endpoints.field)
+	data.value = response.data
+}
 
 const itemInvalid = (item, index) => {
 	if (item.level > (data.value[index - 1]?.level ?? 0) + 1) return true // wrong order
@@ -40,16 +50,14 @@ onMounted(() => {
 	handleLoad()
 
 	// this will trigger after the server has finished processing the request as changes
-	panel.events.on("content.save", (_event) => {
-		handleLoad()
-	})
+	panel.events.on("content.save", handleLoad)
 })
 
-onUnmounted(() => panel.events.off("content.save"))
+onUnmounted(() => panel.events.off("content.save", handleLoad))
 </script>
 
 <template>
-	<div v-if="data" class="k-section k-heading-structure">
+	<div v-if="data" :class="['k-field k-heading-structure', $attrs.class]" :style="$attrs.style">
 		<div class="k-field-header k-heading-structure__label k-label k-field-label">
 			<k-icon type="headline" />
 			<span class="k-label-text">{{
@@ -111,7 +119,7 @@ onUnmounted(() => panel.events.off("content.save"))
 	> .k-icon {
 		margin-top: 0.125rem;
 		margin-right: var(--spacing-1);
-		color: var(--color-red);
+		color: var(--color-red-600);
 	}
 }
 
@@ -122,11 +130,11 @@ onUnmounted(() => panel.events.off("content.save"))
 .k-heading-structure__item {
 	position: relative;
 	background: var(--theme-color-back);
-	padding-block: var(--spacing-px);
+	padding-block: 1px;
 	display: flex;
 
 	&.is-invalid {
-		color: var(--color-red);
+		color: var(--color-red-600);
 	}
 }
 

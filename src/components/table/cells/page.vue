@@ -9,12 +9,7 @@ defineProps({
 <template>
 	<div :data-translated="value.translated !== false" class="k-seo-page-cell">
 		<span class="k-seo-page-cell-heading">
-			<k-link
-				:to="value.href"
-				:target="value.target"
-				class="k-seo-page-cell-title"
-				@click.native.stop
-			>
+			<k-link :to="value.href" :target="value.target" class="k-seo-page-cell-title" @click.stop>
 				{{ value.text }}
 			</k-link>
 			<!-- browsers don't show tooltips for the `title` of (inline) SVGs, so the icons are wrapped -->

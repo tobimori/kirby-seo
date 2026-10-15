@@ -1,4 +1,5 @@
-import { computed, onBeforeUnmount, onMounted, ref, watch, usePanel, useHelpers } from "kirbyuse"
+import { usePanel, useHelpers } from "kirbyuse"
+import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue"
 
 import { fetchSseStream } from "../helpers/ai-stream.js"
 
@@ -10,8 +11,8 @@ export function useTableQuery(props) {
 	// the query is merged with the current one, so empty strings are used to reset values
 	const reload = (query) => panel.view.reload({ query })
 
-	const searchterm = ref(props.search ?? "")
-	const isSearching = ref(Boolean(props.search))
+	const searchterm = ref(props.term ?? "")
+	const isSearching = ref(Boolean(props.term))
 
 	const toggleSearch = () => {
 		isSearching.value = !isSearching.value
@@ -76,7 +77,7 @@ export function useColumnSettings(props, storageKey) {
 /**
  * Coordinates inline editing, content locks, and bulk actions for editable overview tables
  *
- * @param {object} props Props of the view: `rows`, `columns`, `changes`, `summary`, `stats`, `ids`, `search`
+ * @param {object} props Props of the view: `rows`, `columns`, `changes`, `summary`, `stats`, `ids`, `term`
  * @param {object} options
  * @param {string} options.endpoint API endpoint of the table, e.g. `seo/overview/pages`
  * @param {string} options.storageKey Key for the column settings in the local storage
@@ -429,7 +430,7 @@ export function useOverviewTable(props, { endpoint, storageKey, applyPending, ai
 			component: "k-remove-dialog",
 			props: {
 				size: "medium",
-				text: panel.t(`seo.overview.changes.discard.confirm.${scope.value}`, {
+				text: panel.th(`seo.overview.changes.discard.confirm.${scope.value}`, {
 					count: items.length
 				}),
 				submitButton: { theme: "notice", icon: "undo", text: panel.t("form.discard") }

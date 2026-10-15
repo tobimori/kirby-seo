@@ -1,15 +1,7 @@
 <script setup>
+import { usePanel, useLibrary } from "kirbyuse"
 /* global AbortController, Event */
-import {
-	ref,
-	computed,
-	watch,
-	nextTick,
-	onMounted,
-	onBeforeUnmount,
-	usePanel,
-	useLibrary
-} from "kirbyuse"
+import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from "vue"
 
 import { fetchSseStream, openAiCustomizeDialog, getAiEndpointUrl } from "../helpers/ai-stream.js"
 

@@ -1,5 +1,6 @@
 <script setup>
-import { computed, onBeforeUnmount, onMounted, ref, usePanel, watch } from "kirbyuse"
+import { usePanel } from "kirbyuse"
+import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue"
 
 import { useColumnSettings, useTableQuery } from "../composables/overview-table.js"
 import { SEVERITY_ICONS } from "../utils/checks.js"
@@ -236,12 +237,12 @@ const items = computed(() =>
 
 		<k-seo-table
 			v-else
+			v-model:widths="settings.widths"
 			:columns="visibleColumns"
 			:rows="items"
 			:pagination="pagination"
 			:sort="sort"
 			:dir="dir"
-			:widths.sync="settings.widths"
 			:empty="$t('seo.overview.links.empty')"
 			resizable
 			@sort="onSort"
