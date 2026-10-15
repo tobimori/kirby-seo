@@ -1,2 +1,6 @@
 overrides:
   yaml: 2.9.0
+
+allowBuilds:
+  "@parcel/watcher": false
+  esbuild: false
