@@ -83,8 +83,12 @@ class SitemapUrl
 
 		$node = $doc->createElement('url');
 
-		foreach (array_diff_key(get_object_vars($this), array_flip(['alternates'])) as $key => $value) {
-			$node->appendChild($doc->createElement($key, $value));
+		foreach (['loc', 'lastmod', 'changefreq', 'priority'] as $key) {
+			if (!isset($this->$key)) {
+				continue;
+			}
+
+			$node->appendChild($doc->createElement($key, $this->$key));
 		}
 
 		if (!empty($this->alternates())) {
