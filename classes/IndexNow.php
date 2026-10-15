@@ -152,7 +152,7 @@ class IndexNow
 			$searchEngine .= '/indexnow';
 		}
 
-		$domainUrls = array_filter($urls, fn ($url) => parse_url($url, PHP_URL_HOST) === $host);
+		$domainUrls = array_filter($urls, static fn ($url) => parse_url($url, PHP_URL_HOST) === $host);
 
 		// split into batches of 10,000 (IndexNow limit)
 		$batches = array_chunk(array_values(array_unique($domainUrls)), 10000);
@@ -186,7 +186,7 @@ class IndexNow
 	{
 		return static::$key ??= App::instance()
 			->cache('tobimori.seo.indexnow')
-			->getOrSet('key', fn () => Str::random(32, 'hexLower'), 0);
+			->getOrSet('key', static fn () => Str::random(32, 'hexLower'), 0);
 	}
 
 	/**
@@ -228,7 +228,7 @@ class IndexNow
 			$pattern
 		);
 
-		return preg_match("#^{$pattern}$#", parse_url($url, PHP_URL_PATH));
+		return preg_match("#^{$pattern}$#", parse_url($url, PHP_URL_PATH)) === 1;
 	}
 
 	/**

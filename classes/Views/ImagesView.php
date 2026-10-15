@@ -108,7 +108,7 @@ class ImagesView extends EditableOverviewView
 	protected function ids(ModelWithContent $model): array
 	{
 		return array_map(
-			fn ($field) => Audit\Images::id($model, $field),
+			static fn ($field) => Audit\Images::id($model, $field),
 			$this->images()->fields($model)
 		);
 	}
@@ -172,8 +172,8 @@ class ImagesView extends EditableOverviewView
 			'alt' => $this->images()->altText($entry)->text(),
 			// decorative images first when sorting ascending
 			'decorative' => $this->images()->altText($entry)->isDecorative() ? '0' : '1',
-			'parent' => (string)$file->parent()->title()->value(),
-			'template' => (string)$this->blueprint($file)->title()
+			'parent' => $file->parent()->title()->toString(),
+			'template' => $this->blueprint($file)->title()
 		};
 	}
 
@@ -265,14 +265,14 @@ class ImagesView extends EditableOverviewView
 			'lock' => $lock,
 			'selectable' => $lock === null,
 			'parent' => [
-				'text' => (string)$parent->title()->value(),
+				'text' => $parent->title()->toString(),
 				'link' => $parent->panel()->url(true)
 			],
 			'title' => [
 				// files with multiple alt text fields have a row per field
 				'text' => $label ? "{$file->filename()} · {$label}" : $file->filename(),
 				'href' => $file->panel()->url(true),
-				'info' => (string)$parent->title()->value(),
+				'info' => $parent->title()->toString(),
 				// the lock already tells that someone else is editing
 				'changes' => $hasChanges && $lock === null,
 				'translated' => $translated
@@ -290,7 +290,7 @@ class ImagesView extends EditableOverviewView
 				$file->extension() === 'svg' => $file->url(),
 				default => null
 			}],
-			'template' => (string)$this->blueprint($file)->title(),
+			'template' => $this->blueprint($file)->title(),
 			'dimensions' => $file->isResizable() || $file->extension() === 'svg'
 				? $file->width() . ' × ' . $file->height()
 				: null

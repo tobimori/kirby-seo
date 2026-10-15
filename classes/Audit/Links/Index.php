@@ -83,7 +83,7 @@ class Index
 	{
 		return [
 			'invalidated' => $data['invalidated'],
-			'pages' => array_map(fn ($entry) => [$entry['fingerprint'], Report::normalize($entry['url'])], $data['pages']),
+			'pages' => array_map(static fn ($entry) => [$entry['fingerprint'], Report::normalize($entry['url'])], $data['pages']),
 			'external' => static::external($data)
 		];
 	}
@@ -134,10 +134,10 @@ class Index
 		$data['strings'] = array_values(array_intersect_key($data['strings'], $used));
 
 		foreach ($data['pages'] as $key => $entry) {
-			$data['pages'][$key]['links'] = array_map(fn ($id) => $map[$id], $entry['links']);
+			$data['pages'][$key]['links'] = array_map(static fn ($id) => $map[$id], $entry['links']);
 		}
 
-		$data['urls'] = array_intersect_key($data['urls'], array_flip(array_map(fn ($url) => strtok($url, '#'), $data['strings'])));
+		$data['urls'] = array_intersect_key($data['urls'], array_flip(array_map(static fn ($url) => strtok($url, '#'), $data['strings'])));
 
 		return $data;
 	}

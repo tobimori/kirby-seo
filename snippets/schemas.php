@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @var \Kirby\Cms\Page $page
+ * @var \Kirby\Cms\Site $site
+ */
+
 if (!class_exists('Spatie\SchemaOrg\Schema')) {
 	return;
 }

@@ -209,10 +209,10 @@ class Pages
 		// Do not retain Meta instances while filling the cache for the entire site
 		/** @var \tobimori\Seo\Meta $meta */
 		$meta = new (Seo::option('components.meta'))($page);
-		$values = ['title' => (string)$page->title()->value()];
+		$values = ['title' => $page->title()->toString()];
 
 		foreach (self::VALUES as $key) {
-			$values[$key] = Str::unhtml((string)$meta->resolve($key)['field']->value());
+			$values[$key] = Str::unhtml($meta->resolve($key)['field']->toString());
 		}
 
 		// skipped pages are listed (& searched) as well
@@ -301,9 +301,9 @@ class Pages
 			}
 		}
 
-		usort($issues, fn ($a, $b) => array_search($a['type'], self::TYPES) <=> array_search($b['type'], self::TYPES));
+		usort($issues, static fn ($a, $b) => array_search($a['type'], self::TYPES) <=> array_search($b['type'], self::TYPES));
 
-		return array_map(fn ($issue) => [...$issue, 'severity' => self::SEVERITY[$issue['type']]], $issues);
+		return array_map(static fn ($issue) => [...$issue, 'severity' => self::SEVERITY[$issue['type']]], $issues);
 	}
 
 	/**

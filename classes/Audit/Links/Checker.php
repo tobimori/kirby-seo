@@ -85,7 +85,7 @@ class Checker
 	 */
 	public function invalidate(): void
 	{
-		$this->change(function (array $data) {
+		$this->change(static function (array $data) {
 			$data['invalidated'] = time();
 			return $data;
 		});
@@ -96,7 +96,7 @@ class Checker
 	 */
 	public function recheck(string $url): void
 	{
-		$this->change(function (array $data) use ($url) {
+		$this->change(static function (array $data) use ($url) {
 			$id = array_search($url, $data['strings'], true);
 
 			foreach ($data['pages'] as $key => $entry) {
@@ -159,7 +159,7 @@ class Checker
 				$results = [];
 
 				if ($http) {
-					$results = Crawler::fetch(array_map(fn ($target) => $target[0]->url($target[1]), $batch));
+					$results = Crawler::fetch(array_map(static fn ($target) => $target[0]->url($target[1]), $batch));
 				} else {
 					foreach ($batch as $key => [$page, $language]) {
 						$results[$key] = $crawler->render($key, $page, $language);
@@ -243,7 +243,7 @@ class Checker
 		if ($removed !== []) {
 			$ids = array_filter(
 				$this->data['strings'],
-				fn ($url) => Report::isInternal($url) && isset($removed[Report::normalize($url)])
+				static fn ($url) => Report::isInternal($url) && isset($removed[Report::normalize($url)])
 			);
 
 			foreach ($this->data['pages'] as $key => $entry) {
@@ -374,7 +374,7 @@ class Checker
 	{
 		$since = max(time() - ((int)Seo::option('links.ttl') * 3600), $invalidated);
 
-		return array_keys(array_filter($external, fn ($checked) => $checked < $since));
+		return array_keys(array_filter($external, static fn ($checked) => $checked < $since));
 	}
 
 	/**
@@ -396,7 +396,8 @@ class Checker
 
 		foreach ($urls as $url) {
 			$host = strtolower(trim((string)parse_url($url, PHP_URL_HOST), '[]'));
-			$address = $addresses[$host] ??= static::address($host);
+			$addresses[$host] ??= static::address($host);
+			$address = $addresses[$host];
 
 			if ($address === null) {
 				$results[$url] = ['code' => 0, 'location' => null, 'error' => 'private', 'checked' => time()];
@@ -430,7 +431,7 @@ class Checker
 					CURLOPT_USERAGENT => Crawler::userAgent(),
 					CURLOPT_HTTPHEADER => ['Accept: text/html,application/xhtml+xml,*/*;q=0.8'],
 					// only the status is needed: stop at the first bytes of the body
-					CURLOPT_WRITEFUNCTION => fn () => 0
+					CURLOPT_WRITEFUNCTION => static fn () => 0
 				]);
 				curl_multi_add_handle($multi, $handle);
 				$handles[$url] = $handle;

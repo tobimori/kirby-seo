@@ -1,9 +1,11 @@
 <?php
 
-/** @var \Kirby\Cms\Site $site
- ** @var string|null $currentField */
+/**
+ * @var \Kirby\Cms\Site $site
+ * @var string|null $currentField
+ */
 
-$currentField = $currentField ?? null;
+$currentField ??= null;
 
 $metaFields = [
 	'metaDescription' => 'Site Meta Description',

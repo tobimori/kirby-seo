@@ -54,8 +54,8 @@ class Report
 	protected static function hosts(): array
 	{
 		$kirby = App::instance();
-		$urls = [$kirby->url(), ...($kirby->multilang() ? $kirby->languages()->values(fn ($language) => $language->url()) : [])];
-		$hosts = array_map(fn ($url) => parse_url($url, PHP_URL_HOST), $urls);
+		$urls = [$kirby->url(), ...($kirby->multilang() ? $kirby->languages()->values(static fn ($language) => $language->url()) : [])];
+		$hosts = array_map(static fn ($url) => parse_url($url, PHP_URL_HOST), $urls);
 
 		return array_values(array_unique(array_map('strtolower', array_filter([...$hosts, ...(Seo::option('links.hosts') ?? [])]))));
 	}
@@ -127,7 +127,9 @@ class Report
 
 		$cache->set($key, $this->results);
 
-		$this->data = $this->entries = $this->targets = null;
+		$this->data = null;
+		$this->entries = null;
+		$this->targets = null;
 
 		return $this->results;
 	}
@@ -399,7 +401,7 @@ class Report
 			$model = $model
 				->childrenAndDrafts()
 				->filter(
-					fn ($page) => in_array($segment, array_map(fn ($language) => $page->slug($language), $languages), true)
+					static fn ($page) => in_array($segment, array_map($page->slug(...), $languages), true)
 				)
 				->first();
 
@@ -464,7 +466,7 @@ class Report
 				...(is_callable($config) ? $config($this->kirby) : $config)
 			];
 
-			$this->router = new Router(array_filter($routes, fn ($route) => isset($route['pattern'], $route['action'])));
+			$this->router = new Router(array_filter($routes, static fn ($route) => isset($route['pattern'], $route['action'])));
 		}
 
 		try {

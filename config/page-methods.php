@@ -1,7 +1,6 @@
 <?php
 
 use Kirby\Cms\Language;
-use tobimori\Seo\SchemaSingleton;
 use tobimori\Seo\Seo;
 
 return [
@@ -28,8 +27,8 @@ return [
 		// remove the part form the URL that is specific to the 'site'
 		// this is usually the language code prefix
 		// https://example.com/en/ + https://example.com/en/about -> https://example.com/about
-		if (strpos($siteUrl, $kirbyUrl) === 0 && strlen($siteUrl) > strlen($kirbyUrl)) {
-			if (strpos($thisUrl, $siteUrl) === 0) {
+		if (str_starts_with($siteUrl, $kirbyUrl) && strlen($siteUrl) > strlen($kirbyUrl)) {
+			if (str_starts_with($thisUrl, $siteUrl)) {
 				$pathAfterSite = substr($thisUrl, strlen($siteUrl));
 				return "{$kirbyUrl}{$pathAfterSite}";
 			}

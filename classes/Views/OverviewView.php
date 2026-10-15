@@ -72,7 +72,7 @@ abstract class OverviewView
 			],
 			'tab' => $tab,
 			'tabs' => array_map(
-				fn ($name, $icon) => [
+				static fn ($name, $icon) => [
 					'name' => $name,
 					'label' => I18n::translate("seo.overview.tabs.{$name}"),
 					'icon' => $icon,
@@ -152,7 +152,7 @@ abstract class OverviewView
 		// ignore punctuation, e.g. titles starting with quotes
 		$collator->setAttribute(Collator::ALTERNATE_HANDLING, Collator::SHIFTED);
 
-		return fn (string $a, string $b) => $collator->compare($a, $b);
+		return $collator->compare(...);
 	}
 
 	/**
@@ -187,7 +187,7 @@ abstract class OverviewView
 			return $entries;
 		}
 
-		return array_filter($entries, function ($entry) use ($search, $keys, $value) {
+		return array_filter($entries, static function ($entry) use ($search, $keys, $value) {
 			foreach ($keys as $key) {
 				if (Str::contains($value($entry, $key), $search, true)) {
 					return true;
@@ -201,7 +201,7 @@ abstract class OverviewView
 	protected function sort(array $entries, Closure $value, string $dir): array
 	{
 		$compare = $this->comparator();
-		usort($entries, fn ($a, $b) => $compare($value($a), $value($b)) * ($dir === 'desc' ? -1 : 1));
+		usort($entries, static fn ($a, $b) => $compare($value($a), $value($b)) * ($dir === 'desc' ? -1 : 1));
 
 		return $entries;
 	}

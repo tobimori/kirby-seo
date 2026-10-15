@@ -3,7 +3,6 @@
 use Kirby\Cms\Page;
 use Kirby\Content\VersionId;
 use Kirby\Toolkit\Str;
-use tobimori\Seo\Ai;
 use tobimori\Seo\Field\AltTextField;
 use tobimori\Seo\Seo;
 

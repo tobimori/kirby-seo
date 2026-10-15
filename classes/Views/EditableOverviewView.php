@@ -274,7 +274,7 @@ abstract class EditableOverviewView extends OverviewView
 		$keys = array_map('strtolower', $entry['fields']);
 
 		$changes->update(
-			array_combine($keys, array_map(fn ($key) => $latest[$key] ?? null, $keys)),
+			array_combine($keys, array_map(static fn ($key) => $latest[$key] ?? null, $keys)),
 			$language
 		);
 
@@ -292,7 +292,7 @@ abstract class EditableOverviewView extends OverviewView
 		$changes = $model->version('changes');
 		$version = $changes->exists('current') ? $changes : $model->version('latest');
 
-		return (string)$version->content('current')->get($field)->value();
+		return $version->content('current')->get($field)->toString();
 	}
 
 	protected function canUseAi(): bool

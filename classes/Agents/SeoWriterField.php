@@ -26,7 +26,7 @@ class SeoWriterField extends WriterField
 	public function describe(Compiler $schema): string
 	{
 		$variables = array_map(
-			fn (array $variable) => "{{ {$variable[0]} }} ({$variable[1]})",
+			static fn (array $variable) => "{{ {$variable[0]} }} ({$variable[1]})",
 			$this->variables()
 		);
 
@@ -50,12 +50,12 @@ class SeoWriterField extends WriterField
 			return parent::input($value, $current);
 		}
 
-		$names = implode('|', array_map(fn (array $variable) => preg_quote($variable[0], '/'), $variables));
+		$names = implode('|', array_map(static fn (array $variable) => preg_quote($variable[0], '/'), $variables));
 
 		// agents may also send the stored form, so turn it into placeholders first
 		return parent::input(preg_replace_callback(
 			"/\{\{\s*({$names})\s*\}\}/",
-			fn (array $match) => "<span data-seo-template-variable=\"{$match[1]}\">{{ {$match[1]} }}</span>",
+			static fn (array $match) => "<span data-seo-template-variable=\"{$match[1]}\">{{ {$match[1]} }}</span>",
 			self::placeholders($value)
 		), $current);
 	}

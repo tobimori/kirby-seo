@@ -58,7 +58,7 @@ class OpenAiCompletions extends Driver
 		$started = false;
 		$textStarted = false;
 
-		yield from $stream->stream(function (array $event) use (&$started, &$textStarted): Generator {
+		yield from $stream->stream(static function (array $event) use (&$started, &$textStarted): Generator {
 			if (isset($event['error'])) {
 				$error = $event['error'];
 				$message = is_array($error) ? $error['message'] ?? 'Unknown Chat Completions streaming error.' : (string)$error;

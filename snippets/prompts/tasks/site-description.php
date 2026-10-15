@@ -1,9 +1,11 @@
 <?php
 
-/** @var \Kirby\Cms\Page $page
- ** @var \Kirby\Cms\Site $site
- ** @var string|null $instructions
- ** @var string|null $edit */
+/**
+ * @var \Kirby\Cms\Page $page
+ * @var \Kirby\Cms\Site $site
+ * @var string|null $instructions
+ * @var string|null $edit
+ */
 
 snippet('seo/prompts/introduction', [
 	'instructions' => $instructions ?? null,

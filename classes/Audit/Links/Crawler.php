@@ -89,7 +89,7 @@ class Crawler
 
 		try {
 			// as a visitor sees it: templates might show different content to logged-in users
-			$html = $kirby->impersonate('nobody', function () use ($kirby, $page, $language) {
+			$html = $kirby->impersonate('nobody', static function () use ($kirby, $page, $language) {
 				$kirby->site()->visit($page, $language);
 				return $page->render(versionId: 'latest');
 			});
@@ -221,7 +221,11 @@ class Crawler
 		$page = (fn () => $this->page ?? null)->call($site);
 		$state = (fn () => [$this->request, $this->response, $this->path])->call($kirby);
 
-		$_GET = $_POST = $_REQUEST = $_FILES = $_COOKIE = [];
+		$_GET = [];
+		$_POST = [];
+		$_REQUEST = [];
+		$_FILES = [];
+		$_COOKIE = [];
 
 		(function () use ($url) {
 			$this->request = new class(['method' => 'GET', 'url' => $url, 'query' => [], 'body' => [], 'files' => []]) extends Request {

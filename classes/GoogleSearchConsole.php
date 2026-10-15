@@ -320,7 +320,7 @@ class GoogleSearchConsole
 		return static::cache()
 			->getOrSet(
 				md5($property . json_encode($body)),
-				function () use ($property, $body) {
+				static function () use ($property, $body) {
 					$uri = new Uri('https://www.googleapis.com/webmasters/v3/sites');
 					$uri->setPath($uri->path() . '/' . urlencode($property) . '/searchAnalytics/query');
 
@@ -373,7 +373,7 @@ class GoogleSearchConsole
 		}
 
 		$dir = $asc ? 1 : -1;
-		usort($data, fn ($a, $b) => match ($metric) {
+		usort($data, static fn ($a, $b) => match ($metric) {
 			'query' => strcasecmp($a['keys'][0], $b['keys'][0]) * $dir,
 			default => ($a[$metric] <=> $b[$metric]) * $dir
 		});

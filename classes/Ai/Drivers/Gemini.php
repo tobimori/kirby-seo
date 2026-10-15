@@ -21,7 +21,7 @@ class Gemini extends Driver
 		string|null $model = null
 	): Generator {
 		$apiKey = $this->config('apiKey', required: true);
-		$model = $model ?? $this->config('model', static::DEFAULT_MODEL);
+		$model ??= $this->config('model', static::DEFAULT_MODEL);
 		$baseEndpoint = $this->config('endpoint', static::DEFAULT_ENDPOINT);
 		$endpoint = "{$baseEndpoint}/interactions";
 
@@ -46,7 +46,7 @@ class Gemini extends Driver
 		$stream = new SseStream($endpoint, $headers, $payload, (int)$this->config('timeout', 120));
 		$started = false;
 
-		yield from $stream->stream(function (array $event) use (&$started): Generator {
+		yield from $stream->stream(static function (array $event) use (&$started): Generator {
 			switch ($event['event_type'] ?? null) {
 				case 'error':
 					yield Chunk::error($event['error']['message'] ?? 'Unknown Gemini error.', $event);
