@@ -6,7 +6,7 @@ on:
 
 jobs:
   lint-and-format:
-    name: lint, format, and analyze
+    name: lint and format
     runs-on: ubuntu-latest
 
     steps:
@@ -47,6 +47,34 @@ jobs:
         if: success() || failure()
         run: vendor/bin/mago lint
 
+  static-analysis:
+    name: static analysis (PHP ${{ matrix.php }})
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ["8.3", "8.4", "8.5"]
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: setup php
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+          tools: composer
+
+      # spatie/schema-org 5 requires PHP 8.4, so PHP 8.3 runs without schema support
+      - name: install php dependencies without schema support
+        if: matrix.php == '8.3'
+        run: composer remove --dev spatie/schema-org --no-interaction --no-progress
+
+      - name: install php dependencies
+        if: matrix.php != '8.3'
+        run: composer install --no-interaction --no-progress --prefer-dist
+
       - name: run mago analyze
-        if: success() || failure()
-        run: vendor/bin/mago analyze
+        run: vendor/bin/mago --php-version=${{ matrix.php }} analyze
