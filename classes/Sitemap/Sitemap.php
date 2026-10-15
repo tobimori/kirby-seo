@@ -20,7 +20,7 @@ class Sitemap extends Collection
 
 	public function loc(): string
 	{
-		return kirby()->site()->canonicalFor('sitemap-' . $this->key . '.xml');
+		return kirby()->site()->canonicalFor('sitemap-' . $this->key . '.xml', true);
 	}
 
 	public function lastmod(): string

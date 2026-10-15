@@ -8,7 +8,7 @@ return [
 	'schema' => fn ($type) => Seo::option('components.schema')::getInstance($type),
 	'schemas' => fn () => Seo::option('components.schema')::getInstances(),
 	'lang' => fn () => Seo::option('components.meta')::normalizeLocale(Seo::option('default.locale', args: [$this->homePage()]), '-'),
-	'canonicalFor' => function (string $url, bool $useRootUrl = false) {
+	'canonicalFor' => function (string $url, bool $useRootUrl = false, string|null $languageCode = null) {
 		// Determine the base URL
 		$base = Seo::option('canonical.base', Seo::option('canonicalBase'));
 		if (!$base) {
@@ -16,7 +16,7 @@ return [
 			if ($useRootUrl && kirby()->multilang()) {
 				$base = kirby()->url();
 			} else {
-				$base = $this->url();
+				$base = $this->url($languageCode);
 			}
 		}
 

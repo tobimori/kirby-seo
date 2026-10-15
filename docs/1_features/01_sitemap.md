@@ -26,7 +26,7 @@ A `Sitemap:` line is also added to your [robots.txt](1_features/00_robots-indexi
 
 If your Kirby site has multiple languages, the sitemap automatically includes `hreflang` links for each page. These tell search engines which language versions of a page exist, so they can show the right one in search results.
 
-Only languages where a translation actually exists are included. There is no separate sitemap per language: all translations are listed in a single sitemap using `<xhtml:link>` elements.
+Each translation gets its own entry with its translated URL, and every entry lists the same `<xhtml:link>` alternates, including itself and an `x-default` fallback. Only translations that exist and are indexable are included. There is no separate sitemap per language: all translations are listed in a single sitemap.
 
 ## Browser view
 
