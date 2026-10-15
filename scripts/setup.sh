@@ -73,6 +73,11 @@ php -r '
 		}
 
 		if (!isset($blueprint["tabs"])) {
+			// root fields referenced by name from columns or sections stay at the root
+			if (isset($layout["columns"]) || isset($layout["sections"])) {
+				unset($layout["fields"]);
+			}
+
 			$blueprint = array_diff_key($blueprint, $layout);
 			$blueprint["tabs"] = ["content" => ["label" => "Content", ...$layout]];
 		}
