@@ -692,9 +692,10 @@ class Meta
 	/**
 	 * Gets the canonical url for the page
 	 */
-	public function canonicalUrl()
+	public function canonicalUrl(Language|null $lang = null)
 	{
-		return $this->page->site()->canonicalFor($this->page->url());
+		$languageCode = ($lang ?? $this->lang)?->code();
+		return $this->page->site()->canonicalFor($this->page->url($languageCode), languageCode: $languageCode);
 	}
 
 	/**
