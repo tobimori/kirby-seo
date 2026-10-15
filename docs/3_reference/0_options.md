@@ -67,16 +67,16 @@ These are the fallback values for the last level of the [meta cascade](2_customi
 
 ## LLM-friendly content
 
-| Option                         | Default                                        | Description                                                      |
-| ------------------------------ | ---------------------------------------------- | ---------------------------------------------------------------- |
-| `agentic.enabled`              | `true`                                         | Enable all LLM-friendly content features                         |
-| `agentic.markdown.enabled`     | `true`                                         | Enable Markdown URLs and `Accept: text/markdown` negotiation     |
-| `agentic.markdown.auto`        | `false`                                        | Convert selected HTML when no explicit `.md.php` template exists |
-| `agentic.markdown.selectors`   | `[data-agentic-content]`, `main`, and `article` | Content selectors, in priority order                             |
-| `agentic.markdown.converter`   | `null`                                         | Custom conversion callable, object, or class                     |
-| `agentic.llmsTxt.enabled`      | `true`                                         | Enable the language-aware `/llms.txt` route                       |
-| `agentic.llmsTxt.pages`        | `null`                                         | Callable that selects the initial page collection                |
-| `components.agentic`           | `tobimori\Seo\LlmContent`                    | LLM-friendly content component class                             |
+| Option                       | Default                                         | Description                                                      |
+| ---------------------------- | ----------------------------------------------- | ---------------------------------------------------------------- |
+| `agentic.enabled`            | `true`                                          | Enable all LLM-friendly content features                         |
+| `agentic.markdown.enabled`   | `true`                                          | Enable Markdown URLs and `Accept: text/markdown` negotiation     |
+| `agentic.markdown.auto`      | `false`                                         | Convert selected HTML when no explicit `.md.php` template exists |
+| `agentic.markdown.selectors` | `[data-agentic-content]`, `main`, and `article` | Content selectors, in priority order                             |
+| `agentic.markdown.converter` | `null`                                          | Custom conversion callable, object, or class                     |
+| `agentic.llmsTxt.enabled`    | `true`                                          | Enable the language-aware `/llms.txt` route                      |
+| `agentic.llmsTxt.pages`      | `null`                                          | Callable that selects the initial page collection                |
+| `components.agentic`         | `tobimori\Seo\LlmContent`                       | LLM-friendly content component class                             |
 
 ## Robots
 
@@ -113,12 +113,12 @@ These are the fallback values for the last level of the [meta cascade](2_customi
 
 Each provider has a `driver` class and a `config` array. The config options depend on the driver. All built-in drivers share `apiKey` (required), `model`, `endpoint`, and `timeout`. The OpenAI driver also accepts `organization`.
 
-| Provider     | Driver      | Default model                   | Default endpoint                                   |
-| ------------ | ----------- | ------------------------------- | -------------------------------------------------- |
-| `openai`     | `OpenAi`    | `gpt-6-luna`                   | `https://api.openai.com/v1/responses`              |
-| `anthropic`  | `Anthropic` | `claude-haiku-5-5`              | `https://api.anthropic.com/v1/messages`            |
-| `gemini`     | `Gemini`    | `gemini-3.5-flash-lite`         | `https://generativelanguage.googleapis.com/v1beta` |
-| `openrouter` | `OpenAi`    | `openai/gpt-6-luna`             | `https://openrouter.ai/api/v1/responses`           |
+| Provider     | Driver      | Default model           | Default endpoint                                   |
+| ------------ | ----------- | ----------------------- | -------------------------------------------------- |
+| `openai`     | `OpenAi`    | `gpt-6-luna`            | `https://api.openai.com/v1/responses`              |
+| `anthropic`  | `Anthropic` | `claude-haiku-5-5`      | `https://api.anthropic.com/v1/messages`            |
+| `gemini`     | `Gemini`    | `gemini-3.5-flash-lite` | `https://generativelanguage.googleapis.com/v1beta` |
+| `openrouter` | `OpenAi`    | `openai/gpt-6-luna`     | `https://openrouter.ai/api/v1/responses`           |
 
 The Gemini driver uses the [Interactions API](https://ai.google.dev/gemini-api/docs/interactions) (`/interactions` is appended to the endpoint) and authenticates via the `x-goog-api-key` header. Requests are sent with `store: false`, so Google doesn't retain the interaction. All providers default to a timeout of 120 seconds. See [customizing AI Assist](2_customization/06_ai-assist) for adding your own provider.
 
