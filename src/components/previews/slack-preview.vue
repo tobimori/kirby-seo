@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from "kirbyuse"
+import { computed, ref } from "vue"
 
 const props = defineProps({
 	ogTitle: String,

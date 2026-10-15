@@ -250,7 +250,7 @@ class Report
 
 		// permalinks redirect to the current URL of the model
 		if (preg_match('#^@/(page|file)/([^/?]+)#', $path, $match)) {
-			$model = Uuid::for("{$match[1]}://{$match[2]}")?->model();
+			$model = Uuid::from("{$match[1]}://{$match[2]}")?->model();
 			return (
 				$model
 					? ['state' => 'redirect', 'reason' => 'permalink', 'target' => $model->url()]

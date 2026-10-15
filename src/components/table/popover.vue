@@ -1,5 +1,6 @@
 <script setup>
-import { computed, nextTick, onBeforeUnmount, ref, usePanel, watch } from "kirbyuse"
+import { usePanel } from "kirbyuse"
+import { computed, nextTick, onBeforeUnmount, ref, watch } from "vue"
 
 import { usePopoverGroup } from "../../composables/popover.js"
 

@@ -6,44 +6,40 @@ use Closure;
 use Kirby\Cms\App;
 use Kirby\Cms\File;
 use Kirby\Form\Field;
-use Kirby\Form\FieldClass;
+use Kirby\Form\Field\InputField;
 use Kirby\Http\Response;
+use Kirby\Reflection\Attributes\Prop;
 use tobimori\Seo\Ai\Content;
 use tobimori\Seo\AltText;
 use tobimori\Seo\Seo;
 
-class AltTextField extends FieldClass
+class AltTextField extends InputField
 {
-	protected bool $ai;
-	protected bool $autogenerate;
-	protected mixed $value = [];
+	/**
+	 * Shows the AI buttons, if AI is enabled & the file is a supported image
+	 */
+	#[Prop]
+	protected bool $ai = true;
 
-	public function __construct(array $params = [])
-	{
-		$this->autogenerate = $params['autogenerate'] ?? false;
-		parent::__construct($params);
-		$this->setAi($params['ai'] ?? true);
-	}
+	/**
+	 * Generates the alt text with AI after an upload or a file replacement
+	 */
+	#[Prop]
+	protected bool $autogenerate = false;
 
-	public function type(): string
-	{
-		return 'alt-text';
-	}
-
-	protected function setAi(bool $ai = true): void
-	{
-		$component = Seo::option('components.ai');
-
-		$this->ai =
-			$ai &&
-			$component::enabled() &&
-			$component::permitted() &&
-			!($this->model() instanceof File && !Content::supportsImage($this->model()));
-	}
+	protected array $value = [];
 
 	public function ai(): bool
 	{
-		return $this->ai;
+		$component = Seo::option('components.ai');
+		$model = $this->model();
+
+		return (
+			$this->ai &&
+				$component::enabled() &&
+				$component::permitted() &&
+				!($model instanceof File && !Content::supportsImage($model))
+		);
 	}
 
 	public function autogenerate(): bool
@@ -53,49 +49,21 @@ class AltTextField extends FieldClass
 
 	public function fill(mixed $value): static
 	{
-		if (is_array($value)) {
-			$this->value = $value;
-		} else {
-			$this->value = AltText::parse($value)->toArray();
-		}
-
-		return $this;
+		return parent::fill(is_array($value) ? $value : AltText::parse($value)->toArray());
 	}
 
-	public function toFormValue(): mixed
+	public function toStoredValue(): string
 	{
-		return $this->value;
+		$altText = new AltText(
+			text: $this->value['text'] ?? '',
+			decorative: $this->value['decorative'] ?? false,
+			source: $this->value['source'] ?? AltText::SOURCE_MANUAL
+		);
+
+		return $altText->isMissing() ? '' : $altText->toYaml();
 	}
 
-	public function toStoredValue(): mixed
-	{
-		if (is_array($this->value)) {
-			$altText = new AltText(
-				text: $this->value['text'] ?? '',
-				decorative: $this->value['decorative'] ?? false,
-				source: $this->value['source'] ?? AltText::SOURCE_MANUAL
-			);
-
-			if ($altText->isMissing()) {
-				return '';
-			}
-
-			return $altText->toYaml();
-		}
-
-		return $this->value;
-	}
-
-	public function props(): array
-	{
-		return [
-			...parent::props(),
-			'ai' => $this->ai(),
-			'autogenerate' => $this->autogenerate()
-		];
-	}
-
-	public function routes(): array
+	public function api(): array
 	{
 		$field = $this;
 

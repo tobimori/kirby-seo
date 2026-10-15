@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from "kirbyuse"
+import { computed } from "vue"
 
 const props = defineProps({
 	title: String,

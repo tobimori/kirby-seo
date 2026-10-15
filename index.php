@@ -14,10 +14,10 @@ use tobimori\Seo\AltText;
 use tobimori\Seo\Seo;
 
 if (
-	version_compare(App::version() ?? '0.0.0', '5.0.0', '<') === true ||
-	version_compare(App::version() ?? '0.0.0', '6.0.0', '>=') === true
+	version_compare(App::version() ?? '0.0.0', '6.0.0-beta.1', '<') === true ||
+	version_compare(App::version() ?? '0.0.0', '7.0.0', '>=') === true
 ) {
-	throw new Exception('Kirby SEO requires Kirby 5');
+	throw new Exception('Kirby SEO requires Kirby 6');
 }
 
 App::plugin(
@@ -25,7 +25,6 @@ App::plugin(
 	license: fn (\Kirby\Plugin\Plugin $plugin) => new \tobimori\Seo\License($plugin),
 	extends: [
 		'options' => require __DIR__ . '/config/options.php',
-		'sections' => require __DIR__ . '/config/sections.php',
 		'areas' => require __DIR__ . '/config/areas.php',
 		'api' => require __DIR__ . '/config/api.php',
 		'siteMethods' => require __DIR__ . '/config/site-methods.php',

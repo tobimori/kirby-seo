@@ -17,7 +17,7 @@ const emit = defineEmits(["input", "toggle"])
 			:value="value"
 			class="k-input"
 			@input="emit('input', $event)"
-			@keydown.native.esc="emit('toggle')"
+			@keydown.esc="emit('toggle')"
 		/>
 		<k-button
 			:title="$t('filter')"

@@ -1,33 +1,35 @@
 <script setup>
-import {
-	ref,
-	watch,
-	computed,
-	onMounted,
-	onUnmounted,
-	usePanel,
-	useSection,
-	useApp
-} from "kirbyuse"
-import { section } from "kirbyuse/props"
+import { usePanel, useApi } from "kirbyuse"
+import { ref, watch, computed, onMounted, onUnmounted } from "vue"
 
 import FacebookPreview from "../components/previews/facebook-preview.vue"
 import GooglePreview from "../components/previews/google-preview.vue"
 import SlackPreview from "../components/previews/slack-preview.vue"
 
-const props = defineProps(section)
+defineOptions({ inheritAttrs: false })
+
+const props = defineProps({
+	label: String,
+	name: String,
+	endpoints: Object,
+	options: {
+		type: Array,
+		default: () => []
+	}
+})
+
+// display fields store nothing, declaring the events keeps native events from bubbling into the form
+defineEmits(["input", "focus", "submit"])
 
 const panel = usePanel()
-const app = useApp()
-const { load } = useSection()
+const api = useApi()
 
 const meta = ref(null)
-const options = ref([])
-const isSiteParent = computed(() => props.parent === "site")
+
+const isSiteParent = computed(() => props.endpoints?.model === "site")
 const baseLabel = computed(() => props.label || panel.t("seo.sections.preview.title"))
 const headerLabel = computed(() => {
 	const pageTitle = meta.value?.pageTitle
-
 	if (isSiteParent.value && pageTitle) {
 		return panel.t("seo.sections.preview.titleWithPage", { title: pageTitle })
 	}
@@ -35,23 +37,20 @@ const headerLabel = computed(() => {
 	return baseLabel.value
 })
 
-const type = ref(window.localStorage.getItem("kSEOPreviewType") ?? "google")
+const type = ref(
+	window.localStorage.getItem("kSEOPreviewType") ?? props.options[0]?.value ?? "google"
+)
 watch(type, (newType) => {
 	window.localStorage.setItem("kSEOPreviewType", newType)
 })
 
-const handleLoad = () => {
-	load({
-		parent: props.parent,
-		name: props.name
-	}).then((response) => {
-		meta.value = response.meta
-		options.value = response.options
-		// set default type if not already set and options are available
-		if (!window.localStorage.getItem("kSEOPreviewType") && response.options.length > 0) {
-			type.value = response.options[0].value
-		}
-	})
+const handleLoad = async () => {
+	if (!props.endpoints?.field) {
+		return
+	}
+
+	const response = await api.get(props.endpoints.field)
+	meta.value = response.meta
 }
 
 const openPanelTarget = () => {
@@ -59,23 +58,21 @@ const openPanelTarget = () => {
 		return
 	}
 
-	app.$go(meta.value.panelUrl)
+	panel.view.open(meta.value.panelUrl)
 }
 
 onMounted(() => {
 	handleLoad()
 
 	// this will trigger after the server has finished processing the request as changes
-	panel.events.on("content.save", (_event) => {
-		handleLoad()
-	})
+	panel.events.on("content.save", handleLoad)
 })
 
-onUnmounted(() => panel.events.off("content.save"))
+onUnmounted(() => panel.events.off("content.save", handleLoad))
 </script>
 
 <template>
-	<k-section v-if="meta" class="k-seo-preview">
+	<div v-if="meta" :class="['k-field k-seo-preview', $attrs.class]" :style="$attrs.style">
 		<div class="k-field-header k-seo-preview__label k-label k-field-label">
 			<k-icon type="preview" />
 			<span class="k-label-text">
@@ -93,7 +90,7 @@ onUnmounted(() => panel.events.off("content.save"))
 			</k-button>
 		</div>
 		<k-select-field
-			v-model="type"
+			:value="type"
 			type="select"
 			name="seo-preview-type"
 			:aria-label="headerLabel"
@@ -101,13 +98,14 @@ onUnmounted(() => panel.events.off("content.save"))
 			:options="options"
 			:required="true"
 			:empty="false"
+			@input="type = $event"
 		/>
 		<div class="k-seo-preview__inner">
 			<google-preview v-if="type === 'google'" v-bind="meta" />
 			<facebook-preview v-if="type === 'facebook'" v-bind="meta" />
 			<slack-preview v-if="type === 'slack'" v-bind="meta" />
 		</div>
-	</k-section>
+	</div>
 </template>
 
 <style>
@@ -120,7 +118,7 @@ onUnmounted(() => panel.events.off("content.save"))
 	display: flex;
 	font-size: var(--text-sm);
 	color: var(--color-text-dimmed);
-	line-height: var(--spacing-5);
+	line-height: 1.25rem;
 	width: max-content;
 	margin-left: auto;
 

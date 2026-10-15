@@ -1,5 +1,6 @@
 <script setup>
-import { computed, ref, usePanel } from "kirbyuse"
+import { usePanel } from "kirbyuse"
+import { computed, ref } from "vue"
 
 const props = defineProps({
 	state: String,

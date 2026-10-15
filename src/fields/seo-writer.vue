@@ -38,6 +38,7 @@ export default {
 	props: {
 		ai: [String, Boolean]
 	},
+	emits: ["input"],
 	data() {
 		return {
 			aiStreaming: false,
@@ -98,7 +99,7 @@ export default {
 			return getAiEndpointUrl(this.endpoints)
 		}
 	},
-	beforeDestroy() {
+	beforeUnmount() {
 		this.abortAiStream()
 	},
 	methods: {

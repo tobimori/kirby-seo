@@ -307,28 +307,16 @@ message = "Call to `array_search` must enforce strict comparison."
 count = 2
 
 [[issues]]
-file = "classes/Dialogs/UtmShareDialog.php"
-code = "no-else-clause"
-message = "Avoid `else` clauses."
-count = 1
-
-[[issues]]
 file = "classes/Field/AltTextField.php"
 code = "no-else-clause"
 message = "Avoid `else` clauses."
-count = 2
+count = 1
 
 [[issues]]
 file = "classes/Field/AltTextField.php"
 code = "prefer-early-continue"
 message = "Consider using early continue pattern to reduce nesting."
 count = 1
-
-[[issues]]
-file = "classes/Field/AltTextField.php"
-code = "prefer-static-closure"
-message = "This closure does not use `$this` and should be declared static."
-count = 3
 
 [[issues]]
 file = "classes/GoogleSearchConsole.php"
@@ -508,7 +496,7 @@ count = 1
 file = "classes/Views/OverviewView.php"
 code = "prefer-static-closure"
 message = "This arrow function does not use `$this` and should be declared static."
-count = 3
+count = 2
 
 [[issues]]
 file = "classes/Views/OverviewView.php"
@@ -521,24 +509,6 @@ file = "classes/Views/PagesView.php"
 code = "prefer-static-closure"
 message = "This arrow function does not use `$this` and should be declared static."
 count = 2
-
-[[issues]]
-file = "config/areas.php"
-code = "strict-behavior"
-message = "Call to `in_array` must enforce strict comparison."
-count = 1
-
-[[issues]]
-file = "config/fields.php"
-code = "no-boolean-flag-parameter"
-message = "Avoid boolean flag parameters."
-count = 2
-
-[[issues]]
-file = "config/fields.php"
-code = "no-redundant-use"
-message = "Unused import: `Ai`."
-count = 1
 
 [[issues]]
 file = "config/hooks.php"
@@ -580,12 +550,6 @@ count = 2
 file = "config/routes.php"
 code = "strict-behavior"
 message = "Call to `base64_decode` must enforce strict comparison."
-count = 1
-
-[[issues]]
-file = "config/sections.php"
-code = "strict-behavior"
-message = "Call to `in_array` must enforce strict comparison."
 count = 1
 
 [[issues]]

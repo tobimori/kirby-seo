@@ -45,4 +45,4 @@ return [
 ];
 ```
 
-The rest of the plugin picks up your class automatically. Page methods, hooks, routes, and sections all resolve components through the config, so your class is used everywhere the original would have been. Look at the built-in classes in `site/plugins/kirby-seo/classes/` to see what methods are available to override.
+The rest of the plugin picks up your class automatically. Page methods, hooks, routes, and fields all resolve components through the config, so your class is used everywhere the original would have been. Look at the built-in classes in `site/plugins/kirby-seo/classes/` to see what methods are available to override.

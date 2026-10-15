@@ -5,7 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"build": "kirbyup src/index.js",
-		"dev": "kirbyup serve src/index.js",
+		"dev": "kirbyup dev src/index.js",
 		"format": "oxfmt",
 		"lint": "eslint \"src/**/*.{js,vue}\"",
 		"lint:fix": "npm run lint -- --fix",
@@ -13,14 +13,14 @@
 		"playground:portless": "portless run --name seo pnpm playground"
 	},
 	"dependencies": {
-		"kirbyuse": "^1.3.1"
+		"kirbyuse": "^2.0.0-beta.2"
 	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
 		"eslint": "^10.8.0",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-vue": "^10.10.0",
-		"kirbyup": "^3.4.1",
+		"kirbyup": "^4.0.0-beta.1",
 		"oxfmt": "^0.62.0",
 		"oxlint": "^1.77.0",
 		"portless": "^0.15.8",

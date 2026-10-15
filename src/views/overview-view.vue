@@ -1,5 +1,6 @@
 <script setup>
-import { computed, ref, usePanel, useHelpers } from "kirbyuse"
+import { usePanel, useHelpers } from "kirbyuse"
+import { computed, ref } from "vue"
 
 import { useOverviewTable } from "../composables/overview-table.js"
 import { SEVERITY_ICONS } from "../utils/checks.js"
@@ -260,13 +261,13 @@ const onGenerate = async (column) => {
 
 		<div :inert="isGenerating">
 			<k-seo-table
+				v-model:selected="selected"
+				v-model:widths="settings.widths"
 				:columns="tableColumns"
 				:rows="items"
 				:pagination="pagination"
 				:sort="sort"
 				:dir="dir"
-				:selected.sync="selected"
-				:widths.sync="settings.widths"
 				:empty="$t('seo.overview.empty')"
 				resizable
 				selectable

@@ -16,7 +16,7 @@
 			"tobimori\\Seo\\": "classes"
 		}
 	},
-	"minimum-stability": "RC",
+	"minimum-stability": "beta",
 	"require": {
 		"php": ">=8.3.0",
 		"getkirby/composer-installer": "^1.2.1"
@@ -36,7 +36,7 @@
 		"getkirby/cli": "^1.8.0",
 		"tobimori/kirby-queues": "^1.0.0-beta.1",
 		"spatie/schema-org": "^5.0",
-		"getkirby/cms": "^5.0.0"
+		"getkirby/cms": "^6.0.0"
 	},
 	"scripts": {
 		"analyze": "mago analyze",
@@ -57,6 +57,9 @@
 		}
 	},
 	"extra": {
-		"kirby-cms-path": false
+		"kirby-cms-path": false,
+		"kirby": {
+			"compatible": "^6.0"
+		}
 	}
 }

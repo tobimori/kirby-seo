@@ -2,38 +2,44 @@
 
 namespace tobimori\Seo\Dialogs;
 
-use Kirby\Cms\App;
 use Kirby\Cms\Find;
 use Kirby\Cms\Page;
 use Kirby\Cms\Site;
+use Kirby\Exception\NotFoundException;
+use Kirby\Panel\Controller\DialogController;
+use Kirby\Panel\Ui\Dialog;
 
-class UtmShareDialog
+/**
+ * Builds a link with UTM parameters to a page, or to the home page for the site
+ */
+class UtmShareDialog extends DialogController
 {
-	protected Page|Site $model;
-
-	public function __construct(string $path)
-	{
-		$kirby = App::instance();
-
-		if ($path === 'site') {
-			$this->model = $kirby->site();
-		} else {
-			$id = preg_replace('/^pages\//', '', $path);
-			$this->model = Find::page($id);
-		}
+	public function __construct(
+		protected Page $page
+	) {
+		parent::__construct();
 	}
 
-	public function load(): array
+	public static function factory(string $path): self
 	{
-		$url = $this->model instanceof Site
-			? $this->model->homePage()->url()
-			: $this->model->url();
+		$model = Find::parent($path);
 
-		return [
-			'component' => 'k-seo-utm-share-dialog',
-			'props' => [
-				'pageUrl' => $url
-			]
-		];
+		if ($model instanceof Site) {
+			$model = $model->homePage();
+		}
+
+		if ($model instanceof Page === false) {
+			throw new NotFoundException(key: 'page.undefined');
+		}
+
+		return new self($model);
+	}
+
+	public function load(): Dialog
+	{
+		return new Dialog(
+			component: 'k-seo-utm-share-dialog',
+			pageUrl: $this->page->url()
+		);
 	}
 }

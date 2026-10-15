@@ -7,7 +7,7 @@ intro: "All you need to get started with Kirby SEO: Installation & initial confi
 
 Kirby SEO requires
 
-- Kirby 5 or later
+- Kirby 6
 - PHP 8.3, 8.4 or 8.5
 
 Composer is required for full feature support (e.g. schema.org support, background queuing). [Composer](https://getcomposer.org/) is a dependency manager for PHP. If you have never used Composer before, follow the instruction on the [Composer website](https://getcomposer.org/doc/00-intro.md).

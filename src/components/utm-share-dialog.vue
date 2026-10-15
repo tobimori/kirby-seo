@@ -1,5 +1,6 @@
 <script setup>
-import { ref, computed, watch, nextTick, onMounted, onUnmounted, useHelpers } from "kirbyuse"
+import { useHelpers } from "kirbyuse"
+import { ref, computed, watch, nextTick, onMounted, onUnmounted } from "vue"
 
 const props = defineProps({
 	pageUrl: {
@@ -137,8 +138,9 @@ onUnmounted(() => {
 				<k-input class="k-seo-utm-share-dialog__input">
 					<k-text-input
 						:id="field.key"
-						v-model="params[field.key]"
+						:value="params[field.key]"
 						:placeholder="$t(`seo.utmShare.${field.name}.placeholder`)"
+						@input="params[field.key] = $event"
 					/>
 				</k-input>
 			</div>

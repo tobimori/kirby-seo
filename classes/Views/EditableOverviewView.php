@@ -86,7 +86,7 @@ abstract class EditableOverviewView extends OverviewView
 		$changes = [];
 
 		foreach ($this->tracked($tracked) as $model) {
-			if ($model->version('changes')->isLocked('*') || !$model->permissions()->can('update')) {
+			if ($model->version('changes')->isLocked('*') || !$model->guards()->isAvailable('update')) {
 				continue;
 			}
 
@@ -187,7 +187,7 @@ abstract class EditableOverviewView extends OverviewView
 	public function discard(array $ids): array
 	{
 		return $this->apply($ids, function (array $entry) {
-			if (!$entry['model']->permissions()->can('update')) {
+			if (!$entry['model']->guards()->isAvailable('update')) {
 				throw new PermissionException(key: 'version.discard.permission');
 			}
 
@@ -313,7 +313,7 @@ abstract class EditableOverviewView extends OverviewView
 
 		return [
 			'lock' => $lock,
-			'editable' => $model->permissions()->can('update') && $lock === null,
+			'editable' => $model->guards()->isAvailable('update') && $lock === null,
 			// Either version can supply the current translation
 			'translated' => $version->exists('current') || $model->version('latest')->exists('current')
 		];

@@ -1,5 +1,6 @@
 <script setup>
-import { computed, ref, usePanel, watch } from "kirbyuse"
+import { usePanel } from "kirbyuse"
+import { computed, ref, watch } from "vue"
 
 import { SEVERITY_ICONS } from "../utils/checks.js"
 

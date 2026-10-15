@@ -6,6 +6,7 @@ use Kirby\Cms\App;
 use Kirby\Cms\LicenseType;
 use Kirby\Data\Json;
 use Kirby\Exception\InvalidArgumentException;
+use Kirby\Exception\LogicException;
 use Kirby\Filesystem\F;
 use Kirby\Http\Remote;
 use Kirby\Plugin\License as KirbyLicense;
@@ -87,6 +88,20 @@ final class License extends KirbyLicense
 			theme: $state === 'missing' ? $status->theme() : 'negative',
 			dialog: 'seo/activate'
 		);
+	}
+
+	/**
+	 * The license of the registered plugin
+	 */
+	public static function current(): self
+	{
+		$license = App::instance()->plugin('tobimori/seo')?->license();
+
+		if ($license instanceof self === false) {
+			throw new LogicException(message: 'Kirby SEO is not registered');
+		}
+
+		return $license;
 	}
 
 	public function isValid(): bool

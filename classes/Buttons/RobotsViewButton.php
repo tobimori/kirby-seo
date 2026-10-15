@@ -3,7 +3,7 @@
 namespace tobimori\Seo\Buttons;
 
 use Kirby\Cms\Page;
-use Kirby\Panel\Ui\Buttons\ViewButton;
+use Kirby\Panel\Ui\Button\ViewButton;
 use Kirby\Toolkit\I18n;
 use Kirby\Toolkit\Str;
 

@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from "kirbyuse"
+import { computed } from "vue"
 
 import { SEVERITY_ICONS } from "../../../utils/checks.js"
 
@@ -54,7 +54,7 @@ const icon = computed(() =>
 	}
 
 	&[data-state="ok"] {
-		--icon-color: var(--color-positive);
+		--icon-color: var(--color-green-700);
 	}
 
 	&[data-state="decorative"] {

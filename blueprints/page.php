@@ -8,7 +8,7 @@ $license = [];
 if (App::instance()->plugin('tobimori/seo')->license()->status()->value() !== 'active') {
 	$license['license'] = [
 		'width' => '1/1',
-		'sections' => [
+		'fields' => [
 			'seoLicense' => [
 				'type' => 'seo-license'
 			]
@@ -20,6 +20,7 @@ $searchConsole = [];
 
 if (Seo::option('searchConsole.enabled')) {
 	$searchConsole['seoSearchConsole'] = [
+		'label' => 'seo.sections.searchConsole.title',
 		'type' => 'seo-search-console'
 	];
 }
@@ -68,8 +69,9 @@ return [
 		'sidebar' => [
 			'width' => '5/12',
 			'sticky' => true,
-			'sections' => [
+			'fields' => [
 				'seoPreview' => [
+					'label' => 'seo.sections.preview.title',
 					'type' => 'seo-preview'
 				],
 				...$searchConsole

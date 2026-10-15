@@ -1,6 +1,6 @@
 <script setup>
-import { ref, watch, onMounted, usePanel, useApi } from "kirbyuse"
-import { section } from "kirbyuse/props"
+import { usePanel, useApi } from "kirbyuse"
+import { ref, watch, onMounted, onUnmounted } from "vue"
 
 const MESSAGES = {
 	NO_CREDENTIALS: "seo.sections.searchConsole.noCredentials",
@@ -8,7 +8,17 @@ const MESSAGES = {
 	SELECT_PROPERTY: "seo.sections.searchConsole.selectProperty"
 }
 
-const props = defineProps(section)
+defineOptions({ inheritAttrs: false })
+
+const props = defineProps({
+	label: String,
+	name: String,
+	endpoints: Object
+})
+
+// display fields store nothing, declaring the events keeps native events from bubbling into the form
+defineEmits(["input", "focus", "submit"])
+
 const panel = usePanel()
 const api = useApi()
 
@@ -26,7 +36,11 @@ const metricOptions = [
 ]
 
 const handleLoad = async () => {
-	const response = await api.get(`${props.parent}/sections/${props.name}`, {
+	if (!props.endpoints?.field) {
+		return
+	}
+
+	const response = await api.get(props.endpoints.field, {
 		metric: metric.value,
 		limit: 10
 	})
@@ -41,10 +55,10 @@ watch(metric, () => handleLoad())
 onMounted(() => {
 	handleLoad()
 
-	panel.events.on("gsc.propertySelected", () => {
-		handleLoad()
-	})
+	panel.events.on("gsc.propertySelected", handleLoad)
 })
+
+onUnmounted(() => panel.events.off("gsc.propertySelected", handleLoad))
 
 const getBarWidth = (row) => {
 	if (!data.value.length) return 0
@@ -95,7 +109,11 @@ const handleConnect = () => {
 </script>
 
 <template>
-	<k-section v-if="status" class="k-search-console-section">
+	<div
+		v-if="status"
+		:class="['k-field k-search-console-field', $attrs.class]"
+		:style="$attrs.style"
+	>
 		<div class="k-field-header k-seo-preview__label k-label k-field-label">
 			<k-icon type="google" />
 			<span class="k-label-text">
@@ -110,7 +128,7 @@ const handleConnect = () => {
 					size="xs"
 					variant="filled"
 					icon="table"
-					@click="panel.drawer.open(`seo/gsc/data/${props.parent}`, { query: { metric } })"
+					@click="panel.drawer.open(`seo/gsc/data/${props.endpoints.model}`, { query: { metric } })"
 				>
 					{{ $t("seo.sections.searchConsole.showMore") }}
 				</k-button>
@@ -177,13 +195,14 @@ const handleConnect = () => {
 
 		<template v-else>
 			<k-select-field
-				v-model="metric"
+				:value="metric"
 				type="select"
 				name="gsc-metric"
 				:before="$t('seo.sections.searchConsole.sortBy')"
 				:options="metricOptions"
 				:required="true"
 				:empty="false"
+				@input="metric = $event"
 			/>
 
 			<div class="k-search-console__inner">
@@ -210,7 +229,7 @@ const handleConnect = () => {
 				<k-icon type="open" />
 			</a>
 		</template>
-	</k-section>
+	</div>
 </template>
 
 <style>
@@ -287,7 +306,7 @@ const handleConnect = () => {
 	width: max-content;
 	font-size: var(--text-sm);
 	color: var(--color-text-dimmed);
-	line-height: var(--spacing-5);
+	line-height: 1.25rem;
 
 	&:hover {
 		text-decoration: underline;
