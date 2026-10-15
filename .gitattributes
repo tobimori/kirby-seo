@@ -3,6 +3,7 @@
 .husky/ export-ignore
 .zed/ export-ignore
 src/ export-ignore
+scripts/ export-ignore
 .gitattributes export-ignore
 .gitignore export-ignore
 .nvmrc export-ignore
@@ -15,6 +16,9 @@ eslint.config.mjs export-ignore
 i18n.json export-ignore
 i18n.lock export-ignore
 jsconfig.json export-ignore
+mise.toml export-ignore
 package.json export-ignore
 pnpm-lock.yaml export-ignore
 pnpm-workspace.yaml export-ignore
+t3.json export-ignore
+AGENTS.md export-ignore

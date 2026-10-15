@@ -36,6 +36,9 @@ importers:
       oxlint:
         specifier: ^1.77.0
         version: 1.77.0
+      portless:
+        specifier: ^0.15.8
+        version: 0.15.8
       postcss:
         specifier: ^8.5.26
         version: 8.5.26
@@ -1411,6 +1414,12 @@ packages:
   pkg-types@2.3.1:
     resolution: {integrity: sha512-y+ichcgc2LrADuhLNAx8DFjVfgz91pRxfZdI3UDhxHvcVEZsenLO+7XaU5vOp0u/7V/wZ+plyuQxtrDlZJ+yeg==}
 
+  portless@0.15.8:
+    resolution: {integrity: sha512-kzGoG4xLsEytczl7O/COZaBwSAOKsWsZDxHv7/iFHKIC0X71OonpgbsQw58CGO29RklIHIx6yLM31TJMnTtPEw==}
+    engines: {node: '>=24'}
+    os: [darwin, linux, win32]
+    hasBin: true
+
   postcss-load-config@6.0.1:
     resolution: {integrity: sha512-oPtTM4oerL+UXmx+93ytZVN82RrlY/wPUV8IeDxFrzIjXOLF1pN+EmKPLbubvKHT2HC20xXsCAH2Z+CKV6Oz/g==}
     engines: {node: '>= 18'}
@@ -2767,6 +2776,8 @@ snapshots:
       confbox: 0.2.4
       exsolve: 1.1.1
       pathe: 2.0.3
+
+  portless@0.15.8: {}
 
   postcss-load-config@6.0.1(jiti@2.7.0)(postcss@8.5.26):
     dependencies:

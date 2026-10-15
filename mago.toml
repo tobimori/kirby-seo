@@ -4,7 +4,7 @@ php-version = "8.3"
 
 [source]
 paths = ["index.php", "blueprints", "classes", "config", "snippets", "templates"]
-includes = ["vendor"]
+includes = ["vendor", ".repos/vendor"]
 
 [source.glob]
 literal-separator = true

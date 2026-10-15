@@ -1,0 +1,22 @@
+{
+	"$schema": "https://t3.codes/schema/t3.json",
+	"scripts": [
+		{
+			"name": "Setup",
+			"command": "bash scripts/setup.sh",
+			"icon": "configure",
+			"runOnWorktreeCreate": true,
+			"async": false
+		},
+		{
+			"name": "Playground",
+			"command": "pnpm playground:portless",
+			"icon": "play"
+		},
+		{
+			"name": "Panel dev server",
+			"command": "pnpm dev",
+			"icon": "play"
+		}
+	]
+}
