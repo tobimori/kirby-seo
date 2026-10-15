@@ -174,13 +174,13 @@ class Meta
 
 				// only add alternate tags if the page is indexable
 				$meta['alternate'][] = function () use ($allowsIndexFn, $lang) {
-					if (!$allowsIndexFn()) {
+					if (!$allowsIndexFn() || !Seo::isIndexable($this->page, $lang)) {
 						return null;
 					}
 
 					return [
 						'hreflang' => Meta::toBCP47($lang),
-						'href' => $this->page->url($lang->code()),
+						'href' => $this->canonicalUrl($lang),
 						'rel' => 'alternate'
 					];
 				};
