@@ -66,10 +66,7 @@ class PagesView extends EditableOverviewView
 					'summary' => $this->audit()->summary(),
 					'ai' => $this->canUseAi(),
 					'gsc' => $this->hasSearchConsole(),
-					'group' => $group ? [
-						'kind' => $group['kind'],
-						'text' => $group['text'],
-					] : null,
+					'group' => $group ? ['kind' => $group['kind'], 'text' => $group['text']] : null,
 				]
 			];
 		});

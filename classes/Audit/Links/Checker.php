@@ -441,15 +441,18 @@ class Checker
 				$code = (int)curl_getinfo($handle, CURLINFO_RESPONSE_CODE);
 				$error = curl_errno($handle);
 
+				// aborting the body is expected, everything else (DNS, timeout, …) isn't
+				$errorType = match (true) {
+					$code !== 0 || $error === 0 => null,
+					$error === CURLE_OPERATION_TIMEDOUT => 'timeout',
+					$error === CURLE_COULDNT_RESOLVE_HOST => 'dns',
+					default => 'connection',
+				};
+
 				$results[$url] = [
 					'code' => $code,
 					'location' => curl_getinfo($handle, CURLINFO_REDIRECT_URL) ?: null,
-					// aborting the body is expected, everything else (DNS, timeout, …) isn't
-					'error' => $code === 0 && $error !== 0 ? match ($error) {
-						CURLE_OPERATION_TIMEDOUT => 'timeout',
-						CURLE_COULDNT_RESOLVE_HOST => 'dns',
-						default => 'connection',
-					} : null,
+					'error' => $errorType,
 					'checked' => time(),
 				];
 
@@ -473,9 +476,11 @@ class Checker
 	 */
 	protected static function address(string $host): string|false|null
 	{
-		$addresses = filter_var($host, FILTER_VALIDATE_IP) !== false
-			? [$host]
-			: (@gethostbynamel($host) ?: array_column(@dns_get_record($host, DNS_AAAA) ?: [], 'ipv6'));
+		if (filter_var($host, FILTER_VALIDATE_IP) !== false) {
+			$addresses = [$host];
+		} else {
+			$addresses = @gethostbynamel($host) ?: array_column(@dns_get_record($host, DNS_AAAA) ?: [], 'ipv6');
+		}
 
 		if ($addresses === []) {
 			return false;

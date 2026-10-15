@@ -3,20 +3,32 @@
 use Kirby\Cms\App;
 use tobimori\Seo\Seo;
 
+$license = [];
+
+if (App::instance()->plugin('tobimori/seo')->license()->status()->value() !== 'active') {
+	$license['license'] = [
+		'width' => '1/1',
+		'sections' => [
+			'seoLicense' => [
+				'type' => 'seo-license'
+			]
+		]
+	];
+}
+
+$searchConsole = [];
+
+if (Seo::option('searchConsole.enabled')) {
+	$searchConsole['seoSearchConsole'] = [
+		'type' => 'seo-search-console'
+	];
+}
+
 return [
 	'label' => 'seo.tabs.seo',
 	'icon' => 'search',
 	'columns' => [
-		...(App::instance()->plugin('tobimori/seo')->license()->status()->value() !== 'active' ? [
-			'license' => [
-				'width' => '1/1',
-				'sections' => [
-					'seoLicense' => [
-						'type' => 'seo-license'
-					]
-				]
-			]
-		] : []),
+		...$license,
 		'main' => [
 			'width' => '7/12',
 			'fields' => [
@@ -60,11 +72,7 @@ return [
 				'seoPreview' => [
 					'type' => 'seo-preview'
 				],
-				...(Seo::option('searchConsole.enabled') ? [
-					'seoSearchConsole' => [
-						'type' => 'seo-search-console'
-					]
-				] : [])
+				...$searchConsole
 			]
 		]
 	]

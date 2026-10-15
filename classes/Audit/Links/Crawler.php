@@ -131,15 +131,18 @@ class Crawler
 		foreach ($handles as $key => $handle) {
 			$code = (int)curl_getinfo($handle, CURLINFO_RESPONSE_CODE);
 
-			$results[$key] = $code === 0
-				? [...static::result(500, null, '', $urls[$key]), 'error' => curl_error($handle) ?: 'connection']
-				: static::result(
+			if ($code === 0) {
+				$results[$key] = static::result(500, null, '', $urls[$key]);
+				$results[$key]['error'] = curl_error($handle) ?: 'connection';
+			} else {
+				$results[$key] = static::result(
 					status: $code,
 					location: curl_getinfo($handle, CURLINFO_REDIRECT_URL) ?: null,
 					html: (string)curl_multi_getcontent($handle),
 					url: $urls[$key],
 					isHtml: str_contains((string)curl_getinfo($handle, CURLINFO_CONTENT_TYPE), 'html'),
 				);
+			}
 
 			curl_multi_remove_handle($multi, $handle);
 		}

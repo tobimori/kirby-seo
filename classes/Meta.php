@@ -136,15 +136,27 @@ class Meta
 
 		// LLM-friendly content discovery
 		$llmContent = new (Seo::option('components.agentic'))($this->page);
-		$meta['alternate'][] = fn () => $llmContent->available() ? [
-			'href' => $llmContent->markdownUrl(),
-			'rel' => 'alternate',
-			'type' => $llmContent::MARKDOWN_TYPE,
-		] : null;
-		$meta['alternate'][] = fn () => $llmContent->available() && $llmContent->llmsTxtEnabled() ? [
-			'href' => $llmContent->llmsTxtUrl(),
-			'rel' => 'describedby',
-		] : null;
+		$meta['alternate'][] = function () use ($llmContent) {
+			if (!$llmContent->available()) {
+				return null;
+			}
+
+			return [
+				'href' => $llmContent->markdownUrl(),
+				'rel' => 'alternate',
+				'type' => $llmContent::MARKDOWN_TYPE,
+			];
+		};
+		$meta['alternate'][] = function () use ($llmContent) {
+			if (!$llmContent->available() || !$llmContent->llmsTxtEnabled()) {
+				return null;
+			}
+
+			return [
+				'href' => $llmContent->llmsTxtUrl(),
+				'rel' => 'describedby',
+			];
+		};
 
 		// Check if the current URL is canonical
 		// Compare the current request URL with the canonical URL
@@ -163,11 +175,17 @@ class Meta
 				}
 
 				// only add alternate tags if the page is indexable
-				$meta['alternate'][] = fn () => $allowsIndexFn() ? [
-					'hreflang' => Meta::toBCP47($lang),
-					'href' => $this->page->url($lang->code()),
-					'rel' => 'alternate',
-				] : null;
+				$meta['alternate'][] = function () use ($allowsIndexFn, $lang) {
+					if (!$allowsIndexFn()) {
+						return null;
+					}
+
+					return [
+						'hreflang' => Meta::toBCP47($lang),
+						'href' => $this->page->url($lang->code()),
+						'rel' => 'alternate',
+					];
+				};
 
 				if ($lang !== $this->lang) {
 					$meta['og:locale:alternate'][] = fn () => Meta::toOpenGraphLocale($lang);
@@ -177,11 +195,17 @@ class Meta
 			// x-default: language-neutral URL for users whose language doesn't match any translation
 			// indexUrl() strips the language prefix so the server can handle language detection
 			// see config/page-methods.php for details and customization
-			$meta['alternate'][] = fn () => $allowsIndexFn() ? [
-				'hreflang' => 'x-default',
-				'href' => $this->page->indexUrl(),
-				'rel' => 'alternate',
-			] : null;
+			$meta['alternate'][] = function () use ($allowsIndexFn) {
+				if (!$allowsIndexFn()) {
+					return null;
+				}
+
+				return [
+					'hreflang' => 'x-default',
+					'href' => $this->page->indexUrl(),
+					'rel' => 'alternate',
+				];
+			};
 			$meta['og:locale'] = fn () => Meta::toOpenGraphLocale($this->lang);
 		} else {
 			// Single-language site: get locale from cascade (will fallback to 'locale' option)
@@ -339,13 +363,19 @@ class Meta
 
 			// if the value is a string, we use the TAG_TYPE_MAP
 			// to correctly map the attributes
-			$tags[] = [
-				'tag' => $tag['tag'],
-				'attributes' => isset($tag['attributes']) ? [
+			$attributes = null;
+
+			if (isset($tag['attributes'])) {
+				$attributes = [
 					$tag['attributes']['name'] => $name,
 					$tag['attributes']['content'] => $value,
-				] : null,
-				'content' => !isset($tag['attributes']) ? $value : null,
+				];
+			}
+
+			$tags[] = [
+				'tag' => $tag['tag'],
+				'attributes' => $attributes,
+				'content' => $attributes === null ? $value : null,
 				'priority' => $tag['priority'] ?? false,
 			];
 		}
