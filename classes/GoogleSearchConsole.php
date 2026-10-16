@@ -179,6 +179,10 @@ class GoogleSearchConsole
 			]
 		])->json();
 
+		if ($data === null) {
+			throw new \Exception('Invalid response from the OAuth token endpoint');
+		}
+
 		if (isset($data['error'])) {
 			throw new \Exception($data['error_description'] ?? $data['error']);
 		}

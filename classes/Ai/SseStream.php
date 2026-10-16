@@ -42,8 +42,8 @@ final class SseStream
 	}
 
 	/**
-	 * @param callable(array $event): Generator<Chunk> $mapper
-	 * @return Generator<Chunk>
+	 * @param callable(array $event): Generator<int, Chunk, mixed, void> $mapper
+	 * @return Generator<int, Chunk, mixed, void>
 	 */
 	public function stream(callable $mapper): Generator
 	{
@@ -126,8 +126,8 @@ final class SseStream
 	}
 
 	/**
-	 * @param callable(array $event): Generator<Chunk> $mapper
-	 * @return Generator<Chunk>
+	 * @param callable(array $event): Generator<int, Chunk, mixed, void> $mapper
+	 * @return Generator<int, Chunk, mixed, void>
 	 */
 	private function drainBuffer(string &$buffer, callable $mapper, bool $final = false): Generator
 	{
@@ -154,8 +154,8 @@ final class SseStream
 	}
 
 	/**
-	 * @param callable(array $event): Generator<Chunk> $mapper
-	 * @return Generator<Chunk>
+	 * @param callable(array $event): Generator<int, Chunk, mixed, void> $mapper
+	 * @return Generator<int, Chunk, mixed, void>
 	 */
 	private function mapFrame(string $frame, callable $mapper): Generator
 	{
@@ -167,7 +167,7 @@ final class SseStream
 
 		$payload = '';
 
-		foreach (preg_split("/\r\n|\n|\r/", $frame) as $line) {
+		foreach (preg_split("/\r\n|\n|\r/", $frame) ?: [] as $line) {
 			$line = trim($line);
 
 			if ($line === '' || str_starts_with($line, ':')) {

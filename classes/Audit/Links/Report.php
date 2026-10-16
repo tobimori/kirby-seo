@@ -252,6 +252,7 @@ class Report
 
 		// permalinks redirect to the current URL of the model
 		if (preg_match('#^@/(page|file)/([^/?]+)#', $path, $match)) {
+			/** @var \Kirby\Cms\Page|\Kirby\Cms\File|null $model */
 			$model = Uuid::for("{$match[1]}://{$match[2]}")?->model();
 			return (
 				$model
