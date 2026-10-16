@@ -5,7 +5,7 @@ use tobimori\Seo\Sitemap\SitemapIndex;
 
 return function (SitemapIndex $sitemap) {
 	$exclude = option('tobimori.seo.sitemap.excludeTemplates', []);
-	$pages = site()->index()->filter(fn ($page) => !in_array($page->intendedTemplate()->name(), $exclude));
+	$pages = site()->index()->filter(fn ($page) => !in_array($page->intendedTemplate()->name(), $exclude, true));
 
 	if ($group = option('tobimori.seo.sitemap.groupByTemplate')) {
 		$pages = $pages->group('intendedTemplate');

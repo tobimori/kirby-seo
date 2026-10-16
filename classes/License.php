@@ -367,7 +367,7 @@ final class License extends KirbyLicense
 			is_string($signature = $license['signature'] ?? null) &&
 				openssl_verify(
 					Json::encode($signed),
-					base64_decode($signature),
+					(string)base64_decode($signature, true),
 					openssl_pkey_get_public('file://' . dirname(__DIR__) . '/public.pem'),
 					'RSA-SHA256'
 				) === 1

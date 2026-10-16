@@ -6,8 +6,14 @@ use DOMDocument;
 use Kirby\Cms\App;
 use Kirby\Toolkit\Collection;
 
+/**
+ * @extends \Kirby\Toolkit\Collection<\tobimori\Seo\Sitemap\SitemapUrl>
+ */
 class Sitemap extends Collection
 {
+	/**
+	 * @param array<string, \tobimori\Seo\Sitemap\SitemapUrl> $data
+	 */
 	public function __construct(protected string $key, array $data = [], bool $caseSensitive = false)
 	{
 		parent::__construct($data, $caseSensitive);

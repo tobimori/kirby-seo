@@ -6,6 +6,9 @@ use Kirby\Cms\Page;
 use Kirby\Exception\NotFoundException;
 use Kirby\Toolkit\Collection;
 
+/**
+ * @extends \Kirby\Toolkit\Collection<\tobimori\Seo\Sitemap\Sitemap>
+ */
 class SitemapIndex extends Collection
 {
 	protected static $instance = null;

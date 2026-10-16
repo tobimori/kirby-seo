@@ -125,7 +125,7 @@ return [
 
 				$metric = kirby()->request()->get('metric', 'clicks');
 				$limit = (int)kirby()->request()->get('limit', 10);
-				$asc = in_array($metric, ['position', 'query']);
+				$asc = in_array($metric, ['position', 'query'], true);
 
 				try {
 					return $gsc::queryForModel($this->model(), $metric, $limit, $asc);

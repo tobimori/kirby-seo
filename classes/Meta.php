@@ -131,6 +131,7 @@ class Meta
 		$meta['og:url'] = $canonicalFn;
 
 		// LLM-friendly content discovery
+		/** @var \tobimori\Seo\LlmContent $llmContent */
 		$llmContent = new (Seo::option('components.agentic'))($this->page);
 		$meta['alternate'][] = static function () use ($llmContent) {
 			if (!$llmContent->available()) {
@@ -439,7 +440,7 @@ class Meta
 				array_key_exists($toBeConsumed, $this->metaDefaults) ||
 				array_key_exists($toBeConsumed = $this->findTagForField($toBeConsumed), $this->metaDefaults)
 			) &&
-			!in_array($toBeConsumed, $this->consumed)
+			!in_array($toBeConsumed, $this->consumed, true)
 		) {
 			$this->consumed[] = $toBeConsumed;
 		}
@@ -539,7 +540,8 @@ class Meta
 
 	protected function findTagForField(string $fieldName): string|null
 	{
-		return array_search($fieldName, $this->metaArray());
+		$tag = array_search($fieldName, $this->metaArray(), true);
+		return is_string($tag) ? $tag : null;
 	}
 
 	/**
@@ -553,9 +555,7 @@ class Meta
 		}
 
 		// Check if the key (field name) is in the array syntax
-		if (array_key_exists($key, $this->metaDefaults)) {
-			$val = $this->metaDefaults[$key];
-		}
+		$val = $this->metaDefaults[$key] ?? null;
 
 		// If there is no programmatic value for the key,
 		// try looking it up in the meta array

@@ -301,7 +301,7 @@ class Pages
 			}
 		}
 
-		usort($issues, static fn ($a, $b) => array_search($a['type'], self::TYPES) <=> array_search($b['type'], self::TYPES));
+		usort($issues, static fn ($a, $b) => array_search($a['type'], self::TYPES, true) <=> array_search($b['type'], self::TYPES, true));
 
 		return array_map(static fn ($issue) => [...$issue, 'severity' => self::SEVERITY[$issue['type']]], $issues);
 	}

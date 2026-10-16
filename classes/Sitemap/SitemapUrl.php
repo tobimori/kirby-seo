@@ -68,7 +68,7 @@ class SitemapUrl
 		foreach ($alternates as $alternate) {
 			foreach (['href', 'hreflang'] as $key) {
 				if (!array_key_exists($key, $alternate)) {
-					throw new Exception("[Kirby SEO] The alternate link to '{$this->loc()} is missing the '{$key}' attribute");
+					throw new Exception("[Kirby SEO] The alternate link to '{$this->loc}' is missing the '{$key}' attribute");
 				}
 			}
 		}
@@ -88,18 +88,19 @@ class SitemapUrl
 				continue;
 			}
 
-			$node->appendChild($doc->createElement($key, $this->$key));
+			// the value of `createElement()` is not escaped, a `&` would start an entity
+			$element = $doc->createElement($key);
+			$element->textContent = $this->$key;
+			$node->appendChild($element);
 		}
 
-		if (!empty($this->alternates())) {
-			foreach ($this->alternates() as $alternate) {
-				$alternateNode = $doc->createElement('xhtml:link');
-				foreach ($alternate as $key => $value) {
-					$alternateNode->setAttribute($key, $value);
-				}
-
-				$node->appendChild($alternateNode);
+		foreach ($this->alternates as $alternate) {
+			$alternateNode = $doc->createElement('xhtml:link');
+			foreach ($alternate as $key => $value) {
+				$alternateNode->setAttribute($key, $value);
 			}
+
+			$node->appendChild($alternateNode);
 		}
 
 		return $node;
@@ -110,7 +111,7 @@ class SitemapUrl
 		$doc = new DOMDocument('1.0', 'UTF-8');
 		$doc->formatOutput = true;
 
-		$node = $this->toDOMNode();
+		$node = $this->toDOMNode($doc);
 		$doc->appendChild($node);
 
 		return $doc->saveXML($node);

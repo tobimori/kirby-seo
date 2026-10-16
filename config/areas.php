@@ -57,7 +57,7 @@ return [
 					$kirby = App::instance();
 					$request = $kirby->request();
 					$metric = $request->get('metric', 'clicks');
-					$asc = (bool)$request->get('asc', in_array($metric, ['position', 'query']) ? 1 : 0);
+					$asc = (bool)$request->get('asc', in_array($metric, ['position', 'query'], true) ? 1 : 0);
 					$page = max(1, (int)$request->get('page', 1));
 					$limit = max(1, min(100, (int)$request->get('limit', 20)));
 

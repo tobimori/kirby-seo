@@ -277,12 +277,6 @@ message = "Unsafe array access on type `mixed`."
 count = 2
 
 [[issues]]
-file = "classes/Ai/Drivers/Anthropic.php"
-code = "yield-from-invalid-key-type"
-message = "Invalid key type from `yield from`: current generator expects to yield keys of type `int`, but the inner iterable yields keys of type `mixed`."
-count = 1
-
-[[issues]]
 file = "classes/Ai/Drivers/Gemini.php"
 code = "less-specific-nested-argument-type"
 message = "Argument type mismatch for argument #2 of `implode`: expected `array<array-key, Stringable|null|scalar>|null`, but provided type `non-empty-list<mixed>` is less specific."
@@ -307,12 +301,6 @@ message = "Unsafe array access on type `mixed`."
 count = 2
 
 [[issues]]
-file = "classes/Ai/Drivers/Gemini.php"
-code = "yield-from-invalid-key-type"
-message = "Invalid key type from `yield from`: current generator expects to yield keys of type `int`, but the inner iterable yields keys of type `mixed`."
-count = 1
-
-[[issues]]
 file = "classes/Ai/Drivers/OpenAi.php"
 code = "mixed-argument"
 message = 'Invalid argument type for argument #1 of `tobimori\Seo\Ai\Chunk::error`: expected `string`, but found `nonnull`.'
@@ -334,12 +322,6 @@ count = 1
 file = "classes/Ai/Drivers/OpenAi.php"
 code = "mixed-array-access"
 message = "Unsafe array access on type `mixed`."
-count = 1
-
-[[issues]]
-file = "classes/Ai/Drivers/OpenAi.php"
-code = "yield-from-invalid-key-type"
-message = "Invalid key type from `yield from`: current generator expects to yield keys of type `int`, but the inner iterable yields keys of type `mixed`."
 count = 1
 
 [[issues]]
@@ -370,12 +352,6 @@ count = 3
 file = "classes/Ai/Drivers/OpenAiCompletions.php"
 code = "mixed-operand"
 message = "Invalid right operand: type `mixed` cannot be reliably used in string concatenation."
-count = 1
-
-[[issues]]
-file = "classes/Ai/Drivers/OpenAiCompletions.php"
-code = "yield-from-invalid-key-type"
-message = "Invalid key type from `yield from`: current generator expects to yield keys of type `int`, but the inner iterable yields keys of type `mixed`."
 count = 1
 
 [[issues]]
@@ -458,12 +434,6 @@ count = 1
 
 [[issues]]
 file = "classes/Ai/SseStream.php"
-code = "possibly-false-iterator"
-message = "Expression being iterated (type `false|list<non-empty-string>`) might be `false` at runtime."
-count = 1
-
-[[issues]]
-file = "classes/Ai/SseStream.php"
 code = "possibly-null-operand"
 message = "Possibly null right operand used in string concatenation (type `array<array-key, string>|null|string`)."
 count = 1
@@ -500,12 +470,6 @@ count = 1
 
 [[issues]]
 file = "classes/Audit/Images.php"
-code = "invalid-return-statement"
-message = '''Invalid return type for function `tobimori\Seo\Audit\Images::entries`: expected `array<string, array{'field': string, 'fields': array<array-key, string>, 'id': string, 'model': Kirby\Cms\File}>`, but found `array<string, array{'field': string, 'fields': array<array-key, string>, 'id': string, 'model': Kirby\Cms\File}>|null`.'''
-count = 1
-
-[[issues]]
-file = "classes/Audit/Images.php"
 code = "mixed-argument"
 message = 'Invalid argument type for argument #1 of `tobimori\Seo\AltText::parse`: expected `null|string`, but found `mixed`.'
 count = 1
@@ -535,12 +499,6 @@ message = 'Could not infer a precise return type for function `tobimori\Seo\Audi
 count = 1
 
 [[issues]]
-file = "classes/Audit/Images.php"
-code = "nullable-return-statement"
-message = '''Function `tobimori\Seo\Audit\Images::entries` is declared to return `array<string, array{'field': string, 'fields': array<array-key, string>, 'id': string, 'model': Kirby\Cms\File}>` but possibly returns a nullable value (inferred as `array<string, array{'field': string, 'fields': array<array-key, string>, 'id': string, 'model': Kirby\Cms\File}>|null`).'''
-count = 1
-
-[[issues]]
 file = "classes/Audit/Links/Checker.php"
 code = "invalid-array-element"
 message = "Cannot use spread operator on non-iterable type `mixed`."
@@ -556,7 +514,7 @@ count = 1
 file = "classes/Audit/Links/Checker.php"
 code = "invalid-iterator"
 message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
-count = 5
+count = 4
 
 [[issues]]
 file = "classes/Audit/Links/Checker.php"
@@ -663,6 +621,12 @@ count = 1
 [[issues]]
 file = "classes/Audit/Links/Checker.php"
 code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Queues\Schedule\Scheduler::schedule`: expected `string`, but found `truthy-mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Checker.php"
+code = "mixed-argument"
 message = 'Invalid argument type for argument #1 of `tobimori\Seo\Audit\Links\Checker::dueUrls`: expected `array<string, int>`, but found `mixed`.'
 count = 1
 
@@ -718,19 +682,13 @@ count = 2
 file = "classes/Audit/Links/Checker.php"
 code = "mixed-array-access"
 message = "Unsafe array access on type `mixed`."
-count = 5
+count = 4
 
 [[issues]]
 file = "classes/Audit/Links/Checker.php"
 code = "mixed-array-assignment"
 message = "Unsafe array assignment on type `mixed`."
 count = 5
-
-[[issues]]
-file = "classes/Audit/Links/Checker.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 3
 
 [[issues]]
 file = "classes/Audit/Links/Checker.php"
@@ -748,24 +706,6 @@ count = 1
 file = "classes/Audit/Links/Checker.php"
 code = "mixed-return-statement"
 message = 'Could not infer a precise return type for function `tobimori\Seo\Audit\Links\Checker::address`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "classes/Audit/Links/Checker.php"
-code = "non-existent-method"
-message = 'Method `later` does not exist on type `tobimori\Queues\Queues`.'
-count = 1
-
-[[issues]]
-file = "classes/Audit/Links/Checker.php"
-code = "non-existent-method"
-message = 'Method `push` does not exist on type `tobimori\Queues\Queues`.'
-count = 1
-
-[[issues]]
-file = "classes/Audit/Links/Checker.php"
-code = "non-existent-method"
-message = 'Method `scheduler` does not exist on type `tobimori\Queues\Queues`.'
 count = 1
 
 [[issues]]
@@ -1256,12 +1196,6 @@ count = 1
 
 [[issues]]
 file = "classes/Audit/Links/Report.php"
-code = "non-existent-method"
-message = 'Method `url` does not exist on type `Kirby\Uuid\Identifiable`.'
-count = 1
-
-[[issues]]
-file = "classes/Audit/Links/Report.php"
 code = "possibly-false-argument"
 message = "Argument #1 of function `rawurldecode` is possibly `false`, but parameter type `string` does not accept it."
 count = 3
@@ -1700,12 +1634,6 @@ count = 2
 
 [[issues]]
 file = "classes/GoogleSearchConsole.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `tobimori\Seo\GoogleSearchConsole::tokenRequest`: expected `array<array-key, mixed>`, but found `array<array-key, mixed>|null`.'
-count = 1
-
-[[issues]]
-file = "classes/GoogleSearchConsole.php"
 code = "mixed-argument"
 message = "Invalid argument type for argument #1 of `Exception::__construct`: expected `string`, but found `mixed`."
 count = 1
@@ -1852,12 +1780,6 @@ count = 1
 file = "classes/GoogleSearchConsole.php"
 code = "non-documented-method"
 message = 'Ambiguous method call to `query` on class `Kirby\Http\Uri`.'
-count = 1
-
-[[issues]]
-file = "classes/GoogleSearchConsole.php"
-code = "nullable-return-statement"
-message = 'Function `tobimori\Seo\GoogleSearchConsole::tokenRequest` is declared to return `array<array-key, mixed>` but possibly returns a nullable value (inferred as `array<array-key, mixed>|null`).'
 count = 1
 
 [[issues]]
@@ -2018,12 +1940,6 @@ count = 1
 
 [[issues]]
 file = "classes/IndexNow.php"
-code = "non-existent-method"
-message = 'Method `push` does not exist on type `tobimori\Queues\Queues`.'
-count = 1
-
-[[issues]]
-file = "classes/IndexNow.php"
 code = "possibly-false-argument"
 message = "Argument #2 of function `preg_match` is possibly `false`, but parameter type `string` does not accept it."
 count = 1
@@ -2060,26 +1976,20 @@ count = 1
 
 [[issues]]
 file = "classes/Jobs/CheckLinksJob.php"
+code = "impossible-condition"
+message = "Redundant ternary operator: condition is always falsy."
+count = 1
+
+[[issues]]
+file = "classes/Jobs/CheckLinksJob.php"
+code = "impossible-type-comparison"
+message = "Impossible type assertion: `$payload` of type `array<string, mixed>` can never be `list<mixed>`."
+count = 1
+
+[[issues]]
+file = "classes/Jobs/CheckLinksJob.php"
 code = "invalid-return-statement"
 message = 'Invalid return type for function `tobimori\Seo\Jobs\CheckLinksJob::name`: expected `string`, but found `(closure(...mixed=): mixed)|array<array-key, mixed>|null|string`.'
-count = 1
-
-[[issues]]
-file = "classes/Jobs/CheckLinksJob.php"
-code = "less-specific-nested-argument-type"
-message = "Argument type mismatch for argument #1 of `array_column`: expected `array<array-key, array<string('full'), ('V.array_column() extends mixed)>|object>|list<array<string('full'), ('V.array_column() extends mixed)>|object>`, but provided type `list<mixed>|list{mixed}` is less specific."
-count = 1
-
-[[issues]]
-file = "classes/Jobs/CheckLinksJob.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `array_is_list`: expected `array<array-key, ('V.array_is_list() extends mixed)>`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "classes/Jobs/CheckLinksJob.php"
-code = "non-existent-class-like"
-message = 'Class `tobimori\Seo\Jobs\CheckLinksJob` cannot extend unknown type `BatchJob`'
 count = 1
 
 [[issues]]
@@ -2120,18 +2030,6 @@ count = 1
 
 [[issues]]
 file = "classes/Jobs/GenerateAltTextJob.php"
-code = "mixed-array-access"
-message = "Unsafe array access on type `mixed`."
-count = 1
-
-[[issues]]
-file = "classes/Jobs/GenerateAltTextJob.php"
-code = "non-existent-class-like"
-message = 'Class `tobimori\Seo\Jobs\GenerateAltTextJob` cannot extend unknown type `Job`'
-count = 1
-
-[[issues]]
-file = "classes/Jobs/GenerateAltTextJob.php"
 code = "nullable-return-statement"
 message = 'Function `tobimori\Seo\Jobs\GenerateAltTextJob::name` is declared to return `string` but possibly returns a nullable value (inferred as `(closure(...mixed=): mixed)|array<array-key, mixed>|null|string`).'
 count = 1
@@ -2144,8 +2042,8 @@ count = 1
 
 [[issues]]
 file = "classes/Jobs/IndexNowBatchJob.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `array_column`: expected `array<array-key, array<string('urls'), ('V.array_column() extends mixed)>|object>|list<array<string('urls'), ('V.array_column() extends mixed)>|object>`, but found `mixed`."
+code = "less-specific-nested-argument-type"
+message = "Argument type mismatch for argument #1 of `array_column`: expected `array<array-key, array<string('urls'), ('V.array_column() extends mixed)>|object>|list<array<string('urls'), ('V.array_column() extends mixed)>|object>`, but provided type `array<string, mixed>` is less specific."
 count = 1
 
 [[issues]]
@@ -2158,12 +2056,6 @@ count = 1
 file = "classes/Jobs/IndexNowBatchJob.php"
 code = "mixed-return-statement"
 message = 'Could not infer a precise return type for function `tobimori\Seo\Jobs\IndexNowBatchJob::batchWindow`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "classes/Jobs/IndexNowBatchJob.php"
-code = "non-existent-class-like"
-message = 'Class `tobimori\Seo\Jobs\IndexNowBatchJob` cannot extend unknown type `BatchJob`'
 count = 1
 
 [[issues]]
@@ -2504,24 +2396,6 @@ count = 2
 
 [[issues]]
 file = "classes/Meta.php"
-code = "ambiguous-class-like-constant-access"
-message = "Cannot reliably determine class for constant access due to an ambiguous type."
-count = 1
-
-[[issues]]
-file = "classes/Meta.php"
-code = "ambiguous-object-method-access"
-message = "Cannot statically verify method call on a generic `object` type."
-count = 5
-
-[[issues]]
-file = "classes/Meta.php"
-code = "falsable-return-statement"
-message = '''Function `tobimori\Seo\Meta::findTagForField` is declared to return `null|string` but possibly returns 'false' (inferred as `array-key|false`).'''
-count = 1
-
-[[issues]]
-file = "classes/Meta.php"
 code = "invalid-argument"
 message = 'Invalid argument type for argument #1 of `Kirby\Cms\ModelWithContent::toString`: expected `null|string`, but found `Kirby\Content\Field`.'
 count = 1
@@ -2620,12 +2494,6 @@ count = 1
 file = "classes/Meta.php"
 code = "less-specific-nested-return-statement"
 message = '''Returned type `array{'field': truthy-mixed, 'source': Stringable|null|resource|scalar}` is less specific than the declared return type `array{'field': Kirby\Content\Field, 'source': null|string}` for function `tobimori\Seo\Meta::resolve` due to nested 'mixed'.'''
-count = 1
-
-[[issues]]
-file = "classes/Meta.php"
-code = "less-specific-return-statement"
-message = 'Returned type `array-key|false` is less specific than the declared return type `null|string` for function `tobimori\Seo\Meta::findTagForField`.'
 count = 1
 
 [[issues]]
@@ -2942,12 +2810,6 @@ count = 1
 
 [[issues]]
 file = "classes/Meta.php"
-code = "possibly-undefined-variable"
-message = "Variable `$val` might not have been defined on all execution paths leading to this point."
-count = 2
-
-[[issues]]
-file = "classes/Meta.php"
 code = "string-member-selector"
 message = "This member selector uses a non-literal string type (`string`); its specific value cannot be statically determined."
 count = 1
@@ -3086,33 +2948,15 @@ count = 1
 
 [[issues]]
 file = "classes/Sitemap/Sitemap.php"
-code = "less-specific-argument"
-message = 'Argument type mismatch for argument #1 of `Kirby\Toolkit\Collection::__construct`: expected `array<string, mixed>`, but provided type `array<array-key, mixed>` is less specific.'
-count = 1
-
-[[issues]]
-file = "classes/Sitemap/Sitemap.php"
-code = "missing-template-parameter"
-message = 'Too few template arguments for `Kirby\Toolkit\Collection`: expected at least 1, but found 0.'
-count = 1
-
-[[issues]]
-file = "classes/Sitemap/Sitemap.php"
 code = "mixed-argument"
 message = "Invalid argument type for argument #1 of `DOMNode::appendChild`: expected `DOMNode`, but found `mixed`."
 count = 1
 
 [[issues]]
 file = "classes/Sitemap/Sitemap.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `strtotime`: expected `string`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "classes/Sitemap/Sitemap.php"
 code = "mixed-method-access"
 message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 2
+count = 1
 
 [[issues]]
 file = "classes/Sitemap/Sitemap.php"
@@ -3146,6 +2990,12 @@ count = 1
 
 [[issues]]
 file = "classes/Sitemap/Sitemap.php"
+code = "possibly-invalid-argument"
+message = 'Possible argument type mismatch for argument #1 of `strtotime`: expected `string`, but possibly received `string|tobimori\Seo\Sitemap\SitemapUrl`.'
+count = 1
+
+[[issues]]
+file = "classes/Sitemap/Sitemap.php"
 code = "possibly-null-operand"
 message = "Possibly null left operand used in string concatenation (type `null|string`)."
 count = 1
@@ -3158,21 +3008,9 @@ count = 4
 
 [[issues]]
 file = "classes/Sitemap/SitemapIndex.php"
-code = "missing-template-parameter"
-message = 'Too few template arguments for `Kirby\Toolkit\Collection`: expected at least 1, but found 0.'
-count = 1
-
-[[issues]]
-file = "classes/Sitemap/SitemapIndex.php"
 code = "mixed-argument"
 message = 'Invalid argument type for argument #1 of `tobimori\Seo\Sitemap\SitemapIndex::isValidIndex`: expected `null|string`, but found `mixed`.'
 count = 1
-
-[[issues]]
-file = "classes/Sitemap/SitemapIndex.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 2
 
 [[issues]]
 file = "classes/Sitemap/SitemapIndex.php"
@@ -3182,8 +3020,8 @@ count = 1
 
 [[issues]]
 file = "classes/Sitemap/SitemapIndex.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `tobimori\Seo\Sitemap\SitemapIndex::render`. Saw type `mixed`.'
+code = "possible-method-access-on-null"
+message = "Attempting to call a method on `null`."
 count = 2
 
 [[issues]]
@@ -3224,6 +3062,12 @@ count = 3
 
 [[issues]]
 file = "classes/Sitemap/SitemapUrl.php"
+code = "invalid-property-access"
+message = "Attempting to access a property on a non-object type (`false`)."
+count = 1
+
+[[issues]]
+file = "classes/Sitemap/SitemapUrl.php"
 code = "invalid-return-statement"
 message = 'Invalid return type for function `tobimori\Seo\Sitemap\SitemapUrl::toDOMNode`: expected `DOMNode`, but found `DOMElement|false`.'
 count = 1
@@ -3232,12 +3076,6 @@ count = 1
 file = "classes/Sitemap/SitemapUrl.php"
 code = "invalid-return-statement"
 message = 'Invalid return type for function `tobimori\Seo\Sitemap\SitemapUrl::toString`: expected `string`, but found `false|string`.'
-count = 1
-
-[[issues]]
-file = "classes/Sitemap/SitemapUrl.php"
-code = "invalid-type-cast"
-message = 'Cannot cast object of type `tobimori\Seo\Sitemap\SitemapUrl` to `string` because it does not implement `Stringable`.'
 count = 1
 
 [[issues]]
@@ -3256,12 +3094,6 @@ count = 1
 file = "classes/Sitemap/SitemapUrl.php"
 code = "mixed-argument"
 message = "Invalid argument type for argument #2 of `array_key_exists`: expected `array<array-key, mixed>`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "classes/Sitemap/SitemapUrl.php"
-code = "non-iterable-object-iteration"
-message = 'Iterating over object of type `tobimori\Seo\Sitemap\SitemapUrl` which does not implement `Iterator` or `IteratorAggregate`.'
 count = 1
 
 [[issues]]
@@ -3910,7 +3742,7 @@ count = 1
 file = "config/hooks.php"
 code = "ambiguous-object-method-access"
 message = "Cannot statically verify method call on a generic `object` type."
-count = 7
+count = 1
 
 [[issues]]
 file = "config/hooks.php"
@@ -3951,6 +3783,12 @@ count = 1
 [[issues]]
 file = "config/hooks.php"
 code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\LlmContent::prefersMarkdown`: expected `null|string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "config/hooks.php"
+code = "mixed-argument"
 message = 'Invalid argument type for argument #2 of `tobimori\Seo\Seo::isIndexable`: expected `Kirby\Cms\Language|null`, but found `mixed`.'
 count = 1
 
@@ -3976,18 +3814,6 @@ count = 1
 file = "config/hooks.php"
 code = "non-documented-method"
 message = 'Ambiguous method call to `schema` on class `Kirby\Cms\Page`.'
-count = 1
-
-[[issues]]
-file = "config/hooks.php"
-code = "non-existent-method"
-message = 'Method `push` does not exist on type `tobimori\Queues\Queues`.'
-count = 1
-
-[[issues]]
-file = "config/hooks.php"
-code = "non-existent-method"
-message = 'Method `register` does not exist on type `tobimori\Queues\Queues`.'
 count = 1
 
 [[issues]]
@@ -4130,12 +3956,6 @@ count = 1
 
 [[issues]]
 file = "config/routes.php"
-code = "ambiguous-object-method-access"
-message = "Cannot statically verify method call on a generic `object` type."
-count = 2
-
-[[issues]]
-file = "config/routes.php"
 code = "less-specific-nested-argument-type"
 message = "Argument type mismatch for argument #1 of `go`: expected `(callable(...mixed=): mixed)`, but provided type `string` is less specific."
 count = 2
@@ -4144,12 +3964,6 @@ count = 2
 file = "config/routes.php"
 code = "mixed-argument"
 message = 'Invalid argument type for argument #1 of `Kirby\Cms\AppTranslations::setCurrentTranslation`: expected `null|string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "config/routes.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `base64_decode`: expected `string`, but found `mixed`."
 count = 1
 
 [[issues]]
@@ -4168,7 +3982,7 @@ count = 1
 file = "config/routes.php"
 code = "mixed-method-access"
 message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 12
+count = 11
 
 [[issues]]
 file = "config/routes.php"

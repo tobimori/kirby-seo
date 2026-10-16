@@ -59,6 +59,7 @@ return [
 				$this->next();
 			}
 
+			/** @var \tobimori\Seo\LlmContent $llmContent */
 			$llmContent = new (Seo::option('components.agentic'))($page);
 			if ($llmContent->llmsTxtEnabled() === false) {
 				$this->next();
@@ -183,7 +184,7 @@ return [
 			}
 
 			$request = $kirby->request();
-			$state = Json::decode(base64_decode($request->get('state')));
+			$state = Json::decode(base64_decode((string)$request->get('state'), true) ?: '');
 			if (!$state || empty($state['csrf'])) {
 				throw new \Exception('Invalid OAuth state');
 			}

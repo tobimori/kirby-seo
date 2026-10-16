@@ -42,7 +42,7 @@ class Images
 			return $this->entries;
 		}
 
-		$this->entries = [];
+		$entries = [];
 		$site = App::instance()->site();
 		// checking permissions per page is slower
 		$pages = $site->index(true)->filter(static fn (Page $page) => $page->images()->isNotEmpty() && $page->isListable());
@@ -55,7 +55,7 @@ class Images
 
 				foreach ($this->fields($file) as $name) {
 					$id = static::id($file, $name);
-					$this->entries[$id] = [
+					$entries[$id] = [
 						'id' => $id,
 						'model' => $file,
 						'fields' => [$name],
@@ -65,7 +65,7 @@ class Images
 			}
 		}
 
-		return $this->entries;
+		return $this->entries = $entries;
 	}
 
 	public function find(string $id): array|null

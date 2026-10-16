@@ -143,6 +143,7 @@ return [
 		}
 
 		$class = Seo::option('components.agentic');
+		/** @var \tobimori\Seo\LlmContent $llmContent */
 		$llmContent = new $class($page);
 		if ($llmContent->enabled() === false) {
 			return $result;
