@@ -88,7 +88,10 @@ class SitemapUrl
 				continue;
 			}
 
-			$node->appendChild($doc->createElement($key, $this->$key));
+			// the value of `createElement()` is not escaped, a `&` would start an entity
+			$element = $doc->createElement($key);
+			$element->textContent = $this->$key;
+			$node->appendChild($element);
 		}
 
 		foreach ($this->alternates as $alternate) {
@@ -108,7 +111,7 @@ class SitemapUrl
 		$doc = new DOMDocument('1.0', 'UTF-8');
 		$doc->formatOutput = true;
 
-		$node = $this->toDOMNode();
+		$node = $this->toDOMNode($doc);
 		$doc->appendChild($node);
 
 		return $doc->saveXML($node);

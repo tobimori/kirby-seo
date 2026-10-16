@@ -3062,6 +3062,12 @@ count = 3
 
 [[issues]]
 file = "classes/Sitemap/SitemapUrl.php"
+code = "invalid-property-access"
+message = "Attempting to access a property on a non-object type (`false`)."
+count = 1
+
+[[issues]]
+file = "classes/Sitemap/SitemapUrl.php"
 code = "invalid-return-statement"
 message = 'Invalid return type for function `tobimori\Seo\Sitemap\SitemapUrl::toDOMNode`: expected `DOMNode`, but found `DOMElement|false`.'
 count = 1
