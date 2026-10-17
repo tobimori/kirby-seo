@@ -179,6 +179,8 @@ class Crawler
 
 	public static function perform(CurlMultiHandle $multi): void
 	{
+		$running = 0;
+
 		do {
 			$status = curl_multi_exec($multi, $running);
 
@@ -189,6 +191,7 @@ class Crawler
 		} while ($running && $status === CURLM_OK);
 
 		// `curl_errno()` of the handles is only set once their messages are read
+		// @mago-expect analysis:impossible-type-comparison
 		do {
 			$message = curl_multi_info_read($multi);
 		} while ($message !== false);
@@ -322,6 +325,8 @@ class Crawler
 
 	public static function isIgnored(string $url): bool
 	{
+		$match = [];
+
 		return (
 			preg_match('/^([a-z][a-z0-9+.-]*):/i', $url, $match) === 1 &&
 				in_array(strtolower($match[1]), self::IGNORED_SCHEMES, true)
@@ -331,6 +336,7 @@ class Crawler
 	protected static function normalizePath(string $path): string
 	{
 		$suffix = '';
+		$match = [];
 		if (preg_match('/[?#].*$/', $path, $match)) {
 			$suffix = $match[0];
 			$path = substr($path, 0, -strlen($suffix));

@@ -131,6 +131,8 @@ final class SseStream
 	 */
 	private function drainBuffer(string &$buffer, callable $mapper, bool $final = false): Generator
 	{
+		$match = [];
+
 		while (
 			preg_match('/\r?\n\r?\n/', $buffer, $match, PREG_OFFSET_CAPTURE) === 1
 		) {

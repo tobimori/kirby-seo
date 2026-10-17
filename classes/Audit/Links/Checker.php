@@ -131,6 +131,8 @@ class Checker
 	 * Processes pending page scans and external URL checks within a time budget.
 	 * The deadline is checked between batches; an active batch can exceed it.
 	 * Returns progress without processing if another instance holds the index lock
+	 *
+	 * @return array{pages: array{done: int, total: int}, urls: array{done: int, total: int}, done: bool, running: bool, queue: bool}
 	 */
 	public function step(int $seconds): array
 	{

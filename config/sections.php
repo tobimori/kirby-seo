@@ -6,6 +6,7 @@ use Kirby\Cms\Section;
 use Kirby\Cms\Site;
 use Kirby\Toolkit\A;
 use Kirby\Toolkit\Str;
+use tobimori\Seo\License;
 use tobimori\Seo\Seo;
 
 return [
@@ -97,7 +98,12 @@ return [
 	'seo-license' => [
 		'computed' => [
 			'local' => fn () => App::instance()->system()->isLocal(),
-			'state' => fn () => App::instance()->plugin('tobimori/seo')->license()->state()
+			'state' => function () {
+				/** @var License $license */
+				$license = App::instance()->plugin('tobimori/seo')->license();
+
+				return $license->state();
+			}
 		]
 	],
 	'seo-search-console' => [

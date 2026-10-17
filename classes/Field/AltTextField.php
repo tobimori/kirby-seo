@@ -8,6 +8,7 @@ use Kirby\Cms\File;
 use Kirby\Form\Field;
 use Kirby\Form\FieldClass;
 use Kirby\Http\Response;
+use tobimori\Seo\Ai;
 use tobimori\Seo\Ai\Content;
 use tobimori\Seo\AltText;
 use tobimori\Seo\Seo;
@@ -147,6 +148,7 @@ class AltTextField extends FieldClass
 	public static function stream(File $file, string|null $instructions = null): never
 	{
 		$kirby = $file->kirby();
+		/** @var class-string<Ai> $component */
 		$component = Seo::option('components.ai');
 
 		$component::sendStream(static function (Closure $send) use ($kirby, $file, $instructions, $component) {

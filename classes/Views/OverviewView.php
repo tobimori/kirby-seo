@@ -15,6 +15,7 @@ use Kirby\Toolkit\I18n;
 use Kirby\Toolkit\Str;
 use tobimori\Seo\Audit;
 use tobimori\Seo\Audit\Links\Report;
+use tobimori\Seo\License;
 use tobimori\Seo\Meta;
 use tobimori\Seo\Seo;
 
@@ -50,6 +51,9 @@ abstract class OverviewView
 
 	protected function layout(string $tab): array
 	{
+		/** @var License $license */
+		$license = $this->kirby->plugin('tobimori/seo')->license();
+
 		return [
 			// Language buttons use `panel.content` to unlock `{api}/changes/unlock` before switching
 			// The buttons are bound to the site, so they need site model-view props here
@@ -67,7 +71,7 @@ abstract class OverviewView
 				'links' => (new Report())->stats()
 			],
 			'license' => [
-				'state' => $this->kirby->plugin('tobimori/seo')->license()->state(),
+				'state' => $license->state(),
 				'local' => $this->kirby->system()->isLocal()
 			],
 			'tab' => $tab,

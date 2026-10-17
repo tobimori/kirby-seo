@@ -319,12 +319,6 @@ message = "Possibly null right operand used in string concatenation (type `array
 count = 1
 
 [[issues]]
-file = "classes/Ai/SseStream.php"
-code = "possibly-undefined-variable"
-message = "Variable `$match` might not have been defined on all execution paths leading to this point."
-count = 1
-
-[[issues]]
 file = "classes/AltText.php"
 code = "mixed-argument"
 message = 'Invalid argument type for argument #1 of `tobimori\Seo\AltText::parse`: expected `null|string`, but found `mixed`.'
@@ -644,12 +638,6 @@ count = 1
 
 [[issues]]
 file = "classes/Audit/Links/Crawler.php"
-code = "impossible-type-comparison"
-message = "Impossible condition: variable `$message` can never be `false`."
-count = 1
-
-[[issues]]
-file = "classes/Audit/Links/Crawler.php"
 code = "invalid-callable"
 message = "Expression of type `mixed` cannot be called as a function or method."
 count = 1
@@ -754,18 +742,6 @@ count = 1
 file = "classes/Audit/Links/Crawler.php"
 code = "possibly-null-operand"
 message = "Possibly null middle operand used in string concatenation (type `null|string`)."
-count = 1
-
-[[issues]]
-file = "classes/Audit/Links/Crawler.php"
-code = "reference-to-undefined-variable"
-message = "Reference created from a previously undefined variable `$match`."
-count = 2
-
-[[issues]]
-file = "classes/Audit/Links/Crawler.php"
-code = "reference-to-undefined-variable"
-message = "Reference created from a previously undefined variable `$running`."
 count = 1
 
 [[issues]]
@@ -1142,12 +1118,6 @@ count = 1
 
 [[issues]]
 file = "classes/Audit/Links/Report.php"
-code = "reference-to-undefined-variable"
-message = "Reference created from a previously undefined variable `$match`."
-count = 1
-
-[[issues]]
-file = "classes/Audit/Links/Report.php"
 code = "template-constraint-violation"
 message = "Argument type mismatch for template `K`."
 count = 1
@@ -1372,18 +1342,12 @@ count = 1
 file = "classes/Field/AltTextField.php"
 code = "invalid-iterator"
 message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
-count = 2
+count = 1
 
 [[issues]]
 file = "classes/Field/AltTextField.php"
 code = "less-specific-argument"
 message = 'Argument type mismatch for argument #1 of `tobimori\Seo\Ai\Content::supportsImage`: expected `Kirby\Cms\File`, but provided type `Kirby\Cms\ModelWithContent` is less specific.'
-count = 1
-
-[[issues]]
-file = "classes/Field/AltTextField.php"
-code = "missing-return-statement"
-message = "Missing return statement in function `stream`"
 count = 1
 
 [[issues]]
@@ -1432,7 +1396,7 @@ count = 1
 file = "classes/Field/AltTextField.php"
 code = "mixed-method-access"
 message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 2
+count = 1
 
 [[issues]]
 file = "classes/Field/AltTextField.php"
@@ -1784,18 +1748,6 @@ count = 1
 
 [[issues]]
 file = "classes/Jobs/CheckLinksJob.php"
-code = "impossible-condition"
-message = "Redundant ternary operator: condition is always falsy."
-count = 1
-
-[[issues]]
-file = "classes/Jobs/CheckLinksJob.php"
-code = "impossible-type-comparison"
-message = "Impossible type assertion: `$payload` of type `array<string, mixed>` can never be `list<mixed>`."
-count = 1
-
-[[issues]]
-file = "classes/Jobs/CheckLinksJob.php"
 code = "invalid-return-statement"
 message = 'Invalid return type for function `tobimori\Seo\Jobs\CheckLinksJob::name`: expected `string`, but found `(closure(...mixed=): mixed)|array<array-key, mixed>|null|string`.'
 count = 1
@@ -2066,18 +2018,6 @@ count = 1
 
 [[issues]]
 file = "classes/LlmContent.php"
-code = "never-return"
-message = "Cannot return value with type 'never' from this function."
-count = 1
-
-[[issues]]
-file = "classes/LlmContent.php"
-code = "non-existent-class"
-message = 'Class `League\HTMLToMarkdown\HtmlConverter` not found.'
-count = 1
-
-[[issues]]
-file = "classes/LlmContent.php"
 code = "possibly-invalid-argument"
 message = 'Possible argument type mismatch for argument #1 of `Kirby\Toolkit\Str::contains`: expected `null|string`, but possibly received `$this(Kirby\Cms\Responder)|string`.'
 count = 1
@@ -2104,12 +2044,6 @@ count = 1
 file = "classes/LlmContent.php"
 code = "possibly-null-operand"
 message = "Possibly null right operand used in string concatenation (type `null|string`)."
-count = 1
-
-[[issues]]
-file = "classes/LlmContent.php"
-code = "reference-to-undefined-variable"
-message = "Reference created from a previously undefined variable `$match`."
 count = 1
 
 [[issues]]
@@ -2984,12 +2918,6 @@ count = 1
 
 [[issues]]
 file = "classes/Views/OverviewView.php"
-code = "non-existent-method"
-message = 'Method `state` does not exist on type `Kirby\Plugin\License`.'
-count = 1
-
-[[issues]]
-file = "classes/Views/OverviewView.php"
 code = "possible-method-access-on-null"
 message = "Attempting to call a method on `null`."
 count = 1
@@ -3431,12 +3359,6 @@ file = "config/sections.php"
 code = "mixed-property-access"
 message = "Attempting to access a property on a non-object type (`mixed`)."
 count = 2
-
-[[issues]]
-file = "config/sections.php"
-code = "non-existent-method"
-message = 'Method `state` does not exist on type `Kirby\Plugin\License`.'
-count = 1
 
 [[issues]]
 file = "config/sections.php"

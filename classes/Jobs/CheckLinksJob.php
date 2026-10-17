@@ -37,6 +37,7 @@ class CheckLinksJob extends BatchJob
 	public function handle(): void
 	{
 		// batched jobs get the list of payloads, scheduled ones a single payload
+		/** @var array<string, mixed>|list<array<string, mixed>> $payload */
 		$payload = $this->payload();
 		$payloads = array_is_list($payload) ? $payload : [$payload];
 		$checker = new Checker();

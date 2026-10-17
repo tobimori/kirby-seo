@@ -37,7 +37,8 @@
 		"tobimori/kirby-queues": "^1.0.0-beta.1",
 		"spatie/schema-org": "^5.0",
 		"getkirby/cms": "^5.0.0",
-		"tobimori/kirby-agents": "^0.1.1"
+		"tobimori/kirby-agents": "^0.1.1",
+		"league/html-to-markdown": "^5.1"
 	},
 	"scripts": {
 		"analyze": "mago analyze",

@@ -539,6 +539,7 @@ class LlmContent
 			return $selector;
 		}
 
+		$match = [];
 		if (preg_match('/^([a-z][a-z0-9-]*)$/i', $selector, $match) === 1) {
 			return '//' . Str::lower($match[1]);
 		}
