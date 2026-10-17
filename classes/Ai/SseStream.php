@@ -3,6 +3,7 @@
 namespace tobimori\Seo\Ai;
 
 use Generator;
+use Kirby\Data\Json;
 use Kirby\Exception\Exception as KirbyException;
 
 use function curl_errno;
@@ -54,10 +55,7 @@ final class SseStream
 		curl_setopt_array($handle, [
 			CURLOPT_POST => true,
 			CURLOPT_HTTPHEADER => $this->headers,
-			CURLOPT_POSTFIELDS => json_encode(
-				$this->payload,
-				JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
-			),
+			CURLOPT_POSTFIELDS => Json::encode($this->payload),
 			CURLOPT_RETURNTRANSFER => false,
 			CURLOPT_TIMEOUT => $this->timeout,
 			CURLOPT_WRITEFUNCTION => static function ($curl, $data) use (&$buffer, &$response) {

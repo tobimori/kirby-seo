@@ -5,6 +5,7 @@ namespace tobimori\Seo\Audit\Links;
 use Closure;
 use Kirby\Cms\App;
 use Kirby\Cms\Page;
+use Kirby\Data\Json;
 use Kirby\Exception\Exception;
 use Kirby\Toolkit\I18n;
 use tobimori\Seo\Jobs\CheckLinksJob;
@@ -292,7 +293,7 @@ class Checker
 				$url = $page->url($language);
 				$targets[$key] = [$page, $language];
 				$this->urls[Report::normalize($url)] = true;
-				$this->fingerprints[$key] = md5(json_encode([
+				$this->fingerprints[$key] = md5(Json::encode([
 					$site,
 					$url,
 					$page->status(),

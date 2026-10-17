@@ -6,6 +6,7 @@ use Kirby\Cms\App;
 use Kirby\Cms\Language;
 use Kirby\Cms\Page;
 use Kirby\Cms\Pages;
+use Kirby\Data\Json;
 use Kirby\Toolkit\Str;
 
 /**
@@ -135,7 +136,7 @@ final class Seo
 	 */
 	public static function auditOptions(): string
 	{
-		return md5(json_encode([
+		return md5(Json::encode([
 			static::option('robots.index'),
 			static::option('robots.followPageStatus'),
 			static::option('cascade'),

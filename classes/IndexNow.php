@@ -6,6 +6,7 @@ use Exception;
 use Kirby\Cms\App;
 use Kirby\Cms\Page;
 use Kirby\Cms\Url;
+use Kirby\Data\Json;
 use Kirby\Http\Remote;
 use Kirby\Toolkit\Str;
 
@@ -169,7 +170,7 @@ class IndexNow
 					'Content-Type' => 'application/json; charset=utf-8',
 					'User-Agent' => Seo::userAgent()
 				],
-				'data' => json_encode([
+				'data' => Json::encode([
 					'host' => $host,
 					'key' => $key,
 					'keyLocation' => "{$scheme}://{$host}{$basePath}/indexnow-{$key}.txt",

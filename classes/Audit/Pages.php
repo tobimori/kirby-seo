@@ -5,6 +5,7 @@ namespace tobimori\Seo\Audit;
 use Kirby\Cms\App;
 use Kirby\Cms\Page;
 use Kirby\Cms\Site;
+use Kirby\Data\Json;
 use Kirby\Toolkit\Str;
 use tobimori\Seo\Seo;
 
@@ -162,7 +163,7 @@ class Pages
 		$kirby = App::instance();
 		$cache = $kirby->cache('tobimori.seo.overview');
 
-		$key = 'audit-' . md5(json_encode([$kirby->language()?->code(), $this->modified($kirby->site()), Seo::auditOptions()]));
+		$key = 'audit-' . md5(Json::encode([$kirby->language()?->code(), $this->modified($kirby->site()), Seo::auditOptions()]));
 		$cached = $cache->get($key) ?? [];
 		$entries = [];
 		$changed = false;
@@ -188,7 +189,7 @@ class Pages
 
 	protected function fingerprint(Page $page): string
 	{
-		return $this->fingerprints[$page->id()] ??= md5(json_encode([
+		return $this->fingerprints[$page->id()] ??= md5(Json::encode([
 			$page->status(),
 			$page->intendedTemplate()->name(),
 			$this->modified($page),
