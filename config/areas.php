@@ -72,8 +72,9 @@ return [
 						return ['component' => 'k-error-drawer', 'props' => ['message' => 'GSC not connected']];
 					}
 
-					$title = I18n::template('seo.sections.searchConsole.title');
+					$title = I18n::translate('seo.sections.searchConsole.title');
 					if ($model instanceof Page) {
+						// @mago-expect analysis:invalid-operand,possibly-null-operand
 						$title .= ' · ' . $model->title()->toString();
 					}
 
@@ -164,7 +165,8 @@ return [
 					$body = App::instance()->request()->body();
 
 					if (!V::email($body->get('email'))) {
-						throw new InvalidArgumentException(I18n::template('seo.license.error.email'));
+						// @mago-expect analysis:possibly-invalid-argument,possibly-null-argument
+						throw new InvalidArgumentException(I18n::translate('seo.license.error.email'));
 					}
 
 					License::activate(
@@ -188,12 +190,16 @@ return [
 					$gsc = Seo::option('components.gsc');
 
 					$properties = $gsc::listProperties();
-					$options = array_map(fn ($p) => [
-						'value' => $p['siteUrl'],
-						'text' => str_starts_with($p['siteUrl'], 'sc-domain:')
-							? substr($p['siteUrl'], 10) . ' (' . I18n::template('seo.sections.searchConsole.scDomain') . ')'
-							: $p['siteUrl']
-					], $properties);
+					$options = array_map(
+						fn ($p) => [
+							'value' => $p['siteUrl'],
+							'text' => str_starts_with($p['siteUrl'], 'sc-domain:')
+								// @mago-expect analysis:invalid-operand,possibly-null-operand
+								? substr($p['siteUrl'], 10) . ' (' . I18n::translate('seo.sections.searchConsole.scDomain') . ')'
+								: $p['siteUrl']
+						],
+						$properties
+					);
 
 					$currentProperty = $gsc::property();
 					$defaultProperty = $currentProperty ?? $gsc::findMatchingProperty($siteUrl);

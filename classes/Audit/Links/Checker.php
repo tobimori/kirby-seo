@@ -136,7 +136,8 @@ class Checker
 	protected function change(Closure $change): void
 	{
 		if (!$this->index->wait()) {
-			throw new Exception(message: I18n::template('seo.links.busy'));
+			// @mago-expect analysis:possibly-invalid-argument
+			throw new Exception(message: I18n::translate('seo.links.busy'));
 		}
 
 		try {

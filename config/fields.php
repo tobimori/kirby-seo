@@ -30,7 +30,8 @@ return [
 
 				return str_replace(
 					['{{ title }}', '{{ site.title }}'],
-					[I18n::template('seo.writerNodes.template.title'), I18n::template('seo.writerNodes.template.siteTitle')],
+					// @mago-expect analysis:possibly-invalid-argument
+					[I18n::translate('seo.writerNodes.template.title'), I18n::translate('seo.writerNodes.template.siteTitle')],
 					$value
 				);
 			}

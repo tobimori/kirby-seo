@@ -59,7 +59,7 @@ class Pages
 	/** @var Result|null */
 	protected array|null $result = null;
 
-	/** @var array<string, string> */
+	/** @var array<array-key, string> */
 	protected array $fingerprints = [];
 
 	public function __construct(protected \Kirby\Cms\Pages $pages)

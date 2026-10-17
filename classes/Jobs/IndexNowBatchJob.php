@@ -27,7 +27,8 @@ class IndexNowBatchJob extends BatchJob
 
 	public function name(): string
 	{
-		return I18n::template('seo.job.indexNow');
+		// @mago-expect analysis:invalid-return-statement,nullable-return-statement
+		return I18n::translate('seo.job.indexNow');
 	}
 
 	public function handle(): void

@@ -96,13 +96,18 @@ class Images
 	 */
 	public function fields(File $file): array
 	{
-		/** @var array<string, array<string, mixed>> $fields */
-		$fields = $file->blueprint()->fields();
+		$template = $file->template() ?? 'default';
 
-		return $this->fields[$file->template() ?? 'default'] ??= array_keys(array_filter(
-			$fields,
-			static fn ($field) => ($field['type'] ?? null) === 'alt-text'
-		));
+		if (!isset($this->fields[$template])) {
+			/** @var array<string, array<string, mixed>> $fields */
+			$fields = $file->blueprint()->fields();
+			$this->fields[$template] = array_keys(array_filter(
+				$fields,
+				static fn ($field) => ($field['type'] ?? null) === 'alt-text'
+			));
+		}
+
+		return $this->fields[$template];
 	}
 
 	/**
@@ -112,8 +117,10 @@ class Images
 	{
 		/** @var Field $field */
 		$field = $entry['model']->content()->get($entry['field']);
+		/** @var string|null $value */
+		$value = $field->value();
 
-		return AltText::parse($field->toString());
+		return AltText::parse($value);
 	}
 
 	/**

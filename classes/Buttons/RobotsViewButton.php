@@ -40,10 +40,11 @@ class RobotsViewButton extends ViewButton
 			default => 'index'
 		};
 
+		// @mago-expect analysis:invalid-return-statement
 		return [
 			'state' => $state,
 			'icon' => $state === 'index' ? 'robots' : 'robots-off',
-			'text' => I18n::template("seo.fields.robots.indicator.{$state}"),
+			'text' => I18n::translate("seo.fields.robots.indicator.{$state}"),
 			'theme' => self::THEMES[$state]
 		];
 	}
