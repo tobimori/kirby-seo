@@ -1,17 +1,17 @@
 <?php
 
 /**
- * @var array $entries
+ * @var list<array{title: string, url: string, description: string}> $entries
  * @var \Kirby\Cms\Site $site
  */
 
-$clean = fn (string $value) => preg_replace('/\s+/', ' ', strip_tags($value));
+$clean = fn (string $value): string => preg_replace('/\s+/', ' ', strip_tags($value)) ?? '';
 $lines = [
-	'# ' . $site->title()->value(),
+	'# ' . $site->title()->toString(),
 	''
 ];
 
-if ($description = $site->description()->value()) {
+if ($description = $site->description()->toString()) {
 	$lines[] = '> ' . $clean($description);
 	$lines[] = '';
 }

@@ -8,7 +8,7 @@
  */ ?>
 
 <role>
-	You are an accessibility expert writing alt text for images on <?= $site->title()->value() ?>.
+	You are an accessibility expert writing alt text for images on <?= $site->title()->toString() ?>.
 </role>
 
 <rules>
@@ -40,7 +40,7 @@
 	The file is named <filename><?= $file->filename() ?></filename>.
 
 	<?php if ($file->parent() instanceof \Kirby\Cms\Page): ?>
-	The image is on a page called <page-title><?= $file->parent()->title()->value() ?></page-title>.
+	The image is on a page called <page-title><?= $file->parent()->title()->toString() ?></page-title>.
 	<?php endif ?>
 
 	<?php if ($file->template()): ?>

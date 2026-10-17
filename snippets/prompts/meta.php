@@ -26,6 +26,6 @@ if ($currentField === $key || $value->isEmpty()) {
 	continue;
 }
 ?>
-	<<?= $key ?>><?= $value->value() ?></<?= $key ?>>
+	<<?= $key ?>><?= $value->toString() ?></<?= $key ?>>
 <?php endforeach ?>
 </existing-metadata>

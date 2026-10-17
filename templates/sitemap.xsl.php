@@ -13,7 +13,7 @@ use Kirby\Toolkit\I18n;
 		<html>
 
 		<head>
-			<title><?= $page->metadata()->title()->escape()->value() ?></title>
+			<title><?= $page->metadata()->title()->escape()->toString() ?></title>
 			<style>
 				/* Document styles */
 				body {
@@ -157,14 +157,14 @@ use Kirby\Toolkit\I18n;
 		<body>
 			<div class="k-sitemap-body">
 				<h1><?= $page->title()->toString() ?></h1>
-				<p><?= I18n::translate('seo.sitemap.description') ?></p>
+				<p><?= I18n::template('seo.sitemap.description') ?></p>
 
 				<xsl:if test="count(sitemap:sitemapindex/sitemap:sitemap) > 0">
 					<table>
 						<thead>
 							<tr>
-								<th width="66%"><?= I18n::translate('seo.sitemap.index') ?></th>
-								<th width="33%" class="k-sitemap-secondary"><?= I18n::translate('seo.sitemap.lastUpdated') ?></th>
+								<th width="66%"><?= I18n::template('seo.sitemap.index') ?></th>
+								<th width="33%" class="k-sitemap-secondary"><?= I18n::template('seo.sitemap.lastUpdated') ?></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -195,10 +195,10 @@ use Kirby\Toolkit\I18n;
 					<table>
 						<thead>
 							<tr>
-								<th width="55%"><?= I18n::translate('seo.sitemap.url') ?></th>
-								<th width="10%" class="k-sitemap-secondary"><?= I18n::translate('seo.sitemap.priority') ?></th>
-								<th width="15%" class="k-sitemap-secondary"><?= I18n::translate('seo.sitemap.changefreq') ?></th>
-								<th width="20%" class="k-sitemap-secondary"><?= I18n::translate('seo.sitemap.lastUpdated') ?></th>
+								<th width="55%"><?= I18n::template('seo.sitemap.url') ?></th>
+								<th width="10%" class="k-sitemap-secondary"><?= I18n::template('seo.sitemap.priority') ?></th>
+								<th width="15%" class="k-sitemap-secondary"><?= I18n::template('seo.sitemap.changefreq') ?></th>
+								<th width="20%" class="k-sitemap-secondary"><?= I18n::template('seo.sitemap.lastUpdated') ?></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -242,7 +242,7 @@ use Kirby\Toolkit\I18n;
 
 				<xsl:if test="(sitemap:urlset and count(sitemap:urlset/sitemap:url) = 0) or (sitemap:sitemapindex and count(sitemap:sitemapindex/sitemap:sitemap) = 0)">
 					<div class="k-sitemap-table-empty">
-						<?= I18n::translate('seo.sitemap.noEntries') ?>
+						<?= I18n::template('seo.sitemap.noEntries') ?>
 					</div>
 				</xsl:if>
 
@@ -254,7 +254,7 @@ use Kirby\Toolkit\I18n;
 					<xsl:if test="sitemap:sitemapindex">
 						v<xsl:value-of select="sitemap:sitemapindex/@seo-version" />
 					</xsl:if>
-					<?= I18n::translate('seo.sitemap.by') ?> <a target="_blank" rel="noopener nofollow" href="https://andkindness.com/">Love &amp; Kindness</a>
+					<?= I18n::template('seo.sitemap.by') ?> <a target="_blank" rel="noopener nofollow" href="https://andkindness.com/">Love &amp; Kindness</a>
 				</p>
 			</div>
 		</body>

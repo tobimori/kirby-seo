@@ -18,8 +18,8 @@ $metaFields = [
 <?php foreach ($metaFields as $key => $label): ?>
 <?php
 
-$value = $site->$key()->value();
-if ($currentField === $key || !$value || $value === '') {
+$value = $site->$key()->toString();
+if ($currentField === $key || !$value) {
 	continue;
 }
 ?>

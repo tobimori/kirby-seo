@@ -39,6 +39,7 @@ use Kirby\Toolkit\Str;
  *   'robots.pageSettings': bool,
  *   'robots.index': bool,
  *   'robots.sitemap': string|null,
+ *   'robots.content': array<string, array<string, list<string>>>|string|null,
  *   'robots.types': list<string>,
  *   'sitemap.enabled': bool,
  *   'sitemap.active': bool,
