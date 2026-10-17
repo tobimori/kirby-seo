@@ -58,6 +58,7 @@ class Ai
 	public static function sendStream(Closure $stream): never
 	{
 		ignore_user_abort(true);
+		// @mago-expect lint:no-error-control-operator
 		@set_time_limit(0);
 
 		while (ob_get_level() > 0) {

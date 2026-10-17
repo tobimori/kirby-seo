@@ -238,6 +238,7 @@ final class License extends KirbyLicense
 			]
 		};
 
+		// @mago-expect lint:no-empty-catch-clause
 		try {
 			static::write($this->data);
 		} catch (Throwable) {

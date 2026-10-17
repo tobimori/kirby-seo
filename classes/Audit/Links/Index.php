@@ -152,6 +152,7 @@ class Index
 			return true;
 		}
 
+		// @mago-expect lint:no-error-control-operator
 		$handle = @fopen(static::lockFile(), 'c');
 
 		if ($handle === false) {

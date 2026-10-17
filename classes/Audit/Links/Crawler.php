@@ -214,6 +214,7 @@ class Crawler
 	protected static function isolate(App $kirby, string $url): Closure
 	{
 		$site = $kirby->site();
+		// @mago-expect lint:no-request-variable
 		$globals = [$_GET, $_POST, $_REQUEST, $_FILES, $_COOKIE];
 		$language = $kirby->language()?->code();
 		$translation = $kirby->translation()->code();
@@ -223,6 +224,7 @@ class Crawler
 
 		$_GET = [];
 		$_POST = [];
+		// @mago-expect lint:no-request-variable
 		$_REQUEST = [];
 		$_FILES = [];
 		$_COOKIE = [];
@@ -241,6 +243,7 @@ class Crawler
 		})->call($kirby);
 
 		return function () use ($kirby, $site, $globals, $language, $translation, $data, $page, $state) {
+			// @mago-expect lint:no-request-variable
 			[$_GET, $_POST, $_REQUEST, $_FILES, $_COOKIE] = $globals;
 			(function () use ($state) {
 				[$this->request, $this->response, $this->path] = $state;
@@ -261,6 +264,7 @@ class Crawler
 	{
 		$document = new DOMDocument();
 		// without the encoding, libxml reads the HTML as ISO-8859-1
+		// @mago-expect lint:no-error-control-operator
 		@$document->loadHTML('<?xml encoding="UTF-8">' . $html, LIBXML_NOERROR | LIBXML_NOWARNING | LIBXML_NONET);
 		$xpath = new DOMXPath($document);
 

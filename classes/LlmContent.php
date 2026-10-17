@@ -335,6 +335,7 @@ class LlmContent
 		$xpath = new DOMXPath($document);
 		foreach ($this->selectors() as $selector) {
 			$query = $this->selectorToXPath($selector);
+			// @mago-expect lint:no-error-control-operator
 			if ($query === null || ($nodes = @$xpath->query($query)) === false) {
 				continue;
 			}

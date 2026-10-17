@@ -197,12 +197,14 @@ class Checker
 		// pages that don't exist anymore (or have a new URL) mark the pages linking
 		// to them as changed (see `prepare()`), which needs the links of all pages
 		foreach ($state['pages'] as [, $url]) {
-			if (!isset($this->urls[$url])) {
-				$this->data ??= $this->index->read();
-				$this->prepare();
-				$state = Index::summarize($this->data);
-				break;
+			if (isset($this->urls[$url])) {
+				continue;
 			}
+
+			$this->data ??= $this->index->read();
+			$this->prepare();
+			$state = Index::summarize($this->data);
+			break;
 		}
 
 		$done = count(array_filter(
@@ -483,6 +485,8 @@ class Checker
 		if (filter_var($host, FILTER_VALIDATE_IP) !== false) {
 			$addresses = [$host];
 		} else {
+			// @mago-expect lint:no-error-control-operator
+			// @mago-expect lint:no-error-control-operator
 			$addresses = @gethostbynamel($host) ?: array_column(@dns_get_record($host, DNS_AAAA) ?: [], 'ipv6');
 		}
 

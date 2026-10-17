@@ -1,5 +1,6 @@
 <?php
 
+// @mago-expect lint:no-error-control-operator
 @include_once __DIR__ . '/vendor/autoload.php';
 
 use Kirby\Cms\App;

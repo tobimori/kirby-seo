@@ -103,6 +103,7 @@ class AltTextField extends FieldClass
 			[
 				'pattern' => 'ai/stream',
 				'method' => 'POST',
+				// @mago-expect lint:prefer-static-closure
 				'action' => function () use ($field) {
 					$kirby = App::instance();
 					$component = Seo::option('components.ai');
