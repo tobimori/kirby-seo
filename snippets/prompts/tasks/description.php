@@ -21,7 +21,7 @@ App::instance()->snippet(
 ); ?>
 
 <task>
-	Create a useful meta description for this page called <page-title><?= $page->title()->value() ?></page-title>. <?php if ($page->isHomePage()): ?>This page is the homepage of the website.<?php endif ?>
+	Create a useful meta description for this page called <page-title><?= $page->title()->toString() ?></page-title>. <?php if ($page->isHomePage()): ?>This page is the homepage of the website.<?php endif ?>
 
 	The entire meta description SHOULD be between 120 and 158 characters long.
 

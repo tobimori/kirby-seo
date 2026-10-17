@@ -68,12 +68,12 @@ if ($contentHtml !== '' && class_exists('DOMDocument')) {
 			'toolbar'
 		] as $role) {
 			$nodes = $xpath->query("//*[@role='{$role}']");
-			if ($nodes === false) {
+			if (!$nodes instanceof \DOMNodeList) {
 				continue;
 			}
 
 			foreach ($nodes as $node) {
-				if ($node->parentNode !== null) {
+				if ($node instanceof \DOMNode && $node->parentNode !== null) {
 					$node->parentNode->removeChild($node);
 				}
 			}
@@ -83,7 +83,9 @@ if ($contentHtml !== '' && class_exists('DOMDocument')) {
 		if ($body instanceof \DOMNode) {
 			$innerHtml = '';
 			foreach ($body->childNodes as $child) {
-				$innerHtml .= $dom->saveHTML($child);
+				if ($child instanceof \DOMNode) {
+					$innerHtml .= $dom->saveHTML($child) ?: '';
+				}
 			}
 
 			if ($innerHtml !== '') {
@@ -94,14 +96,14 @@ if ($contentHtml !== '' && class_exists('DOMDocument')) {
 }
 
 $blockClosingPattern = 'p|div|section|article|main|aside|header|footer|li|ul|ol|dl|blockquote|pre|figure|figcaption|h[1-6]|table|thead|tbody|tfoot|tr|td|th|dd|dt';
-$contentHtml = preg_replace('~<(?:br|hr)\b[^>]*?>~i', "\n", $contentHtml);
-$contentHtml = preg_replace('~</(?:' . $blockClosingPattern . ')>~i', "\n", $contentHtml);
+$contentHtml = preg_replace('~<(?:br|hr)\b[^>]*?>~i', "\n", $contentHtml) ?? $contentHtml;
+$contentHtml = preg_replace('~</(?:' . $blockClosingPattern . ')>~i', "\n", $contentHtml) ?? $contentHtml;
 
 $text = Str::unhtml($contentHtml);
 $text = Str::replace($text, "\r", "\n");
-$text = preg_replace("/[ \t\x{00A0}\x{202F}\x{2007}\x{2060}]+/u", ' ', $text);
-$text = preg_replace("/ *\n+ */", "\n", $text);
-$text = preg_replace("/\n{3,}/", "\n\n", $text);
+$text = preg_replace("/[ \t\x{00A0}\x{202F}\x{2007}\x{2060}]+/u", ' ', $text) ?? $text;
+$text = preg_replace("/ *\n+ */", "\n", $text) ?? $text;
+$text = preg_replace("/\n{3,}/", "\n\n", $text) ?? $text;
 
 $content = trim($text);
 

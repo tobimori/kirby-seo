@@ -484,9 +484,9 @@ class LlmContent
 		$entries = [];
 		foreach ($pages as $page) {
 			$entries[] = [
-				'description' => $page->metadata()->metaDescription()->value(),
+				'description' => $page->metadata()->metaDescription()->toString(),
 				'page' => $page,
-				'title' => $page->title()->value(),
+				'title' => $page->title()->toString(),
 				'url' => $this->contentFor($page)->markdownUrl($languageCode)
 			];
 		}

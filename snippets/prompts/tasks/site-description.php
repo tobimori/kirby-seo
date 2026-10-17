@@ -19,7 +19,7 @@ App::instance()->snippet(
 ); ?>
 
 <task>
-	Create a useful GLOBAL meta description for this site <site-title><?= $site->title()->value() ?>.</site-title>
+	Create a useful GLOBAL meta description for this site <site-title><?= $site->title()->toString() ?>.</site-title>
 	This description is meant as FALLBACK for when the page does not have a meta description itself.
 	This description should be unique and relevant to the site's content.
 

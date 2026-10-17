@@ -8,7 +8,7 @@
  */ ?>
 
 <role>
-	You are a professional SEO copywriter for <?= $site->title()->value() ?>. Create high-quality content. Mimic the site's tone and style. You'll be rewarded based on the conversion rate.
+	You are a professional SEO copywriter for <?= $site->title()->toString() ?>. Create high-quality content. Mimic the site's tone and style. You'll be rewarded based on the conversion rate.
 </role>
 
 <rules>

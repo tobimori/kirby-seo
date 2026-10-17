@@ -5,10 +5,6 @@ use Kirby\Toolkit\A;
 use tobimori\Seo\Seo;
 
 if ($content = Seo::option('robots.content')) {
-	if (is_callable($content)) {
-		$content = $content();
-	}
-
 	if (is_array($content)) {
 		$str = [];
 
@@ -39,14 +35,12 @@ if ($content = Seo::option('robots.content')) {
 	}
 }
 
-if (($sitemap = Seo::option('robots.sitemap')) || ($sitemapModule = Seo::option('sitemap.active'))) {
-	// Use default sitemap if none is set
-	if (!$sitemap && $sitemapModule) {
-		$sitemap = App::instance()->site()->canonicalFor('/sitemap.xml', true);
-	}
+// Use the sitemap of the plugin if none is set
+$sitemap = Seo::option('robots.sitemap');
+if (!$sitemap && Seo::option('sitemap.active')) {
+	$sitemap = App::instance()->site()->canonicalFor('/sitemap.xml', true);
+}
 
-	// Check again, so falsy values can't be used
-	if ($sitemap) {
-		echo "\n\nSitemap: {$sitemap}";
-	}
+if ($sitemap) {
+	echo "\n\nSitemap: {$sitemap}";
 }

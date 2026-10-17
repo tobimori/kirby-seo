@@ -10,7 +10,7 @@ namespace Kirby\Cms {
 	 * @method Meta metadata(Language|null $lang = null)
 	 * @method string robots(Language|null $lang = null)
 	 * @method mixed schema(string $type)
-	 * @method array schemas()
+	 * @method array<string, \Stringable> schemas()
 	 * @method string indexUrl()
 	 * @method Field metaInherit()
 	 * @method Field useTitleTemplate()
@@ -31,7 +31,7 @@ namespace Kirby\Cms {
 
 	/**
 	 * @method mixed schema(string $type)
-	 * @method array schemas()
+	 * @method array<string, \Stringable> schemas()
 	 * @method string lang()
 	 * @method string canonicalFor(string $url, bool $useRootUrl = false, string|null $languageCode = null)
 	 * @method Field title()
