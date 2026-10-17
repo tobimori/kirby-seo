@@ -49,7 +49,8 @@ class Gemini extends Driver
 		yield from $stream->stream(static function (array $event) use (&$started): Generator {
 			switch ($event['event_type'] ?? null) {
 				case 'error':
-					yield Chunk::error($event['error']['message'] ?? 'Unknown Gemini error.', $event);
+					$message = $event['error']['message'] ?? null;
+					yield Chunk::error(is_string($message) ? $message : 'Unknown Gemini error.', $event);
 					return;
 
 				case 'interaction.created':
@@ -62,8 +63,8 @@ class Gemini extends Driver
 
 				case 'step.delta':
 					$delta = $event['delta'] ?? [];
-					$text = ($delta['type'] ?? null) === 'text' ? $delta['text'] ?? '' : '';
-					if ($text !== '') {
+					$text = ($delta['type'] ?? null) === 'text' ? $delta['text'] ?? null : null;
+					if (is_string($text) && $text !== '') {
 						yield Chunk::textDelta($text, $event);
 					}
 					return;

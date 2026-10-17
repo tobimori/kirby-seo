@@ -18,6 +18,7 @@ class OverviewLanguagesButton extends ViewButton
 
 	public function render(): array|null
 	{
+		/** @var array{component: string, props: array<string, mixed>}|null $button */
 		$button = ViewButton::factory(name: 'languages', model: $this->model)?->render();
 
 		// junohamburg/kirby-language-selector opens translation dialogs relative to the current view

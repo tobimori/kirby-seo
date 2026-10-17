@@ -40,7 +40,7 @@ class Anthropic extends Driver
 			$payload['system'] = $system;
 		}
 
-		$stream = new SseStream($this->config('endpoint', static::DEFAULT_ENDPOINT), $headers, $payload, (int)$this->config('timeout', 120));
+		$stream = new SseStream((string)$this->config('endpoint', static::DEFAULT_ENDPOINT), $headers, $payload, (int)$this->config('timeout', 120));
 		yield from $stream->stream(static function (array $event): Generator {
 			$type = $event['type'] ?? null;
 
@@ -63,8 +63,8 @@ class Anthropic extends Driver
 			if ($type === 'content_block_delta') {
 				$delta = $event['delta'] ?? [];
 				if (($delta['type'] ?? null) === 'text_delta') {
-					$text = $delta['text'] ?? '';
-					if ($text !== '') {
+					$text = $delta['text'] ?? null;
+					if (is_string($text) && $text !== '') {
 						yield Chunk::textDelta($text, $event);
 					}
 				}
@@ -92,8 +92,8 @@ class Anthropic extends Driver
 			// handle error events
 			if ($type === 'error') {
 				$error = $event['error'] ?? [];
-				$message = $error['message'] ?? 'Unknown Anthropic streaming error.';
-				yield Chunk::error($message, $event);
+				$message = $error['message'] ?? null;
+				yield Chunk::error(is_string($message) ? $message : 'Unknown Anthropic streaming error.', $event);
 				return;
 			}
 

@@ -2,6 +2,7 @@
 
 namespace tobimori\Seo\Ai;
 
+use CurlHandle;
 use Generator;
 use Kirby\Data\Json;
 use Kirby\Exception\Exception as KirbyException;
@@ -18,6 +19,7 @@ use function curl_multi_remove_handle;
 use function curl_multi_select;
 use function curl_setopt_array;
 use function is_array;
+use function is_string;
 use function sprintf;
 use function strlen;
 
@@ -58,7 +60,7 @@ final class SseStream
 			CURLOPT_POSTFIELDS => Json::encode($this->payload),
 			CURLOPT_RETURNTRANSFER => false,
 			CURLOPT_TIMEOUT => $this->timeout,
-			CURLOPT_WRITEFUNCTION => static function ($curl, $data) use (&$buffer, &$response) {
+			CURLOPT_WRITEFUNCTION => static function (CurlHandle $curl, string $data) use (&$buffer, &$response): int {
 				$buffer .= $data;
 				$currentLength = strlen($response);
 
@@ -96,8 +98,8 @@ final class SseStream
 				throw new KirbyException(curl_error($handle) ?: "Streaming request failed (cURL error {$errno}).");
 			}
 
-			$code = curl_getinfo($handle, CURLINFO_HTTP_CODE);
-			if ($code !== null && $code >= 400) {
+			$code = (int)curl_getinfo($handle, CURLINFO_HTTP_CODE);
+			if ($code >= 400) {
 				$message = sprintf('Streaming request failed (%d)', $code);
 				$body = trim($response);
 
@@ -105,14 +107,15 @@ final class SseStream
 					$decoded = json_decode($body, true);
 
 					if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
-						$body = $decoded['error']['message'] ?? $decoded['message'] ?? $body;
+						$detail = $decoded['error']['message'] ?? $decoded['message'] ?? null;
+						$body = is_string($detail) ? $detail : $body;
 					}
 
 					if (strlen($body) > 200) {
 						$body = substr($body, 0, 200) . '...';
 					}
 
-					$message .= ': ' . preg_replace('/\s+/', ' ', $body);
+					$message .= ': ' . (preg_replace('/\s+/', ' ', $body) ?? $body);
 				}
 
 				throw new KirbyException($message);
@@ -134,6 +137,7 @@ final class SseStream
 		while (
 			preg_match('/\r?\n\r?\n/', $buffer, $match, PREG_OFFSET_CAPTURE) === 1
 		) {
+			/** @var int $pos */
 			$pos = $match[0][1];
 			$len = strlen($match[0][0]);
 			$frame = substr($buffer, 0, $pos);

@@ -22,6 +22,7 @@ use function is_string;
  */
 class Ai
 {
+	/** @var array<string, Driver> */
 	private static array $providers = [];
 
 	public static function enabled(): bool

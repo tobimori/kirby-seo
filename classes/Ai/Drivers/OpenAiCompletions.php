@@ -39,7 +39,9 @@ class OpenAiCompletions extends Driver
 			$headers[] = "OpenAI-Organization: {$organization}";
 		}
 
-		foreach ((array)$this->config('headers', []) as $name => $value) {
+		/** @var array<string, string> $customHeaders */
+		$customHeaders = $this->config('headers', []);
+		foreach ($customHeaders as $name => $value) {
 			$headers[] = "{$name}: {$value}";
 		}
 
@@ -53,7 +55,7 @@ class OpenAiCompletions extends Driver
 			$payload['max_tokens'] = (int)$maxTokens;
 		}
 
-		$stream = new SseStream($this->config('endpoint', static::DEFAULT_ENDPOINT), $headers, $payload, (int)$this->config('timeout', 120));
+		$stream = new SseStream((string)$this->config('endpoint', static::DEFAULT_ENDPOINT), $headers, $payload, (int)$this->config('timeout', 120));
 
 		$started = false;
 		$textStarted = false;
@@ -61,8 +63,8 @@ class OpenAiCompletions extends Driver
 		yield from $stream->stream(static function (array $event) use (&$started, &$textStarted): Generator {
 			if (isset($event['error'])) {
 				$error = $event['error'];
-				$message = is_array($error) ? $error['message'] ?? 'Unknown Chat Completions streaming error.' : (string)$error;
-				yield Chunk::error($message, $event);
+				$message = is_array($error) ? $error['message'] ?? null : $error;
+				yield Chunk::error(is_string($message) ? $message : 'Unknown Chat Completions streaming error.', $event);
 				return;
 			}
 

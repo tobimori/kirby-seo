@@ -41,7 +41,7 @@ class AltText
 			if (array_key_exists('text', $data) || array_key_exists('decorative', $data)) {
 				return new static(
 					text: (string)($data['text'] ?? ''),
-					decorative: (bool)($data['decorative'] ?? false),
+					decorative: ($data['decorative'] ?? false) === true,
 					source: (string)($data['source'] ?? self::SOURCE_MANUAL)
 				);
 			}

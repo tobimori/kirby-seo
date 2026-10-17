@@ -37,7 +37,7 @@ class OpenAi extends Driver
 			'stream' => true
 		];
 
-		$stream = new SseStream($this->config('endpoint', static::DEFAULT_ENDPOINT), $headers, $payload, (int)$this->config('timeout', 120));
+		$stream = new SseStream((string)$this->config('endpoint', static::DEFAULT_ENDPOINT), $headers, $payload, (int)$this->config('timeout', 120));
 		yield from $stream->stream(static function (array $event): Generator {
 			$type = $event['type'] ?? null;
 
@@ -52,8 +52,8 @@ class OpenAi extends Driver
 			}
 
 			if ($type === 'response.output_text.delta') {
-				$delta = $event['delta'] ?? '';
-				if ($delta !== '') {
+				$delta = $event['delta'] ?? null;
+				if (is_string($delta) && $delta !== '') {
 					yield Chunk::textDelta($delta, $event);
 				}
 				return;
@@ -75,8 +75,8 @@ class OpenAi extends Driver
 			}
 
 			if ($type === 'response.error') {
-				$message = $event['error']['message'] ?? 'Unknown OpenAI streaming error.';
-				yield Chunk::error($message, $event);
+				$message = $event['error']['message'] ?? null;
+				yield Chunk::error(is_string($message) ? $message : 'Unknown OpenAI streaming error.', $event);
 			}
 		});
 	}

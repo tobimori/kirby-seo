@@ -1,162 +1,6 @@
 variant = "loose"
 
 [[issues]]
-file = "classes/Ai.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `tobimori\Seo\Ai::provider`. Saw type `nonnull`.'
-count = 1
-
-[[issues]]
-file = "classes/Ai/Drivers/Anthropic.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `tobimori\Seo\Ai\Chunk::error`: expected `string`, but found `nonnull`.'
-count = 1
-
-[[issues]]
-file = "classes/Ai/Drivers/Anthropic.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `tobimori\Seo\Ai\Chunk::textDelta`: expected `string`, but found `nonnull`.'
-count = 1
-
-[[issues]]
-file = "classes/Ai/Drivers/Anthropic.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `tobimori\Seo\Ai\SseStream::__construct`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "classes/Ai/Drivers/Gemini.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `tobimori\Seo\Ai\Chunk::error`: expected `string`, but found `nonnull`.'
-count = 1
-
-[[issues]]
-file = "classes/Ai/Drivers/Gemini.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `tobimori\Seo\Ai\Chunk::textDelta`: expected `string`, but found `nonnull`.'
-count = 1
-
-[[issues]]
-file = "classes/Ai/Drivers/OpenAi.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `tobimori\Seo\Ai\Chunk::error`: expected `string`, but found `nonnull`.'
-count = 1
-
-[[issues]]
-file = "classes/Ai/Drivers/OpenAi.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `tobimori\Seo\Ai\Chunk::textDelta`: expected `string`, but found `nonnull`.'
-count = 1
-
-[[issues]]
-file = "classes/Ai/Drivers/OpenAi.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `tobimori\Seo\Ai\SseStream::__construct`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "classes/Ai/Drivers/OpenAiCompletions.php"
-code = "invalid-type-cast"
-message = "Casting `mixed` to `array`."
-count = 1
-
-[[issues]]
-file = "classes/Ai/Drivers/OpenAiCompletions.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `tobimori\Seo\Ai\Chunk::error`: expected `string`, but found `nonnull`.'
-count = 1
-
-[[issues]]
-file = "classes/Ai/Drivers/OpenAiCompletions.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `tobimori\Seo\Ai\SseStream::__construct`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "classes/Ai/SseStream.php"
-code = "array-to-string-conversion"
-message = "Potential array in right operand of string concatenation."
-count = 1
-
-[[issues]]
-file = "classes/Ai/SseStream.php"
-code = "invalid-argument"
-message = "Invalid argument type for argument #3 of `substr`: expected `int|null`, but found `string`."
-count = 1
-
-[[issues]]
-file = "classes/Ai/SseStream.php"
-code = "invalid-operand"
-message = "Invalid type for left operand."
-count = 1
-
-[[issues]]
-file = "classes/Ai/SseStream.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `strlen`: expected `string`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "classes/Ai/SseStream.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `strlen`: expected `string`, but found `nonnull`."
-count = 1
-
-[[issues]]
-file = "classes/Ai/SseStream.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `substr`: expected `string`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "classes/Ai/SseStream.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `substr`: expected `string`, but found `nonnull`."
-count = 1
-
-[[issues]]
-file = "classes/Ai/SseStream.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `sprintf`: expected `Stringable|null|scalar`, but found `nonnull`."
-count = 1
-
-[[issues]]
-file = "classes/Ai/SseStream.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `substr`: expected `int`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "classes/Ai/SseStream.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #3 of `preg_replace`: expected `array<('K.preg_replace() extends array-key), string>|string`, but found `nonnull`."
-count = 1
-
-[[issues]]
-file = "classes/Ai/SseStream.php"
-code = "mixed-operand"
-message = "Invalid right operand: type `mixed` cannot be reliably used in string concatenation."
-count = 1
-
-[[issues]]
-file = "classes/Ai/SseStream.php"
-code = "mixed-operand"
-message = "Left operand in `>=` comparison has `mixed` type."
-count = 1
-
-[[issues]]
-file = "classes/Ai/SseStream.php"
-code = "possibly-null-operand"
-message = "Possibly null right operand used in string concatenation (type `array<array-key, string>|null|string`)."
-count = 1
-
-[[issues]]
-file = "classes/AltText.php"
-code = "mixed-operand"
-message = "Casting `mixed` to `bool`."
-count = 1
-
-[[issues]]
 file = "classes/Audit/Images.php"
 code = "invalid-array-element"
 message = "Cannot use spread operator on non-iterable type `nonnull`."
@@ -1075,18 +919,6 @@ message = 'Argument #1 of method `tobimori\Seo\Audit\Pages::fingerprint` is poss
 count = 1
 
 [[issues]]
-file = "classes/Buttons/OverviewLanguagesButton.php"
-code = "mixed-array-access"
-message = "Unsafe array access on type `mixed`."
-count = 1
-
-[[issues]]
-file = "classes/Buttons/RobotsViewButton.php"
-code = "invalid-return-statement"
-message = '''Invalid return type for function `tobimori\Seo\Buttons\RobotsViewButton::indicator`: expected `array{'icon': string, 'state': string, 'text': string, 'theme': string}`, but found `array{'icon': string('robots')|string('robots-off'), 'state': string('any')|string('index')|string('noindex'), 'text': (closure(...mixed=): mixed)|array<array-key, mixed>|null|string, 'theme': string('negative-icon')|string('notice-icon')|string('positive-icon')}`.'''
-count = 1
-
-[[issues]]
 file = "classes/Field/AltTextField.php"
 code = "less-specific-argument"
 message = 'Argument type mismatch for argument #1 of `tobimori\Seo\Ai\Content::supportsImage`: expected `Kirby\Cms\File`, but provided type `Kirby\Cms\ModelWithContent` is less specific.'
@@ -1717,30 +1549,6 @@ message = "Argument type mismatch for template `V`."
 count = 1
 
 [[issues]]
-file = "classes/SchemaSingleton.php"
-code = "mixed-array-access"
-message = "Unsafe array access on type `mixed`."
-count = 2
-
-[[issues]]
-file = "classes/SchemaSingleton.php"
-code = "mixed-array-assignment"
-message = "Unsafe array assignment on type `mixed`."
-count = 2
-
-[[issues]]
-file = "classes/SchemaSingleton.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `tobimori\Seo\SchemaSingleton::getInstances`. Saw type `nonnull`.'
-count = 1
-
-[[issues]]
-file = "classes/SchemaSingleton.php"
-code = "string-member-selector"
-message = "This member selector uses a non-literal string type (`string`); its specific value cannot be statically determined."
-count = 1
-
-[[issues]]
 file = "classes/Views/EditableOverviewView.php"
 code = "invalid-iterator"
 message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
@@ -2194,34 +2002,4 @@ count = 1
 file = "config/sections.php"
 code = "mixed-property-access"
 message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 2
-
-[[issues]]
-file = "snippets/head.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `Kirby\Toolkit\Html::tag`: expected `string`, but found `mixed`.'
-count = 2
-
-[[issues]]
-file = "snippets/head.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `Kirby\Toolkit\Html::tag`: expected `array<array-key, mixed>|null|string`, but found `mixed`.'
-count = 2
-
-[[issues]]
-file = "snippets/head.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #3 of `Kirby\Toolkit\Html::tag`: expected `array<array-key, mixed>`, but found `nonnull`.'
-count = 2
-
-[[issues]]
-file = "snippets/head.php"
-code = "mixed-argument"
-message = "The first value for `echo` is too general."
-count = 1
-
-[[issues]]
-file = "snippets/head.php"
-code = "mixed-array-access"
-message = "Unsafe array access on type `mixed`."
 count = 2

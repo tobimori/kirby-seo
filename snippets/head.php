@@ -2,10 +2,12 @@
 
 /**
  * @var \Kirby\Cms\Page $page
+ * @var \Kirby\Template\Slot|null $slot
  */
 
 use Kirby\Cms\Html;
 
+/** @var list<array{tag: string, content?: string|null, attributes?: array<string, mixed>|null, priority?: bool}> $tags */
 $tags = $page->metadata()->snippetData();
 
 // if we're using slots, the user wants to output priority tags such as <title>
@@ -15,7 +17,7 @@ if (isset($slot)) {
 		echo Html::tag($tag['tag'], $tag['content'] ?? null, $tag['attributes'] ?? []) . PHP_EOL;
 	}
 
-	echo $slot;
+	echo $slot->render();
 
 	$tags = array_filter($tags, static fn (array $tag): bool => ($tag['priority'] ?? false) !== true);
 }

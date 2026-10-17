@@ -7,6 +7,7 @@ use Spatie\SchemaOrg\Schema;
 
 class SchemaSingleton
 {
+	/** @var array<string, array<string, \Spatie\SchemaOrg\BaseType>> */
 	private static $instances = [];
 
 	private function __construct()
@@ -20,6 +21,7 @@ class SchemaSingleton
 		}
 
 		if (!isset(self::$instances[$page?->id() ?? 'default'][$type])) {
+			// @mago-expect analysis:string-member-selector
 			self::$instances[$page?->id() ?? 'default'][$type] = Schema::{$type}();
 		}
 
