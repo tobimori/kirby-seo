@@ -15,6 +15,7 @@ use function array_slice;
 /**
  * @psalm-type Tokens = array{access_token?: string, refresh_token?: string, expires_at?: int, property?: string}
  * @psalm-type Property = array{siteUrl: string, permissionLevel?: string}
+ * @psalm-type QueryRow = array{keys?: list<string>, clicks: int|float, impressions: int|float, ctr: float, position: float}
  * @psalm-type Row = array{keys: list<string>, clicks: int|float, impressions: int|float, ctr: float, position: float}
  * @psalm-type QueryOptions = array{startDate?: string, endDate?: string, dimensions?: list<string>, page?: string, pageOperator?: string}
  */
@@ -189,7 +190,7 @@ class GoogleSearchConsole
 	{
 		$credentials = static::credentials();
 
-		/** @var array{access_token: string, expires_in: int, refresh_token?: string, error?: string, error_description?: string, ...}|null $data */
+		/** @var array{access_token?: string, expires_in?: int, refresh_token?: string, error?: string, error_description?: string, ...}|null $data */
 		$data = Remote::post(static::TOKEN_URL, [
 			'headers' => [
 				'Content-Type' => 'application/x-www-form-urlencoded'
@@ -211,6 +212,7 @@ class GoogleSearchConsole
 			throw new \Exception($data['error_description'] ?? $data['error']);
 		}
 
+		/** @var array{access_token: string, expires_in: int, refresh_token?: string, ...} $data */
 		return $data;
 	}
 
@@ -328,7 +330,7 @@ class GoogleSearchConsole
 	 * Query search analytics data (fetches max 25k rows from Google, cached for 24h)
 	 *
 	 * @param QueryOptions $options
-	 * @return list<Row>
+	 * @return list<QueryRow>
 	 */
 	public static function query(array $options = []): array
 	{
@@ -354,7 +356,7 @@ class GoogleSearchConsole
 			]];
 		}
 
-		/** @var list<Row> */
+		/** @var list<QueryRow> */
 		return static::cache()
 			->getOrSet(
 				md5($property . Json::encode($body)),
@@ -371,7 +373,7 @@ class GoogleSearchConsole
 						'data' => Json::encode($body)
 					]);
 
-					/** @var array{rows?: list<Row>, error?: array{message?: string}}|null $data */
+					/** @var array{rows?: list<QueryRow>, error?: array{message?: string}}|null $data */
 					$data = $response->json();
 
 					if (isset($data['error'])) {
@@ -409,6 +411,8 @@ class GoogleSearchConsole
 			$data = static::query();
 		}
 
+		// rows of the default `query` dimension have keys
+		/** @var list<Row> $data */
 		if (empty($data)) {
 			return [];
 		}
