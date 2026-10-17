@@ -2114,21 +2114,9 @@ count = 1
 
 [[issues]]
 file = "classes/Sitemap/Sitemap.php"
-code = "falsable-return-statement"
-message = '''Function `tobimori\Seo\Sitemap\Sitemap::toXml` is declared to return `string` but possibly returns 'false' (inferred as `false|string`).'''
-count = 1
-
-[[issues]]
-file = "classes/Sitemap/Sitemap.php"
 code = "invalid-method-access"
 message = "Attempting to access a method on a non-object type (`false`)."
 count = 4
-
-[[issues]]
-file = "classes/Sitemap/Sitemap.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `tobimori\Seo\Sitemap\Sitemap::toXml`: expected `string`, but found `false|string`.'
-count = 1
 
 [[issues]]
 file = "classes/Sitemap/Sitemap.php"
@@ -2210,18 +2198,6 @@ count = 1
 
 [[issues]]
 file = "classes/Sitemap/SitemapUrl.php"
-code = "falsable-return-statement"
-message = '''Function `tobimori\Seo\Sitemap\SitemapUrl::toString` is declared to return `string` but possibly returns 'false' (inferred as `false|string`).'''
-count = 1
-
-[[issues]]
-file = "classes/Sitemap/SitemapUrl.php"
-code = "invalid-argument"
-message = "Invalid argument type for argument #2 of `date`: expected `int|null`, but found `string`."
-count = 1
-
-[[issues]]
-file = "classes/Sitemap/SitemapUrl.php"
 code = "invalid-iterator"
 message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
 count = 1
@@ -2242,12 +2218,6 @@ count = 1
 file = "classes/Sitemap/SitemapUrl.php"
 code = "invalid-return-statement"
 message = 'Invalid return type for function `tobimori\Seo\Sitemap\SitemapUrl::toDOMNode`: expected `DOMNode`, but found `DOMElement|false`.'
-count = 1
-
-[[issues]]
-file = "classes/Sitemap/SitemapUrl.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `tobimori\Seo\Sitemap\SitemapUrl::toString`: expected `string`, but found `false|string`.'
 count = 1
 
 [[issues]]
@@ -2859,7 +2829,7 @@ count = 1
 [[issues]]
 file = "config/options/sitemap.php"
 code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `tobimori\Seo\Sitemap\SitemapUrl::lastmod`: expected `null|string`, but found `nonnull`.'
+message = 'Invalid argument type for argument #1 of `tobimori\Seo\Sitemap\SitemapUrl::lastmod`: expected `int|null`, but found `nonnull`.'
 count = 1
 
 [[issues]]
