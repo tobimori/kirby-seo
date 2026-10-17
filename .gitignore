@@ -32,3 +32,4 @@ i18n.cache
 
 # happens because of installing the plugin as dev dependency
 site/plugins/kirby-queues
+site/plugins/kirby-agents

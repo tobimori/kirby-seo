@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "50f0ffbac44e8f5079547baefca44947",
+    "content-hash": "c53b980775293070b5e30ef17055cffd",
     "packages": [
         {
             "name": "getkirby/composer-installer",
@@ -2342,6 +2342,55 @@
                 }
             ],
             "time": "2026-06-08T20:24:16+00:00"
+        },
+        {
+            "name": "tobimori/kirby-agents",
+            "version": "0.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tobimori/kirby-agents.git",
+                "reference": "ccc23635aece852a0e4cebc4c29409ed39cd7ff5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tobimori/kirby-agents/zipball/ccc23635aece852a0e4cebc4c29409ed39cd7ff5",
+                "reference": "ccc23635aece852a0e4cebc4c29409ed39cd7ff5",
+                "shasum": ""
+            },
+            "require": {
+                "getkirby/composer-installer": "^1.2.1",
+                "php": ">=8.2.0"
+            },
+            "require-dev": {
+                "carthage-software/mago": "^1.50.0",
+                "getkirby/cms": "^5.0.0"
+            },
+            "type": "kirby-plugin",
+            "extra": {
+                "kirby-cms-path": false
+            },
+            "autoload": {
+                "psr-4": {
+                    "tobimori\\Agents\\": "classes"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "Tobias Möritz",
+                    "email": "tobias@moeritz.io"
+                }
+            ],
+            "description": "Stateless MCP server for Kirby CMS with OAuth, blueprint-aware editing, and page lifecycle tools",
+            "homepage": "https://github.com/tobimori/kirby-agents#readme",
+            "support": {
+                "issues": "https://github.com/tobimori/kirby-agents/issues",
+                "source": "https://github.com/tobimori/kirby-agents/tree/0.1.1"
+            },
+            "time": "2026-10-03T18:52:14+00:00"
         },
         {
             "name": "tobimori/kirby-queues",

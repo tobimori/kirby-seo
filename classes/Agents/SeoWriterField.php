@@ -44,7 +44,7 @@ class SeoWriterField extends WriterField
 		}
 
 		// the seo-writer has no hard breaks, unlike the core writer
-		$value = preg_replace('/\s*<br\s*\/?>\s*/i', ' ', $value);
+		$value = preg_replace('/\s*<br\s*\/?>\s*/i', ' ', $value) ?? $value;
 
 		if (($variables = $this->variables()) === []) {
 			return parent::input($value, $current);
@@ -63,7 +63,18 @@ class SeoWriterField extends WriterField
 	// template variable nodes are not in the allowed tags of the writer
 	public function check(mixed $value, InputCheck $check, string $where): void
 	{
-		parent::check(is_string($value) ? self::placeholders($value) : $value, $check, $where);
+		$value = is_string($value) ? self::placeholders($value) : $value;
+
+		// the core check always allows <br>, but the seo-writer has no hard breaks
+		if (empty($this->props['marks'])) {
+			if (is_string($value) && $check->isNew($value) && preg_match('/<[a-z]/i', $value) === 1) {
+				$check->error("{$where}: send plain text without HTML tags");
+			}
+
+			return;
+		}
+
+		parent::check($value, $check, $where);
 	}
 
 	public function present(mixed $value, array $path, Presenter $presenter): mixed
