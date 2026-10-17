@@ -2,7 +2,6 @@
 
 namespace tobimori\Seo\Jobs;
 
-use Kirby\Toolkit\I18n;
 use tobimori\Queues\BatchJob;
 use tobimori\Seo\IndexNow;
 use tobimori\Seo\Seo;
@@ -27,8 +26,7 @@ class IndexNowBatchJob extends BatchJob
 
 	public function name(): string
 	{
-		// @mago-expect analysis:invalid-return-statement,nullable-return-statement
-		return I18n::translate('seo.job.indexNow');
+		return Seo::translate('seo.job.indexNow');
 	}
 
 	public function handle(): void

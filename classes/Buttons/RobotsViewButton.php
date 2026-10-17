@@ -4,8 +4,8 @@ namespace tobimori\Seo\Buttons;
 
 use Kirby\Cms\Page;
 use Kirby\Panel\Ui\Buttons\ViewButton;
-use Kirby\Toolkit\I18n;
 use Kirby\Toolkit\Str;
+use tobimori\Seo\Seo;
 
 class RobotsViewButton extends ViewButton
 {
@@ -40,11 +40,10 @@ class RobotsViewButton extends ViewButton
 			default => 'index'
 		};
 
-		// @mago-expect analysis:invalid-return-statement
 		return [
 			'state' => $state,
 			'icon' => $state === 'index' ? 'robots' : 'robots-off',
-			'text' => I18n::translate("seo.fields.robots.indicator.{$state}"),
+			'text' => Seo::translate("seo.fields.robots.indicator.{$state}"),
 			'theme' => self::THEMES[$state]
 		];
 	}

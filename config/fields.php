@@ -4,7 +4,6 @@ use Kirby\Cms\Api;
 use Kirby\Cms\Page;
 use Kirby\Content\VersionId;
 use Kirby\Form\Field as FormField;
-use Kirby\Toolkit\I18n;
 use Kirby\Toolkit\Str;
 use tobimori\Seo\Field\AltTextField;
 use tobimori\Seo\Seo;
@@ -30,8 +29,7 @@ return [
 
 				return str_replace(
 					['{{ title }}', '{{ site.title }}'],
-					// @mago-expect analysis:possibly-invalid-argument
-					[I18n::translate('seo.writerNodes.template.title'), I18n::translate('seo.writerNodes.template.siteTitle')],
+					[Seo::translate('seo.writerNodes.template.title'), Seo::translate('seo.writerNodes.template.siteTitle')],
 					$value
 				);
 			}

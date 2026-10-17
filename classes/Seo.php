@@ -7,6 +7,7 @@ use Kirby\Cms\Language;
 use Kirby\Cms\Page;
 use Kirby\Cms\Pages;
 use Kirby\Data\Json;
+use Kirby\Toolkit\I18n;
 use Kirby\Toolkit\Str;
 
 /**
@@ -34,6 +35,7 @@ use Kirby\Toolkit\Str;
  *   'default.robotsIndex': bool,
  *   'default.locale': string,
  *   'socialMedia': array<string, string>,
+ *   'previews': list<string>,
  *   'robots.enabled': bool,
  *   'robots.active': bool,
  *   'robots.followPageStatus': bool,
@@ -148,6 +150,16 @@ final class Seo
 			static::option('cascade'),
 			static::option('default')
 		]));
+	}
+
+	/**
+	 * Translation of the key as a string, or the key itself if the translation is missing
+	 */
+	public static function translate(string $key): string
+	{
+		$translation = I18n::translate($key);
+
+		return is_string($translation) ? $translation : $key;
 	}
 
 	public static function clearIndexable(): void

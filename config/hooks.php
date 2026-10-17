@@ -153,8 +153,7 @@ return [
 
 		$wantsMarkdown =
 			$isMarkdownPath ||
-			// @mago-expect analysis:mixed-argument
-			$llmContent->prefersMarkdown(App::instance()->request()->header('Accept'));
+			$llmContent->prefersMarkdown((string)App::instance()->request()->header('Accept'));
 
 		if ($result instanceof Page) {
 			if ($wantsMarkdown) {

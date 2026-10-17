@@ -3,9 +3,9 @@
 namespace tobimori\Seo\Jobs;
 
 use Kirby\Cms\App;
-use Kirby\Toolkit\I18n;
 use tobimori\Queues\Job;
 use tobimori\Seo\Field\AltTextField;
+use tobimori\Seo\Seo;
 
 /**
  * Queue job for generating alt text via AI on file upload
@@ -19,8 +19,7 @@ class GenerateAltTextJob extends Job
 
 	public function name(): string
 	{
-		// @mago-expect analysis:invalid-return-statement,nullable-return-statement
-		return I18n::translate('seo.job.generateAltText');
+		return Seo::translate('seo.job.generateAltText');
 	}
 
 	public function handle(): void

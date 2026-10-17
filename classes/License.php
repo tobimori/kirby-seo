@@ -12,7 +12,6 @@ use Kirby\Plugin\License as KirbyLicense;
 use Kirby\Plugin\LicenseStatus;
 use Kirby\Plugin\Plugin;
 use Kirby\Toolkit\A;
-use Kirby\Toolkit\I18n;
 use Kirby\Toolkit\Str;
 use Throwable;
 
@@ -85,8 +84,7 @@ final class License extends KirbyLicense
 		$this->status = new LicenseStatus(
 			value: $status->value(),
 			icon: $state === 'missing' ? $status->icon() : 'alert',
-			// @mago-expect analysis:possibly-invalid-argument,possibly-null-argument
-			label: $state === 'missing' ? $status->label() : I18n::translate("seo.license.status.{$state}"),
+			label: $state === 'missing' ? $status->label() : Seo::translate("seo.license.status.{$state}"),
 			theme: $state === 'missing' ? $status->theme() : 'negative',
 			dialog: 'seo/activate'
 		);
@@ -146,13 +144,11 @@ final class License extends KirbyLicense
 	public static function activate(string $email, string $license): void
 	{
 		if (!static::isOwn(['license' => $license])) {
-			// @mago-expect analysis:possibly-invalid-argument,possibly-null-argument
-			throw new InvalidArgumentException(I18n::translate('seo.license.error.plugin'));
+			throw new InvalidArgumentException(Seo::translate('seo.license.error.plugin'));
 		}
 
 		if (static::requiresEnterprise() && !static::isEnterprise($license)) {
-			// @mago-expect analysis:possibly-invalid-argument,possibly-null-argument
-			throw new InvalidArgumentException(I18n::translate('seo.license.error.enterprise'));
+			throw new InvalidArgumentException(Seo::translate('seo.license.error.enterprise'));
 		}
 
 		try {
@@ -163,14 +159,12 @@ final class License extends KirbyLicense
 				'expires' => true
 			]);
 		} catch (Throwable) {
-			// @mago-expect analysis:possibly-invalid-argument,possibly-null-argument
-			throw new InvalidArgumentException(I18n::translate('seo.license.error.server'));
+			throw new InvalidArgumentException(Seo::translate('seo.license.error.server'));
 		}
 
 		$data = $response->code() === 200 ? $response->json() : null;
 		if (!is_array($data)) {
-			// @mago-expect analysis:possibly-invalid-argument,possibly-null-argument
-			throw new InvalidArgumentException(I18n::translate(match ($response->code()) {
+			throw new InvalidArgumentException(Seo::translate(match ($response->code()) {
 				404 => 'seo.license.error.key',
 				403 => 'seo.license.error.forbidden',
 				default => 'seo.license.error.download'
@@ -178,13 +172,11 @@ final class License extends KirbyLicense
 		}
 
 		if (!static::isOwn($data)) {
-			// @mago-expect analysis:possibly-invalid-argument,possibly-null-argument
-			throw new InvalidArgumentException(I18n::translate('seo.license.error.plugin'));
+			throw new InvalidArgumentException(Seo::translate('seo.license.error.plugin'));
 		}
 
 		if (!static::isSigned($data)) {
-			// @mago-expect analysis:possibly-invalid-argument,possibly-null-argument
-			throw new InvalidArgumentException(I18n::translate('seo.license.error.download'));
+			throw new InvalidArgumentException(Seo::translate('seo.license.error.download'));
 		}
 
 		static::write($data);

@@ -106,8 +106,7 @@ class PagesView extends EditableOverviewView
 	protected function ids(ModelWithContent $model): array
 	{
 		// tracked pages always have an id
-		// @mago-expect analysis:invalid-return-statement
-		return [$model->id()];
+		return [(string)$model->id()];
 	}
 
 	protected function tracked(Changes $changes): iterable

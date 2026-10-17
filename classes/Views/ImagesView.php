@@ -192,13 +192,12 @@ class ImagesView extends EditableOverviewView
 
 	/**
 	 * @param ImageEntry $entry
+	 * @param 'id'|'alt'|'decorative'|'parent'|'template' $key
 	 */
 	protected function value(array $entry, string $key): string
 	{
 		$file = $entry['model'];
 
-		// the keys are the searchable & sortable columns
-		// @mago-expect analysis:match-not-exhaustive
 		return match ($key) {
 			'id' => $file->id(),
 			'alt' => $this->images()->altText($entry)->text(),

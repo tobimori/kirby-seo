@@ -14,8 +14,7 @@ return [
 	'seo-preview' => [
 		'mixins' => ['headline'],
 		'computed' => [
-			// @mago-expect analysis:mixed-argument
-			'options' => fn () => A::map(App::instance()->option('tobimori.seo.previews'), fn ($item) => [
+			'options' => fn () => A::map(Seo::option('previews'), fn ($item) => [
 				'value' => $item,
 				'text' => I18n::translate("seo.sections.preview.{$item}")
 			]),

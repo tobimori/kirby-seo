@@ -7,7 +7,6 @@ use Kirby\Cms\App;
 use Kirby\Cms\Page;
 use Kirby\Data\Json;
 use Kirby\Exception\Exception;
-use Kirby\Toolkit\I18n;
 use tobimori\Seo\Jobs\CheckLinksJob;
 use tobimori\Seo\Seo;
 
@@ -136,8 +135,7 @@ class Checker
 	protected function change(Closure $change): void
 	{
 		if (!$this->index->wait()) {
-			// @mago-expect analysis:possibly-invalid-argument
-			throw new Exception(message: I18n::translate('seo.links.busy'));
+			throw new Exception(message: Seo::translate('seo.links.busy'));
 		}
 
 		try {

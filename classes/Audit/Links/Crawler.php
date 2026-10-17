@@ -11,8 +11,10 @@ use DOMXPath;
 use Kirby\Cms\App;
 use Kirby\Cms\Page;
 use Kirby\Cms\Responder;
+use Kirby\Cms\Site;
 use Kirby\Data\Json;
 use Kirby\Http\Request;
+use ReflectionProperty;
 use Throwable;
 use tobimori\Seo\Seo;
 
@@ -235,10 +237,16 @@ class Crawler
 		$language = $kirby->language()?->code();
 		$translation = $kirby->translation()->code();
 		$data = $kirby->data;
-		// the closures below run with `$this` bound to the site or Kirby with `call()`
-		$page = (fn () => $this->page ?? null)->call($site);
-		// @mago-expect analysis:undefined-variable(3),mixed-property-access(3)
-		$state = (fn () => [$this->request, $this->response, $this->path])->call($kirby);
+
+		// Kirby has no public setters for the current page, request, response & path
+		$page = new ReflectionProperty(Site::class, 'page');
+		$previousPage = $page->isInitialized($site) ? $page->getValue($site) : null;
+		$properties = [];
+		$previous = [];
+		foreach (['request', 'response', 'path'] as $name) {
+			$properties[$name] = new ReflectionProperty(App::class, $name);
+			$previous[$name] = $properties[$name]->getValue($kirby);
+		}
 
 		$_GET = [];
 		$_POST = [];
@@ -247,33 +255,24 @@ class Crawler
 		$_FILES = [];
 		$_COOKIE = [];
 
-		(function () use ($url) {
-			// @mago-expect analysis:undefined-variable,mixed-property-access
-			$this->request = new class(['method' => 'GET', 'url' => $url, 'query' => [], 'body' => [], 'files' => []]) extends Request {
-				// none of the headers of the current request, e.g. its cookies or referer
-				public function headers(): array
-				{
-					return [];
-				}
-			};
-			// templates might change the status code or headers
-			// @mago-expect analysis:undefined-variable,mixed-property-access
-			$this->response = new Responder();
-			// @mago-expect analysis:undefined-variable,mixed-property-access
-			$this->path = null;
-		})->call($kirby);
+		$properties['request']->setValue($kirby, new class(['method' => 'GET', 'url' => $url, 'query' => [], 'body' => [], 'files' => []]) extends Request {
+			// none of the headers of the current request, e.g. its cookies or referer
+			public function headers(): array
+			{
+				return [];
+			}
+		});
+		// templates might change the status code or headers
+		$properties['response']->setValue($kirby, new Responder());
+		$properties['path']->setValue($kirby, null);
 
-		return function () use ($kirby, $site, $globals, $language, $translation, $data, $page, $state) {
+		return static function () use ($kirby, $site, $globals, $language, $translation, $data, $page, $previousPage, $properties, $previous) {
 			// @mago-expect lint:no-request-variable
 			[$_GET, $_POST, $_REQUEST, $_FILES, $_COOKIE] = $globals;
-			(function () use ($state) {
-				// @mago-expect analysis:undefined-variable(3),mixed-property-access(3),invalid-destructuring-source
-				[$this->request, $this->response, $this->path] = $state;
-			})->call($kirby);
-			(function () use ($page) {
-				// @mago-expect analysis:undefined-variable,mixed-property-access
-				$this->page = $page;
-			})->call($site);
+			foreach ($properties as $name => $property) {
+				$property->setValue($kirby, $previous[$name]);
+			}
+			$page->setValue($site, $previousPage);
 			$kirby->data = $data;
 			$kirby->setCurrentLanguage($language);
 			$kirby->setCurrentTranslation($translation);

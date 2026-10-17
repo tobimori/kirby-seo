@@ -2,7 +2,6 @@
 
 use Kirby\Cms\App;
 use Kirby\Cms\Find;
-use Kirby\Cms\ModelWithContent;
 use Kirby\Cms\Page;
 use Kirby\Cms\Site;
 use Kirby\Exception\InvalidArgumentException;
@@ -47,9 +46,7 @@ return [
 		],
 		'buttons' => [
 			'page.robots' => fn (Page $page) => Seo::option('robots.enabled') ? new RobotsViewButton($page) : null,
-			// the button is used in page and site views
-			// @mago-expect analysis:less-specific-argument
-			'utm-share' => fn (ModelWithContent $model) => new UtmShareViewButton($model),
+			'utm-share' => fn (Page|Site $model) => new UtmShareViewButton($model),
 			'seo.overview.languages' => fn (Site $site) => new OverviewLanguagesButton($site)
 		],
 		'drawers' => [
@@ -75,9 +72,8 @@ return [
 						return ['component' => 'k-error-drawer', 'props' => ['message' => 'GSC not connected']];
 					}
 
-					$title = I18n::translate('seo.sections.searchConsole.title');
+					$title = Seo::translate('seo.sections.searchConsole.title');
 					if ($model instanceof Page) {
-						// @mago-expect analysis:invalid-operand,possibly-null-operand
 						$title .= ' · ' . $model->title()->toString();
 					}
 
@@ -168,16 +164,12 @@ return [
 					$body = App::instance()->request()->body();
 
 					if (!V::email($body->get('email'))) {
-						// @mago-expect analysis:possibly-invalid-argument,possibly-null-argument
-						throw new InvalidArgumentException(I18n::translate('seo.license.error.email'));
+						throw new InvalidArgumentException(Seo::translate('seo.license.error.email'));
 					}
 
 					License::activate(
-						// V::email() checked the email
-						// @mago-expect analysis:mixed-argument
-						email: $body->get('email'),
-						// @mago-expect analysis:mixed-argument
-						license: trim($body->get('license', ''))
+						email: (string)$body->get('email'),
+						license: trim((string)$body->get('license', ''))
 					);
 
 					return [
@@ -200,8 +192,7 @@ return [
 						fn ($p) => [
 							'value' => $p['siteUrl'],
 							'text' => str_starts_with($p['siteUrl'], 'sc-domain:')
-								// @mago-expect analysis:invalid-operand,possibly-null-operand
-								? substr($p['siteUrl'], 10) . ' (' . I18n::translate('seo.sections.searchConsole.scDomain') . ')'
+								? substr($p['siteUrl'], 10) . ' (' . Seo::translate('seo.sections.searchConsole.scDomain') . ')'
 								: $p['siteUrl']
 						],
 						$properties

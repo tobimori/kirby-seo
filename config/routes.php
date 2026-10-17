@@ -13,7 +13,7 @@ use tobimori\Seo\Seo;
  * Answers OPTIONS and rejects other methods for an endpoint,
  * if the option that enables the endpoint is active
  */
-$methodRoutes = fn (string $pattern, string $allow, string $option) => [
+$methodRoutes = /** @param 'robots.active'|'sitemap.active' $option */ fn (string $pattern, string $allow, string $option) => [
 	[
 		'pattern' => $pattern,
 		'method' => 'OPTIONS',
@@ -32,7 +32,6 @@ $methodRoutes = fn (string $pattern, string $allow, string $option) => [
 		'action' => function () use ($allow, $option) {
 			/** @var Route $this */
 			// allowed methods only get here if their route passed on (e.g. unknown sitemap index), which is not a method error
-			// @mago-expect analysis:mixed-operand
 			if (Seo::option($option) && !in_array(App::instance()->request()->method(), explode(', ', $allow), true)) {
 				return new Response('Method Not Allowed', 'text/plain', 405, ['Allow' => $allow]);
 			}

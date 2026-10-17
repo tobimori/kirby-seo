@@ -5,7 +5,7 @@ namespace tobimori\Seo\Buttons;
 use Kirby\Cms\Page;
 use Kirby\Cms\Site;
 use Kirby\Panel\Ui\Buttons\ViewButton;
-use Kirby\Toolkit\I18n;
+use tobimori\Seo\Seo;
 
 class UtmShareViewButton extends ViewButton
 {
@@ -15,8 +15,7 @@ class UtmShareViewButton extends ViewButton
 			model: $model,
 			dialog: "seo/utm-share/{$model->panel()->path()}",
 			icon: 'share',
-			// @mago-expect analysis:possibly-invalid-argument
-			title: I18n::translate('seo.utmShare.button')
+			title: Seo::translate('seo.utmShare.button')
 		);
 	}
 }

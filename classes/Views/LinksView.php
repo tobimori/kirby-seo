@@ -46,14 +46,17 @@ class LinksView extends OverviewView
 				$links = array_filter($links, static fn ($link) => Report::has($link, $issue));
 			}
 
-			// the keys are the searchable columns
-			// @mago-expect analysis:match-not-exhaustive
-			$links = $this->search($links, $search, self::SEARCHABLE, fn ($link, $key) => match ($key) {
-				'url' => $link['url'],
-				'details' => $this->reason($link),
-				// line breaks between the titles, so a search can't match across two of them
-				'pages' => implode("\n", array_map($this->title(...), explode("\n", $link['pages'])))
-			});
+			$links = $this->search(
+				$links,
+				$search,
+				self::SEARCHABLE,
+				/** @param 'url'|'details'|'pages' $key */ fn ($link, $key) => match ($key) {
+					'url' => $link['url'],
+					'details' => $this->reason($link),
+					// line breaks between the titles, so a search can't match across two of them
+					'pages' => implode("\n", array_map($this->title(...), explode("\n", $link['pages'])))
+				}
+			);
 
 			$links = $this->sort(
 				$links,
@@ -61,8 +64,7 @@ class LinksView extends OverviewView
 					'pages' => (string)$link['total'],
 					'url' => $this->display($link['url']),
 					// the status & the default order: most severe first
-					// @mago-expect analysis:possibly-false-operand
-					default => array_search($link['state'], Report::STATES, true) . $this->display($link['url'])
+					default => array_flip(Report::STATES)[$link['state']] . $this->display($link['url'])
 				},
 				$dir
 			);

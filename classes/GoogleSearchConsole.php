@@ -120,8 +120,7 @@ class GoogleSearchConsole
 
 		$uri = new Uri(static::AUTH_URL);
 		$uri->query()->merge([
-			// @mago-expect analysis:possibly-null-array-access
-			'client_id' => $credentials['client_id'],
+			'client_id' => $credentials['client_id'] ?? null,
 			'redirect_uri' => $redirectUri,
 			'response_type' => 'code',
 			'access_type' => 'offline',
@@ -195,11 +194,9 @@ class GoogleSearchConsole
 			'headers' => [
 				'Content-Type' => 'application/x-www-form-urlencoded'
 			],
-			// the credentials are checked with hasCredentials() before
-			// @mago-expect analysis:possibly-null-array-access(2)
 			'data' => [
-				'client_id' => $credentials['client_id'],
-				'client_secret' => $credentials['client_secret'],
+				'client_id' => $credentials['client_id'] ?? null,
+				'client_secret' => $credentials['client_secret'] ?? null,
 				...$data
 			]
 		])->json();
@@ -228,9 +225,7 @@ class GoogleSearchConsole
 		}
 
 		// refresh if expired or expiring soon (within 5 min)
-		// connected tokens have an expiry date
-		// @mago-expect analysis:possibly-null-operand,possibly-undefined-string-array-index
-		if ($tokens['expires_at'] < (time() + 300)) {
+		if (($tokens['expires_at'] ?? 0) < (time() + 300)) {
 			return static::refreshToken();
 		}
 
@@ -276,8 +271,7 @@ class GoogleSearchConsole
 		}
 
 		// fallback to first property
-		// @mago-expect analysis:redundant-null-coalesce
-		return $properties[0]['siteUrl'] ?? null;
+		return $properties[0]['siteUrl'];
 	}
 
 	/**

@@ -2,7 +2,6 @@
 
 namespace tobimori\Seo\Jobs;
 
-use Kirby\Toolkit\I18n;
 use tobimori\Queues\BatchJob;
 use tobimori\Seo\Audit\Links\Checker;
 use tobimori\Seo\Audit\Links\Crawler;
@@ -27,8 +26,7 @@ class CheckLinksJob extends BatchJob
 
 	public function name(): string
 	{
-		// @mago-expect analysis:invalid-return-statement,nullable-return-statement
-		return I18n::translate('seo.job.checkLinks');
+		return Seo::translate('seo.job.checkLinks');
 	}
 
 	public function timeout(): int

@@ -166,9 +166,11 @@ abstract class OverviewView
 	/**
 	 * Search, sorting & filter of the table from the query of the view, unknown values are ignored
 	 *
-	 * @param list<string> $sortable
-	 * @param list<string> $issues
-	 * @return array{search: string, sort: string|null, dir: string, issue: string|null}
+	 * @template S of string
+	 * @template I of string
+	 * @param list<S> $sortable
+	 * @param list<I> $issues
+	 * @return array{search: string, sort: S|null, dir: string, issue: I|null}
 	 */
 	protected function query(array $sortable, array $issues): array
 	{
@@ -190,9 +192,10 @@ abstract class OverviewView
 	 * so cheap values should come first
 	 *
 	 * @template T
+	 * @template K of string
 	 * @param array<array-key, T> $entries
-	 * @param list<string> $keys
-	 * @param Closure(T, string): string $value
+	 * @param list<K> $keys
+	 * @param Closure(T, K): string $value
 	 * @return array<array-key, T>
 	 */
 	protected function search(array $entries, string $search, array $keys, Closure $value): array
