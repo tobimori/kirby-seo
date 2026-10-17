@@ -201,15 +201,20 @@ class IndexNow
 	 */
 	public static function key(): string
 	{
-		if (static::$key === null) {
-			/** @var string $key */
-			$key = App::instance()
-				->cache('tobimori.seo.indexnow')
-				->getOrSet('key', static fn () => Str::random(32, 'hexLower'), 0);
-			static::$key = $key;
+		if (static::$key !== null) {
+			return static::$key;
 		}
 
-		return static::$key;
+		$cache = App::instance()->cache('tobimori.seo.indexnow');
+		$key = $cache->get('key');
+
+		// earlier versions stored `false`, as Kirby has no `hexLower` pool for random strings
+		if (!is_string($key) || $key === '') {
+			$key = bin2hex(random_bytes(16));
+			$cache->set('key', $key, 0);
+		}
+
+		return static::$key = $key;
 	}
 
 	/**
