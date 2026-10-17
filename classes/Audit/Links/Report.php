@@ -2,7 +2,9 @@
 
 namespace tobimori\Seo\Audit\Links;
 
+use Closure;
 use Kirby\Cms\App;
+use Kirby\Cms\Language;
 use Kirby\Cms\Page;
 use Kirby\Http\Router;
 use Kirby\Uuid\Uuid;
@@ -11,6 +13,12 @@ use tobimori\Seo\Seo;
 
 /**
  * Classifies indexed links and groups their source pages for a single-language audit report
+ *
+ * @psalm-import-type Data from Index
+ * @psalm-import-type PageEntry from Index
+ * @psalm-type Check = array{state: string, reason?: string, code?: int, target?: string|null}
+ * @psalm-type Link = array{url: string, state: string, reason: string|null, target: string|null, code: int|null, internal: bool, total: int, pages: string}
+ * @psalm-type Results = array{revision: string|null, scanned: bool, links: array<string, Link>}
  */
 class Report
 {
@@ -31,9 +39,17 @@ class Report
 	public const ISSUES = ['broken', 'anchor', 'redirect'];
 
 	protected App $kirby;
+
+	/** @var Data|null */
 	protected array|null $data = null;
+
+	/** @var Results|null */
 	protected array|null $results = null;
+
+	/** @var array<string, PageEntry>|null */
 	protected array|null $entries = null;
+
+	/** @var array<string, int>|null */
 	protected array|null $targets = null;
 	protected Router|null $router = null;
 
@@ -43,6 +59,9 @@ class Report
 		$this->language ??= $this->kirby->language()?->code();
 	}
 
+	/**
+	 * @return Data
+	 */
 	protected function data(): array
 	{
 		return $this->data ??= (new Index())->read();
@@ -50,12 +69,15 @@ class Report
 
 	/**
 	 * Hosts of the site: links to them are checked without requests
+	 *
+	 * @return list<string>
 	 */
 	protected static function hosts(): array
 	{
 		$kirby = App::instance();
-		$urls = [$kirby->url(), ...($kirby->multilang() ? $kirby->languages()->values(static fn ($language) => $language->url()) : [])];
-		$hosts = array_map(static fn ($url) => parse_url($url, PHP_URL_HOST), $urls);
+		/** @var list<string|null> $urls */
+		$urls = [$kirby->url(), ...($kirby->multilang() ? $kirby->languages()->values(static fn (Language $language) => $language->url()) : [])];
+		$hosts = array_map(static fn ($url) => parse_url((string)$url, PHP_URL_HOST), $urls);
 
 		return array_values(array_unique(array_map('strtolower', array_filter([...$hosts, ...(Seo::option('links.hosts') ?? [])]))));
 	}
@@ -65,7 +87,7 @@ class Report
 		static $hosts = null;
 		$hosts ??= static::hosts();
 
-		return in_array(strtolower(parse_url($url, PHP_URL_HOST) ?? ''), $hosts, true);
+		return in_array(strtolower(parse_url($url, PHP_URL_HOST) ?: ''), $hosts, true);
 	}
 
 	public function isEmpty(): bool
@@ -74,13 +96,16 @@ class Report
 	}
 
 	/**
-	 * @return array<string, array{url: string, state: string, reason: string|null, target: string|null, code: int|null, internal: bool, total: int, pages: string}>
+	 * @return array<string, Link>
 	 */
 	public function links(): array
 	{
 		return $this->results()['links'];
 	}
 
+	/**
+	 * @param Link $link
+	 */
 	public static function has(array $link, string $filter): bool
 	{
 		return $filter === 'issues'
@@ -88,6 +113,10 @@ class Report
 			: $link['state'] === $filter;
 	}
 
+	/**
+	 * @param array<string, Link> $links
+	 * @return array<string, int>
+	 */
 	public static function summary(array $links): array
 	{
 		$summary = array_fill_keys(self::FILTERS, 0);
@@ -104,6 +133,8 @@ class Report
 	/**
 	 * Caches classified links per language and index revision.
 	 * Source page IDs use newline-separated strings to reduce memory use for shared links
+	 *
+	 * @return Results
 	 */
 	protected function results(): array
 	{
@@ -113,6 +144,7 @@ class Report
 
 		$cache = Index::cache();
 		$key = 'links/report/' . ($this->language ?? 'default');
+		/** @var Results|null $cached */
 		$cached = $cache->get($key);
 
 		if ($cached !== null && $cached['revision'] === Index::revision()) {
@@ -134,6 +166,9 @@ class Report
 		return $this->results;
 	}
 
+	/**
+	 * @return array<string, Link>
+	 */
 	protected function build(): array
 	{
 		$pages = [];
@@ -182,6 +217,7 @@ class Report
 	{
 		$cache = Index::cache();
 		$key = 'links/stats/' . ($this->language ?? 'default');
+		/** @var array{revision: string|null, stats: array{ok: int, notice: int, negative: int, unknown: int}}|null $cached */
 		$cached = $cache->get($key);
 
 		if ($cached !== null && $cached['revision'] === Index::revision()) {
@@ -201,6 +237,8 @@ class Report
 
 	/**
 	 * Classifies a URL from stored scan results; does not make network requests
+	 *
+	 * @return Check
 	 */
 	protected function check(string $url): array
 	{
@@ -219,11 +257,16 @@ class Report
 			);
 		}
 
-		[$url, $fragment] = array_pad(explode('#', $url, 2), 2, null);
+		$parts = explode('#', $url, 2);
+		$url = $parts[0];
+		$fragment = $parts[1] ?? null;
 
 		return static::isInternal($url) ? $this->checkInternal($url, $fragment) : $this->checkExternal($url);
 	}
 
+	/**
+	 * @return Check
+	 */
 	protected function checkInternal(string $url, string|null $fragment): array
 	{
 		if ($entry = $this->entries()[static::normalize($url)] ?? null) {
@@ -233,8 +276,8 @@ class Report
 		// content representations, e.g. `/team/jane.vcf` for the template `team.vcf.php`
 		$match = [];
 		if (
-			preg_match('#\.([a-z0-9]+)$#i', parse_url($url, PHP_URL_PATH) ?? '', $match) &&
-			($entry = $this->entries()[static::normalize(substr(strtok($url, '?'), 0, -strlen($match[0])))] ?? null)
+			preg_match('#\.([a-z0-9]+)$#i', parse_url($url, PHP_URL_PATH) ?: '', $match) &&
+			($entry = $this->entries()[static::normalize(substr(explode('?', $url, 2)[0], 0, -strlen($match[0])))] ?? null)
 		) {
 			try {
 				$this->kirby->page($entry['page'])?->representation($match[1]);
@@ -262,7 +305,7 @@ class Report
 			);
 		}
 
-		$file = parse_url($url, PHP_URL_PATH) ?? '/';
+		$file = parse_url($url, PHP_URL_PATH) ?: '/';
 
 		if ($this->isMedia($url) || $this->isStatic($file)) {
 			return ['state' => 'ok'];
@@ -285,6 +328,10 @@ class Report
 		return ['state' => 'broken', 'reason' => 'notFound', 'code' => 404];
 	}
 
+	/**
+	 * @param PageEntry $entry
+	 * @return Check
+	 */
 	protected function checkPage(array $entry, string|null $fragment): array
 	{
 		$status = $entry['status'];
@@ -318,6 +365,9 @@ class Report
 		);
 	}
 
+	/**
+	 * @return Check
+	 */
 	protected function checkExternal(string $url): array
 	{
 		$result = $this->data()['urls'][$url] ?? null;
@@ -339,6 +389,8 @@ class Report
 
 	/**
 	 * Scanned pages of all languages by their URL, as pages might link to other languages
+	 *
+	 * @return array<string, PageEntry>
 	 */
 	protected function entries(): array
 	{
@@ -353,6 +405,9 @@ class Report
 		return $this->entries;
 	}
 
+	/**
+	 * @return array<string, int>
+	 */
 	protected function targets(): array
 	{
 		return $this->targets ??= array_flip($this->data()['targets']);
@@ -366,7 +421,7 @@ class Report
 		$parts = parse_url($url);
 		$path = rawurldecode($parts['path'] ?? '');
 		// params, e.g. `/blog/tag:kirby`
-		$path = preg_replace('#(/[^/]+:[^/]*)+/?$#', '', $path);
+		$path = (string)preg_replace('#(/[^/]+:[^/]*)+/?$#', '', $path);
 
 		return strtolower($parts['host'] ?? '') . (isset($parts['port']) ? ":{$parts['port']}" : '') . '/' . trim($path, '/');
 	}
@@ -376,11 +431,11 @@ class Report
 	 */
 	protected function path(string $url): string
 	{
-		$path = trim(rawurldecode(parse_url($url, PHP_URL_PATH) ?? ''), '/');
+		$path = trim(rawurldecode(parse_url($url, PHP_URL_PATH) ?: ''), '/');
 
 		if ($this->kirby->multilang()) {
 			foreach ($this->kirby->languages() as $language) {
-				$prefix = trim(parse_url($language->url(), PHP_URL_PATH) ?? '', '/');
+				$prefix = trim(parse_url($language->url(), PHP_URL_PATH) ?: '', '/');
 
 				if ($prefix !== '' && ($path === $prefix || str_starts_with($path, "{$prefix}/"))) {
 					return ltrim(substr($path, strlen($prefix)), '/');
@@ -400,6 +455,7 @@ class Report
 			return $this->kirby->site()->homePage();
 		}
 
+		/** @var list<string|null> $languages */
 		$languages = $this->kirby->multilang() ? $this->kirby->languages()->codes() : [null];
 		$model = $this->kirby->site();
 
@@ -407,11 +463,11 @@ class Report
 			$model = $model
 				->childrenAndDrafts()
 				->filter(
-					static fn ($page) => in_array($segment, array_map($page->slug(...), $languages), true)
+					static fn (Page $page) => in_array($segment, array_map($page->slug(...), $languages), true)
 				)
 				->first();
 
-			if ($model === null) {
+			if (!$model instanceof Page) {
 				return null;
 			}
 		}
@@ -425,13 +481,13 @@ class Report
 	 */
 	protected function isMedia(string $url): bool
 	{
-		$media = rtrim($this->kirby->url('media'), '/') . '/';
+		$media = rtrim((string)$this->kirby->url('media'), '/') . '/';
 
 		if (!str_starts_with($url, $media)) {
 			return false;
 		}
 
-		$segments = explode('/', rawurldecode(strtok(substr($url, strlen($media)), '?')));
+		$segments = explode('/', rawurldecode(explode('?', substr($url, strlen($media)), 2)[0]));
 		$filename = array_pop($segments);
 		// the hash of the file version
 		array_pop($segments);
@@ -457,19 +513,24 @@ class Report
 
 	protected function isStatic(string $path): bool
 	{
-		$root = realpath($this->kirby->root('index'));
+		$root = realpath((string)$this->kirby->root('index'));
+		if ($root === false) {
+			return false;
+		}
+
 		$file = realpath($root . '/' . rawurldecode(ltrim($path, '/')));
 
-		return $root !== false && $file !== false && is_file($file) && str_starts_with($file, $root . DIRECTORY_SEPARATOR);
+		return $file !== false && is_file($file) && str_starts_with($file, $root . DIRECTORY_SEPARATOR);
 	}
 
 	protected function hasRoute(string $path): bool
 	{
 		if ($this->router === null) {
+			/** @var list<array<string, mixed>>|Closure(App): list<array<string, mixed>> $config */
 			$config = $this->kirby->option('routes', []);
 			$routes = [
 				...$this->kirby->extensions('routes'),
-				...(is_callable($config) ? $config($this->kirby) : $config)
+				...($config instanceof Closure ? $config($this->kirby) : $config)
 			];
 
 			$this->router = new Router(array_filter($routes, static fn ($route) => isset($route['pattern'], $route['action'])));

@@ -6,6 +6,7 @@ use Closure;
 use CurlMultiHandle;
 use DOMDocument;
 use DOMElement;
+use DOMNodeList;
 use DOMXPath;
 use Kirby\Cms\App;
 use Kirby\Cms\Page;
@@ -17,6 +18,8 @@ use tobimori\Seo\Seo;
 
 /**
  * Extracts links and anchor IDs from rendered or fetched pages
+ *
+ * @psalm-type Result = array{status: int, location: string|null, error: string|null, links: list<string>, ids: list<int|string>}
  */
 class Crawler
 {
@@ -46,6 +49,8 @@ class Crawler
 	];
 
 	protected static bool $guarded = false;
+
+	/** @var array{key: string, onExit: Closure(string, int, string|null): void}|null */
 	protected static array|null $current = null;
 
 	/**
@@ -72,11 +77,11 @@ class Crawler
 			return false;
 		}
 
-		return $option === true || PHP_SAPI === 'cli' && preg_match('#^https?://#i', App::instance()->url()) === 1;
+		return $option === true || PHP_SAPI === 'cli' && preg_match('#^https?://#i', (string)App::instance()->url()) === 1;
 	}
 
 	/**
-	 * @return array{status: int, location: string|null, error: string|null, links: array<string>, ids: array<string>}
+	 * @return Result
 	 */
 	public function render(string $key, Page $page, string|null $language): array
 	{
@@ -90,15 +95,19 @@ class Crawler
 
 		try {
 			// as a visitor sees it: templates might show different content to logged-in users
+			/** @var string $html */
 			$html = $kirby->impersonate('nobody', static function () use ($kirby, $page, $language) {
 				$kirby->site()->visit($page, $language);
 				return $page->render(versionId: 'latest');
 			});
 
-			// the router answers with 404 for the error page
-			$code = $kirby->response()->code() ?? ($page->isErrorPage() ? 404 : 200);
+			/** @var int|null $code */
+			$code = $kirby->response()->code();
+			/** @var string|null $location */
+			$location = $kirby->response()->header('Location');
 
-			return static::result($code, $kirby->response()->header('Location'), $html, $url);
+			// the router answers with 404 for the error page
+			return static::result($code ?? ($page->isErrorPage() ? 404 : 200), $location, $html, $url);
 		} catch (Throwable $e) {
 			return [...static::result(500, null, '', $url), 'error' => $e->getMessage()];
 		} finally {
@@ -119,7 +128,7 @@ class Crawler
 
 	/**
 	 * @param array<string, string> $urls URLs of the pages by their key
-	 * @return array<string, array{status: int, location: string|null, error: string|null, links: array<string>, ids: array<string>}>
+	 * @return array<string, Result>
 	 */
 	public static function fetch(array $urls): array
 	{
@@ -153,9 +162,10 @@ class Crawler
 				$results[$key] = static::result(500, null, '', $urls[$key]);
 				$results[$key]['error'] = curl_error($handle) ?: 'connection';
 			} else {
+				$location = curl_getinfo($handle, CURLINFO_REDIRECT_URL);
 				$results[$key] = static::result(
 					status: $code,
-					location: curl_getinfo($handle, CURLINFO_REDIRECT_URL) ?: null,
+					location: is_string($location) && $location !== '' ? $location : null,
 					html: (string)curl_multi_getcontent($handle),
 					url: $urls[$key],
 					isHtml: str_contains((string)curl_getinfo($handle, CURLINFO_CONTENT_TYPE), 'html')
@@ -175,7 +185,7 @@ class Crawler
 	 */
 	public static function userAgent(): string
 	{
-		return 'Mozilla/5.0 (compatible; Kirby SEO link checker; +' . App::instance()->url() . ')';
+		return 'Mozilla/5.0 (compatible; Kirby SEO link checker; +' . (string)App::instance()->url() . ')';
 	}
 
 	public static function perform(CurlMultiHandle $multi): void
@@ -200,6 +210,8 @@ class Crawler
 
 	/**
 	 * Links & anchors of successful HTML responses, redirects and errors have none
+	 *
+	 * @return Result
 	 */
 	protected static function result(int $status, string|null $location, string $html, string $url, bool $isHtml = true): array
 	{
@@ -223,7 +235,9 @@ class Crawler
 		$language = $kirby->language()?->code();
 		$translation = $kirby->translation()->code();
 		$data = $kirby->data;
+		// the closures below run with `$this` bound to the site or Kirby with `call()`
 		$page = (fn () => $this->page ?? null)->call($site);
+		// @mago-expect analysis:undefined-variable(3),mixed-property-access(3)
 		$state = (fn () => [$this->request, $this->response, $this->path])->call($kirby);
 
 		$_GET = [];
@@ -234,6 +248,7 @@ class Crawler
 		$_COOKIE = [];
 
 		(function () use ($url) {
+			// @mago-expect analysis:undefined-variable,mixed-property-access
 			$this->request = new class(['method' => 'GET', 'url' => $url, 'query' => [], 'body' => [], 'files' => []]) extends Request {
 				// none of the headers of the current request, e.g. its cookies or referer
 				public function headers(): array
@@ -242,7 +257,9 @@ class Crawler
 				}
 			};
 			// templates might change the status code or headers
+			// @mago-expect analysis:undefined-variable,mixed-property-access
 			$this->response = new Responder();
+			// @mago-expect analysis:undefined-variable,mixed-property-access
 			$this->path = null;
 		})->call($kirby);
 
@@ -250,9 +267,11 @@ class Crawler
 			// @mago-expect lint:no-request-variable
 			[$_GET, $_POST, $_REQUEST, $_FILES, $_COOKIE] = $globals;
 			(function () use ($state) {
+				// @mago-expect analysis:undefined-variable(3),mixed-property-access(3),invalid-destructuring-source
 				[$this->request, $this->response, $this->path] = $state;
 			})->call($kirby);
 			(function () use ($page) {
+				// @mago-expect analysis:undefined-variable,mixed-property-access
 				$this->page = $page;
 			})->call($site);
 			$kirby->data = $data;
@@ -262,7 +281,9 @@ class Crawler
 	}
 
 	/**
-	 * @return array{links: array<string>, ids: array<string>}
+	 * Numeric IDs are integers, they are array keys
+	 *
+	 * @return array{links: list<string>, ids: list<int|string>}
 	 */
 	protected static function extract(string $html, string $url): array
 	{
@@ -272,11 +293,11 @@ class Crawler
 		@$document->loadHTML('<?xml encoding="UTF-8">' . $html, LIBXML_NOERROR | LIBXML_NOWARNING | LIBXML_NONET);
 		$xpath = new DOMXPath($document);
 
-		$base = $xpath->query('//base[@href]')->item(0);
-		$base = $base instanceof DOMElement ? static::resolve($base->getAttribute('href'), $url) ?? $url : $url;
+		$base = static::elements($xpath, '//base[@href]')[0] ?? null;
+		$base = $base !== null ? static::resolve($base->getAttribute('href'), $url) ?? $url : $url;
 		$links = [];
 
-		foreach ($xpath->query('//a[@href] | //area[@href]') as $element) {
+		foreach (static::elements($xpath, '//a[@href] | //area[@href]') as $element) {
 			if (!($href = static::resolve($element->getAttribute('href'), $base))) {
 				continue;
 			}
@@ -285,7 +306,7 @@ class Crawler
 		}
 
 		$ids = [];
-		foreach ($xpath->query('//*[@id] | //a[@name]') as $element) {
+		foreach (static::elements($xpath, '//*[@id] | //a[@name]') as $element) {
 			$ids[$element->getAttribute('id') ?: $element->getAttribute('name')] = true;
 		}
 
@@ -293,6 +314,26 @@ class Crawler
 			'links' => array_keys($links),
 			'ids' => array_keys($ids)
 		];
+	}
+
+	/**
+	 * @return list<DOMElement>
+	 */
+	protected static function elements(DOMXPath $xpath, string $expression): array
+	{
+		$nodes = $xpath->query($expression);
+		if (!$nodes instanceof DOMNodeList) {
+			return [];
+		}
+
+		$elements = [];
+		foreach ($nodes as $node) {
+			if ($node instanceof DOMElement) {
+				$elements[] = $node;
+			}
+		}
+
+		return $elements;
 	}
 
 	/**
@@ -320,7 +361,7 @@ class Crawler
 			str_starts_with($href, '#') => $origin . $path . $query . $href,
 			str_starts_with($href, '?') => $origin . $path . $href,
 			str_starts_with($href, '/') => $origin . static::normalizePath($href),
-			default => $origin . static::normalizePath(preg_replace('#[^/]*$#', '', $path) . $href)
+			default => $origin . static::normalizePath((string)preg_replace('#[^/]*$#', '', $path) . $href)
 		};
 	}
 
@@ -343,13 +384,14 @@ class Crawler
 			$path = substr($path, 0, -strlen($suffix));
 		}
 
+		/** @var list<string> $segments */
 		$segments = [];
 		foreach (explode('/', $path) as $segment) {
-			match ($segment) {
-				'.' => null,
-				'..' => array_pop($segments),
-				default => $segments[] = $segment
-			};
+			if ($segment === '..') {
+				array_pop($segments);
+			} elseif ($segment !== '.') {
+				$segments[] = $segment;
+			}
 		}
 
 		return '/' . ltrim(implode('/', $segments), '/') . $suffix;

@@ -13,17 +13,33 @@ use tobimori\Seo\Seo;
 
 /**
  * Coordinates page scans and external URL checks for the link audit
+ *
+ * @psalm-import-type Data from Index
+ * @psalm-import-type UrlResult from Index
+ * @psalm-import-type Result from Crawler
  */
 class Checker
 {
 	protected Index $index;
-	protected array|null $data = null;
+
+	/**
+	 * The index, read by a scan step or for the progress
+	 *
+	 * @var Data
+	 */
+	protected array $data;
+
+	/** @var array<string, string> */
 	protected array $fingerprints = [];
 
 	/**
 	 * Normalized scan target URLs, stored as array keys
+	 *
+	 * @var array<string, true>
 	 */
 	protected array $urls = [];
+
+	/** @var array<string, int>|null */
 	protected array|null $lookup = null;
 
 	public function __construct()
@@ -106,7 +122,7 @@ class Checker
 				}
 			}
 
-			unset($data['urls'][strtok($url, '#')]);
+			unset($data['urls'][Index::withoutFragment($url)]);
 
 			return $data;
 		});
@@ -114,11 +130,13 @@ class Checker
 
 	/**
 	 * Updates the index under an exclusive lock, waiting for any active scan step
+	 *
+	 * @param Closure(Data): Data $change
 	 */
 	protected function change(Closure $change): void
 	{
 		if (!$this->index->wait()) {
-			throw new Exception(message: I18n::translate('seo.links.busy'));
+			throw new Exception(message: I18n::template('seo.links.busy'));
 		}
 
 		try {
@@ -175,7 +193,7 @@ class Checker
 				}
 			}
 
-			while (microtime(true) < $deadline && ($urls = $this->dueUrls(Index::external($this->data), $this->data['invalidated']))) {
+			while (microtime(true) < $deadline && ($urls = $this->dueUrls(Index::external($this->data), $this->data['invalidated'])) !== []) {
 				$batch = array_slice($urls, 0, $concurrency * 2);
 				$this->data['urls'] = [...$this->data['urls'], ...static::request($batch)];
 			}
@@ -194,7 +212,7 @@ class Checker
 	public function progress(): array
 	{
 		// a step has the index in memory already, otherwise only its summary is read
-		$state = $this->data !== null ? Index::summarize($this->data) : $this->index->state();
+		$state = isset($this->data) ? Index::summarize($this->data) : $this->index->state();
 		$targets = $this->targets($state['invalidated']);
 
 		// pages that don't exist anymore (or have a new URL) mark the pages linking
@@ -273,6 +291,7 @@ class Checker
 	protected function targets(int $invalidated): array
 	{
 		$kirby = App::instance();
+		/** @var list<string|null> $languages */
 		$languages = $kirby->multilang() ? $kirby->languages()->codes() : [null];
 
 		// Site content can supply shared links, so changes must invalidate every page
@@ -311,6 +330,9 @@ class Checker
 		return ($this->data['pages'][$key]['fingerprint'] ?? null) === $this->fingerprints[$key];
 	}
 
+	/**
+	 * @param Result $result
+	 */
 	protected function store(string $key, Page $page, string|null $language, array $result): void
 	{
 		$this->data['pages'][$key] = [
@@ -335,7 +357,7 @@ class Checker
 		[$language, $id] = explode('/', $key, 2);
 		$page = App::instance()->page($id);
 
-		if ($this->data !== null && $page !== null) {
+		if (isset($this->data) && $page !== null) {
 			$this->store($key, $page, $language ?: null, [
 				'status' => $location && $code < 300 ? 302 : $code,
 				'location' => $location,
@@ -355,6 +377,9 @@ class Checker
 
 	/**
 	 * Maps URLs to IDs in the index's shared string table, adding new URLs as needed
+	 *
+	 * @param list<string> $urls
+	 * @return list<int>
 	 */
 	protected function intern(array $urls): array
 	{
@@ -374,6 +399,7 @@ class Checker
 	 * Returns external URLs whose checks have expired or predate the last invalidation
 	 *
 	 * @param array<string, int> $external Check times by URL, see `Index::external()`
+	 * @return list<string>
 	 */
 	protected function dueUrls(array $external, int $invalidated): array
 	{
@@ -386,7 +412,8 @@ class Checker
 	 * Checks external HTTP statuses without following redirects or downloading bodies.
 	 * Retries HEAD errors with GET and pins resolved public addresses to prevent DNS changes
 	 *
-	 * @return array<string, array{code: int, location: string|null, error: string|null, checked: int}>
+	 * @param list<string> $urls
+	 * @return array<string, UrlResult>
 	 */
 	protected static function request(array $urls): array
 	{
@@ -458,9 +485,10 @@ class Checker
 					default => 'connection'
 				};
 
+				$location = curl_getinfo($handle, CURLINFO_REDIRECT_URL);
 				$results[$url] = [
 					'code' => $code,
-					'location' => curl_getinfo($handle, CURLINFO_REDIRECT_URL) ?: null,
+					'location' => is_string($location) && $location !== '' ? $location : null,
 					'error' => $errorType,
 					'checked' => time()
 				];
@@ -490,8 +518,11 @@ class Checker
 		} else {
 			// @mago-expect lint:no-error-control-operator
 			// @mago-expect lint:no-error-control-operator
+			// @mago-expect analysis:less-specific-nested-argument-type
 			$addresses = @gethostbynamel($host) ?: array_column(@dns_get_record($host, DNS_AAAA) ?: [], 'ipv6');
 		}
+
+		/** @var list<string> $addresses */
 
 		if ($addresses === []) {
 			return false;
