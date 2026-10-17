@@ -3,6 +3,7 @@
 namespace tobimori\Seo\Sitemap;
 
 use DOMDocument;
+use DOMElement;
 use DOMNode;
 use Kirby\Exception\Exception;
 
@@ -13,12 +14,16 @@ class SitemapUrl
 	protected string $lastmod;
 	protected string $changefreq;
 	protected string $priority;
+	/** @var list<array<string, string>> */
 	protected array $alternates = [];
 
 	public function __construct(protected string $loc)
 	{
 	}
 
+	/**
+	 * @return ($url is null ? string : SitemapUrl)
+	 */
 	public function loc(string|null $url = null): SitemapUrl|string
 	{
 		if ($url === null) {
@@ -29,6 +34,9 @@ class SitemapUrl
 		return $this;
 	}
 
+	/**
+	 * @return ($lastmod is null ? string : SitemapUrl)
+	 */
 	public function lastmod(int|null $lastmod = null): SitemapUrl|string
 	{
 		if ($lastmod === null) {
@@ -39,6 +47,9 @@ class SitemapUrl
 		return $this;
 	}
 
+	/**
+	 * @return ($changefreq is null ? string : SitemapUrl)
+	 */
 	public function changefreq(string|null $changefreq = null): SitemapUrl|string
 	{
 		if ($changefreq === null) {
@@ -49,6 +60,9 @@ class SitemapUrl
 		return $this;
 	}
 
+	/**
+	 * @return ($priority is null ? string : SitemapUrl)
+	 */
 	public function priority(string|null $priority = null): SitemapUrl|string
 	{
 		if ($priority === null) {
@@ -59,6 +73,10 @@ class SitemapUrl
 		return $this;
 	}
 
+	/**
+	 * @param list<array<string, string>> $alternates
+	 * @return ($alternates is array{} ? list<array<string, string>> : SitemapUrl)
+	 */
 	public function alternates(array $alternates = []): SitemapUrl|array
 	{
 		if (empty($alternates)) {
@@ -81,6 +99,7 @@ class SitemapUrl
 	{
 		$doc->formatOutput = true;
 
+		/** @var DOMElement $node */
 		$node = $doc->createElement('url');
 
 		foreach (['loc', 'lastmod', 'changefreq', 'priority'] as $key) {
@@ -89,12 +108,14 @@ class SitemapUrl
 			}
 
 			// the value of `createElement()` is not escaped, a `&` would start an entity
+			/** @var DOMElement $element */
 			$element = $doc->createElement($key);
 			$element->textContent = $this->$key;
 			$node->appendChild($element);
 		}
 
 		foreach ($this->alternates as $alternate) {
+			/** @var DOMElement $alternateNode */
 			$alternateNode = $doc->createElement('xhtml:link');
 			foreach ($alternate as $key => $value) {
 				$alternateNode->setAttribute($key, $value);

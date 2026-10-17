@@ -1,25 +1,23 @@
 <?php
 
 use Kirby\Cms\App;
+use Kirby\Cms\Page;
+use Kirby\Cms\Pages;
 use tobimori\Seo\Meta;
+use tobimori\Seo\Seo;
 use tobimori\Seo\Sitemap\SitemapIndex;
 
 return function (SitemapIndex $sitemap) {
-	$exclude = App::instance()->option('tobimori.seo.sitemap.excludeTemplates', []);
+	$exclude = Seo::option('sitemap.excludeTemplates');
 	$pages = App::instance()
 		->site()
 		->index()
-		->filter(fn ($page) => !in_array($page->intendedTemplate()->name(), $exclude, true));
+		->filter(fn (Page $page) => !in_array($page->intendedTemplate()->name(), $exclude, true));
 
-	if ($group = App::instance()->option('tobimori.seo.sitemap.groupByTemplate')) {
-		$pages = $pages->group('intendedTemplate');
-	}
+	/** @var iterable<string, Pages> $groups */
+	$groups = Seo::option('sitemap.groupByTemplate') ? $pages->group('intendedTemplate') : ['pages' => $pages];
 
-	if (is_a($pages->first(), 'Kirby\Cms\Page')) {
-		$pages = $pages->group(fn () => 'pages');
-	}
-
-	foreach ($pages as $group) {
+	foreach ($groups as $key => $group) {
 		$index = null;
 
 		foreach ($group as $page) {
@@ -55,13 +53,13 @@ return function (SitemapIndex $sitemap) {
 				$alternates[] = ['rel' => 'alternate', 'hreflang' => 'x-default', 'href' => $page->indexUrl()];
 			}
 
-			$index ??= $sitemap->create($group ? $group->first()->intendedTemplate()->name() : 'pages');
+			$index ??= $sitemap->create($key);
 			foreach ($urls as [$loc, $languageCode]) {
 				$url = $index
 					->createUrl($loc)
-					->lastmod($page->modified(languageCode: $languageCode) ?? time())
-					->changefreq(is_callable($changefreq = App::instance()->option('tobimori.seo.sitemap.changefreq')) ? $changefreq($page) : $changefreq)
-					->priority(is_callable($priority = App::instance()->option('tobimori.seo.sitemap.priority')) ? $priority($page) : $priority);
+					->lastmod((int)($page->modified(languageCode: $languageCode) ?: time()))
+					->changefreq(Seo::option('sitemap.changefreq', args: [$page]))
+					->priority((string)Seo::option('sitemap.priority', args: [$page]));
 
 				if (count($alternates) > 1) {
 					$url->alternates($alternates);

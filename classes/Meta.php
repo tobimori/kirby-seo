@@ -712,6 +712,8 @@ class Meta
 
 	/**
 	 * Gets the canonical url for the page
+	 *
+	 * @return string
 	 */
 	public function canonicalUrl(Language|null $lang = null)
 	{

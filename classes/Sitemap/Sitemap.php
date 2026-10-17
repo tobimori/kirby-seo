@@ -3,6 +3,8 @@
 namespace tobimori\Seo\Sitemap;
 
 use DOMDocument;
+use DOMElement;
+use DOMProcessingInstruction;
 use Kirby\Cms\App;
 use Kirby\Exception\Exception;
 use Kirby\Toolkit\Collection;
@@ -36,7 +38,7 @@ class Sitemap extends Collection
 	{
 		$lastmod = 0;
 		foreach ($this as $url) {
-			$lastmod = max($lastmod, strtotime($url->lastmod()));
+			$lastmod = max($lastmod, strtotime($url->lastmod()) ?: 0);
 		}
 
 		if ($lastmod > 0) {
@@ -58,14 +60,23 @@ class Sitemap extends Collection
 		return new SitemapUrl($url);
 	}
 
+	/**
+	 * @return DOMElement
+	 */
 	public function toDOMNode(DOMDocument $doc = new DOMDocument('1.0', 'UTF-8'))
 	{
 		$doc->formatOutput = true;
 
+		/** @var DOMElement $root */
 		$root = $doc->createElement('sitemap');
-		foreach (['loc', 'lastmod'] as $key) {
-			$root->appendChild($doc->createElement($key, $this->$key()));
-		}
+
+		/** @var DOMElement $loc */
+		$loc = $doc->createElement('loc', $this->loc());
+		$root->appendChild($loc);
+
+		/** @var DOMElement $lastmod */
+		$lastmod = $doc->createElement('lastmod', $this->lastmod());
+		$root->appendChild($lastmod);
 
 		return $root;
 	}
@@ -78,15 +89,21 @@ class Sitemap extends Collection
 	/**
 	 * Renders a sitemap document with the stylesheet and the
 	 * DOM nodes of the given items in the root element
+	 *
+	 * @param iterable<Sitemap|SitemapUrl> $items
 	 */
 	public static function toXml(string $root, iterable $items): string
 	{
 		$doc = new DOMDocument('1.0', 'UTF-8');
 		$doc->formatOutput = true;
 
-		$stylesheetUrl = App::instance()->url() . '/sitemap.xsl';
-		$doc->appendChild($doc->createProcessingInstruction('xml-stylesheet', 'type="text/xsl" href="' . $stylesheetUrl . '"'));
+		$stylesheetUrl = (string)App::instance()->url() . '/sitemap.xsl';
 
+		/** @var DOMProcessingInstruction $stylesheet */
+		$stylesheet = $doc->createProcessingInstruction('xml-stylesheet', 'type="text/xsl" href="' . $stylesheetUrl . '"');
+		$doc->appendChild($stylesheet);
+
+		/** @var DOMElement $element */
 		$element = $doc->createElementNS('http://www.sitemaps.org/schemas/sitemap/0.9', $root);
 		$element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xhtml', 'http://www.w3.org/1999/xhtml');
 

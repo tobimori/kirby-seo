@@ -4,20 +4,23 @@ namespace tobimori\Seo\Sitemap;
 
 use Kirby\Cms\App;
 use Kirby\Cms\Page;
+use Kirby\Content\Field;
 use Kirby\Exception\NotFoundException;
 use Kirby\Toolkit\Collection;
 
 /**
  * @extends \Kirby\Toolkit\Collection<\tobimori\Seo\Sitemap\Sitemap>
+ * @consistent-constructor
  */
 class SitemapIndex extends Collection
 {
+	/** @var static|null */
 	protected static $instance = null;
 
-	public static function instance(...$args): static
+	public static function instance(): static
 	{
 		if (static::$instance === null) {
-			static::$instance = new static(...$args);
+			static::$instance = new static();
 		}
 
 		return static::$instance;
@@ -79,15 +82,21 @@ class SitemapIndex extends Collection
 			$this->create();
 		}
 
-		if (($index = $page->content()->get('index'))->isEmpty()) {
+		/** @var Field $field */
+		$field = $page->content()->get('index');
+		$index = $field->toString();
+
+		if ($index === '') {
 			// If there is only one index, we do not need to render the index page
+			// @mago-expect analysis:possible-method-access-on-null
 			return $this->count() > 1 ? $this->toString() : $this->first()->toString();
 		}
 
-		if (!$this->isValidIndex($index->value())) {
-			throw new NotFoundException("[Kirby SEO] Sitemap index '{$index->value()}' does not exist");
+		$sitemap = $this->count() > 1 ? $this->findBy('key', $index) : null;
+		if ($sitemap === null) {
+			throw new NotFoundException("[Kirby SEO] Sitemap index '{$index}' does not exist");
 		}
 
-		return $this->findBy('key', $index->value())->toString();
+		return $sitemap->toString();
 	}
 }
