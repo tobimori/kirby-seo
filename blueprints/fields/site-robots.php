@@ -1,6 +1,7 @@
 <?php
 
 use Kirby\Cms\App;
+use Kirby\Toolkit\I18n;
 use tobimori\Seo\Seo;
 
 return function (App $kirby) {
@@ -28,9 +29,9 @@ return function (App $kirby) {
 			'default' => 'default',
 			'reset' => false,
 			'options' => [
-				'default' => t('seo.common.default') . ' ' . ($index ? t('seo.common.yes') : t('seo.common.no')),
-				'true' => t('seo.common.yes'),
-				'false' => t('seo.common.no')
+				'default' => I18n::translate('seo.common.default') . ' ' . ($index ? I18n::translate('seo.common.yes') : I18n::translate('seo.common.no')),
+				'true' => I18n::translate('seo.common.yes'),
+				'false' => I18n::translate('seo.common.no')
 			]
 		];
 	}

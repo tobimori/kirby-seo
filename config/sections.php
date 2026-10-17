@@ -5,6 +5,7 @@ use Kirby\Cms\Page;
 use Kirby\Cms\Section;
 use Kirby\Cms\Site;
 use Kirby\Toolkit\A;
+use Kirby\Toolkit\I18n;
 use Kirby\Toolkit\Str;
 use tobimori\Seo\License;
 use tobimori\Seo\Seo;
@@ -13,9 +14,9 @@ return [
 	'seo-preview' => [
 		'mixins' => ['headline'],
 		'computed' => [
-			'options' => fn () => A::map(option('tobimori.seo.previews'), fn ($item) => [
+			'options' => fn () => A::map(App::instance()->option('tobimori.seo.previews'), fn ($item) => [
 				'value' => $item,
-				'text' => t("seo.sections.preview.{$item}")
+				'text' => I18n::translate("seo.sections.preview.{$item}")
 			]),
 			'meta' => function () {
 				/** @var Section $this */
@@ -134,8 +135,8 @@ return [
 					return [];
 				}
 
-				$metric = kirby()->request()->get('metric', 'clicks');
-				$limit = (int)kirby()->request()->get('limit', 10);
+				$metric = App::instance()->request()->get('metric', 'clicks');
+				$limit = (int)App::instance()->request()->get('limit', 10);
 				$asc = in_array($metric, ['position', 'query'], true);
 
 				try {

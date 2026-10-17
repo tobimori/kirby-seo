@@ -5,6 +5,7 @@ namespace tobimori\Seo;
 use Exception;
 use Kirby\Cms\App;
 use Kirby\Cms\Page;
+use Kirby\Cms\Url;
 use Kirby\Http\Remote;
 use Kirby\Toolkit\Str;
 
@@ -254,7 +255,7 @@ class IndexNow
 		// specific urls
 		if (isset($rule['urls'])) {
 			foreach ($rule['urls'] as $url) {
-				$this->urls[] = url($url);
+				$this->urls[] = Url::to($url);
 			}
 		}
 

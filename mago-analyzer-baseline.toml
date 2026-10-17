@@ -98,18 +98,6 @@ count = 1
 
 [[issues]]
 file = "classes/Ai.php"
-code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #1 of `trim`: expected `string`, but possibly received `Kirby\Template\Snippet|null|string`.'
-count = 1
-
-[[issues]]
-file = "classes/Ai.php"
-code = "possibly-null-argument"
-message = "Argument #1 of function `trim` is possibly `null`, but parameter type `string` does not accept it."
-count = 1
-
-[[issues]]
-file = "classes/Ai.php"
 code = "unsafe-instantiation"
 message = 'Unsafe `new $class_name`: constructor of `tobimori\Seo\Ai\Driver` is not final and its signature might change in child classes, potentially leading to runtime errors.'
 count = 1
@@ -1441,18 +1429,6 @@ message = "Left operand in arithmetic operation might be `false` (type `false|no
 count = 1
 
 [[issues]]
-file = "classes/Field/AltTextField.php"
-code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #1 of `trim`: expected `string`, but possibly received `Kirby\Template\Snippet|null|string`.'
-count = 2
-
-[[issues]]
-file = "classes/Field/AltTextField.php"
-code = "possibly-null-argument"
-message = "Argument #1 of function `trim` is possibly `null`, but parameter type `string` does not accept it."
-count = 2
-
-[[issues]]
 file = "classes/GoogleSearchConsole.php"
 code = "mixed-argument"
 message = "Invalid argument type for argument #1 of `Exception::__construct`: expected `string`, but found `mixed`."
@@ -1617,6 +1593,12 @@ count = 2
 [[issues]]
 file = "classes/IndexNow.php"
 code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `Kirby\Cms\Url::to`: expected `null|string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "classes/IndexNow.php"
+code = "mixed-argument"
 message = "Invalid argument type for argument #1 of `parse_url`: expected `string`, but found `mixed`."
 count = 2
 
@@ -1648,12 +1630,6 @@ count = 2
 file = "classes/IndexNow.php"
 code = "mixed-argument"
 message = 'Invalid argument type for argument #1 of `tobimori\Seo\IndexNow::matchesPattern`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "classes/IndexNow.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `url`: expected `null|string`, but found `mixed`."
 count = 1
 
 [[issues]]
@@ -3266,12 +3242,6 @@ count = 1
 
 [[issues]]
 file = "config/routes.php"
-code = "less-specific-nested-argument-type"
-message = "Argument type mismatch for argument #1 of `go`: expected `(callable(...mixed=): mixed)`, but provided type `string` is less specific."
-count = 2
-
-[[issues]]
-file = "config/routes.php"
 code = "mixed-argument"
 message = 'Invalid argument type for argument #1 of `Kirby\Cms\AppTranslations::setCurrentTranslation`: expected `null|string`, but found `mixed`.'
 count = 1
@@ -3279,13 +3249,13 @@ count = 1
 [[issues]]
 file = "config/routes.php"
 code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `go`: expected `(callable(...mixed=): mixed)`, but found `mixed`."
+message = 'Invalid argument type for argument #1 of `Kirby\Http\Response::go`: expected `string`, but found `mixed`.'
 count = 1
 
 [[issues]]
 file = "config/routes.php"
 code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `go`: expected `(callable(...mixed=): mixed)`, but found `nonnull`."
+message = 'Invalid argument type for argument #1 of `Kirby\Http\Response::go`: expected `string`, but found `nonnull`.'
 count = 1
 
 [[issues]]
@@ -3296,27 +3266,9 @@ count = 2
 
 [[issues]]
 file = "config/routes.php"
-code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #1 of `Kirby\Http\Response::__construct`: expected `array<array-key, mixed>|string`, but possibly received `Kirby\Template\Snippet|null|string`.'
-count = 1
-
-[[issues]]
-file = "config/routes.php"
-code = "possibly-invalid-argument"
-message = "Possible argument type mismatch for argument #1 of `go`: expected `(callable(...mixed=): mixed)`, but possibly received `string('/sitemap.xml')`."
-count = 1
-
-[[issues]]
-file = "config/routes.php"
 code = "possibly-null-argument"
 message = "Argument #1 of function `rtrim` is possibly `null`, but parameter type `string` does not accept it."
 count = 2
-
-[[issues]]
-file = "config/routes.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `Kirby\Http\Response::__construct` is possibly `null`, but parameter type `array<array-key, mixed>|string` does not accept it.'
-count = 1
 
 [[issues]]
 file = "config/routes.php"
@@ -3653,12 +3605,6 @@ file = "templates/llms.txt.php"
 code = "possibly-null-operand"
 message = "Possibly null right operand used in string concatenation (type `null|string`)."
 count = 2
-
-[[issues]]
-file = "templates/sitemap.php"
-code = "less-specific-nested-argument-type"
-message = "Argument type mismatch for argument #1 of `go`: expected `(callable(...mixed=): mixed)`, but provided type `truthy-string` is less specific."
-count = 1
 
 [[issues]]
 file = "templates/sitemap.xsl.php"

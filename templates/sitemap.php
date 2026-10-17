@@ -1,7 +1,9 @@
 <?php
 
+use Kirby\Http\Response;
+
 /**
  * @var \Kirby\Cms\Page $page
  */
 
-go($page->url() . '.xml');
+Response::go($page->url() . '.xml');

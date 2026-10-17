@@ -1,5 +1,6 @@
 <?php
 
+use Kirby\Cms\App;
 use Kirby\Toolkit\A;
 use tobimori\Seo\Seo;
 
@@ -41,7 +42,7 @@ if ($content = Seo::option('robots.content')) {
 if (($sitemap = Seo::option('robots.sitemap')) || ($sitemapModule = Seo::option('sitemap.active'))) {
 	// Use default sitemap if none is set
 	if (!$sitemap && $sitemapModule) {
-		$sitemap = site()->canonicalFor('/sitemap.xml', true);
+		$sitemap = App::instance()->site()->canonicalFor('/sitemap.xml', true);
 	}
 
 	// Check again, so falsy values can't be used

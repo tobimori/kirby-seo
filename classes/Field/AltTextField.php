@@ -158,7 +158,7 @@ class AltTextField extends FieldClass
 				'kirby' => $kirby
 			];
 
-			$prompt = trim(snippet(
+			$prompt = trim(App::instance()->snippet(
 				'seo/prompts/tasks/alt-text',
 				[
 					'file' => $file,
@@ -228,7 +228,7 @@ class AltTextField extends FieldClass
 			? $languages->pluck('code')
 			: [];
 
-		$prompt = trim(snippet(
+		$prompt = trim(App::instance()->snippet(
 			'seo/prompts/tasks/alt-text',
 			[
 				'file' => $file,

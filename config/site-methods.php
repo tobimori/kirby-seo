@@ -1,7 +1,8 @@
 <?php
 
+use Kirby\Cms\App;
 use Kirby\Cms\Site;
-use Kirby\Http\Url;
+use Kirby\Cms\Url;
 use Kirby\Toolkit\Str;
 use tobimori\Seo\Seo;
 
@@ -18,8 +19,8 @@ return [
 		$base = Seo::option('canonical.base', Seo::option('canonicalBase'));
 		if (!is_string($base) || $base === '') {
 			// If useRootUrl is true or this is a multilang site requesting root URL, use kirby()->url()
-			if ($useRootUrl && kirby()->multilang()) {
-				$base = (string)kirby()->url();
+			if ($useRootUrl && App::instance()->multilang()) {
+				$base = (string)App::instance()->url();
 			} else {
 				$base = $this->url($languageCode);
 			}
@@ -29,7 +30,7 @@ return [
 			$canonicalUrl = $url;
 		} else {
 			$path = Url::path($url);
-			$canonicalUrl = url($base . '/' . $path);
+			$canonicalUrl = Url::to($base . '/' . $path);
 		}
 
 		$trailingSlash = Seo::option('canonical.trailingSlash', false);

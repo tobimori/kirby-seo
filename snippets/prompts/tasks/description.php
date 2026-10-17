@@ -1,5 +1,7 @@
 <?php
 
+use Kirby\Cms\App;
+
 /**
  * @var \Kirby\Cms\Page $page
  * @var \Kirby\Cms\Site $site
@@ -9,10 +11,14 @@
 
 $meta = $page->metadata();
 
-snippet('seo/prompts/introduction', [
-	'instructions' => $instructions ?? null,
-	'edit' => $edit ?? null
-]); ?>
+App::instance()->snippet(
+	'seo/prompts/introduction',
+	[
+		'instructions' => $instructions ?? null,
+		'edit' => $edit ?? null
+	],
+	return: false
+); ?>
 
 <task>
 	Create a useful meta description for this page called <page-title><?= $page->title()->value() ?></page-title>. <?php if ($page->isHomePage()): ?>This page is the homepage of the website.<?php endif ?>
@@ -22,5 +28,5 @@ snippet('seo/prompts/introduction', [
 	You'll receive the content of the page as well as any meta tags that are already set below.
 </task>
 
-<?php snippet('seo/prompts/meta', ['currentField' => 'metaDescription']);
-snippet('seo/prompts/content');
+<?php App::instance()->snippet('seo/prompts/meta', ['currentField' => 'metaDescription'], return: false);
+App::instance()->snippet('seo/prompts/content', return: false);

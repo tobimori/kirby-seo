@@ -1,13 +1,17 @@
 <?php
 
+use Kirby\Cms\App;
 use tobimori\Seo\Meta;
 use tobimori\Seo\Sitemap\SitemapIndex;
 
 return function (SitemapIndex $sitemap) {
-	$exclude = option('tobimori.seo.sitemap.excludeTemplates', []);
-	$pages = site()->index()->filter(fn ($page) => !in_array($page->intendedTemplate()->name(), $exclude, true));
+	$exclude = App::instance()->option('tobimori.seo.sitemap.excludeTemplates', []);
+	$pages = App::instance()
+		->site()
+		->index()
+		->filter(fn ($page) => !in_array($page->intendedTemplate()->name(), $exclude, true));
 
-	if ($group = option('tobimori.seo.sitemap.groupByTemplate')) {
+	if ($group = App::instance()->option('tobimori.seo.sitemap.groupByTemplate')) {
 		$pages = $pages->group('intendedTemplate');
 	}
 
@@ -21,7 +25,7 @@ return function (SitemapIndex $sitemap) {
 		foreach ($group as $page) {
 			$urls = [];
 			$alternates = [];
-			foreach (kirby()->multilang() ? kirby()->languages() : [null] as $language) {
+			foreach (App::instance()->multilang() ? App::instance()->languages() : [null] as $language) {
 				// only if this language is translated for this page and exists
 				if ($language && !$page->translation($language->code())->exists()) {
 					continue;
@@ -56,8 +60,8 @@ return function (SitemapIndex $sitemap) {
 				$url = $index
 					->createUrl($loc)
 					->lastmod($page->modified(languageCode: $languageCode) ?? time())
-					->changefreq(is_callable($changefreq = option('tobimori.seo.sitemap.changefreq')) ? $changefreq($page) : $changefreq)
-					->priority(is_callable($priority = option('tobimori.seo.sitemap.priority')) ? $priority($page) : $priority);
+					->changefreq(is_callable($changefreq = App::instance()->option('tobimori.seo.sitemap.changefreq')) ? $changefreq($page) : $changefreq)
+					->priority(is_callable($priority = App::instance()->option('tobimori.seo.sitemap.priority')) ? $priority($page) : $priority);
 
 				if (count($alternates) > 1) {
 					$url->alternates($alternates);

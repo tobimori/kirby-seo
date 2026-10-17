@@ -108,7 +108,7 @@ return [
 			return;
 		}
 
-		if (option('tobimori.seo.generateSchema')) {
+		if (App::instance()->option('tobimori.seo.generateSchema')) {
 			$meta = $page->metadata();
 			$page
 				->schema('WebSite')
@@ -127,7 +127,7 @@ return [
 		$isMarkdownPath = Str::endsWith(Str::lower($path), '.md');
 		if ($isMarkdownPath) {
 			$markdownPath = Str::substr($path, 0, -3);
-			$resolved = kirby()->resolve($markdownPath === '' ? null : $markdownPath, kirby()->languageCode());
+			$resolved = App::instance()->resolve($markdownPath === '' ? null : $markdownPath, App::instance()->languageCode());
 			if ($resolved instanceof Page) {
 				$result = $resolved;
 			}
@@ -137,7 +137,7 @@ return [
 			return $result;
 		}
 
-		$page = $result instanceof Page ? $result : kirby()->site()->errorPage();
+		$page = $result instanceof Page ? $result : App::instance()->site()->errorPage();
 		if ($page === null) {
 			return $result;
 		}
@@ -151,11 +151,11 @@ return [
 
 		$wantsMarkdown =
 			$isMarkdownPath ||
-			$llmContent->prefersMarkdown(kirby()->request()->header('Accept'));
+			$llmContent->prefersMarkdown(App::instance()->request()->header('Accept'));
 
 		if ($result instanceof Page) {
 			if ($wantsMarkdown) {
-				return $llmContent->markdownResponse(kirby()->language(), $method) ?? $result;
+				return $llmContent->markdownResponse(App::instance()->language(), $method) ?? $result;
 			}
 
 			if ($llmContent->available()) {
@@ -166,7 +166,7 @@ return [
 		}
 
 		return $wantsMarkdown
-			? $llmContent->notFoundResponse(kirby()->language(), $method)
+			? $llmContent->notFoundResponse(App::instance()->language(), $method)
 			: $result;
 	}
 ];

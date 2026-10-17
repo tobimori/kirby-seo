@@ -6,6 +6,7 @@ use Kirby\Data\Json;
 use Kirby\Exception\NotFoundException;
 use Kirby\Http\Response;
 use Kirby\Http\Route;
+use Kirby\Toolkit\I18n;
 use tobimori\Seo\Seo;
 
 /**
@@ -45,7 +46,7 @@ $sitemapPage = fn (string|null $index = null) => Page::factory([
 	'template' => 'sitemap',
 	'model' => 'sitemap',
 	'content' => [
-		'title' => t('seo.sitemap.title'),
+		'title' => I18n::translate('seo.sitemap.title'),
 		'index' => $index
 	]
 ]);
@@ -91,7 +92,7 @@ return [
 		'action' => function () {
 			/** @var Route $this */
 			if (Seo::option('robots.active')) {
-				$content = snippet('seo/robots.txt', [], true);
+				$content = App::instance()->snippet('seo/robots.txt', [], true);
 				return new Response($content, 'text/plain', 200);
 			}
 
@@ -109,7 +110,7 @@ return [
 				$this->next();
 			}
 
-			go('/sitemap.xml');
+			Response::go('/sitemap.xml');
 		}
 	],
 	...$methodRoutes('sitemap', 'GET, HEAD', 'sitemap.active'),
@@ -123,8 +124,8 @@ return [
 				$this->next();
 			}
 
-			kirby()->response()->type('text/xsl');
-			kirby()->setCurrentTranslation(Seo::option('sitemap.locale', 'en'));
+			App::instance()->response()->type('text/xsl');
+			App::instance()->setCurrentTranslation(Seo::option('sitemap.locale', 'en'));
 
 			return $sitemapPage()->render(contentType: 'xsl');
 		}
@@ -171,7 +172,7 @@ return [
 		'action' => function () {
 			$kirby = App::instance();
 			if (!$kirby->user() || !Seo::option('searchConsole.enabled') || !Seo::option('components.gsc')::hasCredentials()) {
-				go($kirby->site()->panel()->url());
+				Response::go($kirby->site()->panel()->url());
 			}
 
 			$return = $kirby->request()->get('return') ?? $kirby->site()->panel()->url();
@@ -181,7 +182,7 @@ return [
 			]));
 
 			$redirectUri = rtrim($kirby->url(), '/') . '/__seo/gsc/callback';
-			go(Seo::option('components.gsc')::authUrl($redirectUri, $state));
+			Response::go(Seo::option('components.gsc')::authUrl($redirectUri, $state));
 		}
 	],
 	[
@@ -190,7 +191,7 @@ return [
 		'action' => function () {
 			$kirby = App::instance();
 			if (!$kirby->user()) {
-				go($kirby->site()->panel()->url());
+				Response::go($kirby->site()->panel()->url());
 			}
 
 			$request = $kirby->request();
@@ -212,7 +213,7 @@ return [
 
 			// redirect back to where the user came from
 			$return = $state['return'] ?? $kirby->site()->panel()->url();
-			go($return);
+			Response::go($return);
 		}
 	]
 ];

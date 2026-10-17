@@ -1,5 +1,7 @@
 <?php
 
+use Kirby\Cms\App;
+
 /**
  * @var \Kirby\Cms\Page $page
  * @var \Kirby\Cms\Site $site
@@ -7,10 +9,14 @@
  * @var string|null $edit
  */
 
-snippet('seo/prompts/introduction', [
-	'instructions' => $instructions ?? null,
-	'edit' => $edit ?? null
-]); ?>
+App::instance()->snippet(
+	'seo/prompts/introduction',
+	[
+		'instructions' => $instructions ?? null,
+		'edit' => $edit ?? null
+	],
+	return: false
+); ?>
 
 <task>
 	Create a useful GLOBAL meta description for this site <site-title><?= $site->title()->value() ?>.</site-title>
@@ -22,5 +28,5 @@ snippet('seo/prompts/introduction', [
 	You'll receive the content of the home page as well as any meta tags that are already set below.
 </task>
 
-<?php snippet('seo/prompts/site-meta', ['currentField' => 'metaDescription']);
-snippet('seo/prompts/content');
+<?php App::instance()->snippet('seo/prompts/site-meta', ['currentField' => 'metaDescription'], return: false);
+App::instance()->snippet('seo/prompts/content', return: false);
