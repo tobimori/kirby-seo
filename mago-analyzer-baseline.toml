@@ -81,12 +81,6 @@ count = 1
 [[issues]]
 file = "classes/Ai/SseStream.php"
 code = "invalid-argument"
-message = 'Invalid argument type for argument #2 of `Kirby\Exception\Exception::__construct`: expected `null|string`, but found `int`.'
-count = 1
-
-[[issues]]
-file = "classes/Ai/SseStream.php"
-code = "invalid-argument"
 message = "Invalid argument type for argument #3 of `substr`: expected `int|null`, but found `string`."
 count = 1
 

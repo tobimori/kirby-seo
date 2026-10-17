@@ -93,7 +93,7 @@ final class SseStream
 
 			$errno = curl_errno($handle);
 			if ($errno) {
-				throw new KirbyException(curl_error($handle) ?: 'Streaming request failed.', $errno);
+				throw new KirbyException(curl_error($handle) ?: "Streaming request failed (cURL error {$errno}).");
 			}
 
 			$code = curl_getinfo($handle, CURLINFO_HTTP_CODE);
