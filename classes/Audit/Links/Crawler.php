@@ -307,7 +307,8 @@ class Crawler
 
 		$ids = [];
 		foreach (static::elements($xpath, '//*[@id] | //a[@name]') as $element) {
-			$ids[$element->getAttribute('id') ?: $element->getAttribute('name')] = true;
+			$id = $element->getAttribute('id');
+			$ids[$id !== '' ? $id : $element->getAttribute('name')] = true;
 		}
 
 		return [
