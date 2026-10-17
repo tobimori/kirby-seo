@@ -367,18 +367,6 @@ message = "Cannot perform array access on possibly `null` value."
 count = 1
 
 [[issues]]
-file = "classes/Views/EditableOverviewView.php"
-code = "less-specific-argument"
-message = 'Argument type mismatch for argument #1 of `tobimori\Seo\Views\EditableOverviewView::find`: expected `string`, but provided type `array-key` is less specific.'
-count = 2
-
-[[issues]]
-file = "classes/Views/EditableOverviewView.php"
-code = "less-specific-argument"
-message = 'Argument type mismatch for argument #1 of `tobimori\Seo\Views\EditableOverviewView::notFound`: expected `string`, but provided type `array-key` is less specific.'
-count = 1
-
-[[issues]]
 file = "config/api.php"
 code = "invalid-type-cast"
 message = "Casting `mixed` to `array`."

@@ -178,6 +178,9 @@ abstract class EditableOverviewView extends OverviewView
 		$errors = [];
 
 		foreach ($input as $id => $columns) {
+			// numeric ids, e.g. of the page `2024`, are integer keys
+			$id = (string)$id;
+
 			try {
 				$entry = $this->find($id) ?? throw $this->notFound($id);
 
@@ -193,7 +196,7 @@ abstract class EditableOverviewView extends OverviewView
 		}
 
 		return [
-			...$this->rows(array_keys($input)),
+			...$this->rows(array_map(strval(...), array_keys($input))),
 			'errors' => $errors
 		];
 	}
