@@ -62,6 +62,7 @@ final class License extends KirbyLicense
 	// minutes to wait before the next reissue attempt after a failure
 	private const REISSUE_BACKOFF = [5, 60, 180, 720, 1440];
 
+	/** @var array<array-key, mixed>|null */
 	private array|null $data;
 
 	// whether the license is from the manual license file
@@ -84,6 +85,7 @@ final class License extends KirbyLicense
 		$this->status = new LicenseStatus(
 			value: $status->value(),
 			icon: $state === 'missing' ? $status->icon() : 'alert',
+			// @mago-expect analysis:possibly-invalid-argument,possibly-null-argument
 			label: $state === 'missing' ? $status->label() : I18n::translate("seo.license.status.{$state}"),
 			theme: $state === 'missing' ? $status->theme() : 'negative',
 			dialog: 'seo/activate'
@@ -103,6 +105,8 @@ final class License extends KirbyLicense
 	public function state(): string
 	{
 		return match (true) {
+			// a valid license has a license key
+			// @mago-expect analysis:mixed-argument,possibly-null-array-access
 			$this->isValid() => static::requiresEnterprise() && !static::isEnterprise($this->data['license']) ? 'enterprise' : 'active',
 			($this->data['revoked'] ?? false) === true => 'revoked',
 			$this->data !== null && static::isSigned($this->data) => 'expired',
@@ -131,9 +135,9 @@ final class License extends KirbyLicense
 	 */
 	public static function normalizeUrl(string $url): string
 	{
-		$url = rtrim(preg_replace('#^https?://#', '', Str::lower(trim($url))), '/');
+		$url = rtrim((string)preg_replace('#^https?://#', '', Str::lower(trim($url))), '/');
 
-		return str_contains($url, '/') ? $url : preg_replace('/^(?:www|dev|test|staging)\./', '', $url);
+		return str_contains($url, '/') ? $url : (string)preg_replace('/^(?:www|dev|test|staging)\./', '', $url);
 	}
 
 	/**
@@ -142,10 +146,12 @@ final class License extends KirbyLicense
 	public static function activate(string $email, string $license): void
 	{
 		if (!static::isOwn(['license' => $license])) {
+			// @mago-expect analysis:possibly-invalid-argument,possibly-null-argument
 			throw new InvalidArgumentException(I18n::translate('seo.license.error.plugin'));
 		}
 
 		if (static::requiresEnterprise() && !static::isEnterprise($license)) {
+			// @mago-expect analysis:possibly-invalid-argument,possibly-null-argument
 			throw new InvalidArgumentException(I18n::translate('seo.license.error.enterprise'));
 		}
 
@@ -157,11 +163,13 @@ final class License extends KirbyLicense
 				'expires' => true
 			]);
 		} catch (Throwable) {
+			// @mago-expect analysis:possibly-invalid-argument,possibly-null-argument
 			throw new InvalidArgumentException(I18n::translate('seo.license.error.server'));
 		}
 
 		$data = $response->code() === 200 ? $response->json() : null;
 		if (!is_array($data)) {
+			// @mago-expect analysis:possibly-invalid-argument,possibly-null-argument
 			throw new InvalidArgumentException(I18n::translate(match ($response->code()) {
 				404 => 'seo.license.error.key',
 				403 => 'seo.license.error.forbidden',
@@ -170,10 +178,12 @@ final class License extends KirbyLicense
 		}
 
 		if (!static::isOwn($data)) {
+			// @mago-expect analysis:possibly-invalid-argument,possibly-null-argument
 			throw new InvalidArgumentException(I18n::translate('seo.license.error.plugin'));
 		}
 
 		if (!static::isSigned($data)) {
+			// @mago-expect analysis:possibly-invalid-argument,possibly-null-argument
 			throw new InvalidArgumentException(I18n::translate('seo.license.error.download'));
 		}
 
@@ -199,6 +209,8 @@ final class License extends KirbyLicense
 
 		if (
 			isset($this->data['expires'])
+				// signed licenses have a date string in `expires`
+				// @mago-expect analysis:mixed-argument,possibly-false-operand
 				? (strtotime($this->data['expires']) - time()) > self::REISSUE_BEFORE
 				: $this->manual
 		) {
@@ -207,11 +219,13 @@ final class License extends KirbyLicense
 
 		$failures = (int)($this->data['failures'] ?? 0);
 		$backoff = self::REISSUE_BACKOFF[min($failures, count(self::REISSUE_BACKOFF)) - 1] ?? 0;
+		// @mago-expect analysis:mixed-argument,possibly-false-operand
 		if ((time() - strtotime($this->data['checked'] ?? '')) < ($backoff * 60)) {
 			return;
 		}
 
 		try {
+			// @mago-expect analysis:mixed-argument
 			$response = static::request(Str::lower($this->data['license']) . '/reissue', [
 				'url' => $this->data['assignedUrl']
 			]);
@@ -247,6 +261,9 @@ final class License extends KirbyLicense
 		}
 	}
 
+	/**
+	 * @param array<string, mixed> $data
+	 */
 	private static function request(string $path, array $data): Remote
 	{
 		return Remote::post(self::BASE . $path, [
@@ -260,11 +277,15 @@ final class License extends KirbyLicense
 
 	private static function path(string $file): string
 	{
+		// Kirby always sets the license root
+		// @mago-expect analysis:possibly-null-argument
 		return dirname(App::instance()->root('license')) . '/' . $file;
 	}
 
 	/**
 	 * Returns all licenses from a license file, including those of other plugins
+	 *
+	 * @return list<array<array-key, mixed>>
 	 */
 	private static function read(string $file, bool $strict = false): array
 	{
@@ -290,14 +311,18 @@ final class License extends KirbyLicense
 	 * Returns the license of this plugin for the given domain and whether it is from the manual file,
 	 * preferring an active license from the shared file over the manual file
 	 *
-	 * @return array{0: array|null, 1: bool}
+	 * @return array{0: array<array-key, mixed>|null, 1: bool}
 	 */
 	private static function find(string $url): array
 	{
+		/** @var array<array-key, mixed>|null $shared */
 		$shared = A::find(static::read(self::FILE), static fn (array $license) => static::isFor($license, $url));
+		/** @var array<array-key, mixed>|null $manual */
 		$manual = A::find(static::read(self::MANUAL_FILE), static fn (array $license) => static::isFor($license, $url));
 
 		// a revoked license also blocks its copy in the manual file
+		// the shared license is revoked, so it exists
+		// @mago-expect analysis:possibly-null-array-access
 		if (($shared['revoked'] ?? false) === true && ($manual['license'] ?? null) === $shared['license']) {
 			return [$shared, false];
 		}
@@ -319,6 +344,7 @@ final class License extends KirbyLicense
 		$licenses = array_filter(
 			static::read(self::FILE, strict: true),
 			static fn (array $entry) => (
+				// @mago-expect analysis:mixed-argument
 				!static::isFor($entry, $license['assignedUrl']) &&
 				($entry['license'] ?? null) !== $license['license']
 			)
@@ -335,7 +361,11 @@ final class License extends KirbyLicense
 		return (
 			($license['revoked'] ?? false) !== true &&
 				static::isSigned($license) &&
-				(!isset($license['expires']) || strtotime($license['expires']) > time())
+				(
+					// @mago-expect analysis:mixed-argument,possibly-false-operand
+					!isset($license['expires']) ||
+					strtotime($license['expires']) > time()
+				)
 		);
 	}
 
@@ -348,6 +378,7 @@ final class License extends KirbyLicense
 	{
 		return (
 			static::isOwn($license) &&
+				// @mago-expect analysis:mixed-argument
 				static::normalizeUrl($license['assignedUrl'] ?? '') === static::normalizeUrl($url)
 		);
 	}
@@ -370,6 +401,8 @@ final class License extends KirbyLicense
 				openssl_verify(
 					Json::encode($signed),
 					(string)base64_decode($signature, true),
+					// the public key ships with the plugin
+					// @mago-expect analysis:possibly-false-argument
 					openssl_pkey_get_public('file://' . dirname(__DIR__) . '/public.pem'),
 					'RSA-SHA256'
 				) === 1

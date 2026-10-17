@@ -12,6 +12,12 @@ use Kirby\Http\Uri;
 
 use function array_slice;
 
+/**
+ * @psalm-type Tokens = array{access_token?: string, refresh_token?: string, expires_at?: int, property?: string}
+ * @psalm-type Property = array{siteUrl: string, permissionLevel?: string}
+ * @psalm-type Row = array{keys: list<string>, clicks: int|float, impressions: int|float, ctr: float, position: float}
+ * @psalm-type QueryOptions = array{startDate?: string, endDate?: string, dimensions?: list<string>, page?: string, pageOperator?: string}
+ */
 class GoogleSearchConsole
 {
 	protected const AUTH_URL = 'https://accounts.google.com/o/oauth2/v2/auth';
@@ -19,6 +25,7 @@ class GoogleSearchConsole
 	protected const SCOPES = 'email https://www.googleapis.com/auth/webmasters.readonly';
 	protected const CACHE_DURATION = 60 * 24; // 24 hours in minutes
 
+	/** @var Tokens|null */
 	protected static array|null $tokens = null;
 
 	protected static function cache(): Cache
@@ -28,6 +35,8 @@ class GoogleSearchConsole
 
 	/**
 	 * Get OAuth credentials from config
+	 *
+	 * @return array<string, mixed>|null
 	 */
 	public static function credentials(): array|null
 	{
@@ -53,6 +62,8 @@ class GoogleSearchConsole
 
 	/**
 	 * Load tokens from file
+	 *
+	 * @return Tokens|null
 	 */
 	public static function tokens(): array|null
 	{
@@ -65,12 +76,16 @@ class GoogleSearchConsole
 			return null;
 		}
 
-		static::$tokens = Json::read($path);
+		/** @var Tokens $tokens */
+		$tokens = Json::read($path);
+		static::$tokens = $tokens;
 		return static::$tokens;
 	}
 
 	/**
 	 * Save tokens to file
+	 *
+	 * @param Tokens $tokens
 	 */
 	protected static function saveTokens(array $tokens): void
 	{
@@ -104,6 +119,7 @@ class GoogleSearchConsole
 
 		$uri = new Uri(static::AUTH_URL);
 		$uri->query()->merge([
+			// @mago-expect analysis:possibly-null-array-access
 			'client_id' => $credentials['client_id'],
 			'redirect_uri' => $redirectUri,
 			'response_type' => 'code',
@@ -118,6 +134,8 @@ class GoogleSearchConsole
 
 	/**
 	 * Exchange authorization code for tokens
+	 *
+	 * @return Tokens
 	 */
 	public static function exchangeCode(string $code, string $redirectUri): array
 	{
@@ -163,15 +181,21 @@ class GoogleSearchConsole
 
 	/**
 	 * Send a request to the OAuth token endpoint with the client credentials
+	 *
+	 * @param array<string, string> $data
+	 * @return array{access_token: string, expires_in: int, refresh_token?: string, ...}
 	 */
 	protected static function tokenRequest(array $data): array
 	{
 		$credentials = static::credentials();
 
+		/** @var array{access_token: string, expires_in: int, refresh_token?: string, error?: string, error_description?: string, ...}|null $data */
 		$data = Remote::post(static::TOKEN_URL, [
 			'headers' => [
 				'Content-Type' => 'application/x-www-form-urlencoded'
 			],
+			// the credentials are checked with hasCredentials() before
+			// @mago-expect analysis:possibly-null-array-access(2)
 			'data' => [
 				'client_id' => $credentials['client_id'],
 				'client_secret' => $credentials['client_secret'],
@@ -202,6 +226,8 @@ class GoogleSearchConsole
 		}
 
 		// refresh if expired or expiring soon (within 5 min)
+		// connected tokens have an expiry date
+		// @mago-expect analysis:possibly-null-operand,possibly-undefined-string-array-index
 		if ($tokens['expires_at'] < (time() + 300)) {
 			return static::refreshToken();
 		}
@@ -236,7 +262,7 @@ class GoogleSearchConsole
 			// check domain properties (sc-domain:example.com)
 			if (str_starts_with($propUrl, 'sc-domain:')) {
 				$domain = substr($propUrl, 10);
-				if ($domain === $siteHost || str_ends_with($siteHost, ".{$domain}")) {
+				if ($domain === $siteHost || str_ends_with((string)$siteHost, ".{$domain}")) {
 					return $propUrl;
 				}
 			}
@@ -248,6 +274,7 @@ class GoogleSearchConsole
 		}
 
 		// fallback to first property
+		// @mago-expect analysis:redundant-null-coalesce
 		return $properties[0]['siteUrl'] ?? null;
 	}
 
@@ -275,6 +302,8 @@ class GoogleSearchConsole
 
 	/**
 	 * List available GSC properties
+	 *
+	 * @return list<Property>
 	 */
 	public static function listProperties(): array
 	{
@@ -285,6 +314,7 @@ class GoogleSearchConsole
 			]
 		]);
 
+		/** @var array{siteEntry?: list<Property>, error?: array{message?: string}}|null $data */
 		$data = $response->json();
 
 		if (isset($data['error'])) {
@@ -296,6 +326,9 @@ class GoogleSearchConsole
 
 	/**
 	 * Query search analytics data (fetches max 25k rows from Google, cached for 24h)
+	 *
+	 * @param QueryOptions $options
+	 * @return list<Row>
 	 */
 	public static function query(array $options = []): array
 	{
@@ -305,8 +338,8 @@ class GoogleSearchConsole
 		}
 
 		$body = [
-			'startDate' => $options['startDate'] ?? date('Y-m-d', strtotime('-28 days')),
-			'endDate' => $options['endDate'] ?? date('Y-m-d', strtotime('-1 day')),
+			'startDate' => $options['startDate'] ?? date('Y-m-d', (int)strtotime('-28 days')),
+			'endDate' => $options['endDate'] ?? date('Y-m-d', (int)strtotime('-1 day')),
 			'dimensions' => $options['dimensions'] ?? ['query'],
 			'rowLimit' => 25000
 		];
@@ -321,6 +354,7 @@ class GoogleSearchConsole
 			]];
 		}
 
+		/** @var list<Row> */
 		return static::cache()
 			->getOrSet(
 				md5($property . Json::encode($body)),
@@ -337,6 +371,7 @@ class GoogleSearchConsole
 						'data' => Json::encode($body)
 					]);
 
+					/** @var array{rows?: list<Row>, error?: array{message?: string}}|null $data */
 					$data = $response->json();
 
 					if (isset($data['error'])) {
@@ -351,6 +386,8 @@ class GoogleSearchConsole
 
 	/**
 	 * Query search data for a Kirby model (page or site), sorted by metric
+	 *
+	 * @return list<Row>
 	 */
 	public static function queryForModel($model, string $metric = 'clicks', int $limit = 10, bool $asc = false): array
 	{

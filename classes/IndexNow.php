@@ -21,6 +21,8 @@ class IndexNow
 	protected static string|null $key = null;
 
 	protected Page $page;
+
+	/** @var array<int, string> */
 	protected array $urls = [];
 	protected bool $collected = false;
 
@@ -61,6 +63,8 @@ class IndexNow
 
 	/**
 	 * Get collected urls
+	 *
+	 * @return array<int, string>
 	 */
 	public function urls(): array
 	{
@@ -107,6 +111,8 @@ class IndexNow
 
 	/**
 	 * Static method to send urls to indexnow api
+	 *
+	 * @param array<int, string> $urls
 	 */
 	public static function send(array $urls): bool
 	{
@@ -133,12 +139,15 @@ class IndexNow
 	/**
 	 * Sends urls to the indexnow api
 	 *
+	 * @param array<int, string> $urls
 	 * @throws \Exception if a request fails, with the HTTP status or the network error
 	 */
 	public static function submit(array $urls): void
 	{
 		$firstUrl = $urls[0];
 		$parsedUrl = parse_url($firstUrl);
+		// page URLs are absolute
+		// @mago-expect analysis:possibly-false-array-access,possibly-undefined-string-array-index
 		$host = $parsedUrl['host'];
 		$scheme = $parsedUrl['scheme'] ?? 'https';
 		$path = $parsedUrl['path'] ?? '';
@@ -178,8 +187,10 @@ class IndexNow
 				])
 			]);
 
-			if ($response->code() > 299) {
-				throw new Exception("IndexNow request failed with HTTP {$response->code()}: " . Str::short(trim(strip_tags($response->content())), 200));
+			if (($response->code() ?? 0) > 299) {
+				throw new Exception(
+					"IndexNow request failed with HTTP {$response->code()}: " . Str::short(trim(strip_tags((string)$response->content())), 200)
+				);
 			}
 		}
 	}
@@ -190,9 +201,15 @@ class IndexNow
 	 */
 	public static function key(): string
 	{
-		return static::$key ??= App::instance()
-			->cache('tobimori.seo.indexnow')
-			->getOrSet('key', static fn () => Str::random(32, 'hexLower'), 0);
+		if (static::$key === null) {
+			/** @var string $key */
+			$key = App::instance()
+				->cache('tobimori.seo.indexnow')
+				->getOrSet('key', static fn () => Str::random(32, 'hexLower'), 0);
+			static::$key = $key;
+		}
+
+		return static::$key;
 	}
 
 	/**
@@ -234,7 +251,7 @@ class IndexNow
 			$pattern
 		);
 
-		return preg_match("#^{$pattern}$#", parse_url($url, PHP_URL_PATH)) === 1;
+		return preg_match("#^{$pattern}$#", (string)parse_url($url, PHP_URL_PATH)) === 1;
 	}
 
 	/**
@@ -274,6 +291,8 @@ class IndexNow
 
 	/**
 	 * Collect parent urls
+	 *
+	 * @param bool|int $levels
 	 */
 	protected function collectParents($levels): void
 	{
@@ -292,13 +311,15 @@ class IndexNow
 
 	/**
 	 * Collect children urls
+	 *
+	 * @param bool|int $depth
 	 */
 	protected function collectChildren($depth): void
 	{
 		$maxDepth = is_bool($depth) ? null : $depth;
 		$language = App::instance()->language();
 
-		$collectRecursive = function ($page, $currentDepth = 0) use (&$collectRecursive, $maxDepth, $language) {
+		$collectRecursive = function (Page $page, int $currentDepth = 0) use (&$collectRecursive, $maxDepth, $language) {
 			if ($maxDepth !== null && $currentDepth >= $maxDepth) {
 				return;
 			}
@@ -326,6 +347,7 @@ class IndexNow
 		$language = App::instance()->language();
 
 		foreach ($this->page->siblings() as $sibling) {
+			/** @var Page $sibling */
 			if ($this->isIndexable($sibling)) {
 				$this->urls[] = $sibling->url($language?->code());
 			}
@@ -334,6 +356,8 @@ class IndexNow
 
 	/**
 	 * Collect urls by template names
+	 *
+	 * @param list<string> $templates
 	 */
 	protected function collectByTemplates(array $templates): void
 	{
