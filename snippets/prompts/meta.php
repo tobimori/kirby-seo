@@ -22,10 +22,10 @@ $metaFields = [
 <?php
 
 $value = $meta->get($key);
-if ($currentField === $key || !$value || $value === '') {
+if ($currentField === $key || $value->isEmpty()) {
 	continue;
 }
 ?>
-	<<?= $key ?>><?= $value ?></<?= $key ?>>
+	<<?= $key ?>><?= $value->value() ?></<?= $key ?>>
 <?php endforeach ?>
 </existing-metadata>

@@ -21,6 +21,24 @@ use function is_string;
 
 /**
  * The Meta class is responsible for handling the meta data & cascading
+ *
+ * Meta values, resolved with the cascade by __call()
+ * @method Field title()
+ * @method Field metaTemplate()
+ * @method Field useTitleTemplate()
+ * @method Field metaDescription()
+ * @method Field ogTemplate()
+ * @method Field useOgTemplate()
+ * @method Field ogDescription()
+ * @method Field ogSiteName()
+ * @method Field ogType()
+ * @method Field cropOgImage()
+ * @method Field locale()
+ * @method Field robotsIndex()
+ * @method Field robotsFollow()
+ * @method Field robotsArchive()
+ * @method Field robotsImageindex()
+ * @method Field robotsSnippet()
  */
 class Meta
 {
@@ -292,8 +310,9 @@ class Meta
 			if (is_numeric($name)) {
 				// but we still check if the array is valid
 				if (!is_array($value) || count(array_intersect(['tag', 'content', 'attributes'], array_keys($value))) !== count($value)) {
+					$template = $this->page->intendedTemplate()->name();
 					throw new InvalidArgumentException(
-						"[Kirby SEO] Invalid array structure found in programmatic content for page {$this->slug()}. Please check your metaDefaults method for template {$this->template()->name()}."
+						"[Kirby SEO] Invalid array structure found in programmatic content for page {$this->page->id()}. Please check your metaDefaults method for template {$template}."
 					);
 				}
 

@@ -20,7 +20,7 @@ snippet('seo/prompts/introduction', [
 	Create a useful meta title for this page called <page-title><?= $page->title()->value() ?></page-title>. <?php if ($page->isHomePage()): ?>This page is the homepage of the website. AVOID an overly generic title such as 'Home'.<?php endif ?>
 
 	<?php if ($page->useTitleTemplate()->isEmpty() ? true : $page->useTitleTemplate()->toBool()):
-		$template = $meta->get('metaTemplate');
+		$template = $meta->get('metaTemplate')->value();
 		$templatePreview = $page->toString($template, ['title' => '{{ title }}']);
 		$templateBaseLength = Str::length($page->toString($template, ['title' => '']));
 		?>

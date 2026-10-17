@@ -11,7 +11,7 @@
 		<html>
 
 		<head>
-			<title><?= $page->metadata()->title()->escape() ?></title>
+			<title><?= $page->metadata()->title()->escape()->value() ?></title>
 			<style>
 				/* Document styles */
 				body {

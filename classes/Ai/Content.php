@@ -4,6 +4,7 @@ namespace tobimori\Seo\Ai;
 
 use Imagick;
 use Kirby\Cms\File;
+use Kirby\Exception\Exception;
 
 /**
  * Fluent builder for AI message content.
@@ -62,7 +63,13 @@ class Content
 				'format' => 'webp'
 			]);
 
-			$data = base64_encode($thumb->read());
+			$data = $thumb->read();
+
+			if ($data === false) {
+				throw new Exception("[Kirby SEO] Could not read the thumbnail of {$file->id()}");
+			}
+
+			$data = base64_encode($data);
 		} else {
 			$imagick = new Imagick();
 			$imagick->readImage($file->root());

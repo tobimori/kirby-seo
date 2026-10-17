@@ -13,18 +13,6 @@ message = 'Invalid argument type for argument #1 of `Kirby\Toolkit\Str::ucfirst`
 count = 1
 
 [[issues]]
-file = "blueprints/fields/robots.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 2
-
-[[issues]]
-file = "blueprints/fields/robots.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `metadata` on class `Kirby\Cms\Page`.'
-count = 1
-
-[[issues]]
 file = "blueprints/fields/site-robots.php"
 code = "invalid-iterator"
 message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
@@ -124,42 +112,6 @@ count = 1
 file = "classes/Ai.php"
 code = "unsafe-instantiation"
 message = 'Unsafe `new $class_name`: constructor of `tobimori\Seo\Ai\Driver` is not final and its signature might change in child classes, potentially leading to runtime errors.'
-count = 1
-
-[[issues]]
-file = "classes/Ai/Content.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `base64_encode`: expected `string`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "classes/Ai/Content.php"
-code = "mixed-operand"
-message = "Left operand in `||` operation has `mixed` type."
-count = 1
-
-[[issues]]
-file = "classes/Ai/Content.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `isResizable` on class `Kirby\Cms\File`.'
-count = 2
-
-[[issues]]
-file = "classes/Ai/Content.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `read` on class `Kirby\Cms\FileVersion`.'
-count = 1
-
-[[issues]]
-file = "classes/Ai/Content.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `read` on class `Kirby\Cms\File`.'
-count = 1
-
-[[issues]]
-file = "classes/Ai/Content.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `read` on class `Kirby\Filesystem\Asset`.'
 count = 1
 
 [[issues]]
@@ -1071,12 +1023,6 @@ count = 2
 [[issues]]
 file = "classes/Audit/Links/Report.php"
 code = "mixed-operand"
-message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
-count = 1
-
-[[issues]]
-file = "classes/Audit/Links/Report.php"
-code = "mixed-operand"
 message = "Left operand in `<` comparison has `mixed` type."
 count = 3
 
@@ -1114,12 +1060,6 @@ count = 1
 file = "classes/Audit/Links/Report.php"
 code = "mixed-return-statement"
 message = 'Could not infer a precise return type for function `tobimori\Seo\Audit\Links\Report::stats`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "classes/Audit/Links/Report.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `name` on class `Kirby\Cms\File`.'
 count = 1
 
 [[issues]]
@@ -1405,18 +1345,6 @@ message = '''Invalid return type for function `tobimori\Seo\Buttons\RobotsViewBu
 count = 1
 
 [[issues]]
-file = "classes/Buttons/RobotsViewButton.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `tobimori\Seo\Buttons\RobotsViewButton::indicator`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "classes/Buttons/RobotsViewButton.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `robots` on class `Kirby\Cms\Page`.'
-count = 1
-
-[[issues]]
 file = "classes/Buttons/UtmShareViewButton.php"
 code = "possibly-invalid-argument"
 message = 'Possible argument type mismatch for argument #4 of `Kirby\Panel\Ui\Buttons\ViewButton::__construct`: expected `array<array-key, mixed>|null|string`, but possibly received `(closure(...mixed=): mixed)|array<array-key, mixed>|null|string`.'
@@ -1610,18 +1538,6 @@ count = 7
 
 [[issues]]
 file = "classes/GoogleSearchConsole.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 1
-
-[[issues]]
-file = "classes/GoogleSearchConsole.php"
-code = "mixed-operand"
-message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
-count = 1
-
-[[issues]]
-file = "classes/GoogleSearchConsole.php"
 code = "mixed-operand"
 message = "Left operand in `<` comparison has `mixed` type."
 count = 1
@@ -1694,24 +1610,6 @@ count = 1
 
 [[issues]]
 file = "classes/GoogleSearchConsole.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `path` on class `Kirby\Http\Uri`.'
-count = 1
-
-[[issues]]
-file = "classes/GoogleSearchConsole.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `post` on class `Kirby\Http\Remote`.'
-count = 1
-
-[[issues]]
-file = "classes/GoogleSearchConsole.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `query` on class `Kirby\Http\Uri`.'
-count = 1
-
-[[issues]]
-file = "classes/GoogleSearchConsole.php"
 code = "possibly-false-argument"
 message = "Argument #1 of function `str_ends_with` is possibly `false`, but parameter type `string` does not accept it."
 count = 1
@@ -1751,12 +1649,6 @@ file = "classes/IndexNow.php"
 code = "invalid-iterator"
 message = "The expression provided to `foreach` is not iterable. It resolved to type `nonnull`, which is not iterable."
 count = 2
-
-[[issues]]
-file = "classes/IndexNow.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `Kirby\Toolkit\Str::contains`: expected `null|string`, but found `mixed`.'
-count = 1
 
 [[issues]]
 file = "classes/IndexNow.php"
@@ -1852,18 +1744,6 @@ count = 1
 file = "classes/IndexNow.php"
 code = "mixed-return-statement"
 message = 'Could not infer a precise return type for function `tobimori\Seo\IndexNow::key`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "classes/IndexNow.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `post` on class `Kirby\Http\Remote`.'
-count = 1
-
-[[issues]]
-file = "classes/IndexNow.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `robots` on class `Kirby\Cms\Page`.'
 count = 1
 
 [[issues]]
@@ -2054,12 +1934,6 @@ count = 1
 
 [[issues]]
 file = "classes/License.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `post` on class `Kirby\Http\Remote`.'
-count = 1
-
-[[issues]]
-file = "classes/License.php"
 code = "nullable-return-statement"
 message = 'Function `tobimori\Seo\License::normalizeUrl` is declared to return `string` but possibly returns a nullable value (inferred as `null|string`).'
 count = 1
@@ -2157,30 +2031,6 @@ count = 1
 [[issues]]
 file = "classes/LlmContent.php"
 code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `Kirby\Filesystem\F::dirname`: expected `string`, but found `truthy-mixed`.'
-count = 1
-
-[[issues]]
-file = "classes/LlmContent.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `Kirby\Toolkit\Str::lower`: expected `null|string`, but found `mixed`.'
-count = 3
-
-[[issues]]
-file = "classes/LlmContent.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `tobimori\Seo\LlmContent::normalizePath`: expected `string`, but found `nonnull`.'
-count = 1
-
-[[issues]]
-file = "classes/LlmContent.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `tobimori\Seo\LlmContent::normalizePath`: expected `string`, but found `truthy-mixed`.'
-count = 1
-
-[[issues]]
-file = "classes/LlmContent.php"
-code = "mixed-argument"
 message = 'Invalid argument type for argument #1 of `tobimori\Seo\LlmContent::selectorToXPath`: expected `string`, but found `mixed`.'
 count = 1
 
@@ -2194,19 +2044,7 @@ count = 1
 file = "classes/LlmContent.php"
 code = "mixed-method-access"
 message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 14
-
-[[issues]]
-file = "classes/LlmContent.php"
-code = "mixed-operand"
-message = "Invalid left operand: type `truthy-mixed` cannot be reliably used in string concatenation."
-count = 1
-
-[[issues]]
-file = "classes/LlmContent.php"
-code = "mixed-operand"
-message = "Invalid right operand: type `mixed` cannot be reliably used in string concatenation."
-count = 3
+count = 2
 
 [[issues]]
 file = "classes/LlmContent.php"
@@ -2230,48 +2068,6 @@ count = 1
 file = "classes/LlmContent.php"
 code = "never-return"
 message = "Cannot return value with type 'never' from this function."
-count = 1
-
-[[issues]]
-file = "classes/LlmContent.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `host` on class `Kirby\Http\Uri`.'
-count = 3
-
-[[issues]]
-file = "classes/LlmContent.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `metadata` on class `Kirby\Cms\Page`.'
-count = 4
-
-[[issues]]
-file = "classes/LlmContent.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `path` on class `Kirby\Http\Uri`.'
-count = 4
-
-[[issues]]
-file = "classes/LlmContent.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `port` on class `Kirby\Http\Uri`.'
-count = 3
-
-[[issues]]
-file = "classes/LlmContent.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `query` on class `Kirby\Http\Uri`.'
-count = 1
-
-[[issues]]
-file = "classes/LlmContent.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `scheme` on class `Kirby\Http\Uri`.'
-count = 1
-
-[[issues]]
-file = "classes/LlmContent.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `slash` on class `Kirby\Http\Uri`.'
 count = 1
 
 [[issues]]
@@ -2427,12 +2223,6 @@ count = 1
 [[issues]]
 file = "classes/Meta.php"
 code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `Kirby\Toolkit\A::has`: expected `array<array-key, mixed>`, but found `mixed`.'
-count = 2
-
-[[issues]]
-file = "classes/Meta.php"
-code = "mixed-argument"
 message = 'Invalid argument type for argument #1 of `Kirby\Toolkit\Str::contains`: expected `null|string`, but found `mixed`.'
 count = 1
 
@@ -2516,12 +2306,6 @@ count = 1
 
 [[issues]]
 file = "classes/Meta.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #3 of `tobimori\Seo\Meta::applyTitleTemplate`: expected `Kirby\Content\Field`, but found `mixed`.'
-count = 2
-
-[[issues]]
-file = "classes/Meta.php"
 code = "mixed-array-access"
 message = "Unsafe array access on type `nonnull`."
 count = 2
@@ -2529,31 +2313,13 @@ count = 2
 [[issues]]
 file = "classes/Meta.php"
 code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 4
-
-[[issues]]
-file = "classes/Meta.php"
-code = "mixed-method-access"
 message = "Attempting to access a method on a non-object type (`truthy-mixed`)."
-count = 4
-
-[[issues]]
-file = "classes/Meta.php"
-code = "mixed-operand"
-message = "Left operand in `&&` operation has `mixed` type."
 count = 1
 
 [[issues]]
 file = "classes/Meta.php"
 code = "mixed-operand"
 message = "Right operand in `&&` operation has `mixed` type."
-count = 1
-
-[[issues]]
-file = "classes/Meta.php"
-code = "mixed-operand"
-message = "Right operand in `||` operation has `mixed` type."
 count = 1
 
 [[issues]]
@@ -2570,12 +2336,6 @@ count = 1
 
 [[issues]]
 file = "classes/Meta.php"
-code = "mixed-property-type-coercion"
-message = 'A value with a less specific type `mixed` is being assigned to property `$ogImageThumb` (Kirby\Cms\File|Kirby\Cms\FileVersion|Kirby\Filesystem\Asset|false|null).'
-count = 2
-
-[[issues]]
-file = "classes/Meta.php"
 code = "mixed-return-statement"
 message = 'Could not infer a precise return type for function `tobimori\Seo\Meta::dateFormat`. Saw type `truthy-mixed`.'
 count = 1
@@ -2589,109 +2349,7 @@ count = 1
 [[issues]]
 file = "classes/Meta.php"
 code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `tobimori\Seo\Meta::ogImageThumb`. Saw type `mixed`.'
-count = 2
-
-[[issues]]
-file = "classes/Meta.php"
-code = "mixed-return-statement"
 message = 'Could not infer a precise return type for function `tobimori\Seo\Meta::ogImage`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "classes/Meta.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `canonicalFor` on class `Kirby\Cms\Site`.'
-count = 1
-
-[[issues]]
-file = "classes/Meta.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `height` on class `Kirby\Cms\FileVersion`.'
-count = 1
-
-[[issues]]
-file = "classes/Meta.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `height` on class `Kirby\Cms\File`.'
-count = 1
-
-[[issues]]
-file = "classes/Meta.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `height` on class `Kirby\Filesystem\Asset`.'
-count = 1
-
-[[issues]]
-file = "classes/Meta.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `indexUrl` on class `Kirby\Cms\Page`.'
-count = 1
-
-[[issues]]
-file = "classes/Meta.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `metaInherit` on class `Kirby\Cms\Page`.'
-count = 1
-
-[[issues]]
-file = "classes/Meta.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `slug` on class `tobimori\Seo\Meta`.'
-count = 1
-
-[[issues]]
-file = "classes/Meta.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `template` on class `tobimori\Seo\Meta`.'
-count = 1
-
-[[issues]]
-file = "classes/Meta.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `toBool` on class `Kirby\Content\Field`.'
-count = 3
-
-[[issues]]
-file = "classes/Meta.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `toFile` on class `Kirby\Content\Field`.'
-count = 2
-
-[[issues]]
-file = "classes/Meta.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `toObject` on class `Kirby\Content\Field`.'
-count = 1
-
-[[issues]]
-file = "classes/Meta.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `useOgTemplate` on class `Kirby\Cms\Page`.'
-count = 1
-
-[[issues]]
-file = "classes/Meta.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `useTitleTemplate` on class `Kirby\Cms\Page`.'
-count = 1
-
-[[issues]]
-file = "classes/Meta.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `width` on class `Kirby\Cms\FileVersion`.'
-count = 1
-
-[[issues]]
-file = "classes/Meta.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `width` on class `Kirby\Cms\File`.'
-count = 1
-
-[[issues]]
-file = "classes/Meta.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `width` on class `Kirby\Filesystem\Asset`.'
 count = 1
 
 [[issues]]
@@ -2822,18 +2480,6 @@ count = 1
 
 [[issues]]
 file = "classes/Seo.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `tobimori\Seo\Seo::isIndexable`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "classes/Seo.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `toBool` on class `Kirby\Content\Field`.'
-count = 1
-
-[[issues]]
-file = "classes/Seo.php"
 code = "possible-method-access-on-null"
 message = "Attempting to call a method on `null`."
 count = 1
@@ -2884,18 +2530,6 @@ count = 1
 file = "classes/Sitemap/Sitemap.php"
 code = "mixed-method-access"
 message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 1
-
-[[issues]]
-file = "classes/Sitemap/Sitemap.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `tobimori\Seo\Sitemap\Sitemap::loc`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "classes/Sitemap/Sitemap.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `canonicalFor` on class `Kirby\Cms\Site`.'
 count = 1
 
 [[issues]]
@@ -3220,25 +2854,7 @@ count = 1
 file = "classes/Views/ImagesView.php"
 code = "mixed-method-access"
 message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 9
-
-[[issues]]
-file = "classes/Views/ImagesView.php"
-code = "mixed-operand"
-message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
-count = 1
-
-[[issues]]
-file = "classes/Views/ImagesView.php"
-code = "mixed-operand"
-message = "Invalid right operand: type `mixed` cannot be reliably used in string concatenation."
-count = 1
-
-[[issues]]
-file = "classes/Views/ImagesView.php"
-code = "mixed-operand"
-message = "Left operand in `||` operation has `mixed` type."
-count = 1
+count = 7
 
 [[issues]]
 file = "classes/Views/ImagesView.php"
@@ -3262,42 +2878,6 @@ count = 1
 file = "classes/Views/ImagesView.php"
 code = "mixed-return-statement"
 message = 'Could not infer a precise return type for function `tobimori\Seo\Views\ImagesView::value`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "classes/Views/ImagesView.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `extension` on class `Kirby\Cms\File`.'
-count = 2
-
-[[issues]]
-file = "classes/Views/ImagesView.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `height` on class `Kirby\Cms\File`.'
-count = 1
-
-[[issues]]
-file = "classes/Views/ImagesView.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `isResizable` on class `Kirby\Cms\File`.'
-count = 2
-
-[[issues]]
-file = "classes/Views/ImagesView.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `title` on class `Kirby\Cms\Site`.'
-count = 2
-
-[[issues]]
-file = "classes/Views/ImagesView.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `title` on class `Kirby\Cms\User`.'
-count = 2
-
-[[issues]]
-file = "classes/Views/ImagesView.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `width` on class `Kirby\Cms\File`.'
 count = 1
 
 [[issues]]
@@ -3460,13 +3040,7 @@ count = 1
 file = "classes/Views/PagesView.php"
 code = "mixed-method-access"
 message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 3
-
-[[issues]]
-file = "classes/Views/PagesView.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`nonnull`)."
-count = 2
+count = 1
 
 [[issues]]
 file = "classes/Views/PagesView.php"
@@ -3478,18 +3052,6 @@ count = 1
 file = "classes/Views/PagesView.php"
 code = "mixed-return-statement"
 message = 'Could not infer a precise return type for function `tobimori\Seo\Views\PagesView::resolve`. Saw type `nonnull`.'
-count = 1
-
-[[issues]]
-file = "classes/Views/PagesView.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `toFile` on class `Kirby\Content\Field`.'
-count = 1
-
-[[issues]]
-file = "classes/Views/PagesView.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `url` on class `Kirby\Toolkit\V`.'
 count = 1
 
 [[issues]]
@@ -3586,12 +3148,6 @@ count = 1
 file = "config/areas.php"
 code = "mixed-operand"
 message = "Invalid right operand: type `mixed` cannot be reliably used in string concatenation."
-count = 1
-
-[[issues]]
-file = "config/areas.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `email` on class `Kirby\Toolkit\V`.'
 count = 1
 
 [[issues]]
@@ -3730,43 +3286,13 @@ count = 1
 file = "config/hooks.php"
 code = "mixed-method-access"
 message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 9
-
-[[issues]]
-file = "config/hooks.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `metadata` on class `Kirby\Cms\Page`.'
-count = 1
-
-[[issues]]
-file = "config/hooks.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `schema` on class `Kirby\Cms\Page`.'
-count = 1
+count = 5
 
 [[issues]]
 file = "config/hooks.php"
 code = "unknown-class-instantiation"
 message = "Cannot determine the concrete class for instantiation."
 count = 2
-
-[[issues]]
-file = "config/options.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 1
-
-[[issues]]
-file = "config/options.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `metadata` on class `Kirby\Cms\Page`.'
-count = 1
-
-[[issues]]
-file = "config/options.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `title` on class `Kirby\Cms\Site`.'
-count = 1
 
 [[issues]]
 file = "config/options.php"
@@ -3982,18 +3508,12 @@ count = 1
 file = "config/sections.php"
 code = "mixed-method-access"
 message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 18
+count = 6
 
 [[issues]]
 file = "config/sections.php"
 code = "mixed-property-access"
 message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 2
-
-[[issues]]
-file = "config/sections.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `metadata` on class `Kirby\Cms\Page`.'
 count = 2
 
 [[issues]]
@@ -4076,26 +3596,8 @@ count = 1
 
 [[issues]]
 file = "snippets/head.php"
-code = "invalid-iterator"
-message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
-count = 1
-
-[[issues]]
-file = "snippets/head.php"
-code = "less-specific-nested-argument-type"
-message = "Argument type mismatch for argument #2 of `array_filter`: expected `(callable(('K.array_filter() extends array-key)): bool)|(callable(('V.array_filter() extends mixed)): bool)|(callable(('V.array_filter() extends mixed), ('K.array_filter() extends array-key)): bool)|null`, but provided type `(closure(mixed): mixed)` is less specific."
-count = 1
-
-[[issues]]
-file = "snippets/head.php"
 code = "mixed-argument"
 message = 'Invalid argument type for argument #1 of `Kirby\Toolkit\Html::tag`: expected `string`, but found `mixed`.'
-count = 2
-
-[[issues]]
-file = "snippets/head.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `array_filter`: expected `array<('K.array_filter() extends array-key), ('V.array_filter() extends mixed)>`, but found `mixed`."
 count = 2
 
 [[issues]]
@@ -4120,19 +3622,7 @@ count = 1
 file = "snippets/head.php"
 code = "mixed-array-access"
 message = "Unsafe array access on type `mixed`."
-count = 4
-
-[[issues]]
-file = "snippets/head.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 1
-
-[[issues]]
-file = "snippets/head.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `metadata` on class `Kirby\Cms\Page`.'
-count = 1
+count = 3
 
 [[issues]]
 file = "snippets/prompts/content.php"
@@ -4198,102 +3688,30 @@ count = 1
 file = "snippets/prompts/introduction.php"
 code = "mixed-argument"
 message = "The first value for `echo` is too general."
-count = 3
+count = 1
 
 [[issues]]
-file = "snippets/prompts/introduction.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `lang` on class `Kirby\Cms\Site`.'
+file = "snippets/prompts/meta.php"
+code = "mixed-argument"
+message = "The first value for `echo` is too general."
+count = 1
+
+[[issues]]
+file = "snippets/prompts/site-meta.php"
+code = "mixed-argument"
+message = "The first value for `echo` is too general."
+count = 1
+
+[[issues]]
+file = "snippets/prompts/tasks/alt-text.php"
+code = "mixed-argument"
+message = "The first value for `echo` is too general."
 count = 2
-
-[[issues]]
-file = "snippets/prompts/introduction.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `title` on class `Kirby\Cms\Site`.'
-count = 1
-
-[[issues]]
-file = "snippets/prompts/meta.php"
-code = "mixed-argument"
-message = "The first value for `echo` is too general."
-count = 1
-
-[[issues]]
-file = "snippets/prompts/meta.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 1
-
-[[issues]]
-file = "snippets/prompts/meta.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `metadata` on class `Kirby\Cms\Page`.'
-count = 1
-
-[[issues]]
-file = "snippets/prompts/site-meta.php"
-code = "mixed-argument"
-message = "The first value for `echo` is too general."
-count = 1
-
-[[issues]]
-file = "snippets/prompts/site-meta.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 1
-
-[[issues]]
-file = "snippets/prompts/site-meta.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `metaDescription` on class `Kirby\Cms\Site`.'
-count = 1
-
-[[issues]]
-file = "snippets/prompts/site-meta.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `ogDescription` on class `Kirby\Cms\Site`.'
-count = 1
-
-[[issues]]
-file = "snippets/prompts/site-meta.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `ogSiteName` on class `Kirby\Cms\Site`.'
-count = 1
-
-[[issues]]
-file = "snippets/prompts/tasks/alt-text.php"
-code = "mixed-argument"
-message = "The first value for `echo` is too general."
-count = 3
-
-[[issues]]
-file = "snippets/prompts/tasks/alt-text.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `lang` on class `Kirby\Cms\Site`.'
-count = 1
-
-[[issues]]
-file = "snippets/prompts/tasks/alt-text.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `title` on class `Kirby\Cms\Site`.'
-count = 2
-
-[[issues]]
-file = "snippets/prompts/tasks/alt-text.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `title` on class `Kirby\Cms\User`.'
-count = 1
 
 [[issues]]
 file = "snippets/prompts/tasks/description.php"
 code = "mixed-argument"
 message = "The first value for `echo` is too general."
-count = 1
-
-[[issues]]
-file = "snippets/prompts/tasks/description.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `metadata` on class `Kirby\Cms\Page`.'
 count = 1
 
 [[issues]]
@@ -4303,45 +3721,15 @@ message = "The first value for `echo` is too general."
 count = 1
 
 [[issues]]
-file = "snippets/prompts/tasks/og-description.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `metadata` on class `Kirby\Cms\Page`.'
-count = 1
-
-[[issues]]
 file = "snippets/prompts/tasks/og-site-description.php"
 code = "mixed-argument"
 message = "The first value for `echo` is too general."
 count = 1
 
 [[issues]]
-file = "snippets/prompts/tasks/og-site-description.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 1
-
-[[issues]]
-file = "snippets/prompts/tasks/og-site-description.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `title` on class `Kirby\Cms\Site`.'
-count = 1
-
-[[issues]]
 file = "snippets/prompts/tasks/site-description.php"
 code = "mixed-argument"
 message = "The first value for `echo` is too general."
-count = 1
-
-[[issues]]
-file = "snippets/prompts/tasks/site-description.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 1
-
-[[issues]]
-file = "snippets/prompts/tasks/site-description.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `title` on class `Kirby\Cms\Site`.'
 count = 1
 
 [[issues]]
@@ -4355,24 +3743,6 @@ file = "snippets/prompts/tasks/title.php"
 code = "mixed-argument"
 message = "The first value for `echo` is too general."
 count = 1
-
-[[issues]]
-file = "snippets/prompts/tasks/title.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 3
-
-[[issues]]
-file = "snippets/prompts/tasks/title.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `metadata` on class `Kirby\Cms\Page`.'
-count = 1
-
-[[issues]]
-file = "snippets/prompts/tasks/title.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `useTitleTemplate` on class `Kirby\Cms\Page`.'
-count = 2
 
 [[issues]]
 file = "snippets/robots.txt.php"
@@ -4417,39 +3787,9 @@ message = "Right operand in `||` operation has `mixed` type."
 count = 1
 
 [[issues]]
-file = "snippets/robots.txt.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `canonicalFor` on class `Kirby\Cms\Site`.'
-count = 1
-
-[[issues]]
-file = "snippets/schemas.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `array_merge`: expected `array<('K.array_merge() extends array-key), ('V.array_merge() extends mixed)>`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "snippets/schemas.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `array_merge`: expected `array<('K.array_merge() extends array-key), ('V.array_merge() extends mixed)>`, but found `mixed`."
-count = 1
-
-[[issues]]
 file = "snippets/schemas.php"
 code = "mixed-argument"
 message = "The first value for `echo` is too general."
-count = 1
-
-[[issues]]
-file = "snippets/schemas.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `schemas` on class `Kirby\Cms\Page`.'
-count = 1
-
-[[issues]]
-file = "snippets/schemas.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `schemas` on class `Kirby\Cms\Site`.'
 count = 1
 
 [[issues]]
@@ -4457,18 +3797,6 @@ file = "templates/error.md.php"
 code = "mixed-argument"
 message = "Invalid argument type for argument #1 of `trim`: expected `string`, but found `nonnull`."
 count = 2
-
-[[issues]]
-file = "templates/error.md.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 1
-
-[[issues]]
-file = "templates/error.md.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `text` on class `Kirby\Cms\Page`.'
-count = 1
 
 [[issues]]
 file = "templates/llms.txt.php"
@@ -4502,12 +3830,6 @@ count = 3
 
 [[issues]]
 file = "templates/llms.txt.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 2
-
-[[issues]]
-file = "templates/llms.txt.php"
 code = "mixed-operand"
 message = "Invalid middle operand: type `mixed` cannot be reliably used in string concatenation."
 count = 1
@@ -4516,18 +3838,6 @@ count = 1
 file = "templates/llms.txt.php"
 code = "mixed-operand"
 message = "Invalid right operand: type `mixed` cannot be reliably used in string concatenation."
-count = 1
-
-[[issues]]
-file = "templates/llms.txt.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `description` on class `Kirby\Cms\Site`.'
-count = 1
-
-[[issues]]
-file = "templates/llms.txt.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `title` on class `Kirby\Cms\Site`.'
 count = 1
 
 [[issues]]
@@ -4546,18 +3856,6 @@ count = 1
 file = "templates/sitemap.xsl.php"
 code = "mixed-argument"
 message = "The first value for `echo` is too general."
-count = 1
-
-[[issues]]
-file = "templates/sitemap.xsl.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 2
-
-[[issues]]
-file = "templates/sitemap.xsl.php"
-code = "non-documented-method"
-message = 'Ambiguous method call to `metadata` on class `Kirby\Cms\Page`.'
 count = 1
 
 [[issues]]
