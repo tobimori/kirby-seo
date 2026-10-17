@@ -131,6 +131,8 @@ class Checker
 	 * Processes pending page scans and external URL checks within a time budget.
 	 * The deadline is checked between batches; an active batch can exceed it.
 	 * Returns progress without processing if another instance holds the index lock
+	 *
+	 * @return array{pages: array{done: int, total: int}, urls: array{done: int, total: int}, done: bool, running: bool, queue: bool}
 	 */
 	public function step(int $seconds): array
 	{
@@ -197,12 +199,14 @@ class Checker
 		// pages that don't exist anymore (or have a new URL) mark the pages linking
 		// to them as changed (see `prepare()`), which needs the links of all pages
 		foreach ($state['pages'] as [, $url]) {
-			if (!isset($this->urls[$url])) {
-				$this->data ??= $this->index->read();
-				$this->prepare();
-				$state = Index::summarize($this->data);
-				break;
+			if (isset($this->urls[$url])) {
+				continue;
 			}
+
+			$this->data ??= $this->index->read();
+			$this->prepare();
+			$state = Index::summarize($this->data);
+			break;
 		}
 
 		$done = count(array_filter(
@@ -483,6 +487,8 @@ class Checker
 		if (filter_var($host, FILTER_VALIDATE_IP) !== false) {
 			$addresses = [$host];
 		} else {
+			// @mago-expect lint:no-error-control-operator
+			// @mago-expect lint:no-error-control-operator
 			$addresses = @gethostbynamel($host) ?: array_column(@dns_get_record($host, DNS_AAAA) ?: [], 'ipv6');
 		}
 

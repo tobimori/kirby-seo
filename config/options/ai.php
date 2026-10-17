@@ -4,7 +4,7 @@ use tobimori\Seo\Ai\Drivers\Anthropic;
 use tobimori\Seo\Ai\Drivers\Gemini;
 use tobimori\Seo\Ai\Drivers\OpenAi;
 
-// TODO: custom provider per task
+// TODO(@tobimori): custom provider per task
 return [
 	'enabled' => true,
 	'provider' => 'openai',

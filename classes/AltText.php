@@ -32,6 +32,7 @@ class AltText
 			return new static();
 		}
 
+		// @mago-expect lint:no-empty-catch-clause
 		try {
 			$data = Yaml::decode($value);
 

@@ -335,6 +335,7 @@ class LlmContent
 		$xpath = new DOMXPath($document);
 		foreach ($this->selectors() as $selector) {
 			$query = $this->selectorToXPath($selector);
+			// @mago-expect lint:no-error-control-operator
 			if ($query === null || ($nodes = @$xpath->query($query)) === false) {
 				continue;
 			}
@@ -538,6 +539,7 @@ class LlmContent
 			return $selector;
 		}
 
+		$match = [];
 		if (preg_match('/^([a-z][a-z0-9-]*)$/i', $selector, $match) === 1) {
 			return '//' . Str::lower($match[1]);
 		}

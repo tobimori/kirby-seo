@@ -4,7 +4,7 @@ php-version = "8.3"
 
 [source]
 paths = ["index.php", "blueprints", "classes", "config", "snippets", "templates"]
-includes = ["vendor", ".repos/vendor", "site/plugins"]
+includes = ["vendor", ".repos/vendor", "site/plugins", "stubs"]
 
 [source.glob]
 literal-separator = true
@@ -31,7 +31,6 @@ inline-empty-constructor-braces = false
 
 [linter]
 minimum-fail-level = "warning"
-baseline = "mago-linter-baseline.toml"
 
 [linter.rules]
 # Kirby code style uses these constructs
@@ -47,9 +46,14 @@ excessive-parameter-list = { enabled = false }
 kan-defect = { enabled = false }
 too-many-methods = { enabled = false }
 halstead = { enabled = false }
+no-else-clause = { enabled = false }
+no-boolean-flag-parameter = { enabled = false }
+prefer-early-continue = { max_allowed_statements = 2 }
+no-redundant-file = { exclude = ["templates/llms.php"] }
 # Kirby binds `$this` to route, hook, and area closures
 prefer-static-closure = { exclude = ["config/"] }
 prefer-first-class-callable = { exclude = ["config/"] }
+prefer-arrow-function = { exclude = ["config/"] }
 
 [analyzer]
 baseline = "mago-analyzer-baseline.toml"

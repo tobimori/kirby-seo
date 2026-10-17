@@ -231,6 +231,7 @@ class Report
 		}
 
 		// content representations, e.g. `/team/jane.vcf` for the template `team.vcf.php`
+		$match = [];
 		if (
 			preg_match('#\.([a-z0-9]+)$#i', parse_url($url, PHP_URL_PATH) ?? '', $match) &&
 			($entry = $this->entries()[static::normalize(substr(strtok($url, '?'), 0, -strlen($match[0])))] ?? null)

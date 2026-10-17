@@ -1,7 +1,9 @@
 <?php
 
+use Kirby\Cms\Api;
 use Kirby\Cms\Page;
 use Kirby\Content\VersionId;
+use Kirby\Form\Field as FormField;
 use Kirby\Toolkit\Str;
 use tobimori\Seo\Field\AltTextField;
 use tobimori\Seo\Seo;
@@ -11,11 +13,15 @@ return [
 		'extends' => 'writer',
 		'computed' => [
 			'placeholder' => function () {
-				if ($this->placeholder === null) {
+				/** @var FormField $this */
+				// @mago-expect analysis:non-documented-property
+				$placeholder = $this->placeholder;
+
+				if (!is_string($placeholder)) {
 					return null;
 				}
 
-				$value = $this->model()->toString($this->placeholder);
+				$value = $this->model()->toString($placeholder);
 
 				if (Str::contains($value, 'data-seo-template-variable')) {
 					$value = Str::unhtml($value);
@@ -48,6 +54,7 @@ return [
 				'pattern' => 'ai/stream',
 				'method' => 'POST',
 				'action' => function () {
+					/** @var Api $this */
 					$kirby = $this->kirby();
 					$component = Seo::option('components.ai');
 
@@ -58,10 +65,12 @@ return [
 					$data = $kirby->request()->body()->data();
 					$lang = $kirby->api()->language();
 
+					/** @var FormField $field */
+					$field = $this->field();
+
 					// for site, use homepage
-					$model = $this->field()->model();
-					$page = $model instanceof Page ? $model : $model->homePage();
-					$kirby->site()->visit($page, $lang);
+					$model = $field->model();
+					$page = $kirby->site()->visit($model instanceof Page ? $model : $kirby->site()->homePageId(), $lang);
 					if ($lang) {
 						$kirby->setCurrentLanguage($lang);
 					}
@@ -75,8 +84,9 @@ return [
 
 					// use the unsaved Panel changes (if any) for rendering & reading content,
 					// falls back to the latest version if no changes exist
-					$component::sendStream(fn (Closure $send) => VersionId::render('changes', function () use ($component, $data, $send) {
-						foreach ($component::streamTask($this->field()->ai(), [
+					$component::sendStream(fn (Closure $send) => VersionId::render('changes', function () use ($component, $data, $send, $field) {
+						// @mago-expect analysis:non-documented-method
+						foreach ($component::streamTask($field->ai(), [
 							'instructions' => $data['instructions'] ?? null,
 							'edit' => $data['edit'] ?? null
 						]) as $chunk) {

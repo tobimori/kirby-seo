@@ -179,6 +179,8 @@ class Crawler
 
 	public static function perform(CurlMultiHandle $multi): void
 	{
+		$running = 0;
+
 		do {
 			$status = curl_multi_exec($multi, $running);
 
@@ -189,6 +191,7 @@ class Crawler
 		} while ($running && $status === CURLM_OK);
 
 		// `curl_errno()` of the handles is only set once their messages are read
+		// @mago-expect analysis:impossible-type-comparison
 		do {
 			$message = curl_multi_info_read($multi);
 		} while ($message !== false);
@@ -214,6 +217,7 @@ class Crawler
 	protected static function isolate(App $kirby, string $url): Closure
 	{
 		$site = $kirby->site();
+		// @mago-expect lint:no-request-variable
 		$globals = [$_GET, $_POST, $_REQUEST, $_FILES, $_COOKIE];
 		$language = $kirby->language()?->code();
 		$translation = $kirby->translation()->code();
@@ -223,6 +227,7 @@ class Crawler
 
 		$_GET = [];
 		$_POST = [];
+		// @mago-expect lint:no-request-variable
 		$_REQUEST = [];
 		$_FILES = [];
 		$_COOKIE = [];
@@ -241,6 +246,7 @@ class Crawler
 		})->call($kirby);
 
 		return function () use ($kirby, $site, $globals, $language, $translation, $data, $page, $state) {
+			// @mago-expect lint:no-request-variable
 			[$_GET, $_POST, $_REQUEST, $_FILES, $_COOKIE] = $globals;
 			(function () use ($state) {
 				[$this->request, $this->response, $this->path] = $state;
@@ -261,6 +267,7 @@ class Crawler
 	{
 		$document = new DOMDocument();
 		// without the encoding, libxml reads the HTML as ISO-8859-1
+		// @mago-expect lint:no-error-control-operator
 		@$document->loadHTML('<?xml encoding="UTF-8">' . $html, LIBXML_NOERROR | LIBXML_NOWARNING | LIBXML_NONET);
 		$xpath = new DOMXPath($document);
 
@@ -318,6 +325,8 @@ class Crawler
 
 	public static function isIgnored(string $url): bool
 	{
+		$match = [];
+
 		return (
 			preg_match('/^([a-z][a-z0-9+.-]*):/i', $url, $match) === 1 &&
 				in_array(strtolower($match[1]), self::IGNORED_SCHEMES, true)
@@ -327,6 +336,7 @@ class Crawler
 	protected static function normalizePath(string $path): string
 	{
 		$suffix = '';
+		$match = [];
 		if (preg_match('/[?#].*$/', $path, $match)) {
 			$suffix = $match[0];
 			$path = substr($path, 0, -strlen($suffix));

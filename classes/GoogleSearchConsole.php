@@ -326,7 +326,7 @@ class GoogleSearchConsole
 				md5($property . json_encode($body)),
 				static function () use ($property, $body) {
 					$uri = new Uri('https://www.googleapis.com/webmasters/v3/sites');
-					$uri->setPath($uri->path() . '/' . urlencode($property) . '/searchAnalytics/query');
+					$uri->setPath($uri->path()->toString() . '/' . urlencode($property) . '/searchAnalytics/query');
 
 					$response = Remote::request($uri->toString(), [
 						'method' => 'POST',

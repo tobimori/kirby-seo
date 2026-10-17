@@ -10,7 +10,6 @@ scripts/ export-ignore
 .oxfmtrc.json export-ignore
 mago.toml export-ignore
 mago-analyzer-baseline.toml export-ignore
-mago-linter-baseline.toml export-ignore
 composer.lock export-ignore
 eslint.config.mjs export-ignore
 i18n.json export-ignore
@@ -22,3 +21,4 @@ pnpm-lock.yaml export-ignore
 pnpm-workspace.yaml export-ignore
 t3.json export-ignore
 AGENTS.md export-ignore
+stubs/ export-ignore

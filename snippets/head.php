@@ -11,7 +11,7 @@ $tags = $page->metadata()->snippetData();
 // if we're using slots, the user wants to output priority tags such as <title>
 // before their stylesheet, script, etc. tags
 if (isset($slot)) {
-	foreach (array_filter($tags, fn ($tag) => $tag['priority']) as $tag) {
+	foreach (array_filter($tags, static fn (array $tag): bool => $tag['priority'] === true) as $tag) {
 		echo Html::tag($tag['tag'], $tag['content'] ?? null, $tag['attributes'] ?? []) . PHP_EOL;
 	}
 

@@ -2,9 +2,11 @@
 
 use Kirby\Cms\App;
 use Kirby\Cms\Page;
+use Kirby\Cms\Section;
 use Kirby\Cms\Site;
 use Kirby\Toolkit\A;
 use Kirby\Toolkit\Str;
+use tobimori\Seo\License;
 use tobimori\Seo\Seo;
 
 return [
@@ -16,6 +18,7 @@ return [
 				'text' => t("seo.sections.preview.{$item}")
 			]),
 			'meta' => function () {
+				/** @var Section $this */
 				$model = $this->model();
 
 				if ($model instanceof Site || $model instanceof Page) {
@@ -55,6 +58,7 @@ return [
 		'mixins' => ['headline'],
 		'computed' => [
 			'data' => function () {
+				/** @var Section $this */
 				$model = $this->model();
 				if (!$model instanceof Page) {
 					// only works for pages (not site, files, etc.)
@@ -94,7 +98,12 @@ return [
 	'seo-license' => [
 		'computed' => [
 			'local' => fn () => App::instance()->system()->isLocal(),
-			'state' => fn () => App::instance()->plugin('tobimori/seo')->license()->state()
+			'state' => function () {
+				/** @var License $license */
+				$license = App::instance()->plugin('tobimori/seo')->license();
+
+				return $license->state();
+			}
 		]
 	],
 	'seo-search-console' => [
@@ -111,6 +120,7 @@ return [
 			},
 			'property' => fn () => Seo::option('components.gsc')::property(),
 			'pageUrl' => function () {
+				/** @var Section $this */
 				$model = $this->model();
 				if ($model instanceof Page) {
 					return '/' . $model->uri();
@@ -118,6 +128,7 @@ return [
 				return null;
 			},
 			'data' => function () {
+				/** @var Section $this */
 				$gsc = Seo::option('components.gsc');
 				if (!$gsc::ready()) {
 					return [];
