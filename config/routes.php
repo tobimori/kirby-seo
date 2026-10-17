@@ -2,11 +2,11 @@
 
 use Kirby\Cms\App;
 use Kirby\Cms\Page;
-use Kirby\Data\Json;
 use Kirby\Exception\NotFoundException;
 use Kirby\Http\Response;
 use Kirby\Http\Route;
 use Kirby\Toolkit\I18n;
+use Kirby\Toolkit\Str;
 use tobimori\Seo\Seo;
 
 /**
@@ -174,11 +174,14 @@ return [
 				Response::go($kirby->site()->panel()->url());
 			}
 
-			$return = $kirby->request()->get('return') ?? $kirby->site()->panel()->url();
-			$state = base64_encode(Json::encode([
-				'csrf' => bin2hex(random_bytes(16)),
-				'return' => $return
-			]));
+			$panel = $kirby->url('panel');
+			$return = $kirby->request()->get('return');
+			if ($panel === null || !is_string($return) || $return !== $panel && !Str::startsWith($return, $panel . '/')) {
+				$return = $kirby->site()->panel()->url();
+			}
+
+			$state = bin2hex(random_bytes(16));
+			$kirby->session()->data()->set('tobimori.seo.gsc', ['state' => $state, 'return' => $return]);
 
 			$redirectUri = rtrim($kirby->url(), '/') . '/__seo/gsc/callback';
 			Response::go(Seo::option('components.gsc')::authUrl($redirectUri, $state));
@@ -194,8 +197,9 @@ return [
 			}
 
 			$request = $kirby->request();
-			$state = Json::decode(base64_decode((string)$request->get('state'), true) ?: '');
-			if (!$state || empty($state['csrf'])) {
+			$session = $kirby->session()->data()->pull('tobimori.seo.gsc');
+			$state = $request->get('state');
+			if (!is_array($session) || !is_string($session['state'] ?? null) || !is_string($state) || !hash_equals($session['state'], $state)) {
 				throw new \Exception('Invalid OAuth state');
 			}
 
@@ -212,8 +216,7 @@ return [
 			Seo::option('components.gsc')::exchangeCode($code, $redirectUri);
 
 			// redirect back to where the user came from
-			$return = $state['return'] ?? $kirby->site()->panel()->url();
-			Response::go((string)$return);
+			Response::go((string)$session['return']);
 		}
 	]
 ];
