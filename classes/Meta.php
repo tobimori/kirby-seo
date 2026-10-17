@@ -455,16 +455,11 @@ class Meta
 	{
 		// Track consumed keys, so we don't output legacy field values
 		// (skip without meta defaults, the lookup would build the full meta array)
-		$toBeConsumed = $key;
-		if (
-			$this->metaDefaults &&
-			(
-				array_key_exists($toBeConsumed, $this->metaDefaults) ||
-				array_key_exists($toBeConsumed = $this->findTagForField($toBeConsumed), $this->metaDefaults)
-			) &&
-			!in_array($toBeConsumed, $this->consumed, true)
-		) {
-			$this->consumed[] = $toBeConsumed;
+		if ($this->metaDefaults) {
+			$toBeConsumed = array_key_exists($key, $this->metaDefaults) ? $key : $this->findTagForField($key);
+			if ($toBeConsumed !== null && array_key_exists($toBeConsumed, $this->metaDefaults) && !in_array($toBeConsumed, $this->consumed, true)) {
+				$this->consumed[] = $toBeConsumed;
+			}
 		}
 
 		return $this->resolve($key, $exclude)['field'];

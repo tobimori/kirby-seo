@@ -1880,12 +1880,6 @@ count = 3
 
 [[issues]]
 file = "classes/Meta.php"
-code = "invalid-operand"
-message = "Left operand in `&&` operation is an `array`."
-count = 1
-
-[[issues]]
-file = "classes/Meta.php"
 code = "invalid-property-access"
 message = "Attempting to access a property on a non-object type (`non-empty-array<array-key, mixed>`)."
 count = 1
@@ -2002,7 +1996,7 @@ count = 2
 file = "classes/Meta.php"
 code = "possibly-null-argument"
 message = "Argument #1 of function `array_key_exists` is possibly `null`, but parameter type `bool|float|int|string` does not accept it."
-count = 2
+count = 1
 
 [[issues]]
 file = "classes/Meta.php"
