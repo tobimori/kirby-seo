@@ -32,6 +32,7 @@ $methodRoutes = fn (string $pattern, string $allow, string $option) => [
 		'action' => function () use ($allow, $option) {
 			/** @var Route $this */
 			// allowed methods only get here if their route passed on (e.g. unknown sitemap index), which is not a method error
+			// @mago-expect analysis:mixed-operand
 			if (Seo::option($option) && !in_array(App::instance()->request()->method(), explode(', ', $allow), true)) {
 				return new Response('Method Not Allowed', 'text/plain', 405, ['Allow' => $allow]);
 			}

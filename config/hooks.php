@@ -111,6 +111,8 @@ return [
 
 		if (App::instance()->option('tobimori.seo.generateSchema')) {
 			$meta = $page->metadata();
+			// schema types come from the optional spatie/schema-org package
+			// @mago-expect analysis:mixed-method-access(5)
 			$page
 				->schema('WebSite')
 				->url($meta->canonicalUrl())
@@ -151,6 +153,7 @@ return [
 
 		$wantsMarkdown =
 			$isMarkdownPath ||
+			// @mago-expect analysis:mixed-argument
 			$llmContent->prefersMarkdown(App::instance()->request()->header('Accept'));
 
 		if ($result instanceof Page) {

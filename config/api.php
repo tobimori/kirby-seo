@@ -15,7 +15,10 @@ return [
 				$view = EditableOverviewView::for($tab);
 
 				return match ($action) {
+					// @mago-expect analysis:invalid-type-cast
 					'save' => $view->save((array)$request->get('changes', [])),
+					// the route pattern limits the action
+					// @mago-expect analysis:invalid-type-cast,string-member-selector
 					default => $view->$action((array)$request->get('ids', []))
 				};
 			}
@@ -28,6 +31,8 @@ return [
 		[
 			'pattern' => 'seo/overview/links/(scan|rescan|recheck)',
 			'method' => 'POST',
+			// the route pattern limits the action
+			// @mago-expect analysis:string-member-selector
 			'action' => fn (string $action) => (new LinksView())->$action()
 		]
 	]

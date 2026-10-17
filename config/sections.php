@@ -14,6 +14,7 @@ return [
 	'seo-preview' => [
 		'mixins' => ['headline'],
 		'computed' => [
+			// @mago-expect analysis:mixed-argument
 			'options' => fn () => A::map(App::instance()->option('tobimori.seo.previews'), fn ($item) => [
 				'value' => $item,
 				'text' => I18n::translate("seo.sections.preview.{$item}")
@@ -82,6 +83,7 @@ return [
 				libxml_use_internal_errors($previous);
 
 				$xpath = new DOMXPath($dom);
+				/** @var \DOMNodeList<\DOMElement> $headings */
 				$headings = $xpath->query('//h1|//h2|//h3|//h4|//h5|//h6');
 				$data = [];
 

@@ -56,5 +56,4 @@ prefer-first-class-callable = { exclude = ["config/"] }
 prefer-arrow-function = { exclude = ["config/"] }
 
 [analyzer]
-baseline = "mago-analyzer-baseline.toml"
 ignore = ["mixed-assignment"]

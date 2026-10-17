@@ -47,6 +47,8 @@ return [
 		],
 		'buttons' => [
 			'page.robots' => fn (Page $page) => Seo::option('robots.enabled') ? new RobotsViewButton($page) : null,
+			// the button is used in page and site views
+			// @mago-expect analysis:less-specific-argument
 			'utm-share' => fn (ModelWithContent $model) => new UtmShareViewButton($model),
 			'seo.overview.languages' => fn (Site $site) => new OverviewLanguagesButton($site)
 		],
@@ -57,6 +59,7 @@ return [
 					$kirby = App::instance();
 					$request = $kirby->request();
 					$metric = (string)$request->get('metric', 'clicks');
+					// @mago-expect analysis:mixed-operand
 					$asc = (bool)$request->get('asc', in_array($metric, ['position', 'query'], true) ? 1 : 0);
 					$page = max(1, (int)$request->get('page', 1));
 					$limit = max(1, min(100, (int)$request->get('limit', 20)));
@@ -170,7 +173,10 @@ return [
 					}
 
 					License::activate(
+						// V::email() checked the email
+						// @mago-expect analysis:mixed-argument
 						email: $body->get('email'),
+						// @mago-expect analysis:mixed-argument
 						license: trim($body->get('license', ''))
 					);
 
