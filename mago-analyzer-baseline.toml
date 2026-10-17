@@ -1,204 +1,6 @@
 variant = "loose"
 
 [[issues]]
-file = "classes/Audit/Images.php"
-code = "invalid-array-element"
-message = "Cannot use spread operator on non-iterable type `nonnull`."
-count = 1
-
-[[issues]]
-file = "classes/Audit/Images.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `tobimori\Seo\AltText::parse`: expected `null|string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "classes/Audit/Images.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 3
-
-[[issues]]
-file = "classes/Audit/Images.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `tobimori\Seo\Audit\Images::fields`. Saw type `nonnull`.'
-count = 1
-
-[[issues]]
-file = "classes/Audit/Images.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `tobimori\Seo\Audit\Images::state`. Saw type `nonnull`.'
-count = 1
-
-[[issues]]
-file = "classes/Audit/Images.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `tobimori\Seo\Audit\Images::stats`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "classes/Audit/Pages.php"
-code = "invalid-array-element"
-message = "Cannot use spread operator on non-iterable type `nonnull`."
-count = 1
-
-[[issues]]
-file = "classes/Audit/Pages.php"
-code = "invalid-destructuring-source"
-message = "Invalid destructuring assignment: Cannot unpack type `nonnull` into variables."
-count = 1
-
-[[issues]]
-file = "classes/Audit/Pages.php"
-code = "invalid-iterator"
-message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
-count = 2
-
-[[issues]]
-file = "classes/Audit/Pages.php"
-code = "invalid-iterator"
-message = "The expression provided to `foreach` is not iterable. It resolved to type `nonnull`, which is not iterable."
-count = 1
-
-[[issues]]
-file = "classes/Audit/Pages.php"
-code = "less-specific-nested-argument-type"
-message = "Argument type mismatch for argument #1 of `array_column`: expected `array<array-key, array<string('type'), ('V.array_column() extends mixed)>|object>|list<array<string('type'), ('V.array_column() extends mixed)>|object>`, but provided type `array<array-key, mixed>` is less specific."
-count = 1
-
-[[issues]]
-file = "classes/Audit/Pages.php"
-code = "less-specific-nested-argument-type"
-message = 'Argument type mismatch for argument #2 of `tobimori\Seo\Audit\Pages::issues`: expected `array<array-key, mixed>`, but provided type `array<mixed, array-key>` is less specific.'
-count = 1
-
-[[issues]]
-file = "classes/Audit/Pages.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `array_column`: expected `array<array-key, array<int(0), ('V.array_column() extends mixed)>|object>|list<array<int(0), ('V.array_column() extends mixed)>|object>`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "classes/Audit/Pages.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `array_column`: expected `array<array-key, array<string('type'), ('V.array_column() extends mixed)>|object>|list<array<string('type'), ('V.array_column() extends mixed)>|object>`, but found `nonnull`."
-count = 1
-
-[[issues]]
-file = "classes/Audit/Pages.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `count`: expected `Countable|array<array-key, mixed>`, but found `mixed`."
-count = 3
-
-[[issues]]
-file = "classes/Audit/Pages.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `str_starts_with`: expected `string`, but found `mixed`."
-count = 2
-
-[[issues]]
-file = "classes/Audit/Pages.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `tobimori\Seo\Audit\Pages::issues`: expected `array<array-key, mixed>`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "classes/Audit/Pages.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `tobimori\Seo\Audit\Pages::normalize`: expected `string`, but found `mixed`.'
-count = 2
-
-[[issues]]
-file = "classes/Audit/Pages.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `tobimori\Seo\Audit\Pages::length`: expected `string`, but found `mixed`.'
-count = 2
-
-[[issues]]
-file = "classes/Audit/Pages.php"
-code = "mixed-array-access"
-message = "Unsafe array access on type `mixed`."
-count = 9
-
-[[issues]]
-file = "classes/Audit/Pages.php"
-code = "mixed-array-access"
-message = "Unsafe array access on type `nonnull`."
-count = 1
-
-[[issues]]
-file = "classes/Audit/Pages.php"
-code = "mixed-array-assignment"
-message = "Unsafe array assignment on type `mixed`."
-count = 1
-
-[[issues]]
-file = "classes/Audit/Pages.php"
-code = "mixed-operand"
-message = "Right operand in `<` comparison has `mixed` type."
-count = 1
-
-[[issues]]
-file = "classes/Audit/Pages.php"
-code = "mixed-operand"
-message = "Right operand in `>` comparison has `mixed` type."
-count = 1
-
-[[issues]]
-file = "classes/Audit/Pages.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `tobimori\Seo\Audit\Pages::fingerprint`. Saw type `nonnull`.'
-count = 1
-
-[[issues]]
-file = "classes/Audit/Pages.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `tobimori\Seo\Audit\Pages::group`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "classes/Audit/Pages.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `tobimori\Seo\Audit\Pages::page`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "classes/Audit/Pages.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `tobimori\Seo\Audit\Pages::summary`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "classes/Audit/Pages.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `tobimori\Seo\Audit\Pages::value`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "classes/Audit/Pages.php"
-code = "possibly-false-operand"
-message = "Left operand in spaceship comparison (`<=>`) might be `false` (type `false|non-negative-int`)."
-count = 1
-
-[[issues]]
-file = "classes/Audit/Pages.php"
-code = "possibly-false-operand"
-message = "Right operand in spaceship comparison (`<=>`) might be `false` (type `false|non-negative-int`)."
-count = 1
-
-[[issues]]
-file = "classes/Audit/Pages.php"
-code = "possibly-null-argument"
-message = "Argument #1 of function `trim` is possibly `null`, but parameter type `string` does not accept it."
-count = 1
-
-[[issues]]
-file = "classes/Audit/Pages.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `tobimori\Seo\Audit\Pages::fingerprint` is possibly `null`, but parameter type `Kirby\Cms\Page` does not accept it.'
-count = 1
-
-[[issues]]
 file = "classes/GoogleSearchConsole.php"
 code = "mixed-argument"
 message = "Invalid argument type for argument #1 of `Exception::__construct`: expected `string`, but found `mixed`."
@@ -651,7 +453,7 @@ count = 1
 [[issues]]
 file = "classes/Views/ImagesView.php"
 code = "invalid-return-statement"
-message = '''Invalid return type for function `tobimori\Seo\Views\ImagesView::find`: expected `array{'fields': array<array-key, string>, 'id': string, 'model': Kirby\Cms\ModelWithContent}|null`, but found `array<array-key, mixed>|null`.'''
+message = '''Invalid return type for function `tobimori\Seo\Views\ImagesView::find`: expected `array{'fields': array<array-key, string>, 'id': string, 'model': Kirby\Cms\ModelWithContent}|null`, but found `array{'field': string, 'fields': list<string>, 'id': string, 'model': Kirby\Cms\File}|null`.'''
 count = 1
 
 [[issues]]
@@ -779,6 +581,12 @@ file = "classes/Views/ImagesView.php"
 code = "mixed-return-statement"
 message = 'Could not infer a precise return type for function `tobimori\Seo\Views\ImagesView::value`. Saw type `mixed`.'
 count = 1
+
+[[issues]]
+file = "classes/Views/ImagesView.php"
+code = "possibly-invalid-argument"
+message = '''Possible argument type mismatch for argument #1 of `tobimori\Seo\Audit\Images::altText`: expected `array{'field': string, 'fields': list<string>, 'id': string, 'model': Kirby\Cms\File}`, but possibly received `array<array-key, mixed>`.'''
+count = 3
 
 [[issues]]
 file = "classes/Views/ImagesView.php"

@@ -11,6 +11,14 @@ use tobimori\Seo\Seo;
 
 /**
  * Audits page titles and descriptions for SEO issues across a page collection
+ *
+ * @psalm-type Values = array<string, string>
+ * @psalm-type Checked = array{values: Values, home: bool, title: string, description: string, source: string|null}
+ * @psalm-type Entry = array{fingerprint?: string, skipped: string, values: Values}|array{fingerprint?: string, values: Values, home: bool, title: string, description: string, source: string|null}
+ * @psalm-type Issue = array{type: string, severity?: string, group?: array-key, count?: int, source?: string|null, variant?: string, length?: int, min?: int, max?: int}
+ * @psalm-type Group = array{kind: string, text: string, pages: list<array-key>}
+ * @psalm-type PageResult = array{issues: list<Issue>}|array{skipped: string}
+ * @psalm-type Result = array{pages: array<array-key, PageResult>, summary: array<string, int>, groups: array<array-key, Group>}
  */
 class Pages
 {
@@ -45,8 +53,13 @@ class Pages
 
 	public const VALUES = ['metaTitle', 'metaDescription', 'ogDescription'];
 
+	/** @var array<array-key, Entry>|null */
 	protected array|null $entries = null;
+
+	/** @var Result|null */
 	protected array|null $result = null;
+
+	/** @var array<string, string> */
 	protected array $fingerprints = [];
 
 	public function __construct(protected \Kirby\Cms\Pages $pages)
@@ -56,12 +69,17 @@ class Pages
 	/**
 	 * Checks of a single page: `['issues' => [...]]`, or `['skipped' => 'reason']`
 	 * for untranslated pages
+	 *
+	 * @return PageResult|null
 	 */
 	public function page(Page $page): array|null
 	{
 		return $this->result()['pages'][$page->id()] ?? null;
 	}
 
+	/**
+	 * @return array<string, int>
+	 */
 	public function summary(): array
 	{
 		return $this->result()['summary'];
@@ -70,7 +88,7 @@ class Pages
 	/**
 	 * Pages sharing the same title or description, by the group's hash
 	 *
-	 * @return array{kind: string, text: string, pages: array<string>}|null
+	 * @return Group|null
 	 */
 	public function group(string $hash): array|null
 	{
@@ -145,6 +163,9 @@ class Pages
 		return $stats;
 	}
 
+	/**
+	 * @return Result
+	 */
 	public function result(): array
 	{
 		return $this->result ??= $this->evaluate($this->entries());
@@ -153,6 +174,8 @@ class Pages
 	/**
 	 * Loads per-page audit inputs, resolving metadata only for missing or changed entries.
 	 * Duplicate groups and issues are evaluated separately for the current collection
+	 *
+	 * @return array<array-key, Entry>
 	 */
 	protected function entries(): array
 	{
@@ -164,6 +187,7 @@ class Pages
 		$cache = $kirby->cache('tobimori.seo.overview');
 
 		$key = 'audit-' . md5(Json::encode([$kirby->language()?->code(), $this->modified($kirby->site()), Seo::auditOptions()]));
+		/** @var array<array-key, Entry> $cached */
 		$cached = $cache->get($key) ?? [];
 		$entries = [];
 		$changed = false;
@@ -193,10 +217,13 @@ class Pages
 			$page->status(),
 			$page->intendedTemplate()->name(),
 			$this->modified($page),
-			$page->parent() ? $this->fingerprint($page->parent()) : null
+			($parent = $page->parent()) ? $this->fingerprint($parent) : null
 		]));
 	}
 
+	/**
+	 * @return list<int|null>
+	 */
 	protected function modified(Page|Site $model): array
 	{
 		return [
@@ -205,6 +232,9 @@ class Pages
 		];
 	}
 
+	/**
+	 * @return Entry
+	 */
 	protected function entry(Page $page): array
 	{
 		// Do not retain Meta instances while filling the cache for the entire site
@@ -232,19 +262,30 @@ class Pages
 		];
 	}
 
+	/**
+	 * @param array<array-key, Entry> $entries
+	 * @return Result
+	 */
 	protected function evaluate(array $entries): array
 	{
 		$pages = [];
+		$checked = [];
 
 		foreach ($entries as $id => $entry) {
 			if (isset($entry['skipped'])) {
 				$pages[$id] = ['skipped' => $entry['skipped']];
-				unset($entries[$id]);
+			} else {
+				// Mago merges the shapes of the union, so it can't narrow them
+				/** @var Checked $entry */
+				$checked[$id] = $entry;
 			}
 		}
 
+		$entries = $checked;
+
 		$groups = $this->groups($entries);
 
+		/** @var array<array-key, array<string, array-key>> $memberOf */
 		$memberOf = [];
 		foreach ($groups as $hash => $group) {
 			foreach ($group['pages'] as $id) {
@@ -271,6 +312,12 @@ class Pages
 		];
 	}
 
+	/**
+	 * @param Checked $entry
+	 * @param array<string, array-key> $memberOf
+	 * @param array<array-key, Group> $groups
+	 * @return list<Issue>
+	 */
 	protected function issues(array $entry, array $memberOf, array $groups): array
 	{
 		$issues = [];
@@ -301,7 +348,8 @@ class Pages
 			}
 		}
 
-		usort($issues, static fn ($a, $b) => array_search($a['type'], self::TYPES, true) <=> array_search($b['type'], self::TYPES, true));
+		$order = array_flip(self::TYPES);
+		usort($issues, static fn ($a, $b) => $order[$a['type']] <=> $order[$b['type']]);
 
 		return array_map(static fn ($issue) => [...$issue, 'severity' => self::SEVERITY[$issue['type']]], $issues);
 	}
@@ -309,9 +357,13 @@ class Pages
 	/**
 	 * Groups of pages that share the same title, or the same description of their own
 	 * (descriptions shared via fallbacks are reported as such instead)
+	 *
+	 * @param array<array-key, Checked> $entries
+	 * @return array<array-key, Group>
 	 */
 	protected function groups(array $entries): array
 	{
+		/** @var array<string, array<array-key, list<array{array-key, string}>>> $candidates */
 		$candidates = [];
 
 		foreach ($entries as $id => $entry) {
@@ -332,7 +384,7 @@ class Pages
 					$groups[substr(md5($kind . ':' . $normalized), 0, 12)] = [
 						'kind' => $kind,
 						'text' => $members[0][1],
-						'pages' => array_column($members, 0)
+						'pages' => array_map(static fn ($member) => $member[0], $members)
 					];
 				}
 			}
@@ -343,10 +395,14 @@ class Pages
 
 	/**
 	 * Length issue for the given kind (`title` or `description`), if any
+	 *
+	 * @return array{variant: string, length: int, min: int, max: int}|null
 	 */
 	protected function length(string $kind, string $text): array|null
 	{
-		[$min, $max] = Seo::option("overview.lengths.{$kind}") ?? [0, PHP_INT_MAX];
+		/** @var array{int, int} $lengths */
+		$lengths = Seo::option("overview.lengths.{$kind}") ?? [0, PHP_INT_MAX];
+		[$min, $max] = $lengths;
 		$length = Str::length($text);
 
 		return match (true) {
@@ -369,7 +425,7 @@ class Pages
 
 	protected static function text(mixed $value): string
 	{
-		return trim(preg_replace('/\s+/u', ' ', Str::unhtml((string)$value)));
+		return trim((string)preg_replace('/\s+/u', ' ', Str::unhtml((string)$value)));
 	}
 
 	protected static function normalize(string $text): string

@@ -5,12 +5,15 @@ namespace tobimori\Seo\Audit;
 use Kirby\Cms\App;
 use Kirby\Cms\File;
 use Kirby\Cms\Page;
+use Kirby\Content\Field;
 use tobimori\Seo\AltText;
 
 /**
  * Audits accessible image alt-text fields across the site.
  * Images can be stored on pages without SEO fields (e.g. a media library) and used elsewhere,
  * so the audit is not limited to pages in the overview
+ *
+ * @psalm-type Entry = array{id: string, model: File, fields: list<string>, field: string}
  */
 class Images
 {
@@ -25,16 +28,18 @@ class Images
 	];
 
 	/**
-	 * @var array<string, array{id: string, model: \Kirby\Cms\File, fields: array<string>, field: string}>|null
+	 * @var array<string, Entry>|null
 	 */
 	protected array|null $entries = null;
 
+	/** @var array<string, list<string>> */
 	protected array $fields = [];
 
+	/** @var array<string, string> */
 	protected array $states = [];
 
 	/**
-	 * @return array<string, array{id: string, model: \Kirby\Cms\File, fields: array<string>, field: string}>
+	 * @return array<string, Entry>
 	 */
 	public function entries(): array
 	{
@@ -68,6 +73,9 @@ class Images
 		return $this->entries = $entries;
 	}
 
+	/**
+	 * @return Entry|null
+	 */
 	public function find(string $id): array|null
 	{
 		return $this->entries()[$id] ?? null;
@@ -84,23 +92,34 @@ class Images
 	/**
 	 * Names of the `alt-text` fields of the file's blueprint
 	 *
-	 * @return array<string>
+	 * @return list<string>
 	 */
 	public function fields(File $file): array
 	{
+		/** @var array<string, array<string, mixed>> $fields */
+		$fields = $file->blueprint()->fields();
+
 		return $this->fields[$file->template() ?? 'default'] ??= array_keys(array_filter(
-			$file->blueprint()->fields(),
+			$fields,
 			static fn ($field) => ($field['type'] ?? null) === 'alt-text'
 		));
 	}
 
+	/**
+	 * @param Entry $entry
+	 */
 	public function altText(array $entry): AltText
 	{
-		return AltText::parse($entry['model']->content()->get($entry['field'])->value());
+		/** @var Field $field */
+		$field = $entry['model']->content()->get($entry['field']);
+
+		return AltText::parse($field->toString());
 	}
 
 	/**
 	 * Decorative images take precedence over missing or unreviewed text
+	 *
+	 * @param Entry $entry
 	 */
 	public function state(array $entry): string
 	{
@@ -118,6 +137,9 @@ class Images
 		};
 	}
 
+	/**
+	 * @param Entry $entry
+	 */
 	public function has(array $entry, string $filter): bool
 	{
 		return $filter === 'issues'
@@ -125,6 +147,9 @@ class Images
 			: $this->state($entry) === $filter;
 	}
 
+	/**
+	 * @return array<string, int>
+	 */
 	public function summary(): array
 	{
 		$summary = array_fill_keys(self::FILTERS, 0);
@@ -150,6 +175,7 @@ class Images
 		$cache = $kirby->cache('tobimori.seo.overview');
 		// alt texts can be translated
 		$key = ($kirby->user()?->role()->id() ?? '') . '/' . ($kirby->language()?->code() ?? 'default');
+		/** @var array<string, array{ok: int, notice: int, negative: int}> $cached */
 		$cached = $cache->get('images-stats') ?? [];
 
 		// entries are loaded anyway in the images view, so its stats are always fresh
