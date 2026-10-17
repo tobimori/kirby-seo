@@ -19,6 +19,9 @@ class AltTextField extends FieldClass
 	protected bool $autogenerate;
 	protected mixed $value = [];
 
+	/**
+	 * @param array{autogenerate?: bool, ai?: bool, ...} $params
+	 */
 	public function __construct(array $params = [])
 	{
 		$this->autogenerate = $params['autogenerate'] ?? false;
@@ -35,11 +38,12 @@ class AltTextField extends FieldClass
 	{
 		$component = Seo::option('components.ai');
 
+		$model = $this->model();
 		$this->ai =
 			$ai &&
 			$component::enabled() &&
 			$component::permitted() &&
-			!($this->model() instanceof File && !Content::supportsImage($this->model()));
+			!($model instanceof File && !Content::supportsImage($model));
 	}
 
 	public function ai(): bool
@@ -57,7 +61,7 @@ class AltTextField extends FieldClass
 		if (is_array($value)) {
 			$this->value = $value;
 		} else {
-			$this->value = AltText::parse($value)->toArray();
+			$this->value = AltText::parse(is_string($value) ? $value : null)->toArray();
 		}
 
 		return $this;
@@ -71,10 +75,12 @@ class AltTextField extends FieldClass
 	public function toStoredValue(): mixed
 	{
 		if (is_array($this->value)) {
+			/** @var array{text?: string, decorative?: bool, source?: string} $value */
+			$value = $this->value;
 			$altText = new AltText(
-				text: $this->value['text'] ?? '',
-				decorative: $this->value['decorative'] ?? false,
-				source: $this->value['source'] ?? AltText::SOURCE_MANUAL
+				text: $value['text'] ?? '',
+				decorative: $value['decorative'] ?? false,
+				source: $value['source'] ?? AltText::SOURCE_MANUAL
 			);
 
 			if ($altText->isMissing()) {
@@ -135,7 +141,8 @@ class AltTextField extends FieldClass
 						$kirby->setCurrentLanguage($lang);
 					}
 
-					AltTextField::stream($model, $kirby->request()->body()->data()['instructions'] ?? null);
+					$instructions = $kirby->request()->body()->data()['instructions'] ?? null;
+					AltTextField::stream($model, is_string($instructions) ? $instructions : null);
 				}
 			]
 		];
@@ -198,7 +205,7 @@ class AltTextField extends FieldClass
 
 		foreach ($blueprint->fields() as $name => $field) {
 			$fieldClass = Field::$types[$field['type'] ?? ''] ?? null;
-			if (!is_a($fieldClass, static::class, true)) {
+			if (!is_string($fieldClass) || !is_a($fieldClass, static::class, true)) {
 				continue;
 			}
 
@@ -254,7 +261,7 @@ class AltTextField extends FieldClass
 			return $file;
 		}
 
-		// parse into [langCode => altText] map (single-lang uses null key)
+		// parse into [langCode, altText] pairs (single-lang uses the `null` language code)
 		$results = [];
 
 		if ($isMultiLang) {
@@ -264,20 +271,19 @@ class AltTextField extends FieldClass
 					continue;
 				}
 
-				$colonPos = strpos($line, ':');
-				$code = trim(substr($line, 0, $colonPos));
-				$value = trim(substr($line, $colonPos + 1));
+				[$code, $value] = array_map(trim(...), explode(':', $line, 2));
 
 				if ($value !== '' && in_array($code, $langCodes, true)) {
-					$results[$code] = $value;
+					$results[$code] = [$code, $value];
 				}
 			}
 		} else {
-			$results[null] = $text;
+			$results[] = [null, $text];
 		}
 
+		/** @var File */
 		return $kirby->impersonate('kirby', static function () use ($file, $results, $autogenerateFields) {
-			foreach ($results as $langCode => $altText) {
+			foreach ($results as [$langCode, $altText]) {
 				$updates = [];
 				foreach ($autogenerateFields as $name) {
 					$updates[$name] = (new AltText(text: $altText, source: AltText::SOURCE_AI))->toYaml();

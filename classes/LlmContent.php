@@ -4,6 +4,7 @@ namespace tobimori\Seo;
 
 use DOMDocument;
 use DOMElement;
+use DOMNodeList;
 use DOMXPath;
 use Kirby\Cms\Language;
 use Kirby\Cms\Page;
@@ -54,7 +55,9 @@ class LlmContent
 	{
 		$quality = [self::MARKDOWN_TYPE => 0.0, 'text/html' => 0.0];
 
-		foreach (Str::accepted(Str::lower($accept ?? '')) as $type) {
+		/** @var list<array{value: string, quality: float}> $accepted */
+		$accepted = Str::accepted(Str::lower($accept ?? ''));
+		foreach ($accepted as $type) {
 			foreach ($quality as $mime => $value) {
 				if (in_array($type['value'], [$mime, 'text/*', '*/*'], true)) {
 					$quality[$mime] = max($value, $type['quality']);
@@ -196,7 +199,7 @@ class LlmContent
 	public function llmsTxtPage(): Page
 	{
 		$kirby = $this->page->kirby();
-		$prefix = Str::after($this->page->site()->url($kirby->languageCode()), $kirby->url('index'));
+		$prefix = Str::after($this->page->site()->url($kirby->languageCode()), (string)$kirby->url('index'));
 
 		$parent = null;
 		foreach (Str::split($prefix, '/') as $slug) {
@@ -237,7 +240,9 @@ class LlmContent
 	public function addDiscoveryHeaders(): void
 	{
 		$response = $this->page->kirby()->response();
-		$values = Str::split($response->header('Vary'));
+		/** @var string|null $vary */
+		$vary = $response->header('Vary');
+		$values = Str::split($vary);
 		$normalized = array_map(Str::lower(...), $values);
 		if (!in_array('*', $normalized, true) && !in_array('accept', $normalized, true)) {
 			$values[] = 'Accept';
@@ -249,6 +254,7 @@ class LlmContent
 			$links[] = '<' . $this->llmsTxtUrl() . '>; rel="describedby"';
 		}
 
+		/** @var string|null $current */
 		$current = $response->header('Link');
 		foreach ($links as $link) {
 			if ($current === null) {
@@ -298,6 +304,7 @@ class LlmContent
 		$converter = $this->rawOption('agentic.markdown.converter');
 
 		if (is_string($converter) && class_exists($converter)) {
+			// @mago-expect analysis:unknown-class-instantiation
 			$converter = new $converter();
 		}
 
@@ -337,12 +344,13 @@ class LlmContent
 		$xpath = new DOMXPath($document);
 		foreach ($this->selectors() as $selector) {
 			$query = $this->selectorToXPath($selector);
-			// @mago-expect lint:no-error-control-operator
-			if ($query === null || ($nodes = @$xpath->query($query)) === false) {
+			if ($query === null) {
 				continue;
 			}
 
-			$node = $nodes->item(0);
+			// @mago-expect lint:no-error-control-operator
+			$nodes = @$xpath->query($query);
+			$node = $nodes instanceof DOMNodeList ? $nodes->item(0) : null;
 			if ($node instanceof DOMElement) {
 				return $document->saveHTML($node) ?: null;
 			}
@@ -372,9 +380,8 @@ class LlmContent
 			}
 		}
 
-		$node = (new DOMXPath($document))
-			->query('/html/body/*[1]')
-			?->item(0);
+		$nodes = (new DOMXPath($document))->query('/html/body/*[1]');
+		$node = $nodes instanceof DOMNodeList ? $nodes->item(0) : null;
 		return $node instanceof DOMElement ? ($document->saveHTML($node) ?: $html) : $html;
 	}
 
@@ -448,7 +455,7 @@ class LlmContent
 			$url .= '?' . $hrefUri->query()->toString();
 		}
 		if ($hrefUri->hasFragment()) {
-			$url .= '#' . $hrefUri->fragment();
+			$url .= '#' . (string)$hrefUri->fragment();
 		}
 
 		return $url;
@@ -466,6 +473,8 @@ class LlmContent
 			}
 		}
 
+		// the custom `agentic.llmsTxt.pages` callback returns untyped pages
+		// @mago-expect analysis:less-specific-nested-return-statement
 		return $pages->filter(function (Page $page) use ($kirby, $languageCode) {
 			if ($page->isPublished() === false || $page->metadata()->robotsIndex()->toBool() === false) {
 				return false;
@@ -519,6 +528,9 @@ class LlmContent
 		return '/' . A::join($segments, '/');
 	}
 
+	/**
+	 * @return list<string>
+	 */
 	protected function selectors(): array
 	{
 		$selectors = Seo::option('agentic.markdown.selectors', [

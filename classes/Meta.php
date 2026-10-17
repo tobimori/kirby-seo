@@ -50,7 +50,9 @@ class Meta
 
 	protected Page $page;
 	protected Language|null $lang;
+	/** @var array<int, string> */
 	protected array $consumed = [];
+	/** @var array<string, mixed> */
 	protected array $metaDefaults = [];
 	protected array $metaArray = [];
 	/** @var list<string>|null */
@@ -68,7 +70,9 @@ class Meta
 		$this->lang = $lang ?? App::instance()->language();
 
 		if (method_exists($this->page, 'metaDefaults')) {
-			$this->metaDefaults = $this->page->metaDefaults($this->lang?->code());
+			/** @var array<string, mixed> $metaDefaults */
+			$metaDefaults = $this->page->metaDefaults($this->lang?->code());
+			$this->metaDefaults = $metaDefaults;
 		}
 	}
 
@@ -97,7 +101,9 @@ class Meta
 	 */
 	public static function toBCP47(Language $language): string
 	{
-		return self::normalizeLocale($language->locale(LC_ALL), '-');
+		// languages with a locale array can leave out `LC_ALL`
+		$locale = $language->locale(LC_ALL);
+		return self::normalizeLocale(is_string($locale) ? $locale : $language->code(), '-');
 	}
 
 	/**
@@ -108,7 +114,7 @@ class Meta
 	 */
 	public static function toOpenGraphLocale(Language $language): string
 	{
-		return self::normalizeLocale($language->locale(LC_ALL), '_');
+		return self::normalizeLocale(self::toBCP47($language), '_');
 	}
 
 	/**
@@ -222,7 +228,8 @@ class Meta
 					'rel' => 'alternate'
 				];
 			};
-			$meta['og:locale'] = fn () => Meta::toOpenGraphLocale($this->lang);
+			$language = $this->lang;
+			$meta['og:locale'] = static fn () => Meta::toOpenGraphLocale($language);
 		} else {
 			// Single-language site: get locale from cascade (will fallback to 'locale' option)
 			$meta['og:locale'] = fn () => Meta::normalizeLocale($this->get('locale')->toString(), '_');
@@ -233,10 +240,7 @@ class Meta
 			unset($meta['og:locale:alternate']);
 		}
 
-		$meta['me'] = fn () => ($socialMedia = $this->site('socialMediaAccounts')?->toObject()) &&
-		($mastodon = $socialMedia->mastodon()->value())
-				? $mastodon
-				: null;
+		$meta['me'] = fn () => $this->site('socialMediaAccounts')?->toObject()->mastodon()->toString() ?: null;
 
 		// This array will be normalized for use in the snippet in $this->snippetData()
 		return $this->metaArray = $meta;
@@ -286,7 +290,7 @@ class Meta
 	protected static function decodeEntities(mixed $value): mixed
 	{
 		if ($value instanceof Field) {
-			return new Field($value->model(), $value->key(), html_entity_decode($value->value(), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+			return new Field($value->model(), $value->key(), html_entity_decode($value->toString(), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
 		}
 
 		if (is_string($value)) {
@@ -330,6 +334,7 @@ class Meta
 
 			// if the value is a string, we know it's a field name
 			if (is_string($value)) {
+				// @mago-expect analysis:string-member-selector
 				$value = $this->$value($name);
 			}
 
@@ -409,6 +414,8 @@ class Meta
 
 	/**
 	 * Resolves the tag type from the meta array
+	 *
+	 * @return array{tag: string, priority?: bool, attributes?: array{name: string, content: string}, tags?: list<string>}
 	 */
 	protected function resolveTag(string $tag): array
 	{
@@ -437,9 +444,10 @@ class Meta
 	/**
 	 * Magic method to get a meta value by calling the method name
 	 */
-	public function __call($name, $args = null): mixed
+	public function __call(string $name, array $args = []): mixed
 	{
 		if (method_exists($this, $name)) {
+			// @mago-expect analysis:string-member-selector
 			return $this->$name($args);
 		}
 
@@ -579,7 +587,8 @@ class Meta
 		// If there is no programmatic value for the key,
 		// try looking it up in the meta array
 		// maybe it is a meta tag and not a field name?
-		if (!isset($val) && ($key = $this->findTagForField($key)) && array_key_exists($key, $this->metaDefaults)) {
+		if (!isset($val) && ($tag = $this->findTagForField($key)) !== null && array_key_exists($tag, $this->metaDefaults)) {
+			$key = $tag;
 			$val = $this->metaDefaults[$key];
 		}
 
@@ -616,8 +625,9 @@ class Meta
 	 */
 	protected function parent(string $key): Field|null
 	{
-		if ($this->canInherit($key)) {
-			$this->parentMeta ??= new Meta($this->page->parent(), $this->lang);
+		$parent = $this->page->parent();
+		if ($parent !== null && $this->canInherit($parent, $key)) {
+			$this->parentMeta ??= new Meta($parent, $this->lang);
 			return $this->parentMeta->get($key);
 		}
 
@@ -659,13 +669,8 @@ class Meta
 	/**
 	 * Checks if the page can inherit a meta value from its parent
 	 */
-	private function canInherit(string $key): bool
+	private function canInherit(Page $parent, string $key): bool
 	{
-		$parent = $this->page->parent();
-		if (!$parent) {
-			return false;
-		}
-
 		$inherit = $parent->metaInherit()->split();
 		if (Str::contains($key, 'robots') && A::has($inherit, 'robots')) {
 			return true;
@@ -828,7 +833,9 @@ class Meta
 		$path = App::instance()->request()->url()->toString();
 		$matches = Str::match($path, "/pages\/([a-zA-Z0-9-_+]+)\/?/m");
 
+		$id = $matches[1] ?? null;
+
 		// not Find::page(), its permission check loads blueprints that call this method again
-		return isset($matches[1]) ? App::instance()->page(Str::replace($matches[1], '+', '/')) : null;
+		return is_string($id) ? App::instance()->page(str_replace('+', '/', $id)) : null;
 	}
 }
