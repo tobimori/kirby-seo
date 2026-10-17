@@ -39,6 +39,7 @@ use function is_string;
  * @method Field robotsArchive()
  * @method Field robotsImageindex()
  * @method Field robotsSnippet()
+ * @consistent-constructor
  */
 class Meta
 {
@@ -52,6 +53,7 @@ class Meta
 	protected array $consumed = [];
 	protected array $metaDefaults = [];
 	protected array $metaArray = [];
+	/** @var list<string>|null */
 	protected array|null $cascade = null;
 	protected string|null $robots = null;
 	protected Meta|null $parentMeta = null;
@@ -63,7 +65,7 @@ class Meta
 	public function __construct(Page $page, Language|null $lang = null)
 	{
 		$this->page = $page;
-		$this->lang = $lang ?? kirby()->language();
+		$this->lang = $lang ?? App::instance()->language();
 
 		if (method_exists($this->page, 'metaDefaults')) {
 			$this->metaDefaults = $this->page->metaDefaults($this->lang?->code());
@@ -149,7 +151,6 @@ class Meta
 		$meta['og:url'] = $canonicalFn;
 
 		// LLM-friendly content discovery
-		/** @var \tobimori\Seo\LlmContent $llmContent */
 		$llmContent = new (Seo::option('components.agentic'))($this->page);
 		$meta['alternate'][] = static function () use ($llmContent) {
 			if (!$llmContent->available()) {
@@ -175,14 +176,14 @@ class Meta
 
 		// Check if the current URL is canonical
 		// Compare the current request URL with the canonical URL
-		$currentUrl = kirby()->request()->url()->toString();
+		$currentUrl = App::instance()->request()->url()->toString();
 		$canonicalUrl = $this->canonicalUrl();
 		$isCanonical = $currentUrl === rtrim($canonicalUrl, '/');
 
 		// Multi-lang alternate tags
 		// Skip hreflang tags if URL is not canonical (has query params, Kirby params, etc.)
-		if (kirby()->languages()->count() > 1 && $this->lang !== null && $isCanonical) {
-			foreach (kirby()->languages() as $lang) {
+		if (App::instance()->languages()->count() > 1 && $this->lang !== null && $isCanonical) {
+			foreach (App::instance()->languages() as $lang) {
 				// only if this language is translated for this page and exists
 				// note: can be checked now, does not cause infinite loop
 				if (!$this->page->translation($lang->code())->exists()) {
@@ -447,6 +448,8 @@ class Meta
 
 	/**
 	 * Get the meta value for a given key
+	 *
+	 * @param list<string> $exclude
 	 */
 	public function get(string $key, array $exclude = []): Field
 	{
@@ -470,6 +473,7 @@ class Meta
 	/**
 	 * Resolves a value and its cascade source without marking the key as consumed
 	 *
+	 * @param list<string> $exclude
 	 * @return array{field: Field, source: string|null}
 	 */
 	public function resolve(string $key, array $exclude = []): array
@@ -484,7 +488,8 @@ class Meta
 		}
 
 		foreach (array_diff($this->cascade, $exclude) as $method) {
-			if ($field = $this->$method($key)) {
+			// @mago-expect analysis:string-member-selector
+			if (($field = $this->$method($key)) instanceof Field) {
 				if (
 					is_string($value = $field->value()) &&
 					Str::contains($value, 'data-seo-template-variable')
@@ -548,7 +553,8 @@ class Meta
 			$cascade = Seo::option('cascade');
 
 			foreach (array_intersect($cascade, self::FALLBACK_CASCADE) as $method) {
-				if ($field = $this->$method($fallback)) {
+				// @mago-expect analysis:string-member-selector
+				if (($field = $this->$method($fallback)) instanceof Field) {
 					return $field;
 				}
 			}
@@ -722,7 +728,7 @@ class Meta
 			return $custom;
 		}
 
-		switch (option('date.handler')) {
+		switch (App::instance()->option('date.handler')) {
 			case 'strftime':
 				return '%Y-%m-%d';
 			case 'intl':

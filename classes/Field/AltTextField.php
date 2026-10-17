@@ -148,7 +148,6 @@ class AltTextField extends FieldClass
 	public static function stream(File $file, string|null $instructions = null): never
 	{
 		$kirby = $file->kirby();
-		/** @var class-string<Ai> $component */
 		$component = Seo::option('components.ai');
 
 		$component::sendStream(static function (Closure $send) use ($kirby, $file, $instructions, $component) {
@@ -158,7 +157,7 @@ class AltTextField extends FieldClass
 				'kirby' => $kirby
 			];
 
-			$prompt = trim(snippet(
+			$prompt = trim(App::instance()->snippet(
 				'seo/prompts/tasks/alt-text',
 				[
 					'file' => $file,
@@ -228,7 +227,7 @@ class AltTextField extends FieldClass
 			? $languages->pluck('code')
 			: [];
 
-		$prompt = trim(snippet(
+		$prompt = trim(App::instance()->snippet(
 			'seo/prompts/tasks/alt-text',
 			[
 				'file' => $file,
@@ -246,7 +245,7 @@ class AltTextField extends FieldClass
 		$text = '';
 		foreach ($component::provider()->stream($content) as $chunk) {
 			if ($chunk->type === 'text-delta') {
-				$text .= $chunk->text;
+				$text .= $chunk->text ?? '';
 			}
 		}
 

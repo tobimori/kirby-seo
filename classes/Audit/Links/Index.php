@@ -10,6 +10,8 @@ use Kirby\Toolkit\Str;
 
 /**
  * Stores link audit results and provides locking for scan updates
+ *
+ * @consistent-constructor
  */
 class Index
 {

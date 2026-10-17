@@ -10,14 +10,14 @@ return function (App $kirby) {
 		'query' => 'model.images'
 	];
 
-	if ($parent = option('tobimori.seo.files.parent')) {
+	if ($parent = App::instance()->option('tobimori.seo.files.parent')) {
 		$blueprint['uploads'] = [
 			'parent' => $parent
 		];
 		$blueprint['query'] = "{$parent}.images";
 	}
 
-	if ($template = option('tobimori.seo.files.template')) {
+	if ($template = App::instance()->option('tobimori.seo.files.template')) {
 		$blueprint['uploads'] = [
 			...$blueprint['uploads'],
 			'template' => $template

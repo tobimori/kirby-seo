@@ -8,6 +8,56 @@ use Kirby\Cms\Page;
 use Kirby\Cms\Pages;
 use Kirby\Toolkit\Str;
 
+/**
+ * @psalm-type IndexNowRule = array{parent?: bool|int, children?: bool|int, siblings?: bool, urls?: list<string>, templates?: list<string>}
+ * @psalm-type Options = array{
+ *   'components.meta': class-string<Meta>,
+ *   'components.ai': class-string<Ai>,
+ *   'components.indexnow': class-string<IndexNow>,
+ *   'components.schema': class-string<SchemaSingleton>,
+ *   'components.gsc': class-string<GoogleSearchConsole>,
+ *   'components.agentic': class-string<LlmContent>,
+ *   'agentic.enabled': bool,
+ *   'agentic.markdown.enabled': bool,
+ *   'agentic.markdown.auto': bool,
+ *   'agentic.markdown.selectors': list<string>|string,
+ *   'agentic.llmsTxt.enabled': bool,
+ *   'links.queue': bool,
+ *   'links.schedule': string|false,
+ *   'links.http': bool|null,
+ *   'links.ttl': int,
+ *   'links.timeout': int,
+ *   'links.concurrency': int,
+ *   'links.hosts': list<string>|null,
+ *   'cascade': list<string>,
+ *   'default.robotsIndex': bool,
+ *   'default.locale': string,
+ *   'socialMedia': array<string, string>,
+ *   'robots.enabled': bool,
+ *   'robots.active': bool,
+ *   'robots.followPageStatus': bool,
+ *   'robots.pageSettings': bool,
+ *   'robots.index': bool,
+ *   'robots.sitemap': string|null,
+ *   'robots.types': list<string>,
+ *   'sitemap.enabled': bool,
+ *   'sitemap.active': bool,
+ *   'sitemap.redirect': bool,
+ *   'sitemap.locale': string,
+ *   'canonical.trailingSlash': bool,
+ *   'ai.enabled': bool,
+ *   'ai.provider': string,
+ *   'indexnow.enabled': bool,
+ *   'indexnow.delay': int,
+ *   'indexnow.searchEngine': string,
+ *   'indexnow.rules': array<string, IndexNowRule>|null,
+ *   'searchConsole.enabled': bool,
+ *   'searchConsole.credentials.web': array<string, mixed>|null,
+ *   'searchConsole.tokenPath': string,
+ *   'locale': string,
+ *   'dateFormat': string|null
+ * }
+ */
 final class Seo
 {
 	/**
@@ -61,7 +111,6 @@ final class Seo
 	 */
 	public static function isIndexable(Page $page, Language|null $language = null): bool
 	{
-		/** @var \tobimori\Seo\Meta $meta */
 		$meta = new (static::option('components.meta'))($page, $language);
 
 		if (static::option('robots.index')) {
@@ -100,6 +149,10 @@ final class Seo
 
 	/**
 	 * Returns a plugin option
+	 *
+	 * @template K of string
+	 * @param K $key
+	 * @return (K is key-of<Options> ? Options[K] : mixed)
 	 */
 	public static function option(string $key, mixed $default = null, mixed $args = []): mixed
 	{

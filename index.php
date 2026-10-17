@@ -4,6 +4,7 @@
 @include_once __DIR__ . '/vendor/autoload.php';
 
 use Kirby\Cms\App;
+use Kirby\Cms\Page;
 use Kirby\Cms\Site;
 use Kirby\Data\Json;
 use Kirby\Filesystem\Dir;
@@ -62,7 +63,7 @@ App::plugin(
 			'seo/robots.txt' => __DIR__ . '/snippets/robots.txt.php'
 		],
 		'controllers' => [
-			'llms.txt' => fn (Site $site) => (new (Seo::option('components.agentic'))($site->homePage()))->llmsTxtData()
+			'llms.txt' => fn (Site $site, Page $page) => (new (Seo::option('components.agentic'))($site->homePage() ?? $page))->llmsTxtData()
 		],
 		'templates' => [
 			'error.md' => __DIR__ . '/templates/error.md.php',

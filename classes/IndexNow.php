@@ -5,11 +5,16 @@ namespace tobimori\Seo;
 use Exception;
 use Kirby\Cms\App;
 use Kirby\Cms\Page;
+use Kirby\Cms\Url;
 use Kirby\Http\Remote;
 use Kirby\Toolkit\Str;
 
 use function is_bool;
 
+/**
+ * @psalm-import-type IndexNowRule from Seo
+ * @consistent-constructor
+ */
 class IndexNow
 {
 	protected static string|null $key = null;
@@ -233,6 +238,8 @@ class IndexNow
 
 	/**
 	 * Collect urls based on invalidation rules
+	 *
+	 * @param IndexNowRule $rule
 	 */
 	protected function collectFromRule(array $rule): void
 	{
@@ -254,7 +261,7 @@ class IndexNow
 		// specific urls
 		if (isset($rule['urls'])) {
 			foreach ($rule['urls'] as $url) {
-				$this->urls[] = url($url);
+				$this->urls[] = Url::to($url);
 			}
 		}
 

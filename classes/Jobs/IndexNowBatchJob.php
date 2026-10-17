@@ -2,6 +2,7 @@
 
 namespace tobimori\Seo\Jobs;
 
+use Kirby\Toolkit\I18n;
 use tobimori\Queues\BatchJob;
 use tobimori\Seo\IndexNow;
 use tobimori\Seo\Seo;
@@ -26,7 +27,7 @@ class IndexNowBatchJob extends BatchJob
 
 	public function name(): string
 	{
-		return t('seo.job.indexNow');
+		return I18n::translate('seo.job.indexNow');
 	}
 
 	public function handle(): void

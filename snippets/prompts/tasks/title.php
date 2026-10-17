@@ -1,5 +1,6 @@
 <?php
 
+use Kirby\Cms\App;
 use Kirby\Toolkit\Str;
 
 /**
@@ -11,10 +12,14 @@ use Kirby\Toolkit\Str;
 
 $meta = $page->metadata();
 
-snippet('seo/prompts/introduction', [
-	'instructions' => $instructions ?? null,
-	'edit' => $edit ?? null
-]); ?>
+App::instance()->snippet(
+	'seo/prompts/introduction',
+	[
+		'instructions' => $instructions ?? null,
+		'edit' => $edit ?? null
+	],
+	return: false
+); ?>
 
 <task>
 	Create a useful meta title for this page called <page-title><?= $page->title()->value() ?></page-title>. <?php if ($page->isHomePage()): ?>This page is the homepage of the website. AVOID an overly generic title such as 'Home'.<?php endif ?>
@@ -40,5 +45,5 @@ snippet('seo/prompts/introduction', [
 	If useful for the customers niche, include a keyword for the location. AVOID for global companies or niche subpages.
 </task>
 
-<?php snippet('seo/prompts/meta', ['currentField' => 'metaTitle']);
-snippet('seo/prompts/content');
+<?php App::instance()->snippet('seo/prompts/meta', ['currentField' => 'metaTitle'], return: false);
+App::instance()->snippet('seo/prompts/content', return: false);

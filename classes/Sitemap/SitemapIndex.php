@@ -2,6 +2,7 @@
 
 namespace tobimori\Seo\Sitemap;
 
+use Kirby\Cms\App;
 use Kirby\Cms\Page;
 use Kirby\Exception\NotFoundException;
 use Kirby\Toolkit\Collection;
@@ -55,7 +56,7 @@ class SitemapIndex extends Collection
 
 	public function generate(): void
 	{
-		$generator = option('tobimori.seo.sitemap.generator');
+		$generator = App::instance()->option('tobimori.seo.sitemap.generator');
 		if (is_callable($generator)) {
 			$generator($this);
 		}

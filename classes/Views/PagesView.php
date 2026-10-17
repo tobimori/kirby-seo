@@ -120,6 +120,7 @@ class PagesView extends EditableOverviewView
 	/**
 	 * Resolves a meta value & its source once per request
 	 *
+	 * @param list<string> $exclude
 	 * @return array{field: \Kirby\Content\Field, source: string|null}
 	 */
 	protected function resolve(Page $page, string $key, array $exclude = []): array

@@ -7,6 +7,7 @@ use Generator;
 use Kirby\Cms\App;
 use Kirby\Exception\Exception as KirbyException;
 use Kirby\Http\Response;
+use Kirby\Toolkit\I18n;
 use Throwable;
 use tobimori\Seo\Ai\Chunk;
 use tobimori\Seo\Ai\Content;
@@ -24,7 +25,7 @@ class Ai
 
 	public static function enabled(): bool
 	{
-		return (bool)Seo::option('ai.enabled', false);
+		return Seo::option('ai.enabled', false);
 	}
 
 	/**
@@ -46,7 +47,7 @@ class Ai
 			default => null
 		};
 
-		return $error ? Response::json(['status' => 'error', 'message' => t($error)], 404) : null;
+		return $error ? Response::json(['status' => 'error', 'message' => I18n::translate($error)], 404) : null;
 	}
 
 	/**
@@ -137,7 +138,7 @@ class Ai
 	public static function streamTask(string $taskId, array $variables = []): Generator
 	{
 		$snippet = "seo/prompts/tasks/{$taskId}";
-		$prompt = trim(snippet($snippet, $variables, return: true));
+		$prompt = trim(App::instance()->snippet($snippet, $variables, return: true));
 		if ($prompt === '') {
 			throw new KirbyException("AI prompt snippet \"{$snippet}\" is missing or empty.");
 		}

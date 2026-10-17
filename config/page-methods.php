@@ -5,7 +5,7 @@ use Kirby\Cms\Page;
 use tobimori\Seo\Seo;
 
 return [
-	'schema' => function ($type) {
+	'schema' => function (string $type) {
 		/** @var Page $this */
 		return Seo::option('components.schema')::getInstance($type, $this);
 	},

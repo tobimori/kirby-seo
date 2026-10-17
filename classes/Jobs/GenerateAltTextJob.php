@@ -3,6 +3,7 @@
 namespace tobimori\Seo\Jobs;
 
 use Kirby\Cms\App;
+use Kirby\Toolkit\I18n;
 use tobimori\Queues\Job;
 use tobimori\Seo\Field\AltTextField;
 
@@ -18,7 +19,7 @@ class GenerateAltTextJob extends Job
 
 	public function name(): string
 	{
-		return t('seo.job.generateAltText');
+		return I18n::translate('seo.job.generateAltText');
 	}
 
 	public function handle(): void

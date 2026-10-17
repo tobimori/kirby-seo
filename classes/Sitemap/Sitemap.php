@@ -26,7 +26,9 @@ class Sitemap extends Collection
 
 	public function loc(): string
 	{
-		return kirby()->site()->canonicalFor('sitemap-' . $this->key . '.xml', true);
+		return App::instance()
+			->site()
+			->canonicalFor('sitemap-' . $this->key . '.xml', true);
 	}
 
 	public function lastmod(): string

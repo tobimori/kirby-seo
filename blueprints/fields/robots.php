@@ -2,6 +2,7 @@
 
 use Kirby\Cms\App;
 use Kirby\Toolkit\A;
+use Kirby\Toolkit\I18n;
 use Kirby\Toolkit\Str;
 use tobimori\Seo\Meta;
 use tobimori\Seo\Seo;
@@ -35,12 +36,12 @@ return function (App $kirby) {
 			'options' => [
 				'default' => $page
 					? A::join([
-						t('seo.common.default'),
-						$page->metadata()->get("robots{$upper}", ['fields'])->toBool() ? t('seo.common.yes') : t('seo.common.no')
+						I18n::translate('seo.common.default'),
+						$page->metadata()->get("robots{$upper}", ['fields'])->toBool() ? I18n::translate('seo.common.yes') : I18n::translate('seo.common.no')
 					], ' ')
-					: t('seo.common.default'),
-				'true' => t('seo.common.yes'),
-				'false' => t('seo.common.no')
+					: I18n::translate('seo.common.default'),
+				'true' => I18n::translate('seo.common.yes'),
+				'false' => I18n::translate('seo.common.no')
 			]
 		];
 	}

@@ -8,6 +8,8 @@ use Kirby\Data\Yaml;
 /**
  * Value object for structured alt text data.
  * Handles both YAML object format and plain string migration.
+ *
+ * @consistent-constructor
  */
 class AltText
 {
