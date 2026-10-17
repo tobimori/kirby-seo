@@ -7,14 +7,20 @@
 
 use Kirby\Cms\Html;
 
-/** @var list<array{tag: string, content?: string|null, attributes?: array<string, mixed>|null, priority?: bool}> $tags */
 $tags = $page->metadata()->snippetData();
+
+$render = static function (array $tag): string {
+	/** @var array{tag: string, attributes?: array<string, mixed>|null, content?: string|Stringable|null, priority?: bool} $tag */
+	// field values are `Stringable`, `Html::tag()` expects a string
+	$content = $tag['content'] ?? null;
+	return Html::tag($tag['tag'], $content instanceof Stringable ? (string)$content : $content, $tag['attributes'] ?? []) . PHP_EOL;
+};
 
 // if we're using slots, the user wants to output priority tags such as <title>
 // before their stylesheet, script, etc. tags
 if (isset($slot)) {
 	foreach (array_filter($tags, static fn (array $tag): bool => ($tag['priority'] ?? false) === true) as $tag) {
-		echo Html::tag($tag['tag'], $tag['content'] ?? null, $tag['attributes'] ?? []) . PHP_EOL;
+		echo $render($tag);
 	}
 
 	echo $slot->render();
@@ -25,5 +31,5 @@ if (isset($slot)) {
 // then output other tags as normal
 // this is unfiltered if slots is not set.
 foreach ($tags as $tag) {
-	echo Html::tag($tag['tag'], $tag['content'] ?? null, $tag['attributes'] ?? []) . PHP_EOL;
+	echo $render($tag);
 }

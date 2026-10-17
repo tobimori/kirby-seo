@@ -17,10 +17,12 @@ class SitemapIndex extends Collection
 	/** @var static|null */
 	protected static $instance = null;
 
-	public static function instance(): static
+	public static function instance(...$args): static
 	{
 		if (static::$instance === null) {
-			static::$instance = new static();
+			// Mago reports no constructor parameters for `Kirby\Toolkit\Collection`
+			// @mago-expect analysis:too-many-arguments
+			static::$instance = new static(...$args);
 		}
 
 		return static::$instance;
@@ -82,19 +84,19 @@ class SitemapIndex extends Collection
 			$this->create();
 		}
 
-		/** @var Field $field */
-		$field = $page->content()->get('index');
-		$index = $field->toString();
+		/** @var Field $index */
+		$index = $page->content()->get('index');
 
-		if ($index === '') {
+		if ($index->isEmpty()) {
 			// If there is only one index, we do not need to render the index page
 			// @mago-expect analysis:possible-method-access-on-null
 			return $this->count() > 1 ? $this->toString() : $this->first()->toString();
 		}
 
-		$sitemap = $this->count() > 1 ? $this->findBy('key', $index) : null;
+		$key = $index->toString();
+		$sitemap = $this->isValidIndex($key) ? $this->findBy('key', $key) : null;
 		if ($sitemap === null) {
-			throw new NotFoundException("[Kirby SEO] Sitemap index '{$index}' does not exist");
+			throw new NotFoundException("[Kirby SEO] Sitemap index '{$key}' does not exist");
 		}
 
 		return $sitemap->toString();

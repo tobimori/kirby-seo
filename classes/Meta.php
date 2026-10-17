@@ -12,6 +12,7 @@ use Kirby\Exception\InvalidArgumentException;
 use Kirby\Filesystem\Asset;
 use Kirby\Toolkit\A;
 use Kirby\Toolkit\Str;
+use Stringable;
 
 use function array_key_exists;
 use function count;
@@ -303,6 +304,8 @@ class Meta
 	/**
 	 * Normalize the meta array and remaining meta defaults to be used in the snippet,
 	 * also resolve the content, if necessary
+	 *
+	 * @return list<array{tag: string, attributes?: array<string, mixed>|null, content?: string|Stringable|null, priority?: bool}>
 	 */
 	public function snippetData(array|null $raw = null): array
 	{
@@ -409,6 +412,8 @@ class Meta
 			$tags = array_merge($tags, $this->snippetData(array_diff_key($this->metaDefaults, array_flip($this->consumed))));
 		}
 
+		// programmatic tags from `metaDefaults()` are only checked for their keys
+		// @mago-expect analysis:less-specific-nested-return-statement
 		return $tags;
 	}
 

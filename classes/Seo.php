@@ -162,7 +162,7 @@ final class Seo
 	 * @param K $key
 	 * @return (K is key-of<Options> ? Options[K] : mixed)
 	 */
-	public static function option(string $key, mixed $default = null, array $args = []): mixed
+	public static function option(string $key, mixed $default = null, iterable $args = []): mixed
 	{
 		$option = App::instance()->option("tobimori.seo.{$key}", $default);
 		if (is_callable($option)) {
