@@ -3176,45 +3176,9 @@ count = 1
 
 [[issues]]
 file = "config/fields.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `Kirby\Toolkit\Str::contains`: expected `null|string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "config/fields.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `Kirby\Toolkit\Str::unhtml`: expected `null|string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "config/fields.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #3 of `str_replace`: expected `array<array-key, string>|string`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "config/fields.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 17
-
-[[issues]]
-file = "config/fields.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 2
-
-[[issues]]
-file = "config/fields.php"
 code = "possibly-invalid-argument"
 message = "Possible argument type mismatch for argument #2 of `str_replace`: expected `array<array-key, string>|string`, but possibly received `list{(closure(...mixed=): mixed)|array<array-key, mixed>|null|string, (closure(...mixed=): mixed)|array<array-key, mixed>|null|string}`."
 count = 1
-
-[[issues]]
-file = "config/fields.php"
-code = "undefined-variable"
-message = "Undefined variable: `$this`."
-count = 5
 
 [[issues]]
 file = "config/fields.php"
@@ -3368,42 +3332,6 @@ count = 1
 
 [[issues]]
 file = "config/page-methods.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `str_starts_with`: expected `string`, but found `mixed`."
-count = 2
-
-[[issues]]
-file = "config/page-methods.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `strlen`: expected `string`, but found `mixed`."
-count = 3
-
-[[issues]]
-file = "config/page-methods.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `substr`: expected `string`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "config/page-methods.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `str_starts_with`: expected `string`, but found `mixed`."
-count = 2
-
-[[issues]]
-file = "config/page-methods.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 10
-
-[[issues]]
-file = "config/page-methods.php"
-code = "undefined-variable"
-message = "Undefined variable: `$this`."
-count = 8
-
-[[issues]]
-file = "config/page-methods.php"
 code = "unknown-class-instantiation"
 message = "Cannot determine the concrete class for instantiation."
 count = 1
@@ -3434,12 +3362,6 @@ count = 1
 
 [[issues]]
 file = "config/routes.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 11
-
-[[issues]]
-file = "config/routes.php"
 code = "mixed-operand"
 message = "Left operand in `&&` operation has `mixed` type."
 count = 2
@@ -3467,12 +3389,6 @@ file = "config/routes.php"
 code = "possibly-null-argument"
 message = 'Argument #1 of method `Kirby\Http\Response::__construct` is possibly `null`, but parameter type `array<array-key, mixed>|string` does not accept it.'
 count = 1
-
-[[issues]]
-file = "config/routes.php"
-code = "undefined-variable"
-message = "Undefined variable: `$this`."
-count = 11
 
 [[issues]]
 file = "config/routes.php"
@@ -3508,7 +3424,7 @@ count = 1
 file = "config/sections.php"
 code = "mixed-method-access"
 message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 6
+count = 2
 
 [[issues]]
 file = "config/sections.php"
@@ -3529,40 +3445,10 @@ message = "Attempting to call a method on `null`."
 count = 1
 
 [[issues]]
-file = "config/sections.php"
-code = "undefined-variable"
-message = "Undefined variable: `$this`."
-count = 4
-
-[[issues]]
-file = "config/site-methods.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `Kirby\Toolkit\Str::startsWith`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "config/site-methods.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 2
-
-[[issues]]
-file = "config/site-methods.php"
-code = "mixed-operand"
-message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
-count = 1
-
-[[issues]]
 file = "config/site-methods.php"
 code = "possibly-false-argument"
 message = "Argument #1 of function `pathinfo` is possibly `false`, but parameter type `string` does not accept it."
 count = 1
-
-[[issues]]
-file = "config/site-methods.php"
-code = "undefined-variable"
-message = "Undefined variable: `$this`."
-count = 2
 
 [[issues]]
 file = "index.php"

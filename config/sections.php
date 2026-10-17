@@ -2,6 +2,7 @@
 
 use Kirby\Cms\App;
 use Kirby\Cms\Page;
+use Kirby\Cms\Section;
 use Kirby\Cms\Site;
 use Kirby\Toolkit\A;
 use Kirby\Toolkit\Str;
@@ -16,6 +17,7 @@ return [
 				'text' => t("seo.sections.preview.{$item}")
 			]),
 			'meta' => function () {
+				/** @var Section $this */
 				$model = $this->model();
 
 				if ($model instanceof Site || $model instanceof Page) {
@@ -55,6 +57,7 @@ return [
 		'mixins' => ['headline'],
 		'computed' => [
 			'data' => function () {
+				/** @var Section $this */
 				$model = $this->model();
 				if (!$model instanceof Page) {
 					// only works for pages (not site, files, etc.)
@@ -111,6 +114,7 @@ return [
 			},
 			'property' => fn () => Seo::option('components.gsc')::property(),
 			'pageUrl' => function () {
+				/** @var Section $this */
 				$model = $this->model();
 				if ($model instanceof Page) {
 					return '/' . $model->uri();
@@ -118,6 +122,7 @@ return [
 				return null;
 			},
 			'data' => function () {
+				/** @var Section $this */
 				$gsc = Seo::option('components.gsc');
 				if (!$gsc::ready()) {
 					return [];

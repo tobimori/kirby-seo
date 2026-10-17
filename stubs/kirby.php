@@ -89,6 +89,11 @@ namespace Kirby\Cms {
 	{
 		use \Kirby\Filesystem\IsFile;
 	}
+
+	/**
+	 * @method \Kirby\Form\Field|\Kirby\Form\FieldClass field()
+	 */
+	class Api extends \Kirby\Api\Api {}
 }
 
 namespace Kirby\Filesystem {

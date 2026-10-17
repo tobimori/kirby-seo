@@ -1,19 +1,33 @@
 <?php
 
 use Kirby\Cms\Language;
+use Kirby\Cms\Page;
 use tobimori\Seo\Seo;
 
 return [
-	'schema' => fn ($type) => Seo::option('components.schema')::getInstance($type, $this),
-	'schemas' => fn () => Seo::option('components.schema')::getInstances($this),
-	'metadata' => fn (Language|null $lang = null) => new (Seo::option('components.meta'))($this, $lang),
-	'robots' => fn (Language|null $lang = null) => $this->metadata($lang)->robots(),
+	'schema' => function ($type) {
+		/** @var Page $this */
+		return Seo::option('components.schema')::getInstance($type, $this);
+	},
+	'schemas' => function () {
+		/** @var Page $this */
+		return Seo::option('components.schema')::getInstances($this);
+	},
+	'metadata' => function (Language|null $lang = null) {
+		/** @var Page $this */
+		return new (Seo::option('components.meta'))($this, $lang);
+	},
+	'robots' => function (Language|null $lang = null) {
+		/** @var Page $this */
+		return $this->metadata($lang)->robots();
+	},
 	'indexUrl' => function () {
+		/** @var Page $this */
 		// Google: "fallback page for unmatched languages, especially on language/country selectors or auto-redirecting home pages."
 		// https://developers.google.com/search/docs/specialty/international/localized-versions#all-method-guidelines
 
 		// returns the index URL of the site, e.g. https://example.com/
-		$kirbyUrl = $this->kirby()->url('index');
+		$kirbyUrl = (string)$this->kirby()->url('index');
 
 		$defaultLang = $this->kirby()->defaultLanguage()?->code();
 		// returns the site URL, e.g. https://example.com/en

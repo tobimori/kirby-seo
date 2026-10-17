@@ -53,6 +53,7 @@ no-redundant-file = { exclude = ["templates/llms.php"] }
 # Kirby binds `$this` to route, hook, and area closures
 prefer-static-closure = { exclude = ["config/"] }
 prefer-first-class-callable = { exclude = ["config/"] }
+prefer-arrow-function = { exclude = ["config/"] }
 
 [analyzer]
 baseline = "mago-analyzer-baseline.toml"

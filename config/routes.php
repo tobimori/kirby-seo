@@ -5,6 +5,7 @@ use Kirby\Cms\Page;
 use Kirby\Data\Json;
 use Kirby\Exception\NotFoundException;
 use Kirby\Http\Response;
+use Kirby\Http\Route;
 use tobimori\Seo\Seo;
 
 /**
@@ -16,6 +17,7 @@ $methodRoutes = fn (string $pattern, string $allow, string $option) => [
 		'pattern' => $pattern,
 		'method' => 'OPTIONS',
 		'action' => function () use ($allow, $option) {
+			/** @var Route $this */
 			if (Seo::option($option)) {
 				return new Response('', 'text/plain', 204, ['Allow' => $allow]);
 			}
@@ -27,6 +29,7 @@ $methodRoutes = fn (string $pattern, string $allow, string $option) => [
 		'pattern' => $pattern,
 		'method' => 'ALL',
 		'action' => function () use ($allow, $option) {
+			/** @var Route $this */
 			// allowed methods only get here if their route passed on (e.g. unknown sitemap index), which is not a method error
 			if (Seo::option($option) && !in_array(App::instance()->request()->method(), explode(', ', $allow), true)) {
 				return new Response('Method Not Allowed', 'text/plain', 405, ['Allow' => $allow]);
@@ -53,6 +56,7 @@ return [
 		'method' => 'GET|HEAD',
 		'language' => '*',
 		'action' => function () {
+			/** @var Route $this */
 			// the language router sets the current language
 			$page = App::instance()->site()->homePage();
 			if ($page === null) {
@@ -72,6 +76,7 @@ return [
 		'pattern' => 'indexnow-(:any).txt',
 		'method' => 'GET',
 		'action' => function (string $key) {
+			/** @var Route $this */
 			if (Seo::option('indexnow.enabled') && Seo::option('components.indexnow')::verifyKey($key)) {
 				return new Response($key, 'text/plain', 200);
 			}
@@ -84,6 +89,7 @@ return [
 		'pattern' => 'robots.txt',
 		'method' => 'GET|HEAD',
 		'action' => function () {
+			/** @var Route $this */
 			if (Seo::option('robots.active')) {
 				$content = snippet('seo/robots.txt', [], true);
 				return new Response($content, 'text/plain', 200);
@@ -98,6 +104,7 @@ return [
 		'pattern' => 'sitemap',
 		'method' => 'GET|HEAD',
 		'action' => function () {
+			/** @var Route $this */
 			if (!Seo::option('sitemap.redirect') || !Seo::option('sitemap.active')) {
 				$this->next();
 			}
@@ -111,6 +118,7 @@ return [
 		'pattern' => 'sitemap.xsl',
 		'method' => 'GET',
 		'action' => function () use ($sitemapPage) {
+			/** @var Route $this */
 			if (!Seo::option('sitemap.active')) {
 				$this->next();
 			}
@@ -127,6 +135,7 @@ return [
 		'pattern' => 'sitemap.xml',
 		'method' => 'GET|HEAD',
 		'action' => function () use ($sitemapPage) {
+			/** @var Route $this */
 			if (!Seo::option('sitemap.active')) {
 				$this->next();
 			}
@@ -140,6 +149,7 @@ return [
 		'pattern' => 'sitemap-(:any).xml',
 		'method' => 'GET|HEAD',
 		'action' => function (string $index) use ($sitemapPage) {
+			/** @var Route $this */
 			if (!Seo::option('sitemap.active')) {
 				$this->next();
 			}
