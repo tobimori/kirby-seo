@@ -66,8 +66,8 @@ abstract class EditableOverviewView extends OverviewView
 	 * Converts the edited columns of a row to the values of its content fields
 	 *
 	 * @param TEntry $entry
-	 * @param array<string, mixed> $columns
-	 * @return array<string, mixed>
+	 * @param array<array-key, mixed> $columns
+	 * @return array<array-key, mixed>
 	 */
 	abstract protected function input(array $entry, array $columns): array;
 
@@ -167,10 +167,10 @@ abstract class EditableOverviewView extends OverviewView
 	public function save(array $changes): array
 	{
 		// one save per row, with all of its changed columns
-		/** @var array<array-key, array<string, mixed>> $input */
+		/** @var array<array-key, array<array-key, mixed>> $input */
 		$input = [];
 		foreach ($changes as $change) {
-			if (is_array($change) && is_string($change['id'] ?? null) && is_string($change['column'] ?? null) && array_key_exists('value', $change)) {
+			if (is_string($change['id'] ?? null) && is_string($change['column'] ?? null) && array_key_exists('value', $change)) {
 				$input[$change['id']][$change['column']] = $change['value'];
 			}
 		}

@@ -26,7 +26,7 @@ abstract class OverviewView
 
 	protected App $kirby;
 
-	/** @var array<string, Meta> */
+	/** @var array<array-key, Meta> */
 	protected array $metas = [];
 
 	/** @var array<string, Blueprint> */

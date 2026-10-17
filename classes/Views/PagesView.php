@@ -27,7 +27,7 @@ class PagesView extends EditableOverviewView
 	// Check inexpensive values first so a match can skip the remaining lookups
 	public const SEARCHABLE = ['id', 'title', 'template', 'metaTitle', 'metaDescription', 'ogDescription'];
 
-	/** @var array<string, array<string, array{field: Field, source: string|null}>> */
+	/** @var array<array-key, array<string, array{field: Field, source: string|null}>> */
 	protected array $resolved = [];
 
 	public function load(): array

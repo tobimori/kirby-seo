@@ -90,9 +90,8 @@ class ImagesView extends EditableOverviewView
 			], 403);
 		}
 
-		/** @var string|null $instructions */
-		$instructions = $this->kirby->request()->body()->data()['instructions'] ?? null;
-		AltTextField::stream($entry['model'], $instructions);
+		// @mago-expect analysis:mixed-argument
+		AltTextField::stream($entry['model'], $this->kirby->request()->body()->data()['instructions'] ?? null);
 	}
 
 	/**
@@ -145,7 +144,7 @@ class ImagesView extends EditableOverviewView
 
 	/**
 	 * @param ImageEntry $entry
-	 * @param array<string, mixed> $columns
+	 * @param array<array-key, mixed> $columns
 	 * @return array<string, mixed>
 	 */
 	protected function input(array $entry, array $columns): array
