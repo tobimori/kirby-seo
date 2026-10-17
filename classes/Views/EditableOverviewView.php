@@ -58,7 +58,6 @@ abstract class EditableOverviewView extends OverviewView
 
 	/**
 	 * @param TEntry $entry
-	 * @return array<string, mixed>
 	 */
 	abstract protected function row(array $entry): array;
 
@@ -66,15 +65,11 @@ abstract class EditableOverviewView extends OverviewView
 	 * Converts the edited columns of a row to the values of its content fields
 	 *
 	 * @param TEntry $entry
-	 * @param array<array-key, mixed> $columns
-	 * @return array<array-key, mixed>
 	 */
 	abstract protected function input(array $entry, array $columns): array;
 
 	/**
 	 * Values that might change with any edit (e.g. the number of issues), sent along with updated rows
-	 *
-	 * @return array<string, mixed>
 	 */
 	abstract protected function live(): array;
 
@@ -133,9 +128,6 @@ abstract class EditableOverviewView extends OverviewView
 	/**
 	 * Returns complete rows, not patches, so the client can replace cached rows
 	 * without reloading or reordering the table
-	 *
-	 * @param array<array-key, mixed> $ids
-	 * @return array<string, mixed>
 	 */
 	public function rows(array $ids): array
 	{
@@ -162,7 +154,6 @@ abstract class EditableOverviewView extends OverviewView
 	 * Saves permitted row fields to changes versions through Kirby's content controller
 	 *
 	 * @param array<array-key, mixed> $changes List of `['id' => 'row-id', 'column' => 'metaTitle', 'value' => '…']`
-	 * @return array<string, mixed>
 	 */
 	public function save(array $changes): array
 	{
@@ -204,9 +195,6 @@ abstract class EditableOverviewView extends OverviewView
 	/**
 	 * Publishes the unsaved fields of the given rows,
 	 * other unsaved fields stay in the changes versions
-	 *
-	 * @param array<array-key, mixed> $ids
-	 * @return array<string, mixed>
 	 */
 	public function publish(array $ids): array
 	{
@@ -223,9 +211,6 @@ abstract class EditableOverviewView extends OverviewView
 	/**
 	 * Discards the unsaved fields of the given rows,
 	 * other unsaved fields stay in the changes versions
-	 *
-	 * @param array<array-key, mixed> $ids
-	 * @return array<string, mixed>
 	 */
 	public function discard(array $ids): array
 	{
@@ -239,7 +224,6 @@ abstract class EditableOverviewView extends OverviewView
 	}
 
 	/**
-	 * @param array<array-key, mixed> $ids
 	 * @param Closure(TEntry): void $action
 	 * @return array<string, mixed>
 	 */
@@ -285,7 +269,6 @@ abstract class EditableOverviewView extends OverviewView
 	 * Unsaved values of the row's fields that differ from the published ones
 	 *
 	 * @param TEntry $entry
-	 * @return array<string, mixed>
 	 */
 	protected function fieldChanges(array $entry): array
 	{

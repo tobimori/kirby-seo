@@ -144,8 +144,6 @@ class ImagesView extends EditableOverviewView
 
 	/**
 	 * @param ImageEntry $entry
-	 * @param array<array-key, mixed> $columns
-	 * @return array<string, mixed>
 	 */
 	protected function input(array $entry, array $columns): array
 	{
@@ -179,9 +177,6 @@ class ImagesView extends EditableOverviewView
 		];
 	}
 
-	/**
-	 * @return array<string, mixed>
-	 */
 	protected function live(): array
 	{
 		return [
@@ -208,9 +203,6 @@ class ImagesView extends EditableOverviewView
 		};
 	}
 
-	/**
-	 * @return array<string, array<string, mixed>>
-	 */
 	protected function columns(): array
 	{
 		return [
@@ -279,7 +271,6 @@ class ImagesView extends EditableOverviewView
 
 	/**
 	 * @param ImageEntry $entry
-	 * @return array<string, mixed>
 	 */
 	protected function row(array $entry): array
 	{

@@ -283,7 +283,6 @@ class PagesView extends EditableOverviewView
 	 * Resolved value & source for display, plus the page's own value for editing
 	 *
 	 * @param PageEntry $entry
-	 * @return array<string, mixed>
 	 */
 	protected function metaField(array $entry, string $key, bool $editable): array
 	{

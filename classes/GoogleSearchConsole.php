@@ -17,7 +17,6 @@ use function array_slice;
  * @psalm-type Property = array{siteUrl: string, permissionLevel?: string}
  * @psalm-type QueryRow = array{keys?: list<string>, clicks: int|float, impressions: int|float, ctr: float, position: float}
  * @psalm-type Row = array{keys: list<string>, clicks: int|float, impressions: int|float, ctr: float, position: float}
- * @psalm-type QueryOptions = array{startDate?: string, endDate?: string, dimensions?: list<string>, page?: string, pageOperator?: string}
  */
 class GoogleSearchConsole
 {
@@ -323,7 +322,7 @@ class GoogleSearchConsole
 	/**
 	 * Query search analytics data (fetches max 25k rows from Google, cached for 24h)
 	 *
-	 * @param QueryOptions $options
+	 * @param array{startDate?: string, endDate?: string, dimensions?: list<string>, page?: string, pageOperator?: string} $options
 	 * @return list<QueryRow>
 	 */
 	public static function query(array $options = []): array

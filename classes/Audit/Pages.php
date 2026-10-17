@@ -12,9 +12,8 @@ use tobimori\Seo\Seo;
 /**
  * Audits page titles and descriptions for SEO issues across a page collection
  *
- * @psalm-type Values = array<string, string>
- * @psalm-type Checked = array{values: Values, home: bool, title: string, description: string, source: string|null}
- * @psalm-type Entry = array{fingerprint?: string, skipped: string, values: Values}|array{fingerprint?: string, values: Values, home: bool, title: string, description: string, source: string|null}
+ * @psalm-type Checked = array{values: array<string, string>, home: bool, title: string, description: string, source: string|null}
+ * @psalm-type Entry = array{fingerprint?: string, skipped: string, values: array<string, string>}|array{fingerprint?: string, values: array<string, string>, home: bool, title: string, description: string, source: string|null}
  * @psalm-type Issue = array{type: string, severity?: string, group?: array-key, count?: int, source?: string|null, variant?: string, length?: int, min?: int, max?: int}
  * @psalm-type Group = array{kind: string, text: string, pages: list<array-key>}
  * @psalm-type PageResult = array{issues: list<Issue>}|array{skipped: string}

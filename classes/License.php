@@ -61,7 +61,6 @@ final class License extends KirbyLicense
 	// minutes to wait before the next reissue attempt after a failure
 	private const REISSUE_BACKOFF = [5, 60, 180, 720, 1440];
 
-	/** @var array<array-key, mixed>|null */
 	private array|null $data;
 
 	// whether the license is from the manual license file

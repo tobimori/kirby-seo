@@ -53,7 +53,6 @@ class Meta
 	protected Language|null $lang;
 	/** @var array<int, string> */
 	protected array $consumed = [];
-	/** @var array<array-key, mixed> */
 	protected array $metaDefaults = [];
 	protected array $metaArray = [];
 	/** @var list<string>|null */

@@ -198,9 +198,6 @@ class LinksView extends OverviewView
 		]);
 	}
 
-	/**
-	 * @return array<string, array<string, mixed>>
-	 */
 	protected function columns(): array
 	{
 		return [
@@ -237,7 +234,6 @@ class LinksView extends OverviewView
 
 	/**
 	 * @param Link $link
-	 * @return array<string, mixed>
 	 */
 	protected function row(array $link): array
 	{
