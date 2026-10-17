@@ -8,6 +8,9 @@ use tobimori\Seo\Audit\Links\Checker;
 use tobimori\Seo\Audit\Links\Index;
 use tobimori\Seo\Audit\Links\Report;
 
+/**
+ * @psalm-import-type Link from Report
+ */
 class LinksView extends OverviewView
 {
 	public const SORTABLE = ['url', 'status', 'pages'];
@@ -28,6 +31,7 @@ class LinksView extends OverviewView
 
 	public function load(): array
 	{
+		/** @var array<string, mixed> */
 		return VersionId::render('changes', function () {
 			$query = $this->query(
 				self::SORTABLE,
@@ -42,6 +46,8 @@ class LinksView extends OverviewView
 				$links = array_filter($links, static fn ($link) => Report::has($link, $issue));
 			}
 
+			// the keys are the searchable columns
+			// @mago-expect analysis:match-not-exhaustive
 			$links = $this->search($links, $search, self::SEARCHABLE, fn ($link, $key) => match ($key) {
 				'url' => $link['url'],
 				'details' => $this->reason($link),
@@ -55,6 +61,7 @@ class LinksView extends OverviewView
 					'pages' => (string)$link['total'],
 					'url' => $this->display($link['url']),
 					// the status & the default order: most severe first
+					// @mago-expect analysis:possibly-false-operand
 					default => array_search($link['state'], Report::STATES, true) . $this->display($link['url'])
 				},
 				$dir
@@ -149,6 +156,10 @@ class LinksView extends OverviewView
 		);
 	}
 
+	/**
+	 * @param list<string> $pages
+	 * @return list<array{text: string, link: string}>
+	 */
 	protected function linking(array $pages): array
 	{
 		$items = [];
@@ -170,6 +181,9 @@ class LinksView extends OverviewView
 		return (string)$this->kirby->page($id)?->title()->value();
 	}
 
+	/**
+	 * @param Link $link
+	 */
 	protected function reason(array $link): string
 	{
 		if ($link['reason'] === null) {
@@ -182,6 +196,9 @@ class LinksView extends OverviewView
 		]);
 	}
 
+	/**
+	 * @return array<string, array<string, mixed>>
+	 */
 	protected function columns(): array
 	{
 		return [
@@ -216,6 +233,10 @@ class LinksView extends OverviewView
 		];
 	}
 
+	/**
+	 * @param Link $link
+	 * @return array<string, mixed>
+	 */
 	protected function row(array $link): array
 	{
 		$pages = explode("\n", $link['pages']);

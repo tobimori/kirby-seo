@@ -5,6 +5,7 @@ namespace tobimori\Seo\Views;
 use Kirby\Cms\ModelWithContent;
 use Kirby\Cms\Page;
 use Kirby\Content\Changes;
+use Kirby\Content\Field;
 use Kirby\Content\VersionId;
 use Kirby\Panel\Ui\Item\PageItem;
 use Kirby\Toolkit\I18n;
@@ -15,6 +16,10 @@ use tobimori\Seo\Buttons\RobotsViewButton;
 use tobimori\Seo\Meta;
 use tobimori\Seo\Seo;
 
+/**
+ * @psalm-type PageEntry = array{id: string, model: Page, fields: list<string>}
+ * @extends EditableOverviewView<PageEntry>
+ */
 class PagesView extends EditableOverviewView
 {
 	public const SORTABLE = ['title', 'metaTitle', 'metaDescription', 'ogDescription', 'template'];
@@ -22,10 +27,12 @@ class PagesView extends EditableOverviewView
 	// Check inexpensive values first so a match can skip the remaining lookups
 	public const SEARCHABLE = ['id', 'title', 'template', 'metaTitle', 'metaDescription', 'ogDescription'];
 
+	/** @var array<string, array<string, array{field: Field, source: string|null}>> */
 	protected array $resolved = [];
 
 	public function load(): array
 	{
+		/** @var array<string, mixed> */
 		return VersionId::render('changes', function () {
 			$query = $this->query(
 				self::SORTABLE,
@@ -74,6 +81,9 @@ class PagesView extends EditableOverviewView
 		});
 	}
 
+	/**
+	 * @return PageEntry|null
+	 */
 	protected function find(string $id): array|null
 	{
 		$page = $this->kirby->page($id);
@@ -81,6 +91,9 @@ class PagesView extends EditableOverviewView
 		return $page && $this->isListedPage($page) ? $this->entry($page) : null;
 	}
 
+	/**
+	 * @return PageEntry
+	 */
 	protected function entry(Page $page): array
 	{
 		return [
@@ -92,6 +105,8 @@ class PagesView extends EditableOverviewView
 
 	protected function ids(ModelWithContent $model): array
 	{
+		// tracked pages always have an id
+		// @mago-expect analysis:invalid-return-statement
 		return [$model->id()];
 	}
 
@@ -121,7 +136,7 @@ class PagesView extends EditableOverviewView
 	 * Resolves a meta value & its source once per request
 	 *
 	 * @param list<string> $exclude
-	 * @return array{field: \Kirby\Content\Field, source: string|null}
+	 * @return array{field: Field, source: string|null}
 	 */
 	protected function resolve(Page $page, string $key, array $exclude = []): array
 	{
@@ -238,7 +253,6 @@ class PagesView extends EditableOverviewView
 
 	protected function row(array $entry): array
 	{
-		/** @var \Kirby\Cms\Page $page */
 		$page = $entry['model'];
 		['lock' => $lock, 'editable' => $editable, 'translated' => $translated] = $this->state($page);
 		$hasChanges = $this->fieldChanges($entry) !== [];
@@ -268,13 +282,17 @@ class PagesView extends EditableOverviewView
 
 	/**
 	 * Resolved value & source for display, plus the page's own value for editing
+	 *
+	 * @param PageEntry $entry
+	 * @return array<string, mixed>
 	 */
 	protected function metaField(array $entry, string $key, bool $editable): array
 	{
-		/** @var \Kirby\Cms\Page $page */
 		$page = $entry['model'];
 		$editable = $editable && in_array($key, $entry['fields'], true);
-		$own = $page->content()->get($key)->toString();
+		/** @var Field $own */
+		$own = $page->content()->get($key);
+		$own = $own->toString();
 		// what the page would show without its own value, same as the placeholder in the page form
 		$fallback = $this->resolve($page, $key, ['fields']);
 

@@ -26,8 +26,10 @@ abstract class OverviewView
 
 	protected App $kirby;
 
+	/** @var array<string, Meta> */
 	protected array $metas = [];
 
+	/** @var array<string, Blueprint> */
 	protected array $blueprints = [];
 	protected Audit\Pages|null $audit = null;
 	protected Pages|null $pages = null;
@@ -142,6 +144,8 @@ abstract class OverviewView
 	/**
 	 * Locale-aware string comparison (e.g. sorts "Ü" like "U" in German),
 	 * falls back to natural sorting if the intl extension isn't available
+	 *
+	 * @return callable(string, string): (int|false)
 	 */
 	protected function comparator(): callable
 	{
@@ -162,6 +166,8 @@ abstract class OverviewView
 	/**
 	 * Search, sorting & filter of the table from the query of the view, unknown values are ignored
 	 *
+	 * @param list<string> $sortable
+	 * @param list<string> $issues
 	 * @return array{search: string, sort: string|null, dir: string, issue: string|null}
 	 */
 	protected function query(array $sortable, array $issues): array
@@ -172,9 +178,9 @@ abstract class OverviewView
 
 		return [
 			'search' => trim((string)$request->get('search', '')),
-			'sort' => in_array($sort, $sortable, true) ? $sort : null,
+			'sort' => is_string($sort) && in_array($sort, $sortable, true) ? $sort : null,
 			'dir' => $request->get('dir') === 'desc' ? 'desc' : 'asc',
-			'issue' => in_array($issue, $issues, true) ? $issue : null
+			'issue' => is_string($issue) && in_array($issue, $issues, true) ? $issue : null
 		];
 	}
 
@@ -183,7 +189,11 @@ abstract class OverviewView
 	 * Values are resolved in the order of the keys & only until one matches,
 	 * so cheap values should come first
 	 *
-	 * @param \Closure(mixed $entry, string $key): string $value
+	 * @template T
+	 * @param array<array-key, T> $entries
+	 * @param list<string> $keys
+	 * @param Closure(T, string): string $value
+	 * @return array<array-key, T>
 	 */
 	protected function search(array $entries, string $search, array $keys, Closure $value): array
 	{
@@ -202,10 +212,16 @@ abstract class OverviewView
 		});
 	}
 
+	/**
+	 * @template T
+	 * @param array<array-key, T> $entries
+	 * @param Closure(T): string $value
+	 * @return list<T>
+	 */
 	protected function sort(array $entries, Closure $value, string $dir): array
 	{
 		$compare = $this->comparator();
-		usort($entries, static fn ($a, $b) => $compare($value($a), $value($b)) * ($dir === 'desc' ? -1 : 1));
+		usort($entries, static fn ($a, $b) => (int)$compare($value($a), $value($b)) * ($dir === 'desc' ? -1 : 1));
 
 		return $entries;
 	}
@@ -213,7 +229,9 @@ abstract class OverviewView
 	/**
 	 * Pagination props & the entries of the current table page
 	 *
-	 * @return array{0: array, 1: array}
+	 * @template T
+	 * @param array<array-key, T> $entries
+	 * @return array{array{page: int, limit: int, total: int}, list<T>}
 	 */
 	protected function paginate(array $entries): array
 	{

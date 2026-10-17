@@ -2,6 +2,7 @@
 
 namespace tobimori\Seo\Views;
 
+use Kirby\Cms\File;
 use Kirby\Cms\ModelWithContent;
 use Kirby\Content\Changes;
 use Kirby\Content\VersionId;
@@ -14,6 +15,10 @@ use tobimori\Seo\AltText;
 use tobimori\Seo\Audit;
 use tobimori\Seo\Field\AltTextField;
 
+/**
+ * @psalm-import-type Entry from Audit\Images as ImageEntry
+ * @extends EditableOverviewView<ImageEntry>
+ */
 class ImagesView extends EditableOverviewView
 {
 	public const SORTABLE = ['title', 'alt', 'decorative', 'template'];
@@ -22,6 +27,7 @@ class ImagesView extends EditableOverviewView
 
 	public function load(): array
 	{
+		/** @var array<string, mixed> */
 		return VersionId::render('changes', function () {
 			$query = $this->query(
 				self::SORTABLE,
@@ -62,6 +68,9 @@ class ImagesView extends EditableOverviewView
 		});
 	}
 
+	/**
+	 * @return ImageEntry|null
+	 */
 	protected function find(string $id): array|null
 	{
 		return $this->images()->find($id);
@@ -81,12 +90,16 @@ class ImagesView extends EditableOverviewView
 			], 403);
 		}
 
-		AltTextField::stream($entry['model'], $this->kirby->request()->body()->data()['instructions'] ?? null);
+		/** @var string|null $instructions */
+		$instructions = $this->kirby->request()->body()->data()['instructions'] ?? null;
+		AltTextField::stream($entry['model'], $instructions);
 	}
 
 	/**
 	 * Whether AI can generate the row's alt text: fields can opt out via `ai: false`,
 	 * images need to be resizable (or Imagick installed) to be sent to the AI provider
+	 *
+	 * @param ImageEntry $entry
 	 */
 	protected function canGenerate(array $entry): bool
 	{
@@ -107,26 +120,38 @@ class ImagesView extends EditableOverviewView
 
 	protected function ids(ModelWithContent $model): array
 	{
+		/** @var File $model tracked models are files */
 		return array_map(
 			static fn ($field) => Audit\Images::id($model, $field),
 			$this->images()->fields($model)
 		);
 	}
 
+	/**
+	 * @return iterable<File>
+	 */
 	protected function tracked(Changes $changes): iterable
 	{
 		return $changes->files();
 	}
 
+	/**
+	 * @param ImageEntry $entry
+	 */
 	protected function label(array $entry): string
 	{
 		return $entry['model']->filename();
 	}
 
+	/**
+	 * @param ImageEntry $entry
+	 * @param array<string, mixed> $columns
+	 * @return array<string, mixed>
+	 */
 	protected function input(array $entry, array $columns): array
 	{
 		$text = $columns['alt'] ?? null;
-		$text = is_string($text) ? trim(preg_replace('/[\r\n]+/', ' ', $text)) : null;
+		$text = is_string($text) ? trim((string)preg_replace('/[\r\n]+/', ' ', $text)) : null;
 
 		$current = AltText::parse($this->current($entry['model'], $entry['field']));
 		$decorative = is_bool($columns['decorative'] ?? null) ? $columns['decorative'] : $current->isDecorative();
@@ -155,6 +180,9 @@ class ImagesView extends EditableOverviewView
 		];
 	}
 
+	/**
+	 * @return array<string, mixed>
+	 */
 	protected function live(): array
 	{
 		return [
@@ -163,10 +191,15 @@ class ImagesView extends EditableOverviewView
 		];
 	}
 
+	/**
+	 * @param ImageEntry $entry
+	 */
 	protected function value(array $entry, string $key): string
 	{
 		$file = $entry['model'];
 
+		// the keys are the searchable & sortable columns
+		// @mago-expect analysis:match-not-exhaustive
 		return match ($key) {
 			'id' => $file->id(),
 			'alt' => $this->images()->altText($entry)->text(),
@@ -177,6 +210,9 @@ class ImagesView extends EditableOverviewView
 		};
 	}
 
+	/**
+	 * @return array<string, array<string, mixed>>
+	 */
 	protected function columns(): array
 	{
 		return [
@@ -243,13 +279,17 @@ class ImagesView extends EditableOverviewView
 		];
 	}
 
+	/**
+	 * @param ImageEntry $entry
+	 * @return array<string, mixed>
+	 */
 	protected function row(array $entry): array
 	{
-		/** @var \Kirby\Cms\File $file */
 		$file = $entry['model'];
 		['lock' => $lock, 'editable' => $editable, 'translated' => $translated] = $this->state($file);
 		$hasChanges = $this->fieldChanges($entry) !== [];
 		$alt = $this->images()->altText($entry);
+		/** @var array{label?: array<string, string>|string, ...} $blueprint */
 		$blueprint = $this->blueprint($file)->field($entry['field']) ?? [];
 		$parent = $file->parent();
 		$label = count($this->images()->fields($file)) > 1
@@ -270,6 +310,7 @@ class ImagesView extends EditableOverviewView
 			],
 			'title' => [
 				// files with multiple alt text fields have a row per field
+				// @mago-expect analysis:array-to-string-conversion,invalid-type-cast
 				'text' => $label ? "{$file->filename()} · {$label}" : $file->filename(),
 				'href' => $file->panel()->url(true),
 				'info' => $parent->title()->toString(),
