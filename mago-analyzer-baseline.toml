@@ -2992,7 +2992,7 @@ count = 1
 file = "snippets/head.php"
 code = "mixed-array-access"
 message = "Unsafe array access on type `mixed`."
-count = 3
+count = 2
 
 [[issues]]
 file = "snippets/prompts/content.php"
