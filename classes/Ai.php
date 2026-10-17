@@ -5,6 +5,7 @@ namespace tobimori\Seo;
 use Closure;
 use Generator;
 use Kirby\Cms\App;
+use Kirby\Data\Json;
 use Kirby\Exception\Exception as KirbyException;
 use Kirby\Http\Response;
 use Kirby\Toolkit\I18n;
@@ -76,10 +77,7 @@ class Ai
 		$send = static function (array $event): void {
 			echo
 				'data: ' .
-					json_encode(
-						$event,
-						JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
-					) .
+					Json::encode($event) .
 					"\n\n";
 
 			if (ob_get_level() > 0) {

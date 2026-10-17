@@ -29,7 +29,7 @@ class SitemapUrl
 		return $this;
 	}
 
-	public function lastmod(string|null $lastmod = null): SitemapUrl|string
+	public function lastmod(int|null $lastmod = null): SitemapUrl|string
 	{
 		if ($lastmod === null) {
 			return $this->lastmod;
@@ -114,6 +114,6 @@ class SitemapUrl
 		$node = $this->toDOMNode($doc);
 		$doc->appendChild($node);
 
-		return $doc->saveXML($node);
+		return $doc->saveXML($node) ?: throw new Exception('[Kirby SEO] Could not render the sitemap URL');
 	}
 }

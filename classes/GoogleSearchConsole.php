@@ -323,7 +323,7 @@ class GoogleSearchConsole
 
 		return static::cache()
 			->getOrSet(
-				md5($property . json_encode($body)),
+				md5($property . Json::encode($body)),
 				static function () use ($property, $body) {
 					$uri = new Uri('https://www.googleapis.com/webmasters/v3/sites');
 					$uri->setPath($uri->path()->toString() . '/' . urlencode($property) . '/searchAnalytics/query');
@@ -334,7 +334,7 @@ class GoogleSearchConsole
 							'Authorization' => 'Bearer ' . static::accessToken(),
 							'Content-Type' => 'application/json'
 						],
-						'data' => json_encode($body)
+						'data' => Json::encode($body)
 					]);
 
 					$data = $response->json();

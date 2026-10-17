@@ -4,6 +4,7 @@ namespace tobimori\Seo\Sitemap;
 
 use DOMDocument;
 use Kirby\Cms\App;
+use Kirby\Exception\Exception;
 use Kirby\Toolkit\Collection;
 
 /**
@@ -99,6 +100,6 @@ class Sitemap extends Collection
 		}
 
 		$doc->appendChild($element);
-		return $doc->saveXML();
+		return $doc->saveXML() ?: throw new Exception('[Kirby SEO] Could not render the sitemap');
 	}
 }

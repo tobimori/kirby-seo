@@ -90,7 +90,7 @@ const formatValue = (row) => {
 
 const handleConnect = () => {
 	const returnUrl = encodeURIComponent(window.location.href)
-	window.location.href = `/__seo/gsc/auth?return=${returnUrl}`
+	window.location.href = `${panel.urls.site}/__seo/gsc/auth?return=${returnUrl}`
 }
 </script>
 

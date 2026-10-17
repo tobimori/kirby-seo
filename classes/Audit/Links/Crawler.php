@@ -10,6 +10,7 @@ use DOMXPath;
 use Kirby\Cms\App;
 use Kirby\Cms\Page;
 use Kirby\Cms\Responder;
+use Kirby\Data\Json;
 use Kirby\Http\Request;
 use Throwable;
 use tobimori\Seo\Seo;
@@ -384,7 +385,7 @@ class Crawler
 			header_remove();
 			http_response_code(200);
 			header('Content-Type: application/json; charset=UTF-8');
-			echo json_encode(['retry' => true]);
+			echo Json::encode(['retry' => true]);
 		}
 	}
 }
