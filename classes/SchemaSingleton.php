@@ -7,7 +7,7 @@ use Spatie\SchemaOrg\Schema;
 
 class SchemaSingleton
 {
-	/** @var array<string, array<string, \Spatie\SchemaOrg\BaseType>> */
+	/** @var array<string, array<string, object>> */
 	private static $instances = [];
 
 	private function __construct()
