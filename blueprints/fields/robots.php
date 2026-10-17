@@ -23,7 +23,7 @@ return function (App $kirby) {
 	];
 
 	$page = Meta::currentPage();
-	foreach ($kirby->option('tobimori.seo.robots.types') as $robots) {
+	foreach (Seo::option('robots.types') as $robots) {
 		$upper = Str::ucfirst($robots);
 
 		$fields["robots{$upper}"] = [

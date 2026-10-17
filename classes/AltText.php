@@ -55,7 +55,7 @@ class AltText
 
 	public static function fromField(Field $field): static
 	{
-		return static::parse($field->value());
+		return static::parse($field->toString());
 	}
 
 	public function text(): string

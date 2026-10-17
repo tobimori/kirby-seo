@@ -36,7 +36,7 @@ return [
 		$trailingSlash = Seo::option('canonical.trailingSlash', false);
 		if ($trailingSlash) {
 			// check if URL has a file extension (like .xml, .jpg, .pdf, etc.)
-			$path = parse_url($canonicalUrl, PHP_URL_PATH) ?? '';
+			$path = parse_url($canonicalUrl, PHP_URL_PATH) ?: '';
 			$pathInfo = pathinfo($path);
 			$hasExtension = !empty($pathInfo['extension'] ?? null);
 

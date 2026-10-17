@@ -99,7 +99,7 @@ class OpenAi extends Driver
 						'type' => 'input_image',
 						'image_url' => "data:{$block['mediaType']};base64,{$block['data']}"
 					];
-				} elseif ($block['type'] === 'text') {
+				} else {
 					$blocks[] = [
 						'type' => 'input_text',
 						'text' => $block['text']

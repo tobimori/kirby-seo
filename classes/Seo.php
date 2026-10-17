@@ -67,7 +67,7 @@ final class Seo
 	 */
 	public static function userAgent(): string
 	{
-		return 'Kirby SEO/' . App::plugin('tobimori/seo')->version() . ' (+https://plugins.andkindness.com/seo)';
+		return 'Kirby SEO/' . (App::plugin('tobimori/seo')?->version() ?? 'dev') . ' (+https://plugins.andkindness.com/seo)';
 	}
 
 	/**
@@ -81,6 +81,7 @@ final class Seo
 		$language ??= $kirby->language();
 		$code = $language?->code() ?? 'default';
 		$cache = $kirby->cache('tobimori.seo.overview');
+		/** @var array{options?: string, pages?: array<string, list<string>>} $cached */
 		$cached = $cache->get('indexable') ?? [];
 
 		if (($cached['options'] ?? null) !== static::auditOptions()) {
@@ -98,6 +99,7 @@ final class Seo
 
 		$pages = new Pages([], $kirby->site());
 
+		/** @var string $id */
 		foreach ($cached['pages'][$code] as $id) {
 			if ($page = $kirby->page($id)) {
 				$pages->add($page);
@@ -156,7 +158,7 @@ final class Seo
 	 * @param K $key
 	 * @return (K is key-of<Options> ? Options[K] : mixed)
 	 */
-	public static function option(string $key, mixed $default = null, mixed $args = []): mixed
+	public static function option(string $key, mixed $default = null, array $args = []): mixed
 	{
 		$option = App::instance()->option("tobimori.seo.{$key}", $default);
 		if (is_callable($option)) {

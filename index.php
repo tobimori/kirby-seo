@@ -89,7 +89,7 @@ App::plugin(
 		'translations' => A::keyBy(
 			A::map(
 				Dir::files(__DIR__ . '/translations'),
-				function ($file) {
+				function (string $file) {
 					$translations = [];
 					foreach (Json::read(__DIR__ . '/translations/' . $file) as $key => $value) {
 						$translations["seo.{$key}"] = $value;
@@ -107,12 +107,13 @@ App::plugin(
 );
 
 if (!function_exists('schema')) {
-	function schema($type)
+	function schema(string $type)
 	{
 		if (!class_exists('Spatie\SchemaOrg\Schema')) {
 			return null;
 		}
 
+		// @mago-expect analysis:string-member-selector
 		return Schema::{$type}();
 	}
 }

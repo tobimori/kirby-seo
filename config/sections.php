@@ -39,12 +39,12 @@ return [
 					return [
 						'page' => $model->slug(),
 						'url' => $meta->canonicalUrl(),
-						'pageTitle' => Str::unhtml($model->title()->value()),
-						'title' => Str::unhtml($meta->metaTitle()->value()),
-						'description' => Str::unhtml($meta->metaDescription()->value()),
-						'ogSiteName' => Str::unhtml($meta->ogSiteName()->value()),
-						'ogTitle' => Str::unhtml($meta->ogTitle()->value()),
-						'ogDescription' => Str::unhtml($meta->ogDescription()->value()),
+						'pageTitle' => Str::unhtml($model->title()->toString()),
+						'title' => Str::unhtml($meta->metaTitle()->toString()),
+						'description' => Str::unhtml($meta->metaDescription()->toString()),
+						'ogSiteName' => Str::unhtml($meta->ogSiteName()->toString()),
+						'ogTitle' => Str::unhtml($meta->ogTitle()->toString()),
+						'ogDescription' => Str::unhtml($meta->ogDescription()->toString()),
 						'ogImage' => $meta->ogImage(),
 						'cropOgImage' => $meta->cropOgImage()->toBool(),
 						'panelUrl' => method_exists($model, 'panel') ? "{$model->panel()?->url()}?tab=seo" : null
@@ -101,7 +101,7 @@ return [
 			'local' => fn () => App::instance()->system()->isLocal(),
 			'state' => function () {
 				/** @var License $license */
-				$license = App::instance()->plugin('tobimori/seo')->license();
+				$license = App::plugin('tobimori/seo')?->license();
 
 				return $license->state();
 			}

@@ -3,8 +3,9 @@
 use Kirby\Cms\App;
 use Kirby\Cms\Event;
 use Kirby\Cms\File;
+use Kirby\Cms\Language;
 use Kirby\Cms\Page;
-use Kirby\Toolkit\A;
+use Kirby\Content\Field;
 use Kirby\Toolkit\Str;
 use tobimori\Seo\Audit\Images;
 use tobimori\Seo\Audit\Links\Checker;
@@ -26,7 +27,10 @@ $audit = function (Event $event) {
 	$pages = array_filter([$event->argument('page'), $event->argument('newPage'), $event->argument('oldPage')]);
 	if (
 		$pages !== [] &&
-		!array_filter($pages, fn (Page $page) => $page->hasChildren() || array_filter($languages, fn ($language) => Seo::isIndexable($page, $language)))
+		!array_filter(
+			$pages,
+			fn (Page $page) => $page->hasChildren() || array_filter($languages, fn (Language|null $language) => Seo::isIndexable($page, $language)) !== []
+		)
 	) {
 		return;
 	}
@@ -77,21 +81,18 @@ return [
 	'page.update:after' => function (Page $newPage, Page $oldPage) use ($indexNow) {
 		// only inject blueprint defaults if the seo tab is present
 		if ($newPage->blueprint()->tab('seo')) {
-			$updates = A::reduce(
-				$newPage->kirby()->option('tobimori.seo.robots.types'),
-				function ($carry, $robots) use ($newPage) {
-					$upper = Str::ucfirst($robots);
+			$updates = [];
+			foreach (Seo::option('robots.types') as $robots) {
+				$key = 'robots' . Str::ucfirst($robots);
 
-					if ($newPage->content()->get("robots{$upper}")->value() === '') {
-						$carry["robots{$upper}"] = 'default';
-					}
+				/** @var Field $field */
+				$field = $newPage->content()->get($key);
+				if ($field->value() === '') {
+					$updates[$key] = 'default';
+				}
+			}
 
-					return $carry;
-				},
-				[]
-			);
-
-			if (A::count($updates)) {
+			if ($updates !== []) {
 				$newPage = $newPage->update($updates, $newPage->kirby()->languageCode());
 			}
 		}

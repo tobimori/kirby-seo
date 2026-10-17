@@ -91,7 +91,7 @@ class Sitemap extends Collection
 		$element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xhtml', 'http://www.w3.org/1999/xhtml');
 
 		// version can be null when installing branches during development
-		if ($version = App::plugin('tobimori/seo')->version()) {
+		if ($version = App::plugin('tobimori/seo')?->version()) {
 			$element->setAttribute('seo-version', $version);
 		}
 

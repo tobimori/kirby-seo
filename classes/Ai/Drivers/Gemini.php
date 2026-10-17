@@ -104,7 +104,7 @@ class Gemini extends Driver
 						'mime_type' => $block['mediaType'],
 						'data' => $block['data']
 					];
-				} elseif ($block['type'] === 'text') {
+				} else {
 					$parts[] = [
 						'type' => 'text',
 						'text' => $block['text']

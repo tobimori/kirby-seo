@@ -130,7 +130,7 @@ class Anthropic extends Driver
 							'data' => $block['data']
 						]
 					];
-				} elseif ($block['type'] === 'text') {
+				} else {
 					$blocks[] = [
 						'type' => 'text',
 						'text' => $block['text']

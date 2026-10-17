@@ -151,7 +151,7 @@ return [
 	'searchConsole' => [
 		'enabled' => true,
 		'credentials' => null,
-		'tokenPath' => fn () => App::instance()->root('config') . '/.gsc-tokens.json'
+		'tokenPath' => fn () => (string)App::instance()->root('config') . '/.gsc-tokens.json'
 	],
 	'generateSchema' => true, // whether to generate default schema.org data
 	'locale' => 'en_US', // default locale, used for single-language sites

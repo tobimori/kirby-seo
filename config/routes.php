@@ -183,7 +183,7 @@ return [
 			$state = bin2hex(random_bytes(16));
 			$kirby->session()->data()->set('tobimori.seo.gsc', ['state' => $state, 'return' => $return]);
 
-			$redirectUri = rtrim($kirby->url(), '/') . '/__seo/gsc/callback';
+			$redirectUri = rtrim((string)$kirby->url(), '/') . '/__seo/gsc/callback';
 			Response::go(Seo::option('components.gsc')::authUrl($redirectUri, $state));
 		}
 	],
@@ -212,7 +212,7 @@ return [
 				throw new \Exception('No authorization code received');
 			}
 
-			$redirectUri = rtrim($kirby->url(), '/') . '/__seo/gsc/callback';
+			$redirectUri = rtrim((string)$kirby->url(), '/') . '/__seo/gsc/callback';
 			Seo::option('components.gsc')::exchangeCode($code, $redirectUri);
 
 			// redirect back to where the user came from

@@ -52,7 +52,7 @@ abstract class OverviewView
 	protected function layout(string $tab): array
 	{
 		/** @var License $license */
-		$license = $this->kirby->plugin('tobimori/seo')->license();
+		$license = $this->kirby->plugin('tobimori/seo')?->license();
 
 		return [
 			// Language buttons use `panel.content` to unlock `{api}/changes/unlock` before switching

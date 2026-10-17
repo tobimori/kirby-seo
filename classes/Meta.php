@@ -225,7 +225,7 @@ class Meta
 			$meta['og:locale'] = fn () => Meta::toOpenGraphLocale($this->lang);
 		} else {
 			// Single-language site: get locale from cascade (will fallback to 'locale' option)
-			$meta['og:locale'] = fn () => Meta::normalizeLocale($this->get('locale')->value(), '_');
+			$meta['og:locale'] = fn () => Meta::normalizeLocale($this->get('locale')->toString(), '_');
 		}
 
 		// If URL is not canonical, also skip og:locale:alternate tags
@@ -285,7 +285,7 @@ class Meta
 	 */
 	protected static function decodeEntities(mixed $value): mixed
 	{
-		if (is_a($value, Field::class)) {
+		if ($value instanceof Field) {
 			return new Field($value->model(), $value->key(), html_entity_decode($value->value(), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
 		}
 
@@ -339,7 +339,7 @@ class Meta
 			}
 
 			// if the value is empty, we don't want to output it
-			if (is_a($value, Field::class) && $value->isEmpty() || !$value) {
+			if ($value instanceof Field && $value->isEmpty() || !$value) {
 				continue;
 			}
 
@@ -504,16 +504,15 @@ class Meta
 	 */
 	protected function fields(string $key): Field|null
 	{
-		if ($field = $this->page->content($this->lang?->code())->get($key)) {
-			if (Str::contains($key, 'robots') && !Seo::option('robots.pageSettings')) {
-				return null;
-			}
-
-			if ($field->isNotEmpty() && !A::has(self::DEFAULT_VALUES, $field->value())) {
-				return $field;
-			}
+		if (Str::contains($key, 'robots') && !Seo::option('robots.pageSettings')) {
+			return null;
 		}
 
+		/** @var Field $field */
+		$field = $this->page->content($this->lang?->code())->get($key);
+		if ($field->isNotEmpty() && !A::has(self::DEFAULT_VALUES, $field->value())) {
+			return $field;
+		}
 		return null;
 	}
 
@@ -601,7 +600,7 @@ class Meta
 				}
 			}
 
-			if (is_a($val, 'Kirby\Content\Field')) {
+			if ($val instanceof Field) {
 				return new Field($this->page, $key, $val->value());
 			}
 
@@ -631,8 +630,10 @@ class Meta
 	 */
 	protected function site(string $key): Field|null
 	{
-		if (($site = $this->page->site()->content($this->lang?->code())->get($key)) && ($site->isNotEmpty() && !A::has(self::DEFAULT_VALUES, $site->value))) {
-			return $site;
+		/** @var Field $field */
+		$field = $this->page->site()->content($this->lang?->code())->get($key);
+		if ($field->isNotEmpty() && !A::has(self::DEFAULT_VALUES, $field->value())) {
+			return $field;
 		}
 
 		return null;
@@ -645,7 +646,7 @@ class Meta
 	protected function options(string $key): Field|null
 	{
 		if ($option = Seo::option("default.{$key}", args: [$this->page])) {
-			if (is_a($option, Field::class)) {
+			if ($option instanceof Field) {
 				return $option;
 			}
 
@@ -674,6 +675,8 @@ class Meta
 
 	/**
 	 * Applies the title template, and returns the correct title
+	 *
+	 * @return Field
 	 */
 	public function metaTitle()
 	{
@@ -682,6 +685,8 @@ class Meta
 
 	/**
 	 * Applies the OG title template, and returns the OG Title
+	 *
+	 * @return Field
 	 */
 	public function ogTitle()
 	{
@@ -700,7 +705,7 @@ class Meta
 			$this->page,
 			$name,
 			$useTemplate->isEmpty() || $useTemplate->toBool()
-				? $this->page->toString($template, ['title' => $title])
+				? $this->page->toString($template->toString(), ['title' => $title])
 				: $title->value()
 		);
 	}
@@ -736,6 +741,8 @@ class Meta
 
 	/**
 	 * Get the pages' robots rules as string
+	 *
+	 * @return string
 	 */
 	public function robots()
 	{
@@ -804,7 +811,7 @@ class Meta
 
 		$field = $this->get('ogImage');
 		if ($field->isNotEmpty()) {
-			return $field->value();
+			return $field->toString();
 		}
 
 		return null;

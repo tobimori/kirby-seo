@@ -15,7 +15,7 @@ class UtmShareViewButton extends ViewButton
 			model: $model,
 			dialog: "seo/utm-share/{$model->panel()->path()}",
 			icon: 'share',
-			title: I18n::translate('seo.utmShare.button')
+			title: I18n::template('seo.utmShare.button')
 		);
 	}
 }

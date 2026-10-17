@@ -5,7 +5,7 @@ use tobimori\Seo\Seo;
 
 $license = [];
 
-if (App::instance()->plugin('tobimori/seo')->license()->status()->value() !== 'active') {
+if (App::plugin('tobimori/seo')?->license()->status()->value() !== 'active') {
 	$license['license'] = [
 		'width' => '1/1',
 		'sections' => [

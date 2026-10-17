@@ -27,7 +27,7 @@ class CheckLinksJob extends BatchJob
 
 	public function name(): string
 	{
-		return I18n::translate('seo.job.checkLinks');
+		return I18n::template('seo.job.checkLinks');
 	}
 
 	public function timeout(): int
@@ -52,10 +52,11 @@ class CheckLinksJob extends BatchJob
 
 		do {
 			$progress = $checker->step(self::STEP);
-		} while (!$progress['done'] && !$progress['running'] && time() < $deadline);
+			if ($progress['done'] || $progress['running']) {
+				return;
+			}
+		} while (time() < $deadline);
 
-		if (!$progress['done'] && !$progress['running']) {
-			Checker::dispatch(now: true);
-		}
+		Checker::dispatch(now: true);
 	}
 }

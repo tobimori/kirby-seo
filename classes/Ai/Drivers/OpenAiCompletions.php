@@ -150,7 +150,7 @@ class OpenAiCompletions extends Driver
 							'url' => "data:{$block['mediaType']};base64,{$block['data']}"
 						]
 					];
-				} elseif ($block['type'] === 'text') {
+				} else {
 					$parts[] = [
 						'type' => 'text',
 						'text' => $block['text']

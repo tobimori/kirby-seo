@@ -6,6 +6,7 @@ use Kirby\Cms\App;
 use Kirby\Cms\Find;
 use Kirby\Cms\Page;
 use Kirby\Cms\Site;
+use Kirby\Toolkit\Str;
 
 class UtmShareDialog
 {
@@ -18,15 +19,15 @@ class UtmShareDialog
 		if ($path === 'site') {
 			$this->model = $kirby->site();
 		} else {
-			$id = preg_replace('/^pages\//', '', $path);
-			$this->model = Find::page($id);
+			// @mago-expect analysis:invalid-property-assignment-value
+			$this->model = Find::page(Str::after($path, 'pages/')); // throws if the page doesn't exist
 		}
 	}
 
 	public function load(): array
 	{
 		$url = $this->model instanceof Site
-			? $this->model->homePage()->url()
+			? $this->model->homePage()?->url()
 			: $this->model->url();
 
 		return [

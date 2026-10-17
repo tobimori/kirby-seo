@@ -72,9 +72,9 @@ return [
 						return ['component' => 'k-error-drawer', 'props' => ['message' => 'GSC not connected']];
 					}
 
-					$title = I18n::translate('seo.sections.searchConsole.title');
+					$title = I18n::template('seo.sections.searchConsole.title');
 					if ($model instanceof Page) {
-						$title .= ' · ' . $model->title()->value();
+						$title .= ' · ' . $model->title()->toString();
 					}
 
 					$data = $gsc::queryForModel($model, $metric, 25000, $asc);
@@ -164,7 +164,7 @@ return [
 					$body = App::instance()->request()->body();
 
 					if (!V::email($body->get('email'))) {
-						throw new InvalidArgumentException(I18n::translate('seo.license.error.email'));
+						throw new InvalidArgumentException(I18n::template('seo.license.error.email'));
 					}
 
 					License::activate(
@@ -191,7 +191,7 @@ return [
 					$options = array_map(fn ($p) => [
 						'value' => $p['siteUrl'],
 						'text' => str_starts_with($p['siteUrl'], 'sc-domain:')
-							? substr($p['siteUrl'], 10) . ' (' . I18n::translate('seo.sections.searchConsole.scDomain') . ')'
+							? substr($p['siteUrl'], 10) . ' (' . I18n::template('seo.sections.searchConsole.scDomain') . ')'
 							: $p['siteUrl']
 					], $properties);
 

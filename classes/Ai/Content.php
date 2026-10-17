@@ -10,11 +10,14 @@ use Kirby\Exception\Exception;
  * Fluent builder for AI message content.
  * Each instance represents a single message with a role and content blocks.
  *
+ * @psalm-type Block = array{type: 'text', text: string}|array{type: 'image', data: string, mediaType: string}
  * @consistent-constructor
  */
 class Content
 {
 	private string $role;
+
+	/** @var list<Block> */
 	private array $blocks = [];
 
 	private function __construct(string $role)
@@ -74,7 +77,7 @@ class Content
 			$data = base64_encode($data);
 		} else {
 			$imagick = new Imagick();
-			$imagick->readImage($file->root());
+			$imagick->readImage((string)$file->root());
 			$imagick->setImageFormat('webp');
 			$imagick->thumbnailImage($maxDimension, $maxDimension, true);
 			$data = base64_encode($imagick->getImageBlob());
@@ -96,6 +99,9 @@ class Content
 		return $this->role;
 	}
 
+	/**
+	 * @return list<Block>
+	 */
 	public function blocks(): array
 	{
 		return $this->blocks;

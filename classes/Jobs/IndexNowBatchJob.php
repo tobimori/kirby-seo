@@ -27,13 +27,15 @@ class IndexNowBatchJob extends BatchJob
 
 	public function name(): string
 	{
-		return I18n::translate('seo.job.indexNow');
+		return I18n::template('seo.job.indexNow');
 	}
 
 	public function handle(): void
 	{
+		/** @var array<array{urls: list<string>}> $payloads */
+		$payloads = $this->payload();
 		$urls = array_unique(
-			array_merge(...array_column($this->payload(), 'urls'))
+			array_merge(...array_column($payloads, 'urls'))
 		);
 
 		if (empty($urls) || !IndexNow::isActive()) {

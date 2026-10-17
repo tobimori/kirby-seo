@@ -298,7 +298,7 @@ class PagesView extends EditableOverviewView
 	protected function titleTemplate(Page $page): array
 	{
 		$title = $this->value($page, 'metaTitle');
-		$full = Str::unhtml((string)$this->meta($page)->metaTitle()->value());
+		$full = Str::unhtml($this->meta($page)->metaTitle()->toString());
 		$position = $title !== '' ? mb_strpos($full, $title) : false;
 
 		if ($position === false) {

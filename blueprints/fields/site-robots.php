@@ -20,7 +20,7 @@ return function (App $kirby) {
 	];
 
 	$index = Seo::option('robots.index');
-	foreach ($kirby->option('tobimori.seo.robots.types') as $robots) {
+	foreach (Seo::option('robots.types') as $robots) {
 		$fields["robots{$robots}"] = [
 			'label' => "seo.fields.robots.{$robots}.label",
 			'type' => 'toggles',
@@ -29,7 +29,7 @@ return function (App $kirby) {
 			'default' => 'default',
 			'reset' => false,
 			'options' => [
-				'default' => I18n::translate('seo.common.default') . ' ' . ($index ? I18n::translate('seo.common.yes') : I18n::translate('seo.common.no')),
+				'default' => I18n::template('seo.common.default') . ' ' . I18n::template($index ? 'seo.common.yes' : 'seo.common.no'),
 				'true' => I18n::translate('seo.common.yes'),
 				'false' => I18n::translate('seo.common.no')
 			]

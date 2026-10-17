@@ -19,11 +19,12 @@ class GenerateAltTextJob extends Job
 
 	public function name(): string
 	{
-		return I18n::translate('seo.job.generateAltText');
+		return I18n::template('seo.job.generateAltText');
 	}
 
 	public function handle(): void
 	{
+		/** @var string $fileId */
 		$fileId = $this->payload()['fileId'];
 		$file = App::instance()->file($fileId);
 
