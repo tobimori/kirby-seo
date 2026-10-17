@@ -10,7 +10,7 @@ use Kirby\Cms\Html;
 $tags = $page->metadata()->snippetData();
 
 $render = static function (array $tag): string {
-	/** @var array{tag: string, attributes?: array<string, mixed>|null, content?: string|Stringable|null, priority?: bool} $tag */
+	/** @var array{tag: string, attributes?: array<string, mixed>|null, content?: string|Stringable|array<array-key, mixed>|null, priority?: bool} $tag */
 	// field values are `Stringable`, `Html::tag()` expects a string
 	$content = $tag['content'] ?? null;
 	return Html::tag($tag['tag'], $content instanceof Stringable ? (string)$content : $content, $tag['attributes'] ?? []) . PHP_EOL;

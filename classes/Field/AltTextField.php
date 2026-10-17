@@ -8,6 +8,7 @@ use Kirby\Cms\File;
 use Kirby\Form\Field;
 use Kirby\Form\FieldClass;
 use Kirby\Http\Response;
+use Stringable;
 use tobimori\Seo\Ai;
 use tobimori\Seo\Ai\Content;
 use tobimori\Seo\AltText;
@@ -61,7 +62,8 @@ class AltTextField extends FieldClass
 		if (is_array($value)) {
 			$this->value = $value;
 		} else {
-			$this->value = AltText::parse(is_string($value) ? $value : null)->toArray();
+			// scalars and fields are converted to strings, like before the type check
+			$this->value = AltText::parse(is_scalar($value) || $value instanceof Stringable ? (string)$value : null)->toArray();
 		}
 
 		return $this;

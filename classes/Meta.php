@@ -53,7 +53,7 @@ class Meta
 	protected Language|null $lang;
 	/** @var array<int, string> */
 	protected array $consumed = [];
-	/** @var array<string, mixed> */
+	/** @var array<array-key, mixed> */
 	protected array $metaDefaults = [];
 	protected array $metaArray = [];
 	/** @var list<string>|null */
@@ -71,7 +71,7 @@ class Meta
 		$this->lang = $lang ?? App::instance()->language();
 
 		if (method_exists($this->page, 'metaDefaults')) {
-			/** @var array<string, mixed> $metaDefaults */
+			/** @var array<array-key, mixed> $metaDefaults */
 			$metaDefaults = $this->page->metaDefaults($this->lang?->code());
 			$this->metaDefaults = $metaDefaults;
 		}
@@ -305,7 +305,7 @@ class Meta
 	 * Normalize the meta array and remaining meta defaults to be used in the snippet,
 	 * also resolve the content, if necessary
 	 *
-	 * @return list<array{tag: string, attributes?: array<string, mixed>|null, content?: string|Stringable|null, priority?: bool}>
+	 * @return list<array{tag: string, attributes?: array<string, mixed>|null, content?: string|Stringable|array<array-key, mixed>|null, priority?: bool}>
 	 */
 	public function snippetData(array|null $raw = null): array
 	{
