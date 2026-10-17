@@ -7,7 +7,7 @@ use Kirby\Toolkit\Str;
 use tobimori\Seo\Seo;
 
 return [
-	'schema' => fn ($type) => Seo::option('components.schema')::getInstance($type),
+	'schema' => fn (string $type) => Seo::option('components.schema')::getInstance($type),
 	'schemas' => fn () => Seo::option('components.schema')::getInstances(),
 	'lang' => function () {
 		/** @var Site $this */

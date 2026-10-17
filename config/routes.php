@@ -61,10 +61,9 @@ return [
 			// the language router sets the current language
 			$page = App::instance()->site()->homePage();
 			if ($page === null) {
-				$this->next();
+				return $this->next();
 			}
 
-			/** @var \tobimori\Seo\LlmContent $llmContent */
 			$llmContent = new (Seo::option('components.agentic'))($page);
 			if ($llmContent->llmsTxtEnabled() === false) {
 				$this->next();
@@ -204,7 +203,8 @@ return [
 				throw new \Exception("OAuth error: {$error}");
 			}
 
-			if (!($code = $request->get('code'))) {
+			$code = $request->get('code');
+			if (!is_string($code) || $code === '') {
 				throw new \Exception('No authorization code received');
 			}
 
@@ -213,7 +213,7 @@ return [
 
 			// redirect back to where the user came from
 			$return = $state['return'] ?? $kirby->site()->panel()->url();
-			Response::go($return);
+			Response::go((string)$return);
 		}
 	]
 ];

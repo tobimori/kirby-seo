@@ -56,7 +56,7 @@ return [
 				'load' => function (string $parent) {
 					$kirby = App::instance();
 					$request = $kirby->request();
-					$metric = $request->get('metric', 'clicks');
+					$metric = (string)$request->get('metric', 'clicks');
 					$asc = (bool)$request->get('asc', in_array($metric, ['position', 'query'], true) ? 1 : 0);
 					$page = max(1, (int)$request->get('page', 1));
 					$limit = max(1, min(100, (int)$request->get('limit', 20)));
@@ -218,7 +218,7 @@ return [
 					];
 				},
 				'submit' => function () {
-					$property = App::instance()->request()->get('property');
+					$property = (string)App::instance()->request()->get('property');
 					Seo::option('components.gsc')::setProperty($property);
 
 					return [

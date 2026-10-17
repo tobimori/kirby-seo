@@ -39,6 +39,7 @@ use function is_string;
  * @method Field robotsArchive()
  * @method Field robotsImageindex()
  * @method Field robotsSnippet()
+ * @consistent-constructor
  */
 class Meta
 {
@@ -52,6 +53,7 @@ class Meta
 	protected array $consumed = [];
 	protected array $metaDefaults = [];
 	protected array $metaArray = [];
+	/** @var list<string>|null */
 	protected array|null $cascade = null;
 	protected string|null $robots = null;
 	protected Meta|null $parentMeta = null;
@@ -149,7 +151,6 @@ class Meta
 		$meta['og:url'] = $canonicalFn;
 
 		// LLM-friendly content discovery
-		/** @var \tobimori\Seo\LlmContent $llmContent */
 		$llmContent = new (Seo::option('components.agentic'))($this->page);
 		$meta['alternate'][] = static function () use ($llmContent) {
 			if (!$llmContent->available()) {
@@ -447,6 +448,8 @@ class Meta
 
 	/**
 	 * Get the meta value for a given key
+	 *
+	 * @param list<string> $exclude
 	 */
 	public function get(string $key, array $exclude = []): Field
 	{
@@ -470,6 +473,7 @@ class Meta
 	/**
 	 * Resolves a value and its cascade source without marking the key as consumed
 	 *
+	 * @param list<string> $exclude
 	 * @return array{field: Field, source: string|null}
 	 */
 	public function resolve(string $key, array $exclude = []): array
@@ -484,7 +488,8 @@ class Meta
 		}
 
 		foreach (array_diff($this->cascade, $exclude) as $method) {
-			if ($field = $this->$method($key)) {
+			// @mago-expect analysis:string-member-selector
+			if (($field = $this->$method($key)) instanceof Field) {
 				if (
 					is_string($value = $field->value()) &&
 					Str::contains($value, 'data-seo-template-variable')
@@ -548,7 +553,8 @@ class Meta
 			$cascade = Seo::option('cascade');
 
 			foreach (array_intersect($cascade, self::FALLBACK_CASCADE) as $method) {
-				if ($field = $this->$method($fallback)) {
+				// @mago-expect analysis:string-member-selector
+				if (($field = $this->$method($fallback)) instanceof Field) {
 					return $field;
 				}
 			}

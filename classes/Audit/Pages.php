@@ -207,7 +207,6 @@ class Pages
 	protected function entry(Page $page): array
 	{
 		// Do not retain Meta instances while filling the cache for the entire site
-		/** @var \tobimori\Seo\Meta $meta */
 		$meta = new (Seo::option('components.meta'))($page);
 		$values = ['title' => $page->title()->toString()];
 

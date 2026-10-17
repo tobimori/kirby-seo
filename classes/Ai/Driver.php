@@ -6,6 +6,9 @@ use Generator;
 use Kirby\Exception\InvalidArgumentException;
 use tobimori\Seo\Seo;
 
+/**
+ * @consistent-constructor
+ */
 abstract class Driver
 {
 	public function __construct(protected string $providerId)

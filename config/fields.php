@@ -87,7 +87,7 @@ return [
 					// falls back to the latest version if no changes exist
 					$component::sendStream(fn (Closure $send) => VersionId::render('changes', function () use ($component, $data, $send, $field) {
 						// @mago-expect analysis:non-documented-method
-						foreach ($component::streamTask($field->ai(), [
+						foreach ($component::streamTask((string)$field->ai(), [
 							'instructions' => $data['instructions'] ?? null,
 							'edit' => $data['edit'] ?? null
 						]) as $chunk) {

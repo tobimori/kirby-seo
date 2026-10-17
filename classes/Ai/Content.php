@@ -9,6 +9,8 @@ use Kirby\Exception\Exception;
 /**
  * Fluent builder for AI message content.
  * Each instance represents a single message with a role and content blocks.
+ *
+ * @consistent-constructor
  */
 class Content
 {

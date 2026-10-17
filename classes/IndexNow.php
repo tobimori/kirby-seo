@@ -11,6 +11,10 @@ use Kirby\Toolkit\Str;
 
 use function is_bool;
 
+/**
+ * @psalm-import-type IndexNowRule from Seo
+ * @consistent-constructor
+ */
 class IndexNow
 {
 	protected static string|null $key = null;
@@ -234,6 +238,8 @@ class IndexNow
 
 	/**
 	 * Collect urls based on invalidation rules
+	 *
+	 * @param IndexNowRule $rule
 	 */
 	protected function collectFromRule(array $rule): void
 	{

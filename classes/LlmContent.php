@@ -18,6 +18,8 @@ use Throwable;
 
 /**
  * Provides the Markdown representation for one page.
+ *
+ * @consistent-constructor
  */
 class LlmContent
 {

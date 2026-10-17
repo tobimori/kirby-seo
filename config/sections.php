@@ -135,7 +135,7 @@ return [
 					return [];
 				}
 
-				$metric = App::instance()->request()->get('metric', 'clicks');
+				$metric = (string)App::instance()->request()->get('metric', 'clicks');
 				$limit = (int)App::instance()->request()->get('limit', 10);
 				$asc = in_array($metric, ['position', 'query'], true);
 

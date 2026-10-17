@@ -25,7 +25,7 @@ class Ai
 
 	public static function enabled(): bool
 	{
-		return (bool)Seo::option('ai.enabled', false);
+		return Seo::option('ai.enabled', false);
 	}
 
 	/**
