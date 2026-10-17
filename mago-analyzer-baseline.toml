@@ -554,6 +554,12 @@ count = 1
 
 [[issues]]
 file = "classes/Audit/Links/Report.php"
+code = "less-specific-nested-argument-type"
+message = '''Argument type mismatch for argument #1 of `tobimori\Seo\Audit\Links\Report::hasAnchor`: expected `array{'ids': list<int|string>, ...}`, but provided type `array{'error': null, ...}` is less specific.'''
+count = 1
+
+[[issues]]
+file = "classes/Audit/Links/Report.php"
 code = "mixed-argument"
 message = 'Invalid argument type for argument #1 of `Kirby\Cms\App::page`: expected `null|string`, but found `mixed`.'
 count = 1
@@ -598,12 +604,6 @@ count = 1
 file = "classes/Audit/Links/Report.php"
 code = "mixed-argument"
 message = 'Invalid argument type for argument #1 of `tobimori\Seo\Audit\Links\Report::normalize`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "classes/Audit/Links/Report.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `in_array`: expected `array<array-key, ('V.in_array() extends mixed)>`, but found `mixed`."
 count = 1
 
 [[issues]]

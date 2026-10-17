@@ -298,6 +298,9 @@ class Report
 		};
 	}
 
+	/**
+	 * @param array{ids: list<int|string>, ...} $entry
+	 */
 	protected function hasAnchor(array $entry, string|null $fragment): bool
 	{
 		if ($fragment === null || $fragment === '') {
@@ -307,10 +310,11 @@ class Report
 		$fragment = rawurldecode($fragment);
 
 		// browsers scroll to the top & support text fragments without matching elements
+		// numeric IDs are stored as integers, they were array keys
 		return (
 			$fragment === 'top' ||
 				str_starts_with($fragment, ':~:') ||
-				in_array($fragment, $entry['ids'], true)
+				in_array($fragment, array_map(strval(...), $entry['ids']), true)
 		);
 	}
 
