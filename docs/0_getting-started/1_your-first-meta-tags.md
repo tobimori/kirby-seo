@@ -11,7 +11,7 @@ Open the Panel, and click on "Metadata & SEO". You'll see something like this:
 
 ![Site SEO tab with meta description field](global-seo-settings.png)
 
-Quite empty, but these are your global defaults. Every page that doesn't have its own meta data will use what you set here.
+These are your global defaults. Every page that doesn't have its own meta data uses what you set here.
 
 ### Meta title templates
 
@@ -45,7 +45,7 @@ That page now shows its own description. Every other page still shows "A blog ab
 
 ### Remove the override
 
-Delete the description you just entered on the page and save. Reload — the page falls back to the site-wide default again.
+Delete the description you just entered on the page and save. Reload, and the page falls back to the site-wide default again.
 
 What you just experienced is the **Meta Cascade**. Kirby SEO looks for values in multiple places and uses the most specific one it finds:
 
@@ -56,11 +56,11 @@ What you just experienced is the **Meta Cascade**. Kirby SEO looks for values in
 5. **Site globals**: the Metadata & SEO tab on the Site
 6. **Plugin defaults**
 
-The idea is simple: you set sensible defaults once at the site level, and only override where you need something different. Most pages will never need more than a description in their Metadata & SEO tab.
+You set sensible defaults once at the site level and only override where you need something different. Most pages will never need more than a description in their Metadata & SEO tab. The [Meta Cascade](2_customization/01_meta-cascade) page explains each level in detail.
 
 ## Inheriting settings
 
-So far you've seen two levels: site defaults and page overrides. But what if you have a section of your site — like a blog — where all pages should share specific settings that are different from the rest of your site?
+So far you've seen two levels: site defaults and page overrides. Sometimes a whole section of your site, like a blog, needs settings that are different from the rest of your site.
 
 Open a page's Metadata & SEO tab and use the Inherit settings field. Select which settings should be passed down to its child pages: title templates, descriptions, Open Graph, robots directives, or all at once. Child pages can still override anything individually.
 
@@ -76,6 +76,6 @@ Set a default OG image in the Site SEO tab so every shared link has a preview im
 
 ## What's next
 
-You now know how to control your meta tags, title templates and social previews. The rest of the docs cover individual features in detail:
+Before you launch your site, read [Robots & Indexing](1_features/00_robots-indexing) and [Sitemap](1_features/01_sitemap) to make sure search engines can find and index your pages.
 
-// TODO: add links
+If you're building the site, [Programmatic Content](2_customization/00_programmatic-content) shows how to set meta values from your page models, and [Schema.org](2_customization/08_schema-org) adds structured data.
