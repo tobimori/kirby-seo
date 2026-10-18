@@ -55,7 +55,7 @@ Set your own ordered list if the templates use different markup:
 ],
 ```
 
-Selectors can be element names, IDs, classes, attribute selectors, or XPath expressions.
+Selectors can be element names, IDs, classes, attribute selectors, or XPath expressions. XPath expressions must start with `//`.
 
 ## Replace the converter
 

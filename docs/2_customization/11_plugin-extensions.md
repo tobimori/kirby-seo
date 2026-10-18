@@ -3,7 +3,7 @@ title: Extending the Plugin
 intro: Replace built-in classes with your own
 ---
 
-Kirby SEO uses a component system similar to [Kirby's own](https://getkirby.com/docs/reference/plugins/components). Every major class in the plugin can be swapped out for a custom one. This lets you change how the plugin works without forking it.
+Kirby SEO uses a component system similar to [Kirby's own](https://getkirby.com/docs/reference/plugins/components). The components listed below can be swapped out for custom classes. This lets you change how the plugin works without forking it.
 
 The built-in components are:
 
@@ -45,4 +45,4 @@ return [
 ];
 ```
 
-The rest of the plugin picks up your class automatically. Page methods, hooks, routes, and sections all resolve components through the config, so your class is used everywhere the original would have been. Look at the built-in classes in `site/plugins/kirby-seo/classes/` to see what methods are available to override.
+Calls to `$page->metadata()` and other plugin internals resolve `components.meta` from this config and instantiate `MyMeta`. Look at the built-in classes in the plugin's `classes/` directory to see what methods are available to override.

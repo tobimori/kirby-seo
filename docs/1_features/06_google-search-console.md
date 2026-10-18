@@ -15,9 +15,7 @@ Data is cached for 24 hours, so it won't hit Google's API on every page load.
 
 ## Connecting your Google account
 
-**IMPORTANT:** The following section describes a feature that is not implemented yet. For now, the Search Console integration requires your own GSC credentials.
-
-The Google Search Console section needs access to your Google account. To keep setup simple, API requests to Google are proxied through a server operated by Love & Kindness GmbH (the company behind Kirby SEO). This proxy mode requires an active Kirby SEO license, which is used only for rate limiting. We do not log the content of any requests or responses, so we cannot see the actual search data for your site. The source code for the proxy is [open source on GitHub](https://github.com/tobimori/kirby-seo-gsc-proxy).
+The Google Search Console section connects directly to Google with OAuth credentials from your own Google Cloud project. Follow [Setting up Google Search Console](2_customization/07_gsc-setup) to create the credentials and add them to your config.
 
 1. Open the Panel and navigate to any page with the SEO tab.
 2. In the Google Search Console section, click **Connect**.
@@ -25,5 +23,3 @@ The Google Search Console section needs access to your Google account. To keep s
 4. Back in the Panel, select which Search Console property to use. If your domain is already registered in Google Search Console, it will be pre-selected.
 
 The section starts showing data once the property is selected.
-
-If you'd rather not use the proxy, you can connect with your own Google OAuth credentials instead. See [Setting up your own GSC credentials](2_customization/07_gsc-setup) for details.

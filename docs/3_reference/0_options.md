@@ -45,6 +45,28 @@ Both are equivalent, but you cannot use dot syntax inside a nested array. `'robo
 
 The `socialMedia` option defines which fields appear in the site blueprint. Default fields: `twitter`, `facebook`, `instagram`, `youtube`, `linkedin`, `bluesky`, `mastodon`. Each key maps to a placeholder URL. Override the array to add or remove fields.
 
+## Cache
+
+| Option                | Default | Description                                      |
+| --------------------- | ------- | ------------------------------------------------ |
+| `cache.searchConsole` | `true`  | Enable the Google Search Console cache namespace |
+| `cache.indexnow`      | `true`  | Enable the IndexNow cache namespace              |
+| `cache.overview`      | `true`  | Enable the SEO overview and link audit cache     |
+
+## SEO overview and link audit
+
+| Option                         | Default       | Description                                                                                 |
+| ------------------------------ | ------------- | ------------------------------------------------------------------------------------------- |
+| `overview.lengths.title`       | `[30, 60]`    | Recommended minimum and maximum title length, including the title template                  |
+| `overview.lengths.description` | `[70, 160]`   | Recommended minimum and maximum description length                                          |
+| `links.queue`                  | `true`        | Use Kirby Queues for link checks when `tobimori/kirby-queues` is installed                  |
+| `links.schedule`               | `'0 3 * * *'` | Cron expression for scheduled full link checks with Kirby Queues. Set to `false` to disable |
+| `links.http`                   | `null`        | Use HTTP crawling automatically in CLI mode with an absolute site URL                       |
+| `links.ttl`                    | `168`         | Hours before an external URL is checked again                                               |
+| `links.timeout`                | `10`          | Timeout in seconds for external requests                                                    |
+| `links.concurrency`            | `5`           | Maximum parallel HTTP page requests. External URL checks use twice this limit               |
+| `links.hosts`                  | `[]`          | Additional site hosts that the link audit treats as internal                                |
+
 ## Meta defaults
 
 These are the fallback values for the last level of the [meta cascade](2_customization/01_meta-cascade). They apply when no other level provides a value. Each option can be a static value or a callable that receives the `Page` object.
@@ -76,7 +98,6 @@ These are the fallback values for the last level of the [meta cascade](2_customi
 | `agentic.markdown.converter` | `null`                                          | Custom conversion callable, object, or class                     |
 | `agentic.llmsTxt.enabled`    | `true`                                          | Enable the language-aware `/llms.txt` route                      |
 | `agentic.llmsTxt.pages`      | `null`                                          | Callable that selects the initial page collection                |
-| `components.agentic`         | `tobimori\Seo\LlmContent`                       | LLM-friendly content component class                             |
 
 ## Robots
 
@@ -124,11 +145,12 @@ The Gemini driver uses the [Interactions API](https://ai.google.dev/gemini-api/d
 
 ## IndexNow
 
-| Option                  | Default                      | Description                                                |
-| ----------------------- | ---------------------------- | ---------------------------------------------------------- |
-| `indexnow.enabled`      | `true`                       | Whether to ping search engines on page changes             |
-| `indexnow.searchEngine` | `'https://api.indexnow.org'` | IndexNow API endpoint. One engine propagates to all others |
-| `indexnow.rules`        | `[]`                         | Invalidation rules for related pages                       |
+| Option                  | Default                      | Description                                                          |
+| ----------------------- | ---------------------------- | -------------------------------------------------------------------- |
+| `indexnow.enabled`      | `true`                       | Whether to ping search engines on page changes                       |
+| `indexnow.delay`        | `30`                         | Batch window in seconds when `tobimori/kirby-queues` is installed    |
+| `indexnow.searchEngine` | `'https://api.indexnow.org'` | IndexNow API endpoint. One engine propagates to all others           |
+| `indexnow.rules`        | `[]`                         | Invalidation rules for related pages                                 |
 
 Rules map a match pattern to invalidation targets. Match patterns can be a URL glob (`'/blog/*'`), a template name (`'article'`), or a wildcard (`'*'`).
 
@@ -159,12 +181,13 @@ Rules map a match pattern to invalidation targets. Match patterns can be a URL g
 
 ## Components
 
-| Option                | Default                            | Description               |
-| --------------------- | ---------------------------------- | ------------------------- |
-| `components.meta`     | `tobimori\Seo\Meta`                | Meta tag generation class |
-| `components.ai`       | `tobimori\Seo\Ai`                  | AI Assist class           |
-| `components.indexnow` | `tobimori\Seo\IndexNow`            | IndexNow class            |
-| `components.schema`   | `tobimori\Seo\SchemaSingleton`     | Schema.org store class    |
-| `components.gsc`      | `tobimori\Seo\GoogleSearchConsole` | Search Console class      |
+| Option                 | Default                            | Description                |
+| ---------------------- | ---------------------------------- | -------------------------- |
+| `components.meta`      | `tobimori\Seo\Meta`                | Meta tag generation class  |
+| `components.ai`        | `tobimori\Seo\Ai`                  | AI Assist class            |
+| `components.indexnow`  | `tobimori\Seo\IndexNow`            | IndexNow class             |
+| `components.schema`    | `tobimori\Seo\SchemaSingleton`     | Schema.org store class     |
+| `components.gsc`       | `tobimori\Seo\GoogleSearchConsole` | Search Console class       |
+| `components.agentic`   | `tobimori\Seo\LlmContent`          | LLM-friendly content class |
 
 See [extending the plugin](2_customization/11_plugin-extensions) for details on replacing components.

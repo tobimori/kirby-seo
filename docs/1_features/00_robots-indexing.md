@@ -30,7 +30,7 @@ The `robots.txt` does **not** list individual pages. It only sets broad rules. T
 
 ### Debug mode
 
-When Kirby's debug mode is on, the `robots.txt` blocks all crawlers:
+When Kirby's debug mode is on and `robots.content` is empty, the `robots.txt` blocks all crawlers:
 
 ```txt
 User-agent: *
@@ -55,7 +55,7 @@ The plugin follows page status in Kirby:
 - **Unlisted** pages are hidden from search engines
 - **Draft** pages are not publicly accessible
 
-In debug mode, **all** pages are hidden from search engines regardless of their status.
+In debug mode, the default changes to hide all pages from search engines. Values from higher-priority levels of the [Meta Cascade](2_customization/01_meta-cascade) can still override it.
 
 ### Overriding robots settings
 
@@ -96,7 +96,7 @@ Clicking it takes you straight to the SEO tab, so you can quickly spot which pag
 
 ![Robots directives fields in the Panel](robots-section.png)
 
-Our suggestion: hide the per-page robots fields unless you actually need them. The defaults are good enough for the vast majority of sites, and the individual settings tend to confuse editors more than they help. You can disable them entirely:
+Hide the per-page robots fields when editors don't need them. You can disable them entirely:
 
 ```php
 // site/config/config.php

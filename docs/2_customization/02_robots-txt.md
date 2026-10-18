@@ -5,6 +5,8 @@ intro: Add custom rules to your robots.txt
 
 By default, Kirby SEO generates a simple `robots.txt` that allows all crawlers and blocks the Panel. If you need to add your own rules, use the `robots.content` option.
 
+Any non-empty `robots.content` value replaces all default content. Include the general `User-agent: *`, `Allow: /`, and `Disallow: /panel` rules when you want to keep them. The `Sitemap:` line is still appended automatically.
+
 ## Blocking specific bots
 
 Some AI providers crawl websites to use the content as training data. You can block their crawlers:
@@ -17,6 +19,10 @@ return [
   'tobimori.seo' => [
     'robots' => [
       'content' => [
+        '*' => [
+          'Allow' => ['/'],
+          'Disallow' => ['/panel'],
+        ],
         'GPTBot' => [
           'Disallow' => ['/'],
         ],
@@ -32,11 +38,9 @@ return [
 ];
 ```
 
-This adds rules for each bot while keeping the default rules for all other crawlers intact.
-
 ## Custom rules for all crawlers
 
-If you set rules for `*`, they replace the default rules entirely:
+Include the general rules together with any additional paths:
 
 ```php
 'content' => [

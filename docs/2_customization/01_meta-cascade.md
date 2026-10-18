@@ -3,21 +3,21 @@ title: Meta Cascade
 intro: Understand how meta values are resolved across multiple levels
 ---
 
-Kirby SEO is built with a cascading approach. Meta tags can be defined on multiple levels, and they are merged based on priority. If a value is empty on one level, it falls through to the next. This is how the plugin forms the final metadata for every page.
+Meta tags can be defined on multiple levels, and they are merged based on priority. If a value is empty on one level, it falls through to the next.
 
 The default cascade, in order of priority:
 
-1. **Page fields** (`fields`) -- Values the editor enters in the page's SEO blueprint fields. This is the highest priority: if an editor sets a meta description, it always wins.
+1. **Page fields** (`fields`): Values the editor enters in the page's SEO blueprint fields. This is the highest priority: if an editor sets a meta description, it always wins.
 
-2. **Programmatic** (`programmatic`) -- Values returned by `metaDefaults()` in [page models](2_customization/00_programmatic-content). Use this for computed defaults like generated OG images or descriptions derived from other fields.
+2. **Programmatic** (`programmatic`): Values returned by `metaDefaults()` in [page models](2_customization/00_programmatic-content). Use this for computed defaults like generated OG images or descriptions derived from other fields.
 
-3. **Parent** (`parent`) -- Inherited values from the parent page. If a parent page has "inherit settings" enabled for a field, its children pick up those values. Useful for giving all blog posts the same title template, for example.
+3. **Parent** (`parent`): Inherited values from the parent page. If a parent page has "inherit settings" enabled for a field, its children pick up those values. Useful for giving all blog posts the same title template, for example.
 
-4. **Fallback fields** (`fallbackFields`) -- Falls back to meta field values for Open Graph tags. If no `ogDescription` is set, the page's `metaDescription` is used instead.
+4. **Fallback fields** (`fallbackFields`): Falls back to meta field values for Open Graph tags. If no `ogDescription` is set, the page's `metaDescription` is used instead.
 
-5. **Site** (`site`) -- Global values from the site's SEO blueprint fields. These apply to all pages that don't have their own value set at a higher level.
+5. **Site** (`site`): Global values from the site's SEO blueprint fields. These apply to all pages that don't have their own value set at a higher level.
 
-6. **Options** (`options`) -- The final fallback, defined in the plugin's config defaults. These are the built-in defaults like the title template `{{ title }} - {{ site.title }}`.
+6. **Options** (`options`): The final fallback, defined in the plugin's config defaults. These are the built-in defaults like the title template `{{ title }} - {{ site.title }}`.
 
 ## Configuring the cascade
 

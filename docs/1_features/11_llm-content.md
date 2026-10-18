@@ -55,7 +55,7 @@ GET /article
 Accept: text/markdown
 ```
 
-Kirby SEO returns Markdown only when the request prefers it over HTML. Browser requests continue to receive the normal page. Links between local pages use `.md` when the target page has a Markdown representation. File, anchor, query-only, route, and external links remain unchanged.
+Kirby SEO returns Markdown only when the request prefers it over HTML. Browser requests continue to receive the normal page. Links between local pages use `.md` when the target page has a Markdown representation. Query strings and fragments on those links are preserved, and query-only links point to the current page's Markdown representation. File links, anchor-only links, external links, and routes that do not resolve to pages remain unchanged.
 
 The HTML response also advertises its Markdown alternative. The Markdown response points back to the canonical HTML page and to the site's `llms.txt` file.
 

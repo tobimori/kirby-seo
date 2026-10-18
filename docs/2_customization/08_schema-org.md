@@ -3,7 +3,7 @@ title: Schema.org (JSON-LD)
 intro: Add structured data to your pages
 ---
 
-Kirby SEO can output Schema.org structured data as JSON-LD. It uses the [spatie/schema-org](https://github.com/spatie/schema-org) package, which must be installed separately:
+Kirby SEO can output Schema.org structured data as JSON-LD. It uses the [spatie/schema-org](https://github.com/spatie/schema-org) package, which must be installed separately. Version 5 requires PHP 8.4 or later:
 
 ```bash
 composer require "spatie/schema-org:^5.0"
@@ -28,7 +28,7 @@ $page->schema('Article')
   );
 ```
 
-`$page->schema($type)` returns the stored schema for that type, or creates a new one if it doesn't exist yet. Both also exist as `$site->schema()` and `$site->schemas()` for site-level schemas.
+`$page->schema($type)` returns the stored schema for that type, or creates a new one if it doesn't exist yet. `$page->schemas()` returns all stored page schemas. The same methods are available as `$site->schema()` and `$site->schemas()` for site-level schemas.
 
 The global `schema($type)` function creates a new instance without storing it. Use it for nested objects like the `Person` above that don't need their own top-level entry.
 

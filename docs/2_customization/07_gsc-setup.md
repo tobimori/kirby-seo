@@ -3,7 +3,7 @@ title: Setting up Google Search Console
 intro: Connect Search Console with your own Google OAuth credentials
 ---
 
-By default, the Search Console integration uses a proxy to keep setup simple. If you'd rather connect directly, you can set up your own Google OAuth credentials instead. This requires a Google Cloud project with the Search Console API enabled. The API is free to use.
+The Search Console integration connects directly to Google with your own OAuth credentials. This requires a Google Cloud project with the Search Console API enabled. The API is free to use.
 
 ## Create OAuth credentials
 

@@ -15,7 +15,7 @@ use Kirby\Cms\Page;
 
 class ArticlePage extends Page
 {
-  public function metaDefaults(string $lang = null): array
+  public function metaDefaults(?string $lang = null): array
   {
     return [
       'og:image' => "{$this->url()}.png",
@@ -74,7 +74,7 @@ Page models only apply to pages with a specific template. If you want to add met
 
 Kirby::plugin('my/meta', [
   'pageMethods' => [
-    'metaDefaults' => function (string $lang = null): array {
+    'metaDefaults' => function (?string $lang = null): array {
       return [
         'og:image' => "{$this->url()}.png",
       ];

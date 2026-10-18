@@ -9,7 +9,7 @@ Kirby SEO provides a dedicated `alt-text` field that handles both cases. It stor
 
 ## Adding the field
 
-Add a `alt-text` field to any file blueprint:
+Add an `alt-text` field to any file blueprint:
 
 ```yaml
 # site/blueprints/files/image.yml
@@ -23,9 +23,9 @@ Editors see a text input with a toggle. The toggle marks an image as decorative:
 
 ## AI generation
 
-If [AI Assist](1_features/04_ai-assist) is configured, the field shows **Generate** and **Customize** buttons. The AI sees the actual image and writes alt text based on it, the filename, and the page context. Results stream in word by word and can be stopped early.
+If [AI Assist](1_features/04_ai-assist) is configured, the field shows **Generate** and **Customize** buttons. The AI sees the actual image and writes alt text based on it, the filename, and the page context. Results stream in chunks and can be stopped early.
 
-You can disable AI for a specific field by setting `ai: false` in the blueprint.
+You can hide the Panel AI controls for a specific field by setting `ai: false` in the blueprint. This does not disable upload generation when `autogenerate: true` is set.
 
 ### Auto-generation on upload
 
@@ -37,7 +37,7 @@ alt:
   autogenerate: true
 ```
 
-By default, this runs synchronously during the upload. For better performance, you can offload it to a background queue. See [Background Processing](2_customization/10_background-processing) for setup. On multilingual sites, a single AI call generates alt text for all languages at once.
+When `tobimori/kirby-queues` is installed, generation runs through Kirby Queues. Without that plugin, it runs synchronously during the upload. See [Background Processing](2_customization/10_background-processing) for setup. On multilingual sites, a single AI call generates alt text for all languages at once.
 
 ## Using alt text in templates
 
@@ -53,6 +53,6 @@ The plugin registers a `toAltText()` field method that returns an `AltText` obje
 
 // decorative image:
 // <img alt="" src="..." width="..." height="...">
+```
 
 The field also works with plain string values from existing `alt` fields. If you migrate from a regular text field, `toAltText()` treats the old value as manual alt text.
-```

@@ -3,7 +3,7 @@ title: Customizing the Sitemap
 intro: Fine-tune the built-in sitemap or replace it entirely
 ---
 
-The built-in sitemap generator has a few options to adjust its behavior. For most sites, these are enough. If you need full control, you can replace the generator with your own.
+The built-in sitemap generator has a few options to adjust its behavior. You can also replace the generator with your own.
 
 ## Excluding templates
 
@@ -37,6 +37,8 @@ By default, all pages end up in a single sitemap. If you have many pages, you ca
 Both `changefreq` and `priority` accept a static value or a callable:
 
 ```php
+use Kirby\Cms\Page;
+
 'sitemap' => [
   'changefreq' => 'daily',
   'priority' => fn (Page $page) => $page->isHomePage() ? 1.0 : 0.5,

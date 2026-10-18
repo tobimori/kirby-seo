@@ -3,7 +3,7 @@ title: AI Assist
 intro: Let AI draft your meta titles and descriptions
 ---
 
-Writing meta titles and descriptions for every page gets tedious fast. AI Assist can generate them for you based on the actual content of each page. It reads the page, looks at your existing meta fields, and drafts a title or description that fits.
+AI Assist can generate meta titles and descriptions based on the actual content of each page. It reads the page, looks at your existing meta fields, and drafts a title or description that fits.
 
 AI Assist works for these fields:
 
@@ -62,7 +62,7 @@ The **Generate** button drafts a new value from scratch based on the page conten
 
 Already have a value but want to tweak it? The **Edit** button lets you revise the current text with instructions like "make it shorter" or "add the brand name".
 
-The result appears word by word. You can stop it early if you want.
+The result streams in chunks. You can stop it early if you want.
 
 ## Custom providers and prompts
 

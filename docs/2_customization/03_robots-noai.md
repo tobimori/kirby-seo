@@ -22,6 +22,4 @@ return [
 
 The new fields show up in the robots section of the SEO tab. If you previously disabled `robots.pageSettings`, you need to re-enable it for the fields to appear.
 
-By default, all directives are set to "Yes" (allowed). To opt out of AI training, an editor needs to set the AI Training and AI Image Training fields to "No". The plugin then outputs `noai` and `noimageai` in the robots meta tag.
-
-If you want to opt out for all pages at once, set it on the Site level instead of per page. Translations for the field labels are included in the plugin.
+As soon as you add the two types, every page opts out: the plugin outputs `noai` and `noimageai` in the robots meta tag. To allow AI training for a single page, set its AI Training and AI Image Training fields to "Yes". To allow it for the whole site, set them on the Site level. Translations for the field labels are included in the plugin.

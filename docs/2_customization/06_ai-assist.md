@@ -36,7 +36,7 @@ You can override these too. Look at the built-in prompts in `site/plugins/kirby-
 
 If you need a provider that isn't built in, you can add your own. A provider has two parts: a driver class that handles the API communication, and a config entry that registers it.
 
-Create a class that extends `tobimori\Seo\Ai\Driver`. The only method you need to implement is `stream`, which receives a prompt string and must yield `Chunk` objects as the response comes in.
+Create a class that extends `tobimori\Seo\Ai\Driver`. The only method you need to implement is `stream`, which receives an array of `Content` messages and must yield `Chunk` objects as the response comes in. This example follows the OpenAI Responses API format used by the built-in OpenAI driver.
 
 ```php
 <?php
@@ -45,15 +45,15 @@ namespace App\Ai;
 
 use Generator;
 use tobimori\Seo\Ai\Chunk;
+use tobimori\Seo\Ai\Content;
 use tobimori\Seo\Ai\Driver;
 use tobimori\Seo\Ai\SseStream;
 
 class MyProvider extends Driver
 {
-  public function stream(string $prompt, string|null $model = null): Generator
+  public function stream(array $content, string|null $model = null): Generator
   {
     $apiKey = $this->config('apiKey', required: true);
-    $model = $model ?? $this->config('model', 'default-model');
     $endpoint = $this->config('endpoint', required: true);
 
     $stream = new SseStream($endpoint, [
@@ -61,46 +61,93 @@ class MyProvider extends Driver
       'Accept: text/event-stream',
       "Authorization: Bearer {$apiKey}",
     ], [
-      'model' => $model,
-      'input' => $prompt,
+      'model' => $model ?? $this->config('model', 'default-model'),
+      'input' => $this->buildInput($content),
       'stream' => true,
     ], (int)$this->config('timeout', 120));
 
-    yield from $stream->stream(function (array $event): Generator {
+    yield from $stream->stream(static function (array $event): Generator {
       $type = $event['type'] ?? null;
 
-      if ($type === 'start') {
+      if ($type === 'response.created') {
         yield Chunk::streamStart($event);
+        return;
       }
 
-      if ($type === 'delta') {
-        yield Chunk::textDelta($event['text'] ?? '', $event);
+      if ($type === 'response.in_progress') {
+        yield Chunk::textStart($event);
+        return;
       }
 
-      if ($type === 'done') {
+      if ($type === 'response.output_text.delta') {
+        $delta = $event['delta'] ?? null;
+        if (is_string($delta) && $delta !== '') {
+          yield Chunk::textDelta($delta, $event);
+        }
+        return;
+      }
+
+      if ($type === 'response.output_text.done') {
+        yield Chunk::textComplete($event);
+        return;
+      }
+
+      if ($type === 'response.completed') {
         yield Chunk::streamEnd($event);
+        return;
       }
 
-      if ($type === 'error') {
-        yield Chunk::error($event['message'] ?? 'Unknown error', $event);
+      if ($type === 'response.error') {
+        $message = $event['error']['message'] ?? null;
+        yield Chunk::error(is_string($message) ? $message : 'Unknown streaming error.', $event);
       }
     });
+  }
+
+  /** @param array<Content> $content */
+  private function buildInput(array $content): array
+  {
+    $input = [];
+
+    foreach ($content as $message) {
+      $blocks = [];
+
+      foreach ($message->blocks() as $block) {
+        $blocks[] = $block['type'] === 'image'
+          ? [
+              'type' => 'input_image',
+              'image_url' => "data:{$block['mediaType']};base64,{$block['data']}",
+            ]
+          : [
+              'type' => 'input_text',
+              'text' => $block['text'],
+            ];
+      }
+
+      $input[] = [
+        'role' => $message->role(),
+        'content' => $blocks,
+      ];
+    }
+
+    return $input;
   }
 }
 ```
 
 The driver uses `$this->config()` to read values from the provider's `config` array in `config.php`. Pass `required: true` to throw an error if a value is missing.
 
-`SseStream` is a helper class included in Kirby SEO that handles the cURL request and SSE parsing. You pass it the endpoint, headers, payload, and a mapper function that converts raw SSE events into `Chunk` objects.
+`SseStream` is a helper class included in Kirby SEO that handles the cURL request and SSE parsing. Pass the endpoint, headers, payload, and timeout to its constructor. Pass the mapper that converts raw SSE events into `Chunk` objects to `$stream->stream()`.
 
 If your API doesn't use SSE, you can skip `SseStream` and yield chunks directly.
 
 The chunks the Panel expects, in order:
 
 1. `Chunk::streamStart()` - Signals the stream has started
-2. `Chunk::textDelta($text)` - Each piece of generated text (repeated)
-3. `Chunk::textComplete()` - The text is done
-4. `Chunk::streamEnd()` - The stream is finished
+2. `Chunk::textStart()` - Signals that text output has started
+3. `Chunk::textDelta($text)` - Each piece of generated text (repeated)
+4. `Chunk::textComplete()` - The text is done
+5. `Chunk::streamEnd()` - The stream is finished
 
 If something goes wrong, yield `Chunk::error($message)` at any point.
 
@@ -122,7 +169,7 @@ return [
           'config' => [
             'apiKey' => 'sk-...',
             'model' => 'my-model',
-            'endpoint' => 'https://api.example.com/v1/chat',
+            'endpoint' => 'https://api.example.com/v1/responses',
           ],
         ],
       ],

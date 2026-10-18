@@ -3,7 +3,7 @@ title: IndexNow
 intro: Notify search engines when your content changes
 ---
 
-Normally, search engines discover changes to your site on their own schedule, which can take days or weeks. [IndexNow](https://www.indexnow.org/) lets you skip the wait: whenever you save, publish, or move a page in Kirby, Kirby SEO notifies search engines so they can re-crawl right away.
+Normally, search engines discover changes to your site on their own schedule, which can take days or weeks. [IndexNow](https://www.indexnow.org/) lets Kirby SEO notify participating search engines when page content is updated or a page changes status or slug. The search engines decide when to crawl the URL.
 
 IndexNow is supported by Bing, Yandex, Seznam, and others. Kirby SEO sends a single request to `api.indexnow.org`, which propagates to all participating search engines. Google does not support IndexNow but is not affected by it.
 
@@ -11,7 +11,7 @@ IndexNow is supported by Bing, Yandex, Seznam, and others. Kirby SEO sends a sin
 
 IndexNow is triggered on three events:
 
-- A page is saved
+- A page's content is updated
 - A page changes status (e.g. draft to listed)
 - A page's slug changes
 

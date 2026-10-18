@@ -9,7 +9,7 @@ What you see here are the defaults. The sitemap generator and all its options ca
 
 ## What's in the sitemap
 
-The sitemap only includes pages allowed by their [page-level robots indexing settings](1_features/00_robots-indexing). Unlisted pages, drafts, and pages with `robotsIndex` disabled are left out. Custom `robots.txt` rules from `robots.content` do not affect the sitemap. The `error` template is also excluded by default.
+The sitemap includes each page or translation whose resolved [robots indexing setting](1_features/00_robots-indexing) allows indexing. Page status provides the default. Higher-priority values in the Meta Cascade can override it. Custom `robots.txt` rules from `robots.content` do not affect the sitemap. The `error` template is also excluded by default.
 
 Each page in the sitemap includes:
 
