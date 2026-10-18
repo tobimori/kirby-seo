@@ -145,12 +145,12 @@ The Gemini driver uses the [Interactions API](https://ai.google.dev/gemini-api/d
 
 ## IndexNow
 
-| Option                  | Default                      | Description                                                          |
-| ----------------------- | ---------------------------- | -------------------------------------------------------------------- |
-| `indexnow.enabled`      | `true`                       | Whether to ping search engines on page changes                       |
-| `indexnow.delay`        | `30`                         | Batch window in seconds when `tobimori/kirby-queues` is installed    |
-| `indexnow.searchEngine` | `'https://api.indexnow.org'` | IndexNow API endpoint. One engine propagates to all others           |
-| `indexnow.rules`        | `[]`                         | Invalidation rules for related pages                                 |
+| Option                  | Default                      | Description                                                       |
+| ----------------------- | ---------------------------- | ----------------------------------------------------------------- |
+| `indexnow.enabled`      | `true`                       | Whether to ping search engines on page changes                    |
+| `indexnow.delay`        | `30`                         | Batch window in seconds when `tobimori/kirby-queues` is installed |
+| `indexnow.searchEngine` | `'https://api.indexnow.org'` | IndexNow API endpoint. One engine propagates to all others        |
+| `indexnow.rules`        | `[]`                         | Invalidation rules for related pages                              |
 
 Rules map a match pattern to invalidation targets. Match patterns can be a URL glob (`'/blog/*'`), a template name (`'article'`), or a wildcard (`'*'`).
 
@@ -181,13 +181,13 @@ Rules map a match pattern to invalidation targets. Match patterns can be a URL g
 
 ## Components
 
-| Option                 | Default                            | Description                |
-| ---------------------- | ---------------------------------- | -------------------------- |
-| `components.meta`      | `tobimori\Seo\Meta`                | Meta tag generation class  |
-| `components.ai`        | `tobimori\Seo\Ai`                  | AI Assist class            |
-| `components.indexnow`  | `tobimori\Seo\IndexNow`            | IndexNow class             |
-| `components.schema`    | `tobimori\Seo\SchemaSingleton`     | Schema.org store class     |
-| `components.gsc`       | `tobimori\Seo\GoogleSearchConsole` | Search Console class       |
-| `components.agentic`   | `tobimori\Seo\LlmContent`          | LLM-friendly content class |
+| Option                | Default                            | Description                |
+| --------------------- | ---------------------------------- | -------------------------- |
+| `components.meta`     | `tobimori\Seo\Meta`                | Meta tag generation class  |
+| `components.ai`       | `tobimori\Seo\Ai`                  | AI Assist class            |
+| `components.indexnow` | `tobimori\Seo\IndexNow`            | IndexNow class             |
+| `components.schema`   | `tobimori\Seo\SchemaSingleton`     | Schema.org store class     |
+| `components.gsc`      | `tobimori\Seo\GoogleSearchConsole` | Search Console class       |
+| `components.agentic`  | `tobimori\Seo\LlmContent`          | LLM-friendly content class |
 
 See [extending the plugin](2_customization/11_plugin-extensions) for details on replacing components.

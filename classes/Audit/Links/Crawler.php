@@ -9,6 +9,7 @@ use DOMElement;
 use DOMNodeList;
 use DOMXPath;
 use Kirby\Cms\App;
+use Kirby\Cms\Ingredients;
 use Kirby\Cms\Page;
 use Kirby\Cms\Responder;
 use Kirby\Cms\Site;
@@ -238,12 +239,12 @@ class Crawler
 		$translation = $kirby->translation()->code();
 		$data = $kirby->data;
 
-		// Kirby has no public setters for the current page, request, response & path
+		// Kirby has no public setters for the current page, request, response, path & URLs
 		$page = new ReflectionProperty(Site::class, 'page');
 		$previousPage = $page->isInitialized($site) ? $page->getValue($site) : null;
 		$properties = [];
 		$previous = [];
-		foreach (['request', 'response', 'path'] as $name) {
+		foreach (['request', 'response', 'path', 'urls'] as $name) {
 			$properties[$name] = new ReflectionProperty(App::class, $name);
 			$previous[$name] = $properties[$name]->getValue($kirby);
 		}
@@ -265,6 +266,8 @@ class Crawler
 		// templates might change the status code or headers
 		$properties['response']->setValue($kirby, new Responder());
 		$properties['path']->setValue($kirby, null);
+		// the current URL is resolved once per request, e.g. pagination builds its links from it
+		$properties['urls']->setValue($kirby, new Ingredients([...$kirby->urls()->toArray(), 'current' => $url]));
 
 		return static function () use ($kirby, $site, $globals, $language, $translation, $data, $page, $previousPage, $properties, $previous) {
 			// @mago-expect lint:no-request-variable
