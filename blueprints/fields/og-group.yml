@@ -33,7 +33,7 @@ fields:
     label: seo.fields.cropOgImage.label
     type: select
     width: 1/1
-    placeholder: "{{ t('seo.common.default') }} {{ site.cropOgImage.toBool ? t('seo.common.yes') : t('seo.common.no') }}"
+    placeholder: "{{ t('seo.common.default') }} {{ page.metadata.cropOgImage.toBool ? t('seo.common.yes') : t('seo.common.no') }}"
     options:
       "true": "{{ t('seo.common.yes') }}"
       "false": "{{ t('seo.common.no') }}"

@@ -1,6 +1,7 @@
 <?php
 
 use Kirby\Cms\App;
+use Kirby\Content\Field;
 use tobimori\Seo\Seo;
 
 $license = [];
@@ -23,6 +24,10 @@ if (Seo::option('searchConsole.enabled')) {
 		'type' => 'seo-search-console'
 	];
 }
+
+// the placeholder shows the value used while the field is empty, defaults receive a page
+$homePage = App::instance()->site()->homePage();
+$cropOgImage = $homePage !== null && (new Field($homePage, 'cropOgImage', Seo::option('default.cropOgImage', args: [$homePage])))->toBool();
 
 return [
 	'label' => 'seo.tabs.seo',
@@ -85,11 +90,11 @@ return [
 				],
 				'cropOgImage' => [
 					'label' => 'seo.fields.cropOgImage.label',
-					'type' => 'toggle',
-					'default' => true,
-					'text' => [
-						"{{ t('seo.common.no') }}",
-						"{{ t('seo.common.yes') }}"
+					'type' => 'select',
+					'placeholder' => "{{ t('seo.common.default') }} {{ t('seo.common." . ($cropOgImage ? 'yes' : 'no') . "') }}",
+					'options' => [
+						'true' => "{{ t('seo.common.yes') }}",
+						'false' => "{{ t('seo.common.no') }}"
 					],
 					'help' => 'seo.fields.cropOgImage.help'
 				],

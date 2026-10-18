@@ -6,6 +6,7 @@ use Kirby\Cms\File;
 use Kirby\Cms\Language;
 use Kirby\Cms\Page;
 use Kirby\Content\Field;
+use Kirby\Http\Params;
 use Kirby\Toolkit\Str;
 use tobimori\Seo\Audit\Images;
 use tobimori\Seo\Audit\Links\Checker;
@@ -127,9 +128,13 @@ return [
 			return $result;
 		}
 
-		$isMarkdownPath = Str::endsWith(Str::lower($path), '.md');
+		// params follow the representation, e.g. `notes.md/page:2` from pagination links
+		/** @var array<int, string>|null $segments */
+		$segments = Params::extract($path)['path'];
+		$route = implode('/', $segments ?? []);
+		$isMarkdownPath = Str::endsWith(Str::lower($route), '.md');
 		if ($isMarkdownPath) {
-			$markdownPath = Str::substr($path, 0, -3);
+			$markdownPath = Str::substr($route, 0, -3);
 			$resolved = App::instance()->resolve($markdownPath === '' ? null : $markdownPath, App::instance()->languageCode());
 			if ($resolved instanceof Page) {
 				$result = $resolved;
