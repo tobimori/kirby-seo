@@ -145,7 +145,7 @@ return [
 
 ### Checking links in the background
 
-Install `tobimori/kirby-queues` to run link checks in a queue worker. Kirby SEO schedules a full check every day at 3 am by default. You can change the cron expression in your config:
+Install `tobimori/kirby-queues` to run link checks in a queue worker. Kirby SEO schedules a full check every day at 3 am UTC by default. You can change the cron expression in your config:
 
 ```php
 // site/config/config.php
