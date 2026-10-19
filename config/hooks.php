@@ -134,8 +134,22 @@ return [
 		$route = implode('/', $segments ?? []);
 		$isMarkdownPath = Str::endsWith(Str::lower($route), '.md');
 		if ($isMarkdownPath) {
+			$kirby = App::instance();
 			$markdownPath = Str::substr($route, 0, -3);
-			$resolved = App::instance()->resolve($markdownPath === '' ? null : $markdownPath, App::instance()->languageCode());
+			$language = $kirby->language();
+
+			// the path starts with the URL prefix of its language (`de/blog.md`),
+			// or is only the prefix for the home page (`de.md`)
+			foreach ($kirby->multilang() ? $kirby->languages()->filter('baseurl', $kirby->url()) : [] as $candidate) {
+				$prefix = $candidate->path();
+				if ($prefix !== '' && ($markdownPath === $prefix || Str::startsWith($markdownPath, $prefix . '/'))) {
+					$language = $candidate;
+					$markdownPath = Str::substr($markdownPath, Str::length($prefix) + 1);
+					break;
+				}
+			}
+
+			$resolved = $kirby->resolve($markdownPath === '' ? null : $markdownPath, $language?->code());
 			if ($resolved instanceof Page) {
 				$result = $resolved;
 			}
