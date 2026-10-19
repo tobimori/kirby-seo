@@ -89,15 +89,15 @@ These are the fallback values for the last level of the [meta cascade](2_customi
 
 ## LLM-friendly content
 
-| Option                       | Default                                         | Description                                                      |
-| ---------------------------- | ----------------------------------------------- | ---------------------------------------------------------------- |
-| `agentic.enabled`            | `true`                                          | Enable all LLM-friendly content features                         |
-| `agentic.markdown.enabled`   | `true`                                          | Enable Markdown URLs and `Accept: text/markdown` negotiation     |
-| `agentic.markdown.auto`      | `false`                                         | Convert selected HTML when no explicit `.md.php` template exists |
-| `agentic.markdown.selectors` | `[data-agentic-content]`, `main`, and `article` | Content selectors, in priority order                             |
-| `agentic.markdown.converter` | `null`                                          | Custom conversion callable, object, or class                     |
-| `agentic.llmsTxt.enabled`    | `true`                                          | Enable the language-aware `/llms.txt` route                      |
-| `agentic.llmsTxt.pages`      | `null`                                          | Callable that selects the initial page collection                |
+| Option                       | Default                                         | Description                                                                                                                |
+| ---------------------------- | ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `agentic.enabled`            | `true`                                          | Enable all LLM-friendly content features                                                                                   |
+| `agentic.markdown.enabled`   | `true`                                          | Enable Markdown URLs and `Accept: text/markdown` negotiation                                                               |
+| `agentic.markdown.auto`      | `false`                                         | Convert selected HTML when no explicit `.md.php` template exists. Requires `league/html-to-markdown` or a custom converter |
+| `agentic.markdown.selectors` | `[data-agentic-content]`, `main`, and `article` | Content selectors, in priority order                                                                                       |
+| `agentic.markdown.converter` | `null`                                          | Custom conversion callable, object, or class. Requires `agentic.markdown.auto` set to `true`                               |
+| `agentic.llmsTxt.enabled`    | `true`                                          | Enable the language-aware `/llms.txt` route                                                                                |
+| `agentic.llmsTxt.pages`      | `null`                                          | Callable that selects the initial page collection                                                                          |
 
 ## Robots
 

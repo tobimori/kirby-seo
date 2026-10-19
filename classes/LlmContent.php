@@ -216,12 +216,17 @@ class LlmContent
 
 	/**
 	 * Returns the data for the llms.txt template and sets the response headers
+	 *
+	 * @throws \Kirby\Exception\NotFoundException if no page has Markdown available
 	 */
 	public function llmsTxtData(): array
 	{
 		$kirby = $this->page->kirby();
 		$language = $kirby->language();
 		$pages = $this->llmsTxtPages($language?->code());
+		if ($pages->isEmpty()) {
+			throw new NotFoundException('[Kirby SEO] llms.txt has no pages with Markdown available');
+		}
 
 		$response = $kirby->response();
 		$response->type('text/plain');

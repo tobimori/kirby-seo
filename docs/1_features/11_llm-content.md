@@ -34,9 +34,9 @@ The Markdown template receives the same `$page` object as the HTML template:
 <?= $page->text()->value() ?>
 ```
 
-`site/templates/default.md.php` can provide a shared representation for several page types. A template such as `article.md.php` takes priority for articles.
+Each HTML template needs its own `.md.php` representation. `site/templates/default.md.php` only covers pages that use the `default` template. A page that uses `about.php` needs `about.md.php`; Kirby does not fall back to `default.md.php`.
 
-Automatic conversion avoids separate templates. It extracts the main content from the rendered HTML and converts that fragment to Markdown. It requires an HTML-to-Markdown converter and must be enabled in the plugin options. See [Customizing LLM-friendly Content](2_customization/12_llm-content) for the setup.
+Automatic conversion avoids separate templates. It extracts the main content from the rendered HTML and converts that fragment to Markdown. It requires both an HTML-to-Markdown converter and `agentic.markdown.auto` set to `true` (the default is `false`). See [Customizing LLM-friendly Content](2_customization/12_llm-content) for the setup.
 
 Without a `.md.php` template or automatic conversion, a page has no Markdown representation and does not appear in `llms.txt`.
 
@@ -76,4 +76,4 @@ Kirby SEO publishes the file at `/llms.txt`:
 - [First article](https://example.com/blog/first-article.md)
 ```
 
-The list contains published, indexable pages that have Markdown available. On multilingual sites, each language route lists the pages translated into that language.
+The list contains published, indexable pages that have Markdown available. On multilingual sites, each language route lists the pages translated into that language. If no page qualifies, `/llms.txt` returns a 404 response.

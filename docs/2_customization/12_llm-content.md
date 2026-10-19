@@ -7,6 +7,8 @@ Explicit `.md.php` templates give you full control over Markdown. Automatic conv
 
 ## Convert existing pages
 
+Automatic conversion requires both a converter and `agentic.markdown.auto` set to `true`. Installing a converter alone does not enable it.
+
 First, install the default HTML-to-Markdown converter:
 
 ```sh

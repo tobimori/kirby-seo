@@ -69,7 +69,12 @@ return [
 				$this->next();
 			}
 
-			return $llmContent->llmsTxtPage()->render(contentType: 'txt');
+			// the page list is built on a cache miss and rejected there if it is empty
+			try {
+				return $llmContent->llmsTxtPage()->render(contentType: 'txt');
+			} catch (NotFoundException) {
+				$this->next();
+			}
 		}
 	],
 	[
