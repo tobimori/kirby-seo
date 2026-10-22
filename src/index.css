@@ -4,8 +4,8 @@
 	border-radius: var(--button-rounded);
 	display: inline-block;
 	font-weight: var(--font-semi);
-	height: var(--text-line-height) em;
-	line-height: var(--text-line-height) em;
+	height: calc(var(--text-line-height) * 1em);
+	line-height: calc(var(--text-line-height) * 1em);
 	padding-inline: 0.5rem;
 	white-space: nowrap;
 	user-select: none;

@@ -54,6 +54,11 @@ export default {
 		overflow: hidden;
 	}
 
+	/* Kirby's `.k-text > img + *` rule would push the next node one line down */
+	img.ProseMirror-separator + * {
+		margin-block-start: 0;
+	}
+
 	br.ProseMirror-trailingBreak {
 		display: none;
 	}
