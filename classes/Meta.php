@@ -2,6 +2,7 @@
 
 namespace tobimori\Seo;
 
+use DOMDocument;
 use Kirby\Cms\App;
 use Kirby\Cms\File;
 use Kirby\Cms\FileVersion;
@@ -51,6 +52,14 @@ class Meta
 
 	protected Page $page;
 	protected Language|null $lang;
+
+	/**
+	 * Title templates that are being filled, to stop `kql` templates that query their own title
+	 *
+	 * @var array<string, true>
+	 */
+	protected static array $filling = [];
+
 	/** @var array<int, string> */
 	protected array $consumed = [];
 	protected array $metaDefaults = [];
@@ -497,18 +506,31 @@ class Meta
 		foreach (array_diff($this->cascade, $exclude) as $method) {
 			// @mago-expect analysis:string-member-selector
 			if (($field = $this->$method($key)) instanceof Field) {
-				if (
-					is_string($value = $field->value()) &&
-					Str::contains($value, 'data-seo-template-variable')
-				) {
-					$field = new Field($this->page, $key, Str::unhtml($value));
-				}
-
 				return ['field' => $field, 'source' => $method];
 			}
 		}
 
 		return ['field' => new Field($this->page, $key, ''), 'source' => null];
+	}
+
+	/**
+	 * Meta values are plain text. Content fields can store HTML (writer fields), so they are read
+	 * the way a browser and the Panel writer read them, which also keeps plain text from 1.x content intact.
+	 * Strings from code are plain text already
+	 */
+	protected static function toText(Field $field): Field
+	{
+		$value = $field->value();
+		if (!is_string($value) || strpbrk($value, '<&') === false) {
+			return $field;
+		}
+
+		$document = new DOMDocument();
+		// without the encoding, libxml reads the HTML as ISO-8859-1
+		// @mago-expect lint:no-error-control-operator
+		@$document->loadHTML('<?xml encoding="UTF-8"><body>' . $value . '</body>', LIBXML_NOERROR | LIBXML_NOWARNING | LIBXML_NONET);
+
+		return new Field($field->model(), $field->key(), $document->getElementsByTagName('body')->item(0)->textContent ?? '');
 	}
 
 	/**
@@ -523,7 +545,7 @@ class Meta
 		/** @var Field $field */
 		$field = $this->page->content($this->lang?->code())->get($key);
 		if ($field->isNotEmpty() && !A::has(self::DEFAULT_VALUES, $field->value())) {
-			return $field;
+			return self::toText($field);
 		}
 		return null;
 	}
@@ -614,7 +636,7 @@ class Meta
 			}
 
 			if ($val instanceof Field) {
-				return new Field($this->page, $key, $val->value());
+				return self::toText($val);
 			}
 
 			return new Field($this->page, $key, $val);
@@ -647,7 +669,7 @@ class Meta
 		/** @var Field $field */
 		$field = $this->page->site()->content($this->lang?->code())->get($key);
 		if ($field->isNotEmpty() && !A::has(self::DEFAULT_VALUES, $field->value())) {
-			return $field;
+			return self::toText($field);
 		}
 
 		return null;
@@ -661,7 +683,7 @@ class Meta
 	{
 		if ($option = Seo::option("default.{$key}", args: [$this->page])) {
 			if ($option instanceof Field) {
-				return $option;
+				return self::toText($option);
 			}
 
 			return new Field($this->page, $key, $option);
@@ -707,15 +729,38 @@ class Meta
 	 */
 	protected function applyTitleTemplate(string $name, string $templateKey, Field $useTemplate): Field
 	{
-		$title = $this->get('metaTitle');
-		$template = $this->get($templateKey);
+		$title = $this->get('metaTitle')->toString();
+		$key = "{$this->page->id()}:{$this->lang?->code()}:{$name}";
 
-		return new Field(
-			$this->page,
-			$name,
-			$useTemplate->isEmpty() || $useTemplate->toBool()
-				? $this->page->toString($template->toString(), ['title' => $title])
-				: $title->value()
+		if (isset(self::$filling[$key]) || $useTemplate->isNotEmpty() && !$useTemplate->toBool()) {
+			return new Field($this->page, $name, $title);
+		}
+
+		self::$filling[$key] = true;
+
+		try {
+			return new Field($this->page, $name, $this->fillTitleTemplate($this->get($templateKey)->toString(), $title));
+		} finally {
+			unset(self::$filling[$key]);
+		}
+	}
+
+	/**
+	 * Fills `{{ title }}` and `{{ site.title }}` in a title template.
+	 * The `kql` option allows all queries of the Kirby query language
+	 */
+	public function fillTitleTemplate(string $template, string $title): string
+	{
+		if (Seo::option('kql') === true) {
+			return $this->page->toString($template, ['title' => new Field($this->page, 'title', $title)]);
+		}
+
+		$values = ['title' => $title, 'site.title' => $this->site('title')?->toString() ?? ''];
+
+		return (string)preg_replace_callback(
+			'/{{\s*(title|site\.title)\s*}}/',
+			static fn (array $match) => $values[$match[1]],
+			$template
 		);
 	}
 

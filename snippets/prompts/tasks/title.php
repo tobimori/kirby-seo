@@ -26,8 +26,8 @@ App::instance()->snippet(
 
 	<?php if ($page->useTitleTemplate()->isEmpty() ? true : $page->useTitleTemplate()->toBool()):
 		$template = $meta->get('metaTemplate')->toString();
-		$templatePreview = $page->toString($template, ['title' => '{{ title }}']);
-		$templateBaseLength = Str::length($page->toString($template, ['title' => '']));
+		$templatePreview = $meta->fillTitleTemplate($template, '{{ title }}');
+		$templateBaseLength = Str::length($meta->fillTitleTemplate($template, ''));
 		?>
 		The final page title will be rendered as:
 

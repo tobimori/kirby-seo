@@ -78,12 +78,12 @@ return [
 		'options'
 	],
 	'default' => [ // default field values for metadata, format is [field => value]
-		'metaTitle' => fn (Page $page) => $page->title(),
+		'metaTitle' => fn (Page $page) => $page->title()->value(),
 		'metaTemplate' => '{{ title }} - {{ site.title }}',
 		'ogTemplate' => '{{ title }}',
-		'ogSiteName' => fn (Page $page) => $page->site()->title(),
+		'ogSiteName' => fn (Page $page) => $page->site()->title()->value(),
 		'ogType' => 'website',
-		'ogDescription' => fn (Page $page) => $page->metadata()->metaDescription(),
+		'ogDescription' => fn (Page $page) => $page->metadata()->metaDescription()->value(),
 		'cropOgImage' => true,
 		'locale' => fn (Page $page) => $page->kirby()->language()?->locale(LC_ALL) ?? Seo::option('locale', 'en_US'),
 		// default for robots: noIndex if global index configuration is set, otherwise fall back to page status
@@ -153,6 +153,9 @@ return [
 		'credentials' => null,
 		'tokenPath' => fn () => (string)App::instance()->root('config') . '/.gsc-tokens.json'
 	],
+	// allow all Kirby queries in title templates, not only `{{ title }}` and `{{ site.title }}`
+	// do not enable with untrusted Panel users, queries can read any data, e.g. user emails
+	'kql' => false,
 	'generateSchema' => true, // whether to generate default schema.org data
 	'locale' => 'en_US', // default locale, used for single-language sites
 	'dateFormat' => null // custom date format

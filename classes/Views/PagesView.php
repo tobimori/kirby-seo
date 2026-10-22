@@ -9,7 +9,6 @@ use Kirby\Content\Field;
 use Kirby\Content\VersionId;
 use Kirby\Panel\Ui\Item\PageItem;
 use Kirby\Toolkit\I18n;
-use Kirby\Toolkit\Str;
 use Kirby\Toolkit\V;
 use tobimori\Seo\Audit;
 use tobimori\Seo\Buttons\RobotsViewButton;
@@ -156,7 +155,7 @@ class PagesView extends EditableOverviewView
 			'id' => $page->id(),
 			'title' => $page->title()->toString(),
 			'template' => $this->blueprint($page)->title(),
-			default => Str::unhtml($this->resolve($page, $key)['field']->toString())
+			default => $this->resolve($page, $key)['field']->toString()
 		};
 	}
 
@@ -299,7 +298,7 @@ class PagesView extends EditableOverviewView
 			'source' => $this->resolve($page, $key)['source'],
 			// raw value, as writer fields store HTML
 			'value' => in_array($own, Meta::DEFAULT_VALUES, true) ? '' : $own,
-			'placeholder' => Str::unhtml($fallback['field']->toString()),
+			'placeholder' => $fallback['field']->toString(),
 			'placeholderSource' => $fallback['source'],
 			'editable' => $editable,
 			'ai' => $editable && $this->canUseAi() && !empty($this->blueprint($page)->field($key)['ai'] ?? false),
@@ -314,7 +313,7 @@ class PagesView extends EditableOverviewView
 	protected function titleTemplate(Page $page): array
 	{
 		$title = $this->value($page, 'metaTitle');
-		$full = Str::unhtml($this->meta($page)->metaTitle()->toString());
+		$full = $this->meta($page)->metaTitle()->toString();
 		$position = $title !== '' ? mb_strpos($full, $title) : false;
 
 		if ($position === false) {

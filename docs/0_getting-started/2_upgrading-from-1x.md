@@ -76,6 +76,20 @@ In 1.x, a page without its own Open Graph description used the site's Open Graph
 
 To keep the 1.x behavior, follow [Restore the 1.x behavior](2_customization/01_meta-cascade#restore-the-1x-behavior) in the Meta Cascade documentation.
 
+## Enable queries in title templates
+
+In 1.x, title templates could use all queries of the [Kirby query language](https://getkirby.com/docs/guide/blueprints/query-language), for example `{{ page.parent.title }}`. Editors can change the templates in the Panel, so 2.0 only fills `{{ title }}` and `{{ site.title }}` and keeps other placeholders as they are.
+
+If your templates use other queries, enable them in your config:
+
+```php
+'tobimori.seo' => [
+  'kql' => true,
+],
+```
+
+With `kql` enabled, editors can call all query methods of your site in a title template. Do not enable it if you have Panel users that you do not trust. A query can read data that the user cannot access otherwise, for example the email addresses of all users, and show it in the page title.
+
 ## Update custom PHP calls
 
 `$page->metadata()` and `$page->robots()` now take a `Kirby\Cms\Language` object instead of a language code. Passing a string throws a `TypeError`:

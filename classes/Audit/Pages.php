@@ -241,7 +241,7 @@ class Pages
 		$values = ['title' => $page->title()->toString()];
 
 		foreach (self::VALUES as $key) {
-			$values[$key] = Str::unhtml($meta->resolve($key)['field']->toString());
+			$values[$key] = $meta->resolve($key)['field']->toString();
 		}
 
 		// skipped pages are listed (& searched) as well
@@ -424,7 +424,7 @@ class Pages
 
 	protected static function text(mixed $value): string
 	{
-		return trim((string)preg_replace('/\s+/u', ' ', Str::unhtml((string)$value)));
+		return trim((string)preg_replace('/\s+/u', ' ', (string)$value));
 	}
 
 	protected static function normalize(string $text): string
