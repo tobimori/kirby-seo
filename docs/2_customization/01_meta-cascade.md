@@ -90,6 +90,6 @@ class MyMeta extends Meta
 }
 ```
 
-Then register your class in the config. See [Extending the Plugin](2_customization/11_plugin-extensions) for details.
+Then register your class in the config. See [Extending the Plugin](2_customization/10_plugin-extensions) for details.
 
 </details>

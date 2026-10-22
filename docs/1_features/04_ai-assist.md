@@ -50,7 +50,7 @@ return [
 
 To use another provider, change both occurrences of `openrouter` to its ID from the list above and use its API key.
 
-Each provider comes with a default model. You can choose a different one by adding a `model` key next to `apiKey`. See the [AI Assist options](3_reference/0_options#ai-assist) for the current defaults and [Customizing AI Assist](2_customization/06_ai-assist) for more configuration options.
+Each provider comes with a default model. You can choose a different one by adding a `model` key next to `apiKey`. See the [AI Assist options](3_reference/0_options#ai-assist) for the current defaults and [Customizing AI Assist](2_customization/05_ai-assist) for more configuration options.
 
 ## Using AI Assist in the Panel
 
@@ -66,4 +66,4 @@ The result streams in chunks. You can stop it early if you want.
 
 ## Custom providers and prompts
 
-You can add your own providers or override the built-in prompts. See [Customizing AI Assist](2_customization/06_ai-assist) for details.
+You can add your own providers or override the built-in prompts. See [Customizing AI Assist](2_customization/05_ai-assist) for details.

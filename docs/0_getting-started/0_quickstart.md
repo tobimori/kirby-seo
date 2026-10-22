@@ -22,8 +22,8 @@ composer require tobimori/kirby-seo:^2.0.0
 
 Some features require additional packages. Install them when you need them:
 
-- [Schema.org](2_customization/08_schema-org) requires `spatie/schema-org:^5.0`
-- [Background Processing](2_customization/10_background-processing) requires `tobimori/kirby-queues`
+- [Schema.org](2_customization/07_schema-org) requires `spatie/schema-org:^5.0`
+- [Background Processing](2_customization/09_background-processing) requires `tobimori/kirby-queues`
 
 <details>
 <summary>Manual Installation</summary>

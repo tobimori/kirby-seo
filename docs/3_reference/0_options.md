@@ -34,7 +34,7 @@ Both are equivalent, but you cannot use dot syntax inside a nested array. `'robo
 | ------------------------- | --------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
 | `locale`                  | `'en_US'`                                                                   | Default locale for single-language sites                                                                        |
 | `dateFormat`              | `null`                                                                      | Custom date format for dates in meta tags                                                                       |
-| `generateSchema`          | `true`                                                                      | Generate a default `WebSite` schema for every page. Requires [spatie/schema-org](2_customization/08_schema-org) |
+| `generateSchema`          | `true`                                                                      | Generate a default `WebSite` schema for every page. Requires [spatie/schema-org](2_customization/07_schema-org) |
 | `previews`                | `['google', 'facebook', 'slack']`                                           | Which preview types to show in the Panel                                                                        |
 | `cascade`                 | `['fields', 'programmatic', 'parent', 'fallbackFields', 'site', 'options']` | The [meta cascade](2_customization/01_meta-cascade) order                                                       |
 | `canonical.base`          | `null`                                                                      | Base URL for canonical links. Uses the site URL if not set                                                      |
@@ -118,7 +118,7 @@ These are the fallback values for the last level of the [meta cascade](2_customi
 | `sitemap.enabled`          | `true`                | Whether to generate a sitemap                                                                                 |
 | `sitemap.redirect`         | `true`                | Redirect `/sitemap` to `/sitemap.xml`                                                                         |
 | `sitemap.locale`           | `'en'`                | Locale for the sitemap XSL stylesheet                                                                         |
-| `sitemap.generator`        | Built-in generator    | A callable that receives a `SitemapIndex` instance. See [customizing the sitemap](2_customization/05_sitemap) |
+| `sitemap.generator`        | Built-in generator    | A callable that receives a `SitemapIndex` instance. See [customizing the sitemap](2_customization/04_sitemap) |
 | `sitemap.changefreq`       | `'weekly'`            | Default change frequency. Static value or callable                                                            |
 | `sitemap.priority`         | Calculated from depth | Homepage gets `1.0`, each level deeper subtracts `0.2`, minimum `0.2`                                         |
 | `sitemap.groupByTemplate`  | `false`               | Split the sitemap into separate files per template                                                            |
@@ -141,7 +141,7 @@ Each provider has a `driver` class and a `config` array. The config options depe
 | `gemini`     | `Gemini`    | `gemini-3.5-flash-lite` | `https://generativelanguage.googleapis.com/v1beta` |
 | `openrouter` | `OpenAi`    | `openai/gpt-6-luna`     | `https://openrouter.ai/api/v1/responses`           |
 
-The Gemini driver uses the [Interactions API](https://ai.google.dev/gemini-api/docs/interactions) (`/interactions` is appended to the endpoint) and authenticates via the `x-goog-api-key` header. Requests are sent with `store: false`, so Google doesn't retain the interaction. All providers default to a timeout of 120 seconds. See [customizing AI Assist](2_customization/06_ai-assist) for adding your own provider.
+The Gemini driver uses the [Interactions API](https://ai.google.dev/gemini-api/docs/interactions) (`/interactions` is appended to the endpoint) and authenticates via the `x-goog-api-key` header. Requests are sent with `store: false`, so Google doesn't retain the interaction. All providers default to a timeout of 120 seconds. See [customizing AI Assist](2_customization/05_ai-assist) for adding your own provider.
 
 ## IndexNow
 
@@ -176,7 +176,7 @@ Rules map a match pattern to invalidation targets. Match patterns can be a URL g
 | Option                      | Default                        | Description                                                                   |
 | --------------------------- | ------------------------------ | ----------------------------------------------------------------------------- |
 | `searchConsole.enabled`     | `true`                         | Whether the Search Console integration is active                              |
-| `searchConsole.credentials` | `null`                         | Google OAuth credentials array. See [GSC setup](2_customization/07_gsc-setup) |
+| `searchConsole.credentials` | `null`                         | Google OAuth credentials array. See [GSC setup](2_customization/06_gsc-setup) |
 | `searchConsole.tokenPath`   | `site/config/.gsc-tokens.json` | Where OAuth tokens are stored                                                 |
 
 ## Components
@@ -190,4 +190,4 @@ Rules map a match pattern to invalidation targets. Match patterns can be a URL g
 | `components.gsc`      | `tobimori\Seo\GoogleSearchConsole` | Search Console class       |
 | `components.agentic`  | `tobimori\Seo\LlmContent`          | LLM-friendly content class |
 
-See [extending the plugin](2_customization/11_plugin-extensions) for details on replacing components.
+See [extending the plugin](2_customization/10_plugin-extensions) for details on replacing components.

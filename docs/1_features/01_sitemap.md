@@ -5,7 +5,7 @@ intro: A sitemap for search engines, generated from your pages
 
 Kirby SEO generates an XML sitemap at `https://example.com/sitemap.xml`. Search engines like Google use it to discover all the pages on your site. You don't need to create or update it manually: it updates whenever your content changes.
 
-What you see here are the defaults. The sitemap generator and all its options can be changed or replaced entirely. See [Customizing the sitemap](2_customization/05_sitemap) for details.
+What you see here are the defaults. The sitemap generator and all its options can be changed or replaced entirely. See [Customizing the sitemap](2_customization/04_sitemap) for details.
 
 ## What's in the sitemap
 

@@ -78,4 +78,4 @@ Set a default OG image in the Site SEO tab so every shared link has a preview im
 
 Before you launch your site, read [Robots & Indexing](1_features/00_robots-indexing) and [Sitemap](1_features/01_sitemap) to make sure search engines can find and index your pages.
 
-If you're building the site, [Programmatic Content](2_customization/00_programmatic-content) shows how to set meta values from your page models, and [Schema.org](2_customization/08_schema-org) adds structured data.
+If you're building the site, [Programmatic Content](2_customization/00_programmatic-content) shows how to set meta values from your page models, and [Schema.org](2_customization/07_schema-org) adds structured data.

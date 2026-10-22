@@ -56,7 +56,7 @@ composer require "spatie/schema-org:^5.0"
 
 Version 5 of the package requires PHP 8.4. Without the package, Kirby SEO does not output JSON-LD, and `$page->schema()`, `$site->schema()` and `schema()` return `null`. Chained calls such as `$page->schema('Article')->headline(...)` then fail.
 
-Remove `schema()` calls on sites that do not use Schema.org. See [Schema.org](2_customization/08_schema-org) for setup and usage.
+Remove `schema()` calls on sites that do not use Schema.org. See [Schema.org](2_customization/07_schema-org) for setup and usage.
 
 ## Remove obsolete Twitter options
 
@@ -91,7 +91,7 @@ $page->metadata($language);
 $page->robots($language);
 ```
 
-In [custom sitemap generators](2_customization/05_sitemap), `lastmod()` now takes a Unix timestamp instead of a date string:
+In [custom sitemap generators](2_customization/04_sitemap), `lastmod()` now takes a Unix timestamp instead of a date string:
 
 ```php
 // 1.x

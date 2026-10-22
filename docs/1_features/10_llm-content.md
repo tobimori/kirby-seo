@@ -36,7 +36,7 @@ The Markdown template receives the same `$page` object as the HTML template:
 
 Each HTML template needs its own `.md.php` representation. `site/templates/default.md.php` only covers pages that use the `default` template. A page that uses `about.php` needs `about.md.php`; Kirby does not fall back to `default.md.php`.
 
-Automatic conversion avoids separate templates. It extracts the main content from the rendered HTML and converts that fragment to Markdown. It requires both an HTML-to-Markdown converter and `agentic.markdown.auto` set to `true` (the default is `false`). See [Customizing LLM-friendly Content](2_customization/12_llm-content) for the setup.
+Automatic conversion avoids separate templates. It extracts the main content from the rendered HTML and converts that fragment to Markdown. It requires both an HTML-to-Markdown converter and `agentic.markdown.auto` set to `true` (the default is `false`). See [Customizing LLM-friendly Content](2_customization/11_llm-content) for the setup.
 
 Without a `.md.php` template or automatic conversion, a page has no Markdown representation and does not appear in `llms.txt`.
 

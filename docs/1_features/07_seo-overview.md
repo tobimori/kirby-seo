@@ -159,7 +159,7 @@ return [
 ];
 ```
 
-Set `schedule` to `false` to turn off scheduled checks. See [Background Processing](2_customization/10_background-processing) for queue setup.
+Set `schedule` to `false` to turn off scheduled checks. See [Background Processing](2_customization/09_background-processing) for queue setup.
 
 ## Restricting access
 

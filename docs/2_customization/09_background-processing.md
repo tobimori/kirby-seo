@@ -11,7 +11,7 @@ Kirby SEO uses [Kirby Queues](https://www.andkindness.com/queues/docs) when it i
 
 Kirby SEO adds three types of jobs to the queue:
 
-- **Check Links** (`seo:check-links`) checks the links shown in the [SEO Overview](1_features/08_seo-overview). Content changes within 60 seconds are grouped into one check. Clicking **Check again** in the Panel queues a full check immediately. A full check is also scheduled every day at 3 am UTC by default.
+- **Check Links** (`seo:check-links`) checks the links shown in the [SEO Overview](1_features/07_seo-overview). Content changes within 60 seconds are grouped into one check. Clicking **Check again** in the Panel queues a full check immediately. A full check is also scheduled every day at 3 am UTC by default.
 - **Generate Alt Text** (`seo:generate-alt-text`) runs after an image upload when [AI Assist](1_features/04_ai-assist) is configured. It fills [Alt Text Field](1_features/05_alt-texts) fields that have `autogenerate: true`.
 - **IndexNow** (`seo:indexnow`) collects page changes for 30 seconds, removes duplicates, and sends them to [IndexNow](1_features/02_indexnow) in one request.
 

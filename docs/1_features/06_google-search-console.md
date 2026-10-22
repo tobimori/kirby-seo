@@ -15,7 +15,7 @@ Data is cached for 24 hours, so it won't hit Google's API on every page load.
 
 ## Connecting your Google account
 
-The Google Search Console section connects directly to Google with OAuth credentials from your own Google Cloud project. Follow [Setting up Google Search Console](2_customization/07_gsc-setup) to create the credentials and add them to your config.
+The Google Search Console section connects directly to Google with OAuth credentials from your own Google Cloud project. Follow [Setting up Google Search Console](2_customization/06_gsc-setup) to create the credentials and add them to your config.
 
 1. Open the Panel and navigate to any page with the SEO tab.
 2. In the Google Search Console section, click **Connect**.

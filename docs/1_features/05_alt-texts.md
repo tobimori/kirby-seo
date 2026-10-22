@@ -37,7 +37,7 @@ alt:
   autogenerate: true
 ```
 
-When `tobimori/kirby-queues` is installed, generation runs through Kirby Queues. Without that plugin, it runs synchronously during the upload. See [Background Processing](2_customization/10_background-processing) for setup. On multilingual sites, a single AI call generates alt text for all languages at once.
+When `tobimori/kirby-queues` is installed, generation runs through Kirby Queues. Without that plugin, it runs synchronously during the upload. See [Background Processing](2_customization/09_background-processing) for setup. On multilingual sites, a single AI call generates alt text for all languages at once.
 
 ## Using alt text in templates
 
