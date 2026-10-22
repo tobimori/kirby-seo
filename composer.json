@@ -2,7 +2,7 @@
 	"name": "tobimori/kirby-seo",
 	"description": "The default choice for SEO on Kirby: Implement technical SEO & Meta best practices with ease and provide an easy-to-use editor experience",
 	"type": "kirby-plugin",
-	"version": "2.0.0-rc.2",
+	"version": "2.0.0",
 	"license": "proprietary",
 	"homepage": "https://github.com/tobimori/kirby-seo#readme",
 	"authors": [
@@ -16,7 +16,6 @@
 			"tobimori\\Seo\\": "classes"
 		}
 	},
-	"minimum-stability": "RC",
 	"require": {
 		"php": ">=8.3.0",
 		"getkirby/composer-installer": "^1.2.1"
@@ -32,9 +31,9 @@
 		"spatie/schema-org": "<5.0"
 	},
 	"require-dev": {
-		"carthage-software/mago": "^1.57.0",
+		"carthage-software/mago": "^1.58.2",
 		"getkirby/cli": "^1.8.0",
-		"tobimori/kirby-queues": "^1.0.0-beta.1",
+		"tobimori/kirby-queues": "^1.1.0",
 		"spatie/schema-org": "^5.0",
 		"getkirby/cms": "^5.0.0",
 		"tobimori/kirby-agents": "^0.1.1",

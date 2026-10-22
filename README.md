@@ -29,13 +29,9 @@
 
 [Read the documentation](https://www.andkindness.com/seo/docs) to get started with Kirby SEO.
 
-If you're looking to use Kirby SEO with Kirby 5 or newer, please install the release candidate of the plugin:
+Kirby SEO 2 requires Kirby 5 or newer. Install it with Composer:
 
-`composer require tobimori/kirby-seo:^2.0@RC`
-
-### What does Release Candidate mean for Kirby SEO 2?
-
-Kirby SEO 2 is feature complete and can be used in production. Until the final release, we only fix bugs and don't plan any breaking changes.
+`composer require tobimori/kirby-seo`
 
 ## Contributing
 

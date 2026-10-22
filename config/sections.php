@@ -47,7 +47,7 @@ return [
 						'ogDescription' => $meta->ogDescription()->toString(),
 						'ogImage' => $meta->ogImage(),
 						'cropOgImage' => $meta->cropOgImage()->toBool(),
-						'panelUrl' => method_exists($model, 'panel') ? "{$model->panel()?->url()}?tab=seo" : null
+						'panelUrl' => method_exists($model, 'panel') ? "{$model->panel()->url()}?tab=seo" : null
 					];
 				}
 

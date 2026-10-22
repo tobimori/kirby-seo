@@ -161,8 +161,14 @@ abstract class EditableOverviewView extends OverviewView
 		/** @var array<array-key, array<array-key, mixed>> $input */
 		$input = [];
 		foreach ($changes as $change) {
-			if (is_string($change['id'] ?? null) && is_string($change['column'] ?? null) && array_key_exists('value', $change)) {
-				$input[$change['id']][$change['column']] = $change['value'];
+			if (!is_array($change)) {
+				continue;
+			}
+
+			$id = $change['id'] ?? null;
+			$column = $change['column'] ?? null;
+			if (is_string($id) && is_string($column) && array_key_exists('value', $change)) {
+				$input[$id][$column] = $change['value'];
 			}
 		}
 
