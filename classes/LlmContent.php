@@ -95,8 +95,26 @@ class LlmContent
 		}
 
 		if ($this->hasExplicitRepresentation()) {
+			// the pages cache stores the headers that are on the Kirby response during the render
+			$kirby = $this->page->kirby();
+			$response = $kirby->response();
+			/** @var array<string, string> $headers */
+			$headers = $response->headers();
+			/** @var string|null $type */
+			$type = $response->type();
+			$response->type(self::MARKDOWN_TYPE);
+			foreach ($this->markdownHeaders($kirby->language()) as $key => $value) {
+				$response->header($key, $value);
+			}
+
 			$markdown = trim($this->page->render(contentType: 'md'));
-			return $markdown === '' ? null : $markdown . "\n";
+			if ($markdown === '') {
+				$response->headers($headers);
+				$response->type($type ?? 'text/html');
+				return null;
+			}
+
+			return $markdown . "\n";
 		}
 
 		if ($this->automaticConversionEnabled() === false) {
@@ -131,6 +149,19 @@ class LlmContent
 			return null;
 		}
 
+		return new Response(
+			Str::upper($method) === 'HEAD' ? '' : $markdown,
+			self::MARKDOWN_TYPE,
+			200,
+			$this->markdownHeaders($language)
+		);
+	}
+
+	/**
+	 * @return array<string, string>
+	 */
+	protected function markdownHeaders(Language|null $language): array
+	{
 		$link = '<' . $this->canonicalUrl() . '>; rel="canonical"';
 		if ($this->llmsTxtEnabled()) {
 			$link .= ', <' . $this->llmsTxtUrl($language) . '>; rel="describedby"';
@@ -147,12 +178,7 @@ class LlmContent
 			$headers['Content-Language'] = $language->code();
 		}
 
-		return new Response(
-			Str::upper($method) === 'HEAD' ? '' : $markdown,
-			self::MARKDOWN_TYPE,
-			200,
-			$headers
-		);
+		return $headers;
 	}
 
 	public function notFoundResponse(Language|null $language = null, string $method = 'GET'): Response
