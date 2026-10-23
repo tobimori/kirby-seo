@@ -11,7 +11,7 @@ $lines = [
 	''
 ];
 
-if ($description = $site->description()->toString()) {
+if ($description = $site->metaDescription()->toString()) {
 	$lines[] = '> ' . $clean($description);
 	$lines[] = '';
 }
