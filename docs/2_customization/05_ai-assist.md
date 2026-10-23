@@ -137,6 +137,8 @@ class MyProvider extends Driver
 
 The driver uses `$this->config()` to read values from the provider's `config` array in `config.php`. Pass `required: true` to throw an error if a value is missing.
 
+The Panel hides AI features while `configured()` returns `false`. By default, it checks that `apiKey` is set. Override it if your provider needs no API key.
+
 `SseStream` is a helper class included in Kirby SEO that handles the cURL request and SSE parsing. Pass the endpoint, headers, payload, and timeout to its constructor. Pass the mapper that converts raw SSE events into `Chunk` objects to `$stream->stream()`.
 
 If your API doesn't use SSE, you can skip `SseStream` and yield chunks directly.

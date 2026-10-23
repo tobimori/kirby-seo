@@ -26,6 +26,15 @@ abstract class Driver
 	abstract public function stream(array $content, string|null $model = null): Generator;
 
 	/**
+	 * Whether the provider has the configuration it needs to send requests.
+	 * AI features are hidden in the Panel when this returns false.
+	 */
+	public function configured(): bool
+	{
+		return (string)$this->config('apiKey') !== '';
+	}
+
+	/**
 	 * Returns a configuration value or throws when required.
 	 */
 	protected function config(string $key, mixed $default = null, bool $required = false): mixed
