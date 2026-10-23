@@ -73,7 +73,7 @@ final class Seo
 	 */
 	public static function userAgent(): string
 	{
-		return 'Kirby SEO/' . (App::plugin('tobimori/seo')?->version() ?? 'dev') . ' (+https://plugins.andkindness.com/seo)';
+		return 'Kirby SEO/' . (App::plugin('tobimori/seo')?->version() ?? 'dev') . ' (+https://www.andkindness.com/seo)';
 	}
 
 	/**

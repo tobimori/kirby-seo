@@ -50,7 +50,7 @@ final class License extends KirbyLicense
 	private const ENTERPRISE_PREFIX = 'KS-ENT-';
 	private const FILE = '.tm-licenses';
 	private const MANUAL_FILE = '.seo-license';
-	private const BASE = 'https://plugins.andkindness.com/licenses/';
+	private const BASE = 'https://www.andkindness.com/licenses/';
 
 	// the order of the fields is part of the signature, `expires` is signed last if it exists
 	private const SIGNED_FIELDS = ['license', 'plugin', 'edition', 'allowOfflineUse', 'purchasedOn', 'assignedUrl', 'email'];
