@@ -139,7 +139,7 @@ const handleConnect = () => {
 					size="sm"
 					variant="filled"
 					icon="page"
-					link="https://plugins.andkindness.com/seo/docs/get-started/feature-overview"
+					link="https://www.andkindness.com/seo/docs/customization/gsc-setup"
 					target="_blank"
 				>
 					{{ $t("seo.sections.searchConsole.docs") }}
