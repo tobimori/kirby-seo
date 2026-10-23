@@ -66,7 +66,7 @@ Kirby SEO 2.0 no longer uses these options:
 - `default.twitterCardType`
 - `default.twitterCreator`
 
-It does not output `twitter:*` tags. X removed its card documentation and reads the Open Graph tags instead.
+It does not output `twitter:*` tags, except `twitter:card` with the value `summary_large_image` when the page has an Open Graph image file and "Crop OG image" is active. X, Discord and other platforms read this tag to show a large image preview. For all other values, they read the Open Graph tags.
 
 The Panel fields "Twitter Card Type" and "Author @username on Twitter" are also gone. Existing values remain in your content files and are ignored. You do not need to add Twitter tags back.
 

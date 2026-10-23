@@ -148,7 +148,8 @@ class Meta
 			'og:image:width' => fn () => $this->ogImageThumb()?->width() ?? null,
 			'og:image:height' => fn () => $this->ogImageThumb()?->height() ?? null,
 			'og:image:alt' => fn () => $this->get('ogImage')->toFile()?->alt() ?? null,
-			'og:type' => 'ogType'
+			'og:type' => 'ogType',
+			'twitter:card' => fn () => $this->ogImageThumb() !== null && $this->get('cropOgImage')->toBool() ? 'summary_large_image' : null
 		];
 
 		// Robots
