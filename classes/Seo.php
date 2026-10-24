@@ -134,7 +134,18 @@ final class Seo
 			return $field->toBool();
 		}
 
-		// same as the default, without the site-wide switch
+		return static::isIndexableByDefault($page);
+	}
+
+	/**
+	 * Default of `robotsIndex` without the site-wide `robots.index` switch
+	 */
+	public static function isIndexableByDefault(Page $page): bool
+	{
+		if ($page->isErrorPage()) {
+			return false;
+		}
+
 		return static::option('robots.followPageStatus') ? $page->isListed() : true;
 	}
 

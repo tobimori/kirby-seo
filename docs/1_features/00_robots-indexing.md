@@ -54,6 +54,7 @@ The plugin follows page status in Kirby:
 - **Listed** pages are visible to search engines
 - **Unlisted** pages are hidden from search engines
 - **Draft** pages are not publicly accessible
+- The **error page** is always hidden from search engines
 
 In debug mode, the default changes to hide all pages from search engines. Values from higher-priority levels of the [Meta Cascade](2_customization/01_meta-cascade) can still override it.
 

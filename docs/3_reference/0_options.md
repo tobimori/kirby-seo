@@ -72,21 +72,21 @@ The `socialMedia` option defines which fields appear in the site blueprint. Defa
 
 These are the fallback values for the last level of the [meta cascade](2_customization/01_meta-cascade). They apply when no other level provides a value. Each option can be a static value or a callable that receives the `Page` object.
 
-| Option                     | Default                            | Description                                                |
-| -------------------------- | ---------------------------------- | ---------------------------------------------------------- |
-| `default.metaTitle`        | Page title                         | Meta title                                                 |
-| `default.metaTemplate`     | `'{{ title }} - {{ site.title }}'` | Title template applied to all pages                        |
-| `default.ogTemplate`       | `'{{ title }}'`                    | Open Graph title template                                  |
-| `default.ogSiteName`       | Site title                         | Open Graph site name                                       |
-| `default.ogType`           | `'website'`                        | Open Graph type                                            |
-| `default.ogDescription`    | Meta description                   | Open Graph description, falls back to the meta description |
-| `default.cropOgImage`      | `true`                             | Crop OG images to 1200x630                                 |
-| `default.locale`           | Language locale or `'en_US'`       | Locale for meta tags                                       |
-| `default.robotsIndex`      | `true` if listed and not debug     | Whether pages are indexable                                |
-| `default.robotsFollow`     | Same as `robotsIndex`              | Whether links are followed                                 |
-| `default.robotsArchive`    | Same as `robotsIndex`              | Whether archiving is allowed                               |
-| `default.robotsImageindex` | Same as `robotsIndex`              | Whether image indexing is allowed                          |
-| `default.robotsSnippet`    | Same as `robotsIndex`              | Whether snippets are allowed                               |
+| Option                     | Default                                            | Description                                                |
+| -------------------------- | -------------------------------------------------- | ---------------------------------------------------------- |
+| `default.metaTitle`        | Page title                                         | Meta title                                                 |
+| `default.metaTemplate`     | `'{{ title }} - {{ site.title }}'`                 | Title template applied to all pages                        |
+| `default.ogTemplate`       | `'{{ title }}'`                                    | Open Graph title template                                  |
+| `default.ogSiteName`       | Site title                                         | Open Graph site name                                       |
+| `default.ogType`           | `'website'`                                        | Open Graph type                                            |
+| `default.ogDescription`    | Meta description                                   | Open Graph description, falls back to the meta description |
+| `default.cropOgImage`      | `true`                                             | Crop OG images to 1200x630                                 |
+| `default.locale`           | Language locale or `'en_US'`                       | Locale for meta tags                                       |
+| `default.robotsIndex`      | `true` if listed, not the error page and not debug | Whether pages are indexable                                |
+| `default.robotsFollow`     | Same as `robotsIndex`                              | Whether links are followed                                 |
+| `default.robotsArchive`    | Same as `robotsIndex`                              | Whether archiving is allowed                               |
+| `default.robotsImageindex` | Same as `robotsIndex`                              | Whether image indexing is allowed                          |
+| `default.robotsSnippet`    | Same as `robotsIndex`                              | Whether snippets are allowed                               |
 
 ## LLM-friendly content
 

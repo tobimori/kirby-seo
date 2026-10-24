@@ -86,15 +86,8 @@ return [
 		'ogDescription' => fn (Page $page) => $page->metadata()->metaDescription()->value(),
 		'cropOgImage' => true,
 		'locale' => fn (Page $page) => $page->kirby()->language()?->locale(LC_ALL) ?? Seo::option('locale', 'en_US'),
-		// default for robots: noIndex if global index configuration is set, otherwise fall back to page status
-		'robotsIndex' => function (Page $page) {
-			$index = Seo::option('robots.index');
-			if (!$index) {
-				return false;
-			}
-
-			return Seo::option('robots.followPageStatus') ? $page->isListed() : true;
-		},
+		// default for robots: noindex if global index configuration is set or for the error page, otherwise fall back to page status
+		'robotsIndex' => fn (Page $page) => Seo::option('robots.index') && Seo::isIndexableByDefault($page),
 		'robotsFollow' => fn (Page $page) => Seo::option('default.robotsIndex', args: [$page]),
 		'robotsArchive' => fn (Page $page) => Seo::option('default.robotsIndex', args: [$page]),
 		'robotsImageindex' => fn (Page $page) => Seo::option('default.robotsIndex', args: [$page]),
