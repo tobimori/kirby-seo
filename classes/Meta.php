@@ -147,7 +147,11 @@ class Meta
 			'og:image' => 'ogImage',
 			'og:image:width' => fn () => $this->ogImageThumb()?->width() ?? null,
 			'og:image:height' => fn () => $this->ogImageThumb()?->height() ?? null,
-			'og:image:alt' => fn () => $this->get('ogImage')->toFile()?->alt() ?? null,
+			'og:image:alt' => function () {
+				/** @var Field|null $alt */
+				$alt = $this->get('ogImage')->toFile()?->content($this->lang?->code())->get('alt');
+				return (string)AltText::parse($alt?->toString());
+			},
 			'og:type' => 'ogType',
 			'twitter:card' => fn () => $this->ogImageThumb() !== null && $this->get('cropOgImage')->toBool() ? 'summary_large_image' : null
 		];
